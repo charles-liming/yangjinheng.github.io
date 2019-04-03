@@ -147,7 +147,7 @@
 
 </head>
 
-<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
 
   
   
@@ -157,7 +157,7 @@
   <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
-    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
       <div class="header-inner"><div class="site-brand-wrapper">
   <div class="site-meta ">
     
@@ -356,20 +356,20 @@
   
   
 
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
   
   
   
   <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://yangjinheng.github.io/2018/02/11/Linux/Salt-API/">
 
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Jin Heng">
-      <meta itemprop="description" content="">
+      <meta itemprop="description" content>
       <meta itemprop="image" content="/images/avatar.jpg">
     </span>
 
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
       <meta itemprop="name" content="默默">
     </span>
 
@@ -412,7 +412,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
                   <a href="/categories/运维笔记/" itemprop="url" rel="index">
                     <span itemprop="name">运维笔记</span>
                   </a>
@@ -663,7 +663,7 @@
 </ul>
 <figure class="highlight"><table><tr><td class="code"><pre><span class="line">curl -sSk https://localhost:9527 \</span><br><span class="line">    -H 'Content-type: application/json' \</span><br><span class="line">    -H 'X-Auth-Token: 6455367f150426fab3fa8d75ba589e1e78e40e13' \</span><br><span class="line">    -d '[</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="attr">"client"</span>: <span class="string">"local"</span>,</span><br><span class="line">                <span class="attr">"tgt"</span>: <span class="string">"*"</span>,</span><br><span class="line">                <span class="attr">"fun"</span>: <span class="string">"state.sls"</span>,</span><br><span class="line">                <span class="attr">"kwarg"</span>: &#123;</span><br><span class="line">                    <span class="attr">"mods"</span>: <span class="string">"apache"</span>,</span><br><span class="line">                    <span class="attr">"pillar"</span>: &#123;</span><br><span class="line">                        <span class="attr">"lookup"</span>: &#123;</span><br><span class="line">                            <span class="attr">"wwwdir"</span>: <span class="string">"/srv/httpd/htdocs"</span></span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;,</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="attr">"client"</span>: <span class="string">"runner"</span>,</span><br><span class="line">                <span class="attr">"fun"</span>: <span class="string">"cloud.create"</span>,</span><br><span class="line">                <span class="attr">"provider"</span>: <span class="string">"my-ec2-provider"</span>,</span><br><span class="line">                <span class="attr">"instances"</span>: <span class="string">"my-centos-6"</span>,</span><br><span class="line">                <span class="attr">"image"</span>: <span class="string">"ami-1624987f"</span>,</span><br><span class="line">                "delvol_on_destroy", true</span><br><span class="line">            &#125;</span><br><span class="line">        ]'</span><br></pre></td></tr></table></figure>
 <figure class="highlight"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"return"</span>: [</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="attr">"jerry"</span>: &#123;</span><br><span class="line">        <span class="attr">"pkg_|-install_apache_|-httpd_|-installed"</span>: &#123;</span><br><span class="line">            [...snip full state return here...]</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">      [...snip other minion returns here...]</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">        [...snip full salt-cloud output here...]</span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="接口定义"><a href="#接口定义" class="headerlink" title="接口定义"></a>接口定义</h2><h3 id=""><a href="#" class="headerlink" title="/"></a>/</h3><ul>
+<h2 id="接口定义"><a href="#接口定义" class="headerlink" title="接口定义"></a>接口定义</h2><h3 id><a href="#" class="headerlink" title="/"></a>/</h3><ul>
 <li>Salt 的 REST API 的主要入口点</li>
 </ul>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">curl -k https://172.16.100.253:9527 -H &quot;Accept: application/x-yaml&quot;</span><br></pre></td></tr></table></figure>
@@ -806,8 +806,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/01/10/Linux/minio/" rel="next" title="minio 对象存储">
-                <i class="fa fa-chevron-left"></i> minio 对象存储
+              <a href="/2018/01/10/Linux/SaltStack/" rel="next" title="SaltStack笔记整理">
+                <i class="fa fa-chevron-left"></i> SaltStack笔记整理
               </a>
             
           </div>
@@ -887,12 +887,12 @@
 
       <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
-          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
               <img class="site-author-image" itemprop="image" src="/images/avatar.jpg" alt="Jin Heng">
             
               <p class="site-author-name" itemprop="name">Jin Heng</p>
-              <p class="site-description motion-element" itemprop="description">欢迎小伙伴们留言</p>
+              <p class="site-description motion-element" itemprop="description">大雨来临，没有伞的孩子只有努力奔跑</p>
           </div>
 
           <nav class="site-state motion-element">
@@ -949,9 +949,7 @@
           
           
 
-          <div id="music163player">
-    <iframe style="margin-top:20px" frameborder="no" border="0" marginwidth="0" marginheight="0" width="298" height="52" src="//music.163.com/outchain/player?type=2&id=473571801&auto=1&height=32"></iframe>
-</div>
+          
         </div>
       </section>
 
