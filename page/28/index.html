@@ -351,6 +351,183 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://yangjinheng.github.io/2017/09/12/python/3.封装和解构/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Jin Heng">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="默默">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/09/12/python/3.封装和解构/" itemprop="url">封装和解构</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-12T00:00:00+08:00">
+                2017-09-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Python/" itemprop="url" rel="index">
+                    <span itemprop="name">Python</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="变量赋值"><a href="#变量赋值" class="headerlink" title="变量赋值"></a>变量赋值</h2><p>变量是可变的量，它是一个标识符，标识符指向对象的内存地址，标识符命名规范有：以大小写字母下划线开头、但不能以数字开头、不能用各种运算符，特殊标记符，语言符号。</p>
+<p>如下定义：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&gt;&gt;&gt; var1 = 1</span><br><span class="line">&gt;&gt;&gt; print (var1)</span><br><span class="line">1</span><br><span class="line">&gt;&gt;&gt; var2 = 2</span><br><span class="line">&gt;&gt;&gt; print (var2)</span><br><span class="line">2</span><br></pre></td></tr></table></figure>
+<h2 id="解构赋值"><a href="#解构赋值" class="headerlink" title="解构赋值"></a>解构赋值</h2><p> 过程是把线性结构的元素解开，并顺序的赋给其它变量，左边接纳的变量数要和右边解开的元素个数一致。</p>
+<ul>
+<li>代码示例</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">1</span>]: x,y,z = <span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">2</span>]: x</span><br><span class="line">Out[<span class="number">2</span>]: <span class="number">1</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">3</span>]: y</span><br><span class="line">Out[<span class="number">3</span>]: <span class="number">2</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">4</span>]: z</span><br><span class="line">Out[<span class="number">4</span>]: <span class="number">3</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>这个过程就叫序列解包，或者递归解包，将多个值的序列解开，然后放到变量序列中。</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">5</span>]: values = <span class="string">'a1'</span>,<span class="string">'b2'</span>,<span class="string">'c3'</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">6</span>]: x,y,z = values</span><br><span class="line"></span><br><span class="line">In [<span class="number">7</span>]: x</span><br><span class="line">Out[<span class="number">7</span>]: <span class="string">'a1'</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">8</span>]: y</span><br><span class="line">Out[<span class="number">8</span>]: <span class="string">'b2'</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">9</span>]: z</span><br><span class="line">Out[<span class="number">9</span>]: <span class="string">'c3'</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">10</span>]: values</span><br><span class="line">Out[<span class="number">10</span>]: (<span class="string">'a1'</span>, <span class="string">'b2'</span>, <span class="string">'c3'</span>)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>可以利用这个特性来交换两个变量的值</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">12</span>]: a = <span class="string">'a'</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">13</span>]: b = <span class="string">'b'</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">14</span>]: a,b = b,a</span><br><span class="line"></span><br><span class="line">In [<span class="number">15</span>]: a</span><br><span class="line">Out[<span class="number">15</span>]: <span class="string">'b'</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">16</span>]: b</span><br><span class="line">Out[<span class="number">16</span>]: <span class="string">'a'</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>假如需要获取（并且删除）字典中的 键-值 对时候，可以使用字典的 popitem 方法，这个方法可以返回 键-值。</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">17</span>]: d1 = &#123;<span class="string">'name'</span>:<span class="string">'yangjinheng'</span>,<span class="string">'age'</span>:<span class="number">29</span>&#125;</span><br><span class="line"></span><br><span class="line">In [<span class="number">18</span>]: key,values = d1.popitem()</span><br><span class="line"></span><br><span class="line">In [<span class="number">19</span>]: key</span><br><span class="line">Out[<span class="number">19</span>]: <span class="string">'name'</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">20</span>]: values</span><br><span class="line">Out[<span class="number">20</span>]: <span class="string">'yangjinheng'</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>取得环境变量中的 键-值 对</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">47</span>]: PATH = <span class="string">'JAVA_HOME=/usr/bin'</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">48</span>]: a,b = PATH.split(<span class="string">'='</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">49</span>]: a</span><br><span class="line">Out[<span class="number">49</span>]: <span class="string">'JAVA_HOME'</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">50</span>]: b</span><br><span class="line">Out[<span class="number">50</span>]: <span class="string">'/usr/bin'</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>在for循环中使用序列解包</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">9</span>]: <span class="keyword">for</span> i,j <span class="keyword">in</span> enumerate(range(<span class="number">10</span>)):print(i,j)</span><br><span class="line"><span class="number">0</span> <span class="number">0</span></span><br><span class="line"><span class="number">1</span> <span class="number">1</span></span><br><span class="line"><span class="number">2</span> <span class="number">2</span></span><br><span class="line"><span class="number">3</span> <span class="number">3</span></span><br><span class="line"><span class="number">4</span> <span class="number">4</span></span><br><span class="line"><span class="number">5</span> <span class="number">5</span></span><br><span class="line"><span class="number">6</span> <span class="number">6</span></span><br><span class="line"><span class="number">7</span> <span class="number">7</span></span><br><span class="line"><span class="number">8</span> <span class="number">8</span></span><br><span class="line"><span class="number">9</span> <span class="number">9</span></span><br></pre></td></tr></table></figure>
+<h2 id="通配解构"><a href="#通配解构" class="headerlink" title="通配解构"></a>通配解构</h2><p>Python支持一个新特性，可以使用<em>号运算符匹配多个元素来赋值，例如：a,b,\</em>c = [1,2,3,4]，那么 c 的值是 [3,4]</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">23</span>]: a,b,*c = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>]</span><br><span class="line"></span><br><span class="line">In [<span class="number">24</span>]: a</span><br><span class="line">Out[<span class="number">24</span>]: <span class="number">1</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">25</span>]: b</span><br><span class="line">Out[<span class="number">25</span>]: <span class="number">2</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">26</span>]: c</span><br><span class="line">Out[<span class="number">26</span>]: [<span class="number">3</span>, <span class="number">4</span>]</span><br></pre></td></tr></table></figure>
+<p>需要注意的是，使用*号匹配到的变量总会放到一个列表中。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">27</span>]: test = <span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">28</span>]: test</span><br><span class="line">Out[<span class="number">28</span>]: (<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">29</span>]: a,b,*c = test</span><br><span class="line"></span><br><span class="line">In [<span class="number">30</span>]: a</span><br><span class="line">Out[<span class="number">30</span>]: <span class="number">1</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">31</span>]: b</span><br><span class="line">Out[<span class="number">31</span>]: <span class="number">2</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">32</span>]: c</span><br><span class="line">Out[<span class="number">32</span>]: [<span class="number">3</span>, <span class="number">4</span>]</span><br></pre></td></tr></table></figure>
+<h2 id="丢弃变量"><a href="#丢弃变量" class="headerlink" title="丢弃变量"></a>丢弃变量</h2><p>在CPython中，变量名 _ 是合法的，它是个特殊的变量，保存着上一条命令的执行结果。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">42</span>]: <span class="number">1</span>&gt;<span class="number">1</span></span><br><span class="line">Out[<span class="number">42</span>]: <span class="keyword">False</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">43</span>]: _</span><br><span class="line">Out[<span class="number">43</span>]: <span class="keyword">False</span></span><br></pre></td></tr></table></figure>
+<p>现在有一个列表 <code>list1 = [1,[2,3,4],5]</code>  ，想要取得列表子集中的4，就可以这样。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">44</span>]: list1 = [<span class="number">1</span>,[<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>],<span class="number">5</span>]</span><br><span class="line"></span><br><span class="line">In [<span class="number">45</span>]: _,[_,_,a],_ = list1</span><br><span class="line"></span><br><span class="line">In [<span class="number">46</span>]: a</span><br><span class="line">Out[<span class="number">46</span>]: <span class="number">4</span></span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://yangjinheng.github.io/2017/09/11/python/2.运算符和数据类型/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1745,244 +1922,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://yangjinheng.github.io/2017/09/10/python/1.Python介绍/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Jin Heng">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="默默">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/09/10/python/1.Python介绍/" itemprop="url">Python介绍和环境</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-10T00:00:00+08:00">
-                2017-09-10
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Python/" itemprop="url" rel="index">
-                    <span itemprop="name">Python</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="Python简介"><a href="#Python简介" class="headerlink" title="Python简介"></a>Python简介</h1><p>Python 的设计具有很强的可读性，相比其他语言经常使用英文关键字，其他语言的一些标点符号，它具有比其他语言更有特色语法结构。</p>
-<ul>
-<li>Python 是一种解释型语言：这意味着开发过程中没有了编译这个环节。类似于PHP和Perl语言。</li>
-<li>Python 是交互式语言：这意味着，您可以在一个Python提示符，直接互动执行写你的程序。</li>
-<li>Python 是面向对象语言: 这意味着Python支持面向对象的风格或代码封装在对象的编程技术。</li>
-<li>Python 是动态、强类型语言：这意味着不用给变量指定数据类型，它会在第一次赋值给变量时在内部将数据类型记录下来。</li>
-</ul>
-<h2 id="垃圾回收"><a href="#垃圾回收" class="headerlink" title="垃圾回收"></a>垃圾回收</h2><p>Python使用引用计数方式来进行垃圾回收的，当一个对象引用计数小于1的时候将被使用标记清除的方法从内存中清除，标记清除就是将对象标记为空白，这种算法的缺点是会产生内存碎片。</p>
-<h2 id="基础语法"><a href="#基础语法" class="headerlink" title="基础语法"></a>基础语法</h2><ol>
-<li>转义序列：\,\t,\r,\n,\’,\”，具体见：man ascii，前缀r/R会让转义序列失效。</li>
-<li>缩进：Python使用缩进的层级来表示代码层次关系。</li>
-<li>代码续行：在行尾使用\，来表示一行未完成，下一行将继续，如果使用括号，认为括号内是一个整体。</li>
-<li>python 的变量名自定义函数名，只能包括字母数字下划线，且数字不能开头。</li>
-<li>不能使用 python 内部的关键字，例如：def，class，等。</li>
-</ol>
-<h2 id="数据类型"><a href="#数据类型" class="headerlink" title="数据类型"></a>数据类型</h2><p>Python的对象从概念上大致分为四类：</p>
-<p>数值对象（Math）：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Float（浮点数）、int（整数）、Complex（复数）</span><br></pre></td></tr></table></figure>
-<p>容纳其他对象的集合对象（Contaniner）</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">List（列表）、Dict（字典）、String（字符串）、Tuple（元组）</span><br></pre></td></tr></table></figure>
-<p>表示程序结构的对象（Composition）</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Class（类）、Method（方法）、Fuction（函数）、Module（模块）、File（文件）</span><br></pre></td></tr></table></figure>
-<p>Python内部对象（Internal）</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Buffer（二进制对象）、Type、Frame、Cell、Code</span><br></pre></td></tr></table></figure>
-<h2 id="数据结构"><a href="#数据结构" class="headerlink" title="数据结构"></a>数据结构</h2><ol>
-<li>列表：Python关键字标记为 list，用来表示“顺序的数据”</li>
-<li>元祖：Python关键字标记为 tuple，用来表示“不可修改的顺序数据”</li>
-<li>字典：Python关键字标记为 dict，用来表示“有别名的数据”</li>
-<li>集合：Python关键字标记为 set，用来表示“没有顺序的数据”</li>
-</ol>
-<h2 id="非内置数据结构"><a href="#非内置数据结构" class="headerlink" title="非内置数据结构"></a>非内置数据结构</h2><ol>
-<li>堆：通常是由完全二叉树实现，可以看作一棵树的数组对象，堆是应用程序在运行的时候请求操作系统分配给自己内存，一般是申请/给予的过程，需要注意的是堆是在程序运行时，而不是在程序编译时。</li>
-<li>栈：正好与队列相反，它实现了后进先出(LOFO)，对于堆栈的所有数据操作，都是在栈的顶部完成的，只可以查看栈顶部的数据，只能够向顶部压入数据，也只能在顶部弹出数据，这个结构主要用于递归。</li>
-<li>队列：用来表示“先进先出”的数据(FIFO)，形象的比喻就像“毛毛虫”，它是先吃的东西，先消化拉出去。在开发中常用的消息处理，就是先来的消息，先“消化”，最后来的最后“消化”。</li>
-<li>链表：链表是在非连续的内存单元中保存数据，并且通过指针将各内存单元相链接在一起，链表不需要事先申请固定大小的内存空间，对于大数据检索等比较常用。</li>
-<li>二叉树：表示父子关系的数据，就更加抽象了，暂不了解。</li>
-</ol>
-<h1 id="开发环境"><a href="#开发环境" class="headerlink" title="开发环境"></a>开发环境</h1><h2 id="pip"><a href="#pip" class="headerlink" title="pip"></a>pip</h2><ul>
-<li>配置 Pip 源为国内</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mkdir .pip</span><br><span class="line">echo &apos;[global]</span><br><span class="line">trusted-host =  mirrors.aliyun.com</span><br><span class="line">index-url = http://mirrors.aliyun.com/pypi/simple&apos; &gt;~/.pip/pip.conf</span><br><span class="line"></span><br><span class="line">cat &gt;&gt;~/.pip/pip.conf&lt;&lt;EOF</span><br><span class="line">[global]</span><br><span class="line">index-url = http://pypi.douban.com/simple</span><br><span class="line">[install]</span><br><span class="line">trusted-host=pypi.douban.com</span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
-<ul>
-<li>Freeze 功能，备份当前 pip 包到一个名单，然后到另外的环境恢复</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">pip freeze &gt; /tmp/list              # 冻结配置且备份为文件</span><br><span class="line">pip install -r /tmp/list            # 进入另外的 pyenv 虚拟环境内恢复</span><br></pre></td></tr></table></figure>
-<h2 id="pyenv"><a href="#pyenv" class="headerlink" title="pyenv"></a>pyenv</h2><ul>
-<li>Github 地址</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">https://github.com/pyenv/pyenv</span><br></pre></td></tr></table></figure>
-<ul>
-<li>安装依赖</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">yum -y install gcc make git patch gdbm-devel openssl-devel sqlite-devel readline-devel zlib-devel bzip2-devel</span><br></pre></td></tr></table></figure>
-<ul>
-<li>安装脚本</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">curl -L https://raw.githubusercontent.com/pyenv/pyenv-installer/master/bin/pyenv-installer | bash</span><br></pre></td></tr></table></figure>
-<ul>
-<li>设置用户环境变量</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">export PATH=&quot;/home/python/.pyenv/bin:$PATH&quot;</span><br><span class="line">eval &quot;$(pyenv init -)&quot;</span><br><span class="line">eval &quot;$(pyenv virtualenv-init -)&quot;</span><br></pre></td></tr></table></figure>
-<ul>
-<li>查看帮助</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">pyenv help                          # 查看命令帮助 </span><br><span class="line">pyenv version                       # 查看当前版本 </span><br><span class="line">pyenv versions                      # 查看所有版本 </span><br><span class="line">pyenv install -l                    # 查看可安装版本</span><br></pre></td></tr></table></figure>
-<ul>
-<li>安装python</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">pyenv install --list                # 查看可以安装的 Python 版本</span><br><span class="line">pyenv uninstall &lt;version&gt;           # 指定安装某版本 Python</span><br><span class="line">pyenv uninstall &lt;version&gt;           # 指定卸载某个版本 Python</span><br></pre></td></tr></table></figure>
-<ul>
-<li>设置环境</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">pyenv global 3.5.3                  # 设置全局 Python 版本</span><br><span class="line">pyenv shell 3.5.3                   # 设置会话 Python 版本</span><br><span class="line">pyenv local 3.5.3                   # 设置目录 Python 版本</span><br><span class="line">pyenv local system                  # 恢复系统 Python 版本</span><br></pre></td></tr></table></figure>
-<ul>
-<li>虚拟环境，虚拟环境之间的包是互相隔离的</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">pyenv virtualenv 3.5.3 dev          # 创建虚拟环境</span><br><span class="line">pyenv local dev                     # 设置虚拟环境</span><br></pre></td></tr></table></figure>
-<h2 id="virtualenv"><a href="#virtualenv" class="headerlink" title="virtualenv"></a>virtualenv</h2><ul>
-<li>安装 Python</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ ./configure --prefix=/usr/<span class="built_in">local</span>/python3.7 --<span class="built_in">enable</span>-optimizations --<span class="built_in">enable</span>-shared LDFLAGS=-Wl,-rpath=/usr/<span class="built_in">local</span>/python3.7/lib</span><br><span class="line"></span><br><span class="line">$ make &amp;&amp; make altinstall</span><br><span class="line"></span><br><span class="line">$ ln -svf /usr/<span class="built_in">local</span>/python3.7/bin/python3.7 /usr/<span class="built_in">local</span>/bin/</span><br><span class="line">$ ln -svf /usr/<span class="built_in">local</span>/python3.7/bin/pip3.7 /usr/<span class="built_in">local</span>/bin/</span><br></pre></td></tr></table></figure>
-<ul>
-<li>安装虚拟环境并进入</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ pip3 install virtualenv</span><br><span class="line">$ ln -svf /usr/<span class="built_in">local</span>/python3.7/bin/virtualenv /usr/<span class="built_in">local</span>/bin/</span><br><span class="line"></span><br><span class="line">$ virtualenv --no-site-packages .venv   <span class="comment"># 创建没有任何包的 env</span></span><br><span class="line">$ <span class="built_in">source</span> .venv/bin/activate             <span class="comment"># 激活虚拟环境，使用 deactivate 退出</span></span><br></pre></td></tr></table></figure>
-<h2 id="Jupyter"><a href="#Jupyter" class="headerlink" title="Jupyter"></a>Jupyter</h2><ul>
-<li>安装 Jupyter，Ipython 作为依赖组件也会被安装</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">pip install jupyter</span><br></pre></td></tr></table></figure>
-<ul>
-<li>修改 Jupyter 密码</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">jupyter notebook password</span><br></pre></td></tr></table></figure>
-<ul>
-<li>启动 Jupyter，之后就可以在网页查看了</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">jupyter notebook --ip=0.0.0.0 --port=80 --allow-root</span><br></pre></td></tr></table></figure>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2035,7 +1974,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">59</span>
+                  <span class="site-state-item-count">60</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
