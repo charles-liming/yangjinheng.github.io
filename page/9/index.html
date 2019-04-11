@@ -351,6 +351,149 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://yangjinheng.github.io/2018/07/10/Linux/mysql_install/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Jin Heng">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="默默">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/07/10/Linux/mysql_install/" itemprop="url">一个自动编译安装My-SQL的脚本</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-10T20:38:00+08:00">
+                2018-07-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/运维笔记/" itemprop="url" rel="index">
+                    <span itemprop="name">运维笔记</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>由于经常公司私有云项目常常需要编译My-SQL，每次都手动执行太麻烦了，所以我编写了一个脚本。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"><span class="comment">#Name: Yang jinheng</span></span><br><span class="line"><span class="comment">#Mail: 420123641@qq.com</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#官方源码地址: https://dev.mysql.com/downloads/mysql/</span></span><br><span class="line"><span class="comment">#页面如何选择: Archives--&gt;MySQL Community Server--&gt;Product Version--&gt;Source--&gt;Generic Linux (Architecture Independent)--&gt;Download</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#-----------------------------------------------变量声明-----------------------------------------------</span></span><br><span class="line"><span class="comment">#设置下载地址</span></span><br><span class="line">URL=<span class="string">'https://cdn.mysql.com//Downloads/MySQL-5.6/mysql-5.6.38.tar.gz'</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#设置安装目录</span></span><br><span class="line">PREFIX=/usr/<span class="built_in">local</span>/$(basename <span class="variable">$&#123;URL%.tar.gz&#125;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">#设置数据目录</span></span><br><span class="line">DATADIR=/usr/<span class="built_in">local</span>/$(basename <span class="variable">$&#123;URL%.tar.gz&#125;</span>)/data</span><br><span class="line"></span><br><span class="line"><span class="comment">#设置编译参数</span></span><br><span class="line"><span class="keyword">function</span> <span class="function"><span class="title">Construct</span></span>() &#123;</span><br><span class="line">cmake . \</span><br><span class="line">-DCMAKE_INSTALL_PREFIX=<span class="variable">$PREFIX</span> \</span><br><span class="line">-DMYSQL_DATADIR=<span class="variable">$DATADIR</span> \</span><br><span class="line">-DMYSQL_UNIX_ADDR=/var/lib/mysql/mysql.sock \</span><br><span class="line">-DDEFAULT_CHARSET=utf8 \</span><br><span class="line">-DDEFAULT_COLLATION=utf8_general_ci \</span><br><span class="line">-DWITH_EXTRA_CHARSETS=all \</span><br><span class="line">-DWITH_INNOBASE_STORAGE_ENGINE=1 \</span><br><span class="line">-DWITH_FEDERATED_STORAGE_ENGINE=1 \</span><br><span class="line">-DWITH_BLACKHOLE_STORAGE_ENGINE=1 \</span><br><span class="line">-DWITHOUT_EXAMPLE_STORAGE_ENGINE=1 \</span><br><span class="line">-DWITH_ZLIB=bundled \</span><br><span class="line">-DWITH_SSL=bundled \</span><br><span class="line">-DENABLED_LOCAL_INFILE=1 \</span><br><span class="line">-DWITH_EMBEDDED_SERVER=1 \</span><br><span class="line">-DENABLE_DOWNLOADS=1 \</span><br><span class="line">-DWITH_DEBUG=0</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">#-----------------------------------------------环境准备----------------------------------------------</span></span><br><span class="line"><span class="comment">#检测root权限</span></span><br><span class="line">[ $(id -u) != <span class="string">"0"</span> ] &amp;&amp; <span class="built_in">echo</span> <span class="string">"Error: You must be root to run this script"</span> &amp;&amp; <span class="built_in">exit</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#检测是否已经安装过</span></span><br><span class="line">[ -f <span class="variable">$PREFIX</span>/bin/mysqld_safe ] &amp;&amp;  <span class="built_in">echo</span> <span class="string">"Error:MY-SQL Has been installed"</span> &amp;&amp; <span class="built_in">exit</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#安装epel源</span></span><br><span class="line"><span class="keyword">if</span> hostnamectl --version &amp;&gt;/dev/null ;<span class="keyword">then</span></span><br><span class="line">    [ -f /etc/yum.repos.d/epel.repo ] || curl -o /etc/yum.repos.d/epel.repo http://mirrors.aliyun.com/repo/epel-7.repo</span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">    [ -f /etc/yum.repos.d/epel.repo ] || curl -o /etc/yum.repos.d/epel.repo http://mirrors.aliyun.com/repo/epel-6.repo</span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#下载解压函数</span></span><br><span class="line"><span class="keyword">function</span> <span class="function"><span class="title">download</span></span>() &#123;</span><br><span class="line">    <span class="keyword">if</span> FILE=<span class="variable">$&#123;1##*/&#125;</span> ; [[ -f <span class="variable">$&#123;1##*/&#125;</span> ]] ;<span class="keyword">then</span></span><br><span class="line">        [[ -d <span class="variable">$&#123;FILE%.tar.gz&#125;</span> ]] || tar vxf <span class="variable">$&#123;1##*/&#125;</span></span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        [[ <span class="variable">$&#123;1&#125;</span> != *.tar.gz ]] &amp;&amp; <span class="built_in">echo</span> <span class="string">'URL Check Failed'</span> &amp;&amp; <span class="built_in">exit</span> 1</span><br><span class="line">        curl -o <span class="variable">$&#123;1##*/&#125;</span> <span class="variable">$&#123;1&#125;</span> &amp;&amp; tar vxf <span class="variable">$&#123;1##*/&#125;</span></span><br><span class="line">    <span class="keyword">fi</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">#-----------------------------------------------编译安装-----------------------------------------------</span></span><br><span class="line"><span class="comment">#解决安装依赖</span></span><br><span class="line">yum install ncurses-devel libaio-devel openssl-devel libevent-devel jemalloc-devel autoconf cmake gcc gcc-c++ -y || <span class="built_in">exit</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#创建用户</span></span><br><span class="line">useradd -r -u 306 mysql</span><br><span class="line"></span><br><span class="line"><span class="comment">#下载源码并进入目录</span></span><br><span class="line">download <span class="variable">$URL</span> &amp;&amp; <span class="built_in">cd</span> <span class="variable">$&#123;FILE%.tar.gz&#125;</span> || <span class="built_in">exit</span> 1</span><br><span class="line"></span><br><span class="line"><span class="comment">#编译安装</span></span><br><span class="line">Construct &amp;&amp; make &amp;&amp; make install || <span class="built_in">exit</span> 1</span><br><span class="line"></span><br><span class="line"><span class="comment">#创建软连接</span></span><br><span class="line">ln -svf <span class="variable">$PREFIX</span> /usr/<span class="built_in">local</span>/mysql</span><br><span class="line">ln -svf /usr/<span class="built_in">local</span>/mysql/bin/* /usr/<span class="built_in">local</span>/bin</span><br><span class="line"></span><br><span class="line"><span class="comment">#设置安装目录的权限</span></span><br><span class="line">chown -R mysql.mysql <span class="variable">$PREFIX</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#创建sock文件目录</span></span><br><span class="line">mkdir -p /var/lib/mysql</span><br><span class="line">chown -R mysql.mysql /var/lib/mysql</span><br><span class="line"></span><br><span class="line"><span class="comment">#复制配置文件</span></span><br><span class="line">mv /etc/my.cnf&#123;,.bak&#125; ; cp <span class="variable">$PREFIX</span>/support-files/my-default.cnf /etc/my.cnf</span><br><span class="line">cp <span class="variable">$PREFIX</span>/support-files/mysql.server /etc/init.d/mysqld &amp;&amp; chmod 700 /etc/init.d/mysqld</span><br><span class="line"></span><br><span class="line"><span class="comment">#初始化数据库</span></span><br><span class="line"><span class="variable">$PREFIX</span>/scripts/mysql_install_db --user=mysql --basedir=<span class="variable">$PREFIX</span> --DATADIR=<span class="variable">$DATADIR</span> --defaults-file=/etc/my.cnf</span><br><span class="line"></span><br><span class="line"><span class="comment">#设置开机启动</span></span><br><span class="line">chkconfig --add mysqld</span><br><span class="line"></span><br><span class="line"><span class="comment">#启动MY-SQL服务</span></span><br><span class="line">service mysqld start || service mysqld start</span><br><span class="line"></span><br><span class="line"><span class="comment">#安全初始化：设置root用户密码,删除匿名用户,禁止root远程登陆,删除测试数据库,重新加载授权表。</span></span><br><span class="line"><span class="comment">#/usr/local/mysql/bin/mysql_secure_installation</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#允许远程访问数据库</span></span><br><span class="line"><span class="comment">#mysql -e 'grant all on *.* to 'root'@'%' identified by 'Jinheng890821'; flush privileges;'</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#设置root密码(如果忘记密码: 在/etc/my.cnf添加skip-grant-tables参数来跳过授权表,重启MySQL,使用下面语句修改密码)</span></span><br><span class="line"><span class="variable">$PREFIX</span>/bin/mysql -e <span class="string">"UPDATE mysql.user SET password=PASSWORD('Jinheng890821') WHERE user='root'; flush privileges;"</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#显示信息</span></span><br><span class="line"><span class="built_in">echo</span> -e <span class="string">"PREFIX:\t\t \033[32;1m <span class="variable">$PREFIX</span> \033[0m"</span></span><br><span class="line"><span class="built_in">echo</span> -e <span class="string">"DATADIR:\t \033[32;1m <span class="variable">$DATADIR</span> \033[0m"</span></span><br><span class="line"><span class="built_in">echo</span> -e <span class="string">"USER:\t\t \033[32;1m root \033[0m"</span></span><br><span class="line"><span class="built_in">echo</span> -e <span class="string">"PASSWORD:\t \033[32;1m Jinheng890821 \033[0m"</span></span><br><span class="line"><span class="built_in">echo</span> -e <span class="string">"Secure_Install:\t \033[32;1m /usr/local/mysql/bin/mysql_secure_installation \033[0m"</span></span><br><span class="line"><span class="built_in">echo</span> -e <span class="string">"Remote Access:\t \033[32;1m grant all on *.* to 'root'@'%' identified by 'Jinheng890821'; flush privileges; \033[0m"</span></span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://yangjinheng.github.io/2018/07/10/Linux/Docker/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1439,188 +1582,11 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://yangjinheng.github.io/2018/07/09/personal/口腔溃疡/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Jin Heng">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="默默">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/07/09/personal/口腔溃疡/" itemprop="url">口腔溃疡愈合指南</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-09T21:56:00+08:00">
-                2018-07-09
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/个人日志/" itemprop="url" rel="index">
-                    <span itemprop="name">个人日志</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="口腔溃疡"><a href="#口腔溃疡" class="headerlink" title="口腔溃疡"></a>口腔溃疡</h2><p>口腔溃疡是口腔上皮表面崩解坏死的伤口，它最初只是口腔粘膜表面的破损，没有明显的感觉，最多只是有瞬间的刺痛感，随后就逐渐扩大加深，一两天甚至几个小时之内就能深及真皮，在接下来一个星期里带来一触即发的剧痛，影响说话和进食，有的人会因此营养不良，以至于口腔溃疡更加频繁。</p>
-<h2 id="发病原因"><a href="#发病原因" class="headerlink" title="发病原因"></a>发病原因</h2><p>口腔溃疡的发病原因，坦率的说人类目前还不清楚，因为口腔粘膜的上皮非常疏松，很容易出现微小的创口，任何延迟愈合的因素都有可能造成溃疡，比如说：戴假牙、牙齿矫正器、嗑瓜子、龋齿破损、吃硬脆的油炸烧烤都能带来频繁的机械摩擦，不断刺激造成伤口。</p>
-<p>所以不难发现，口腔溃疡总出现在牙齿较多，粘膜位置薄弱的部分，比如：双唇内测和两颊内测，而上皮角质更厚的舌正面牙龈以及上颚就比较少见，鉴于吸烟能使口腔粘膜角质化，烟瘾重的人往往少患溃疡。</p>
-<p>类似的，某些能给口腔粘膜带来化学刺激的食物，比如：辣椒、菠萝、芒果、腌渍物、强酸碱性食物，或者诱发轻微过敏的食物，比如：咖啡、坚果、巧克力、乳制品、柑橘类水果、甜食里的肉桂醛都可能偶然性的触发溃疡。</p>
-<p>特别值得一提的是：十二烷基硫酸钠，也被怀疑与口腔溃疡有关，但包括牙膏在内的 95% 的洗护用品都在用它去污，刚刷完牙吃什么都发酸发涩就是这种物质能暂时瘫痪甜味觉。</p>
-<p>同样的多种感染也能诱发口腔溃疡，如：单纯疱疹病毒、带状疱疹病毒、人类腺病毒、等常见的病毒都与口腔溃疡有关，像链球菌、葡萄球菌这样常见的体表共生菌也能偶尔促进溃疡。</p>
-<h2 id="更深原因"><a href="#更深原因" class="headerlink" title="更深原因"></a>更深原因</h2><p>但上述这些因素都只是关系到伤口愈合而已，口腔溃疡独特的症状与免疫系统关系密切，人类现在已经知道它与 T 淋巴细胞释放的白细胞介素和肿瘤坏死因子有关，这些物质都能启动程序性的细胞凋亡，粘膜肥大细胞与巨噬细胞也参与其中，它们都能分泌同样的物质，促进局部组织的炎症。</p>
-<p>焦虑、疲劳、免疫系统疾病、使用免疫抑制药物，总是与口腔溃疡相伴的发生。</p>
-<p>另外口腔溃疡还总是呈现出明显的遗传性，因为它们与一型白细胞抗原有关，这种蛋白质存在于每个有细胞核的活细胞表面，除同卵双胞胎以外，每个人都不一样，它们的功能相当于细胞的身份证，是免疫系统识别自体和异体以及健康细胞和感染细胞的依据，而某些白细胞抗原的具体性状就与口腔溃疡的发病率有关。</p>
-<p>所以综合目前研究来看我们认为口腔溃疡并没有某一种专一的致病因素，而是可以被多种因素诱发的局部自身免疫问题。</p>
-<h2 id="影响愈合"><a href="#影响愈合" class="headerlink" title="影响愈合"></a>影响愈合</h2><p>在最初的诱因之后，缺乏维生素B1、B2、B6、B12、锌、铁、叶酸也能普遍的延缓上皮组织的修复速度，带来复发性的口腔溃疡。</p>
-<h2 id="治疗参考"><a href="#治疗参考" class="headerlink" title="治疗参考"></a>治疗参考</h2><ul>
-<li>按功能分类药物</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">止痛药物：利多卡因凝胶、喷剂，苯佐卡因凝胶，苄达明喷雾剂、含漱液等。</span><br><span class="line"></span><br><span class="line">消毒防腐：氯己定含漱液，西吡氯铵含漱液，聚维酮碘含漱液，硼砂含漱液等。</span><br><span class="line"></span><br><span class="line">糖皮质激素：曲安奈德口腔糊剂，低塞米松软膏、喷雾剂、含漱液，泼尼松龙软膏，倍他米松含漱液，氢化可的松粘附片，氟轻松乳膏，丙酸倍氯米松喷雾剂、乳膏等。</span><br><span class="line"></span><br><span class="line">促进愈合药物：重组人表皮生长因子凝胶、外用溶液，重组牛碱性成纤维细生长因子凝胶，外用溶液等。</span><br><span class="line"></span><br><span class="line">其他局部制剂：氨来呫诺糊剂、口腔含片，甘珀酸钠含漱液，环孢素含漱液，5-氨基水杨酸乳膏，双氯芬透明质酸凝脂胶等。</span><br></pre></td></tr></table></figure>
-<ul>
-<li>具体参考</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">首先作息规律，注意休息：</span><br><span class="line">	首先暂停摄入咖啡、可乐、红牛、等含有咖啡因和提神的饮料，保证睡眠良好。</span><br><span class="line">	</span><br><span class="line">补充重要的微量元素，加快修复速度：</span><br><span class="line">	维生素B2、维生素B1、维生素B6、叶酸、葡萄糖酸锌、</span><br><span class="line"></span><br><span class="line">以往症状明显的应该在初期给与糖皮质激素：</span><br><span class="line">	复方氯已定地塞米松膜（止痛加糖皮质激素）、意可贴（地塞米松类）</span><br><span class="line"></span><br><span class="line">口腔溃疡疼痛影响进食：</span><br><span class="line">	利多卡因凝胶，苄达明含漱液、复方氯已定地塞米松膜（止痛加糖皮质激素）</span><br><span class="line"></span><br><span class="line">保持口腔卫生局部抗炎：</span><br><span class="line">	氯己定含漱液、氨来呫诺糊剂、聚维酮碘含漱液、</span><br></pre></td></tr></table></figure>
-<h2 id="维生素B2"><a href="#维生素B2" class="headerlink" title="维生素B2"></a>维生素B2</h2><ul>
-<li>维生素B2</li>
-</ul>
-<p>又叫核黄素，当缺乏时，就影响机体的生物氧化，使代谢发生障碍，其病变多表现为口、眼和外生殖器部位的炎症，如口角炎、唇炎、舌炎、眼结膜炎和阴囊炎等，故本品可用于上述疾病的防治。</p>
-<p>动物一般不能在体内合成维生素B2，体内维生素B2的储存是很有限的，因此每天都要由饮食提供，摄入不足时需要补充，人类早已经成人工合成大部分维生素，可以服用片剂且非极大量使用，无安全危害，多余的会通过尿液派出，表现为荧黄色尿。</p>
-<p>通常我们所说的 “上火” 就是维生素B2短期内极剧缺乏的引起的。</p>
-<ul>
-<li>主要功能</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">1、促进发育和细胞的再生；</span><br><span class="line">2、促使皮肤、指甲、毛发的正常生长；</span><br><span class="line">3、帮助预防和消除口腔内、唇、舌及皮肤的炎反应，统称为口腔生殖综合症；</span><br><span class="line">4、增进视力，减轻眼睛的疲劳；</span><br><span class="line">5、影响人体对铁的吸收；</span><br><span class="line">6、与其他物质结合一起，从而影响生物氧化和能量代谢。</span><br></pre></td></tr></table></figure>
-<ul>
-<li>判断标准</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">嘴唇脱皮、红肿、发亮</span><br></pre></td></tr></table></figure>
-<h2 id="文章参考"><a href="#文章参考" class="headerlink" title="文章参考"></a>文章参考</h2><blockquote>
-<p>混乱博物馆、方舟子《刻舟求健》、 中华口腔医学会《复发性阿弗他溃疡诊疗指南(试行)55197.pdf》</p>
-</blockquote>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/8/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><span class="page-number current">9</span><a class="page-number" href="/page/10/">10</a><span class="space">&hellip;</span><a class="page-number" href="/page/29/">29</a><a class="extend next" rel="next" href="/page/10/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/page/8/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><span class="page-number current">9</span><a class="page-number" href="/page/10/">10</a><span class="space">&hellip;</span><a class="page-number" href="/page/30/">30</a><a class="extend next" rel="next" href="/page/10/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1668,7 +1634,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">58</span>
+                  <span class="site-state-item-count">59</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
