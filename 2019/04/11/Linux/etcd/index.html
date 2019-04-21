@@ -86,7 +86,7 @@
 <meta property="og:site_name" content="默默">
 <meta property="og:description" content="简介Etcd 是 CoreOS 推出的高可用的键值存储系统，主要用于k8s集群的服务发现等，而本身 Etcd 也支持集群模式部署，从而实现自身高可用；  Etcd 构建自身高可用集群主要有三种形式  -   静态发现: 预先已知 Etcd 集群中有哪些节点，在启动时直接指定好 Etcd 的各个 node 节点地址-   Etcd 动态发现: 通过已有的 Etcd 集群作为数据交互点，然后在扩展新的">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-04-11T10:22:50.345Z">
+<meta property="og:updated_time" content="2019-04-11T16:29:55.284Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="etcd 集群搭建">
 <meta name="twitter:description" content="简介Etcd 是 CoreOS 推出的高可用的键值存储系统，主要用于k8s集群的服务发现等，而本身 Etcd 也支持集群模式部署，从而实现自身高可用；  Etcd 构建自身高可用集群主要有三种形式  -   静态发现: 预先已知 Etcd 集群中有哪些节点，在启动时直接指定好 Etcd 的各个 node 节点地址-   Etcd 动态发现: 通过已有的 Etcd 集群作为数据交互点，然后在扩展新的">
@@ -251,7 +251,7 @@
       
         
         <li class="menu-item menu-item-css">
-          <a href="/2019/01/02/web/css/" rel="section">
+          <a href="/2019/01/02/web/CSS/" rel="section">
             
               <i class="menu-item-icon fa fa-fw fa-dashboard"></i> <br>
             
@@ -927,7 +927,7 @@
 <ul>
 <li>集群启动脚本，</li>
 </ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 本节点名称</span></span><br><span class="line">MEMBER_NAME=<span class="string">"node1"</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 本节点IP地址</span></span><br><span class="line">MEMBER_IP=<span class="string">"http://172.16.100.100"</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 集群成员地址</span></span><br><span class="line">CLUSTER_MEMBER=<span class="string">"node1=http://172.16.100.100:2380,node2=http://172.16.100.101:2380,node3=http://172.16.100.102:2380"</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">cd</span> $(dirname $(readlink -f <span class="variable">$0</span>))</span><br><span class="line">[ -d ./logs/ ] || mkdir logs</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="title">start</span></span>() &#123;</span><br><span class="line">    nohup ./etcd --name <span class="variable">$MEMBER_NAME</span> \</span><br><span class="line">    --initial-advertise-peer-urls <span class="variable">$MEMBER_IP</span>:2380 \</span><br><span class="line">    --listen-peer-urls <span class="variable">$MEMBER_IP</span>:2380 \</span><br><span class="line">    --listen-client-urls http://0.0.0.0:2379 \</span><br><span class="line">    --advertise-client-urls <span class="variable">$MEMBER_IP</span>:2379 \</span><br><span class="line">    --initial-cluster-token etcd-cluster-1 \</span><br><span class="line">    --initial-cluster <span class="variable">$CLUSTER_MEMBER</span> \</span><br><span class="line">    --initial-cluster-state new &gt;&gt;./logs/etcd.log 2&gt;&gt;./logs/etcd_error.log &amp;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="title">stop</span></span>() &#123;</span><br><span class="line">    <span class="built_in">kill</span> -15 `pidof etcd`</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="title">status</span></span>() &#123;</span><br><span class="line">    ./etcdctl member list</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">case</span> <span class="string">"<span class="variable">$1</span>"</span> <span class="keyword">in</span></span><br><span class="line">    start)</span><br><span class="line">        start;;</span><br><span class="line">    stop)</span><br><span class="line">        stop;;</span><br><span class="line">    restart)</span><br><span class="line">        stop; sleep 3; start;;</span><br><span class="line">    status)</span><br><span class="line">        status;;</span><br><span class="line">    *)</span><br><span class="line">        <span class="built_in">echo</span> <span class="string">"Usage: <span class="variable">$0</span> &#123;start|stop|restart|status&#125;"</span> ;;</span><br><span class="line"><span class="keyword">esac</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 本节点名称</span></span><br><span class="line">MEMBER_NAME=<span class="string">"node2"</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 本节点IP地址</span></span><br><span class="line">MEMBER_IP=<span class="string">"http://172.16.100.101"</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 集群成员地址</span></span><br><span class="line">CLUSTER_MEMBER=<span class="string">"node1=http://172.16.100.100:2380,node2=http://172.16.100.101:2380,node3=http://172.16.100.102:2380"</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">cd</span> $(dirname $(readlink -f <span class="variable">$0</span>))</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="title">start</span></span>() &#123;</span><br><span class="line">    nohup ./etcd --name <span class="variable">$MEMBER_NAME</span> \</span><br><span class="line">    --initial-advertise-peer-urls <span class="variable">$MEMBER_IP</span>:2380 \</span><br><span class="line">    --listen-peer-urls <span class="variable">$MEMBER_IP</span>:2380 \</span><br><span class="line">    --listen-client-urls http://0.0.0.0:2379 \</span><br><span class="line">    --advertise-client-urls <span class="variable">$MEMBER_IP</span>:2379 \</span><br><span class="line">    --initial-cluster-token etcd-cluster-1 \</span><br><span class="line">    --initial-cluster <span class="variable">$CLUSTER_MEMBER</span> \</span><br><span class="line">    --initial-cluster-state new \</span><br><span class="line">    --<span class="built_in">log</span>-output <span class="string">'stdout'</span> &amp;&gt;log.log &amp;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="title">stop</span></span>() &#123;</span><br><span class="line">    <span class="built_in">kill</span> -15 `pidof etcd`</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="title">status</span></span>() &#123;</span><br><span class="line">    ./etcdctl member list</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">case</span> <span class="string">"<span class="variable">$1</span>"</span> <span class="keyword">in</span></span><br><span class="line">    start)</span><br><span class="line">        start;;</span><br><span class="line">    stop)</span><br><span class="line">        stop;;</span><br><span class="line">    restart)</span><br><span class="line">        stop; sleep 3; start;;</span><br><span class="line">    status)</span><br><span class="line">        status;;</span><br><span class="line">    *)</span><br><span class="line">        <span class="built_in">echo</span> <span class="string">"Usage: <span class="variable">$0</span> &#123;start|stop|restart|status&#125;"</span> ;;</span><br><span class="line"><span class="keyword">esac</span></span><br></pre></td></tr></table></figure>
 <ul>
 <li>官方文档</li>
 </ul>
@@ -966,8 +966,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2019/04/12/Linux/nginx-upsync-module/" rel="prev" title="nginx-upsync-module 无损扩容方案">
-                nginx-upsync-module 无损扩容方案 <i class="fa fa-chevron-right"></i>
+              <a href="/2019/04/12/Linux/nginx-upsync-module/" rel="prev" title="nginx-upsync-module 服务发现">
+                nginx-upsync-module 服务发现 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -1042,7 +1042,7 @@
               <img class="site-author-image" itemprop="image" src="/images/avatar.jpg" alt="Jin Heng">
             
               <p class="site-author-name" itemprop="name">Jin Heng</p>
-              <p class="site-description motion-element" itemprop="description">方向错了，越努力错的越离谱</p>
+              <p class="site-description motion-element" itemprop="description">越努力越幸运</p>
           </div>
 
           <nav class="site-state motion-element">
@@ -1052,7 +1052,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">60</span>
+                  <span class="site-state-item-count">62</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

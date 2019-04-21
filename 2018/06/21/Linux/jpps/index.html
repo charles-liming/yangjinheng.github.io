@@ -86,7 +86,7 @@
 <meta property="og:site_name" content="默默">
 <meta property="og:description" content="需求情况  由于公司使用 Java 开发，我经常需要查看： 程序是否正常监听、目前启动了哪些 Java 程序，内存占用情况。 一般使用 netstat -tunlp 查看套接字，但是蛋疼的事情就来了，由于 Java 程序运行在虚拟机，所以所有 java 程序都会只显示为 Java ，不会显示具体是哪个 Java 程序在运行，这就需要用脑子记住 PID 然后再进程查看的命令  ps aux | g">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-08-13T11:01:16.000Z">
+<meta property="og:updated_time" content="2019-04-19T11:19:43.190Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="一个Awk脚本显示Java的：PID,套接字,内存占用,程序名">
 <meta name="twitter:description" content="需求情况  由于公司使用 Java 开发，我经常需要查看： 程序是否正常监听、目前启动了哪些 Java 程序，内存占用情况。 一般使用 netstat -tunlp 查看套接字，但是蛋疼的事情就来了，由于 Java 程序运行在虚拟机，所以所有 java 程序都会只显示为 Java ，不会显示具体是哪个 Java 程序在运行，这就需要用脑子记住 PID 然后再进程查看的命令  ps aux | g">
@@ -251,7 +251,7 @@
       
         
         <li class="menu-item menu-item-css">
-          <a href="/2019/01/02/web/css/" rel="section">
+          <a href="/2019/01/02/web/CSS/" rel="section">
             
               <i class="menu-item-icon fa fa-fw fa-dashboard"></i> <br>
             
@@ -444,16 +444,23 @@
 <li>需求情况</li>
 </ul>
 <p>由于公司使用 Java 开发，我经常需要查看： 程序是否正常监听、目前启动了哪些 Java 程序，内存占用情况。</p>
-<p>一般使用 <code>netstat -tunlp</code> 查看套接字，但是蛋疼的事情就来了，由于 Java 程序运行在虚拟机，所以所有 java 程序都会只显示为 Java ，不会显示具体是哪个 Java 程序在运行，这就需要用脑子记住 PID 然后再进程查看的命令  <code>ps aux | grep &#39;PID&#39;</code> 人肉取交集，才能知道现在 JVM 命令行参数，从而得知是哪个 Java 程序运行，还有时候，我需要监控 Java 程序的内存使用情况，防止因为占用过多的内存，被 Linux 系统惩罚性的杀死。</p>
+<p>一般使用 <code>netstat -tunlp</code> 查看套接字，但是蛋疼的事情就来了，由于 Java 程序运行在虚拟机，所以所有 java 程序都会只显示为 Java ，不会显示具体是哪个 Java 程序在运行，这就需要用脑子记住 PID 然后再进程查看的命令  <code>ps aux | grep &#39;PID&#39;</code> 人肉取交集，才能知道现在 JVM 命令行参数，从而得知是哪个 Java 程序运行，还有时候，我需要监控 Java 程序的内存使用情况，防止因为占用过多的内存，被 Linux 系统惩罚性的杀死（OOM）。</p>
 <p>所以我用 AWK 编写了一个小程序，它专门用来查看 Java 程序：套接字、PID、程序名称、运行目录、占用内存，等情况，一站式购齐！！哈哈哈… 再也不用人肉取交集了，其实，这个程序稍微改动以下，就可以适用于查看所有运行虚拟机环境的程序：Python、Node-js、等，不啰嗦了，现在你就可以新建一个文件，复制下面代码，然后给它执行权限，然后试试效果吧！</p>
+<blockquote>
+<p>  这个脚本查看内存方面已经支持查看所有的程序了哦，不仅限于 java。</p>
+</blockquote>
 <ul>
 <li>程序代码</li>
 </ul>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">netstat -tunlp 2&gt;/dev/null | awk -v PAGE_SIZE=`getconf PAGE_SIZE` &apos;</span><br><span class="line">BEGIN &#123;FS = &quot;[ ]+|/.+&quot;&#125;</span><br><span class="line">NR &gt; 2 &amp;&amp; PID != &quot;-&quot; &#123;</span><br><span class="line">    sub(&quot;^0.0.0.0|::&quot;, &quot;*&quot;, $4)</span><br><span class="line"></span><br><span class="line">    PID = $(NF - 1)</span><br><span class="line"></span><br><span class="line">    if (! PRRAM[PID]) &#123;</span><br><span class="line">        getline PRG_STA &lt; ((&quot;/proc/&quot; (PID) &quot;/statm&quot;))</span><br><span class="line">        split(PRG_STA, PRG_PAG, FS)</span><br><span class="line">        PRG_RAM[PID] = PRG_PAG[2] * PAGE_SIZE / 1.04858e+06</span><br><span class="line"></span><br><span class="line">        ((&quot;readlink -f /proc/&quot; (PID) &quot;/exe&quot;)) | getline PRG_SRC[PID]</span><br><span class="line"></span><br><span class="line">        split(PRG_SRC[PID],PNAME,&quot;/&quot;)</span><br><span class="line">        PRG_NAME[PID] = PNAME[length(PNAME)]</span><br><span class="line">        if (PRG_NAME[PID] == &quot;java&quot;) &#123;</span><br><span class="line">            ((&quot;readlink -f /proc/&quot; (PID) &quot;/cwd&quot;)) | getline PRG_SRC[PID]</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    PROTO = $1</span><br><span class="line">    STATE = $6 ~ /-|[0-9]+/ ? &quot;UNCONN&quot; : $6</span><br><span class="line">    LADDR = $4</span><br><span class="line">    FNAME = PRG_NAME[PID]</span><br><span class="line">    PRAM = PRG_RAM[PID]</span><br><span class="line">    PSRC = PRG_SRC[PID]</span><br><span class="line"></span><br><span class="line">    printf &quot;%-4s %s %21s %-20s %5dM %8s %-s\n&quot;, PROTO,STATE,LADDR,FNAME,PRAM,PID,PSRC</span><br><span class="line">&#125;&apos;</span><br></pre></td></tr></table></figure>
 <ul>
+<li>就这样子了~</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">tcp  LISTEN                *:9801 nginx                    2M    10415 /usr/local/nginx-1.12.2/sbin/nginx</span><br><span class="line">tcp  LISTEN                *:9802 nginx                    2M    10415 /usr/local/nginx-1.12.2/sbin/nginx</span><br><span class="line">tcp  LISTEN               *:41419 java                   372M    23692 /app/zookeeper-3.4.6/bin</span><br><span class="line">tcp  LISTEN                *:8003 nginx                    8M    10305 /usr/local/nginx-1.12.2/sbin/nginx</span><br><span class="line">tcp  LISTEN                *:8004 nginx                    8M    10305 /usr/local/nginx-1.12.2/sbin/nginx</span><br><span class="line">tcp  LISTEN                *:2181 bin                      8M    23692 /app/zookeeper-3.4.6/bin</span><br></pre></td></tr></table></figure>
+<ul>
 <li>Awk相关知识</li>
 </ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">在AWK内使用系统变量：</span><br><span class="line">	使用双引号（<span class="string">""</span>）</span><br><span class="line">	</span><br><span class="line">AWK 读取外部文件：</span><br><span class="line">	getline var &lt; (/path/to/path)</span><br><span class="line">	</span><br><span class="line">AWK 读取子进程的结果：</span><br><span class="line">	((<span class="string">"system command"</span>)) | getline var</span><br><span class="line">	</span><br><span class="line">AWK 派生子进程：</span><br><span class="line">	system(<span class="string">"system command"</span>)</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">在AWK内使用系统变量：</span><br><span class="line">	使用双引号（<span class="string">""</span>）</span><br><span class="line"></span><br><span class="line">AWK 读取外部文件：</span><br><span class="line">	getline var &lt; (/path/to/path)</span><br><span class="line">	</span><br><span class="line">AWK 读取子进程的结果：</span><br><span class="line">	((<span class="string">"system command"</span>)) | getline var</span><br><span class="line">	</span><br><span class="line">AWK 派生子进程：</span><br><span class="line">	system(<span class="string">"system command"</span>)</span><br></pre></td></tr></table></figure>
 <ul>
 <li>关键点知识</li>
 </ul>
@@ -482,8 +489,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/03/01/web/DOM/" rel="next" title="BOM 和 DOM">
-                <i class="fa fa-chevron-left"></i> BOM 和 DOM
+              <a href="/2018/04/20/personal/小草/" rel="next" title="小草">
+                <i class="fa fa-chevron-left"></i> 小草
               </a>
             
           </div>
@@ -559,7 +566,7 @@
               <img class="site-author-image" itemprop="image" src="/images/avatar.jpg" alt="Jin Heng">
             
               <p class="site-author-name" itemprop="name">Jin Heng</p>
-              <p class="site-description motion-element" itemprop="description">方向错了，越努力错的越离谱</p>
+              <p class="site-description motion-element" itemprop="description">越努力越幸运</p>
           </div>
 
           <nav class="site-state motion-element">
@@ -569,7 +576,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">60</span>
+                  <span class="site-state-item-count">62</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
