@@ -79,17 +79,17 @@
 
 
 
-<meta name="description" content="title: Docker知识总结date: 2018-07-10categories: 运维笔记 容器技术在 Linux 内核中，提供了 cgroups 功能，来达成资源的限制。它同时也提供了 namespaces 隔离的功能，使应用程序看到的操作系统环境被区隔成独立区间，包括进程树，网络，用户id，以及挂载的文件系统。 CgroupsCGroup 是 Control Groups 的缩写，是">
+<meta name="description" content="容器技术在 Linux 内核中，提供了 cgroups 功能，来达成资源的限制。它同时也提供了 namespaces 隔离的功能，使应用程序看到的操作系统环境被区隔成独立区间，包括进程树，网络，用户id，以及挂载的文件系统。 CgroupsCGroup 是 Control Groups 的缩写，是 Linux 内核提供的一种可以限制、记录、隔离进程组  (process groups)  所使用的">
 <meta property="og:type" content="article">
-<meta property="og:title" content="默默">
-<meta property="og:url" content="https://yangjinheng.github.io/2019/01/18/Linux/Docker/index.html">
+<meta property="og:title" content="Docker知识总结">
+<meta property="og:url" content="https://yangjinheng.github.io/2018/07/10/Linux/Docker/index.html">
 <meta property="og:site_name" content="默默">
-<meta property="og:description" content="title: Docker知识总结date: 2018-07-10categories: 运维笔记 容器技术在 Linux 内核中，提供了 cgroups 功能，来达成资源的限制。它同时也提供了 namespaces 隔离的功能，使应用程序看到的操作系统环境被区隔成独立区间，包括进程树，网络，用户id，以及挂载的文件系统。 CgroupsCGroup 是 Control Groups 的缩写，是">
+<meta property="og:description" content="容器技术在 Linux 内核中，提供了 cgroups 功能，来达成资源的限制。它同时也提供了 namespaces 隔离的功能，使应用程序看到的操作系统环境被区隔成独立区间，包括进程树，网络，用户id，以及挂载的文件系统。 CgroupsCGroup 是 Control Groups 的缩写，是 Linux 内核提供的一种可以限制、记录、隔离进程组  (process groups)  所使用的">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-04-12T03:40:39.898Z">
+<meta property="og:updated_time" content="2019-04-21T05:20:15.896Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="默默">
-<meta name="twitter:description" content="title: Docker知识总结date: 2018-07-10categories: 运维笔记 容器技术在 Linux 内核中，提供了 cgroups 功能，来达成资源的限制。它同时也提供了 namespaces 隔离的功能，使应用程序看到的操作系统环境被区隔成独立区间，包括进程树，网络，用户id，以及挂载的文件系统。 CgroupsCGroup 是 Control Groups 的缩写，是">
+<meta name="twitter:title" content="Docker知识总结">
+<meta name="twitter:description" content="容器技术在 Linux 内核中，提供了 cgroups 功能，来达成资源的限制。它同时也提供了 namespaces 隔离的功能，使应用程序看到的操作系统环境被区隔成独立区间，包括进程树，网络，用户id，以及挂载的文件系统。 CgroupsCGroup 是 Control Groups 的缩写，是 Linux 内核提供的一种可以限制、记录、隔离进程组  (process groups)  所使用的">
 
 
 
@@ -119,13 +119,13 @@
 
 
 
-  <link rel="canonical" href="https://yangjinheng.github.io/2019/01/18/Linux/Docker/">
+  <link rel="canonical" href="https://yangjinheng.github.io/2018/07/10/Linux/Docker/">
 
 
 
 
 
-  <title> | 默默</title>
+  <title>Docker知识总结 | 默默</title>
   
 
 
@@ -351,7 +351,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://yangjinheng.github.io/2019/01/18/Linux/Docker/">
+    <link itemprop="mainEntityOfPage" href="https://yangjinheng.github.io/2018/07/10/Linux/Docker/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Jin Heng">
@@ -368,7 +368,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline"></h1>
+          <h1 class="post-title" itemprop="name headline">Docker知识总结</h1>
         
 
         <div class="post-meta">
@@ -380,8 +380,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-01-18T17:36:00+08:00">
-                2019-01-18
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-10T00:00:00+08:00">
+                2018-07-10
               </time>
             
 
@@ -390,6 +390,28 @@
             
           </span>
 
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/运维笔记/" itemprop="url" rel="index">
+                    <span itemprop="name">运维笔记</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
           
 
           
@@ -418,8 +440,7 @@
       
 
       
-        <p>title: Docker知识总结<br>date: 2018-07-10<br>categories: 运维笔记</p>
-<h1 id="容器技术"><a href="#容器技术" class="headerlink" title="容器技术"></a>容器技术</h1><p>在 Linux 内核中，提供了 cgroups 功能，来达成资源的限制。它同时也提供了 namespaces 隔离的功能，使应用程序看到的操作系统环境被区隔成独立区间，包括进程树，网络，用户id，以及挂载的文件系统。</p>
+        <h1 id="容器技术"><a href="#容器技术" class="headerlink" title="容器技术"></a>容器技术</h1><p>在 Linux 内核中，提供了 cgroups 功能，来达成资源的限制。它同时也提供了 namespaces 隔离的功能，使应用程序看到的操作系统环境被区隔成独立区间，包括进程树，网络，用户id，以及挂载的文件系统。</p>
 <h2 id="Cgroups"><a href="#Cgroups" class="headerlink" title="Cgroups"></a>Cgroups</h2><p>CGroup 是 Control Groups 的缩写，是 Linux 内核提供的一种可以限制、记录、隔离进程组  (process groups)  所使用的物理资源  (如 cpu memory i/o 等等)  的机制，简单来将就是把进程放到一个组里面统一加以控制。CGroup 2007 年进入 Linux 2.6.24 内核，CGroups 不是全新创造的，它将进程管理从 cpuset 中剥离出来，作者是 Google 的 Paul Menage。</p>
 <p>CGroups 也是 LXC 为实现虚拟化所使用的资源管理手段，Cgroup 有个重要概念叫子系统，子系统也就是资源控制器，每个子系统就是一个资源分配器，比如 CPU 子系统是控制CPU时间分配的，首先挂载子系统，然后才有 Control Group 的。比如，先挂载 memory 子系统，然后在 memory 子系统中创建一个 Cgroup 子节点，在这个节点中，将需要控制的进程 ID 写入，并且将控制的属性写入，这样就完成了内存的限制。</p>
 <ul>
@@ -1413,8 +1434,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/01/02/web/CSS/" rel="next" title="CSS学习笔记">
-                <i class="fa fa-chevron-left"></i> CSS学习笔记
+              <a href="/2018/07/09/personal/口腔溃疡/" rel="next" title="口腔溃疡愈合指南">
+                <i class="fa fa-chevron-left"></i> 口腔溃疡愈合指南
               </a>
             
           </div>
@@ -1423,8 +1444,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2019/01/18/python/Ascii码表/" rel="prev" title>
-                 <i class="fa fa-chevron-right"></i>
+              <a href="/2018/07/10/Linux/mysql_install/" rel="prev" title="一个自动编译安装My-SQL的脚本">
+                一个自动编译安装My-SQL的脚本 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
