@@ -664,7 +664,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/06/21/Linux/jpps/" itemprop="url">一个Awk脚本显示Java的：PID,套接字,内存占用,程序名</a></h1>
+                <a class="post-title-link" href="/2018/06/21/Linux/jpps/" itemprop="url">一个 awk 脚本显示 Java 程序：PID,套接字,内存占用,程序名</a></h1>
         
 
         <div class="post-meta">
@@ -741,12 +741,9 @@
             <ul>
 <li>需求情况</li>
 </ul>
-<p>由于公司使用 Java 开发，我经常需要查看： 程序是否正常监听、目前启动了哪些 Java 程序，内存占用情况。</p>
-<p>一般使用 <code>netstat -tunlp</code> 查看套接字，但是蛋疼的事情就来了，由于 Java 程序运行在虚拟机，所以所有 java 程序都会只显示为 Java ，不会显示具体是哪个 Java 程序在运行，这就需要用脑子记住 PID 然后再进程查看的命令  <code>ps aux | grep &#39;PID&#39;</code> 人肉取交集，才能知道现在 JVM 命令行参数，从而得知是哪个 Java 程序运行，还有时候，我需要监控 Java 程序的内存使用情况，防止因为占用过多的内存，被 Linux 系统惩罚性的杀死（OOM）。</p>
-<p>所以我用 AWK 编写了一个小程序，它专门用来查看 Java 程序：套接字、PID、程序名称、运行目录、占用内存，等情况，一站式购齐！！哈哈哈… 再也不用人肉取交集了，其实，这个程序稍微改动以下，就可以适用于查看所有运行虚拟机环境的程序：Python、Node-js、等，不啰嗦了，现在你就可以新建一个文件，复制下面代码，然后给它执行权限，然后试试效果吧！</p>
-<blockquote>
-<p>  这个脚本查看内存方面已经支持查看所有的程序了哦，不仅限于 java。</p>
-</blockquote>
+<p>由于公司使用 Java 开发，我经常需要查看： 程序是否正常监听、目前启动了哪些 java 程序，内存占用情况。</p>
+<p>一般使用 <code>netstat -tunlp</code> 查看套接字，但是蛋疼的事情就来了，由于 java 程序运行在虚拟机，所以所有 java 程序都会只显示为 java ，不会显示具体是哪个 java 程序在运行，这就需要用脑子记住 PID 然后再进程查看的命令  <code>ps aux | grep &#39;PID&#39;</code> 人肉取交集，才能知道现在 JVM 命令行参数，从而得知是哪个 java 程序运行，还有时候，我需要监控 java 程序的内存使用情况，防止因为占用过多的内存，被 Linux 系统惩罚性的杀死（OOM）。</p>
+<p>所以我用 awk 编写了一个小程序，它可以用来查看 java 程序：套接字、PID、程序名称、运行目录、占用内存，等情况，一站式购齐！！哈哈哈… 再也不用人肉取交集了，现在你就可以新建一个文件，复制下面代码，然后给它执行权限，然后试试效果吧！</p>
 <ul>
 <li>程序代码</li>
 </ul>
@@ -756,13 +753,13 @@
 </ul>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">tcp  LISTEN                *:9801 nginx                    2M    10415 /usr/local/nginx-1.12.2/sbin/nginx</span><br><span class="line">tcp  LISTEN                *:9802 nginx                    2M    10415 /usr/local/nginx-1.12.2/sbin/nginx</span><br><span class="line">tcp  LISTEN               *:41419 java                   372M    23692 /app/zookeeper-3.4.6/bin</span><br><span class="line">tcp  LISTEN                *:8003 nginx                    8M    10305 /usr/local/nginx-1.12.2/sbin/nginx</span><br><span class="line">tcp  LISTEN                *:8004 nginx                    8M    10305 /usr/local/nginx-1.12.2/sbin/nginx</span><br><span class="line">tcp  LISTEN                *:2181 bin                      8M    23692 /app/zookeeper-3.4.6/bin</span><br></pre></td></tr></table></figure>
 <ul>
-<li>Awk相关知识</li>
+<li>awk相关知识</li>
 </ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">在AWK内使用系统变量：</span><br><span class="line">	使用双引号（<span class="string">""</span>）</span><br><span class="line"></span><br><span class="line">AWK 读取外部文件：</span><br><span class="line">	getline var &lt; (/path/to/path)</span><br><span class="line">	</span><br><span class="line">AWK 读取子进程的结果：</span><br><span class="line">	((<span class="string">"system command"</span>)) | getline var</span><br><span class="line">	</span><br><span class="line">AWK 派生子进程：</span><br><span class="line">	system(<span class="string">"system command"</span>)</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">在awk内使用系统变量：</span><br><span class="line">	使用双引号（<span class="string">""</span>）</span><br><span class="line"></span><br><span class="line">awk 读取外部文件：</span><br><span class="line">	getline var &lt; (/path/to/path)</span><br><span class="line">	</span><br><span class="line">awk 读取子进程的结果：</span><br><span class="line">	((<span class="string">"system command"</span>)) | getline var</span><br><span class="line">	</span><br><span class="line">awk 派生子进程：</span><br><span class="line">	system(<span class="string">"system command"</span>)</span><br></pre></td></tr></table></figure>
 <ul>
 <li>关键点知识</li>
 </ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">取得系统内存页大小：</span><br><span class="line">	getconf PAGE_SIZE</span><br><span class="line">	</span><br><span class="line">取得进程内存使用：</span><br><span class="line">	/proc/pid/statm</span><br><span class="line">	</span><br><span class="line">取得程序文件路径：</span><br><span class="line">	/proc/pid/exe|cwd</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">取得系统内存页大小：</span><br><span class="line">	getconf PAGE_SIZE</span><br><span class="line">	</span><br><span class="line">取得进程内存使用：</span><br><span class="line">	/proc/&lt;pid&gt;/statm</span><br><span class="line">	</span><br><span class="line">取得程序文件路径：</span><br><span class="line">	/proc/&lt;pid&gt;/exe|cwd</span><br></pre></td></tr></table></figure>
 
           
         
@@ -802,7 +799,7 @@
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/10/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><span class="page-number current">11</span><a class="page-number" href="/page/12/">12</a><span class="space">&hellip;</span><a class="page-number" href="/page/31/">31</a><a class="extend next" rel="next" href="/page/12/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/page/10/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><span class="page-number current">11</span><a class="page-number" href="/page/12/">12</a><span class="space">&hellip;</span><a class="page-number" href="/page/32/">32</a><a class="extend next" rel="next" href="/page/12/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -850,7 +847,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">62</span>
+                  <span class="site-state-item-count">63</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
