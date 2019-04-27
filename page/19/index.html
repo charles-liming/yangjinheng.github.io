@@ -351,7 +351,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://yangjinheng.github.io/2017/10/01/python/22.协程和异步/">
+    <link itemprop="mainEntityOfPage" href="https://yangjinheng.github.io/2017/10/03/python/24.pymysql/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Jin Heng">
@@ -370,7 +370,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/10/01/python/22.协程和异步/" itemprop="url">协程和异步</a></h1>
+                <a class="post-title-link" href="/2017/10/03/python/24.pymysql/" itemprop="url">Pymysql</a></h1>
         
 
         <div class="post-meta">
@@ -382,8 +382,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-01T00:00:00+08:00">
-                2017-10-01
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-03T00:00:00+08:00">
+                2017-10-03
               </time>
             
 
@@ -444,37 +444,19 @@
       
         
           
-            <h1 id="协程"><a href="#协程" class="headerlink" title="协程"></a>协程</h1><p>协程，又称微线程，英文名Coroutine。一句话说明什么是线程：协程是一种用户态的轻量级线程。</p>
-<p>协程拥有自己的寄存器上下文和栈。协程调度切换时，将寄存器上下文和栈保存到其他地方，在切回来的时候，恢复先前保存的寄存器上下文和栈。因此：协程能保留上一次调用时的状态（即所有局部状态的一个特定组合），每次过程重入时，就相当于进入上一次调用的状态，换种说法：进入上一次离开时所处逻辑流的位置。</p>
-<p>优点：</p>
-<ul>
-<li>无需线程上下文切换的开销</li>
-<li><p>无需原子操作锁定及同步的开销</p>
-<ul>
-<li>“原子操作(atomic operation)是不需要synchronized”，所谓原子操作是指不会被线程调度机制打断的操作；这种操作一旦开始，就一直运行到结束，中间不会有任何 context switch （切换到另一个线程）。原子操作可以是一个步骤，也可以是多个操作步骤，但是其顺序是不可以被打乱，或者切割掉只执行部分。视作整体是原子性的核心。</li>
+            <h2 id="Connection-Object"><a href="#Connection-Object" class="headerlink" title="Connection Object"></a>Connection Object</h2><ul>
+<li>连接构造方法</li>
 </ul>
-</li>
-<li><p>方便切换控制流，简化编程模型</p>
-</li>
-<li>高并发+高扩展性+低成本：一个CPU支持上万的协程都不是问题。所以很适合用于高并发处理。</li>
-</ul>
-<p>缺点：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, host=None, user=None, password=<span class="string">""</span>,</span></span></span><br><span class="line"><span class="function"><span class="params">                database=None, port=<span class="number">0</span>, unix_socket=None,</span></span></span><br><span class="line"><span class="function"><span class="params">                charset=<span class="string">''</span>, sql_mode=None,</span></span></span><br><span class="line"><span class="function"><span class="params">                read_default_file=None, conv=None, use_unicode=None,</span></span></span><br><span class="line"><span class="function"><span class="params">                client_flag=<span class="number">0</span>, cursorclass=Cursor, init_command=None,</span></span></span><br><span class="line"><span class="function"><span class="params">                connect_timeout=<span class="number">10</span>, ssl=None, read_default_group=None,</span></span></span><br><span class="line"><span class="function"><span class="params">                compress=None, named_pipe=None, no_delay=None,</span></span></span><br><span class="line"><span class="function"><span class="params">                autocommit=False, db=None, passwd=None, local_infile=False,</span></span></span><br><span class="line"><span class="function"><span class="params">                max_allowed_packet=<span class="number">16</span>*<span class="number">1024</span>*<span class="number">1024</span>, defer_connect=False,</span></span></span><br><span class="line"><span class="function"><span class="params">                auth_plugin_map=&#123;&#125;, read_timeout=None, write_timeout=None,</span></span></span><br><span class="line"><span class="function"><span class="params">                bind_address=None, binary_prefix=False)</span>:</span></span><br></pre></td></tr></table></figure>
 <ul>
-<li>无法利用多核资源：协程的本质是个单线程,它不能同时将 单个CPU 的多个核用上,协程需要和进程配合才能运行在多CPU上.当然我们日常所编写的绝大部分应用都没有这个必要，除非是cpu密集型应用。</li>
-<li>进行阻塞（Blocking）操作（如I/O时）会阻塞掉整个程序</li>
+<li>创建数据库连接</li>
 </ul>
-<h2 id="Gevent模块"><a href="#Gevent模块" class="headerlink" title="Gevent模块"></a>Gevent模块</h2><p>从下面的实验可以看出来，当控制流一遇到I/O的时候，就会立即切换。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> pymysql</span><br><span class="line"></span><br><span class="line">config = &#123;</span><br><span class="line">          <span class="string">'host'</span>:<span class="string">'172.16.100.252'</span>,</span><br><span class="line">          <span class="string">'port'</span>:<span class="number">3306</span>,</span><br><span class="line">          <span class="string">'user'</span>:<span class="string">'root'</span>,</span><br><span class="line">          <span class="string">'password'</span>:<span class="string">'Jinheng890821@'</span>,</span><br><span class="line">          <span class="string">'db'</span>:<span class="string">'hellodb'</span>,                              <span class="comment">#指定数据库</span></span><br><span class="line">          <span class="string">'charset'</span>:<span class="string">'utf8mb4'</span>,                         <span class="comment">#设定字符集</span></span><br><span class="line">          <span class="string">'cursorclass'</span>:pymysql.cursors.DictCursor,    <span class="comment">#指定游标类</span></span><br><span class="line">          &#125;</span><br><span class="line"></span><br><span class="line">db = pymysql.Connect(**config)</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>游标，相当于使用 <code>mysql</code> 命令刚进入数据库时候那个光标的位置</p>
+</blockquote>
 <ul>
-<li>协程基本用法</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> gevent</span><br><span class="line"><span class="keyword">import</span> datetime</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func1</span><span class="params">()</span>:</span></span><br><span class="line">    print(<span class="string">'现在运行func1'</span>)</span><br><span class="line">    gevent.sleep(<span class="number">3</span>)</span><br><span class="line">    print(<span class="string">'返回func1继续运行'</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func2</span><span class="params">()</span>:</span></span><br><span class="line">    print(<span class="string">'现在运行func2'</span>)</span><br><span class="line">    gevent.sleep(<span class="number">3</span>)</span><br><span class="line">    print(<span class="string">'返回func2继续运行'</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func3</span><span class="params">()</span>:</span></span><br><span class="line">    print(<span class="string">'现在运行func3'</span>)</span><br><span class="line">    gevent.sleep(<span class="number">3</span>)</span><br><span class="line">    print(<span class="string">'返回func3继续运行'</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func4</span><span class="params">()</span>:</span></span><br><span class="line">    print(<span class="string">'现在运行func4'</span>)</span><br><span class="line">    gevent.sleep(<span class="number">3</span>)</span><br><span class="line">    print(<span class="string">'返回func4继续运行'</span>)</span><br><span class="line"></span><br><span class="line">t1 = datetime.datetime.now()</span><br><span class="line"></span><br><span class="line">tasklist = [gevent.spawn(func1),gevent.spawn(func2),gevent.spawn(func3),gevent.spawn(func4)]</span><br><span class="line">gevent.joinall(tasklist)</span><br><span class="line"></span><br><span class="line">t2 = datetime.datetime.now()</span><br><span class="line"></span><br><span class="line">print(t2-t1)</span><br></pre></td></tr></table></figure>
-<ul>
-<li>基于协程的爬虫</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> gevent</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> gevent <span class="keyword">import</span> monkey</span><br><span class="line"><span class="keyword">from</span> urllib.request <span class="keyword">import</span> urlopen</span><br><span class="line"></span><br><span class="line">monkey.patch_all()</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func</span><span class="params">(url)</span>:</span></span><br><span class="line">    print(<span class="string">'GET: %s'</span> % url)</span><br><span class="line">    resp = urlopen(url)</span><br><span class="line">    data = resp.read()</span><br><span class="line">    print(<span class="string">'%d bytes received from %s.'</span> % (len(data), url))</span><br><span class="line"></span><br><span class="line">urls = [<span class="string">'https://www.python.org/'</span>, <span class="string">'https://www.yahoo.com/'</span>, <span class="string">'https://github.com/'</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment"># start = time.time()</span></span><br><span class="line"><span class="comment"># for url in urls:</span></span><br><span class="line"><span class="comment">#     func(url)</span></span><br><span class="line"><span class="comment"># end = time.time()</span></span><br><span class="line"><span class="comment"># print("异步cost", end - start)</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">start = time.time()</span><br><span class="line"></span><br><span class="line">tasklist = [gevent.spawn(func, <span class="string">'https://www.python.org/'</span>),gevent.spawn(func, <span class="string">'https://www.yahoo.com/'</span>),gevent.spawn(func, <span class="string">'https://github.com/'</span>),]</span><br><span class="line">gevent.joinall(tasklist)</span><br><span class="line"></span><br><span class="line">end = time.time()</span><br><span class="line"></span><br><span class="line">print(<span class="string">"异步cost"</span>, end - start)</span><br></pre></td></tr></table></figure>
-<h1 id="asyncio"><a href="#asyncio" class="headerlink" title="asyncio"></a>asyncio</h1><p>asyncio是Python 3.4 试验性引入的异步I/O框架（PEP 3156），提供了基于协程做异步I/O编写单线程并发代码的基础设施。其核心组件有事件循环（Event Loop）、协程(Coroutine）、任务(Task)、未来对象(Future)以及其他一些扩充和辅助性质的模块。 </p>
-<h2 id="事件循环"><a href="#事件循环" class="headerlink" title="事件循环"></a>事件循环</h2><ul>
-<li>asyncio.events</li>
+<li>类的方法</li>
 </ul>
 <table>
 <thead>
@@ -485,35 +467,82 @@
 </thead>
 <tbody>
 <tr>
-<td><code>asyncio.get_event_loop()</code></td>
-<td>返回一个事件循环对象，是 <code>asyncio.BaseEventLoop</code> 的实例</td>
+<td><code>.cursor()</code></td>
+<td>使用此连接并且返回连接游标</td>
 </tr>
 <tr>
-<td><code>.run_until_complete(future)</code></td>
-<td>运行直到 <code>Future</code> 对象运行完成，如果该参数为协同程序, 则将其包装在任务中。</td>
+<td><code>.begin()</code></td>
+<td>开始事务</td>
 </tr>
 <tr>
-<td><code>.run_forever()</code></td>
-<td>运行直到调用 <code>.stop()</code></td>
+<td><code>.rollback()</code></td>
+<td>对事务进行回滚</td>
 </tr>
 <tr>
-<td><code>.isruning()</code></td>
-<td>返回事件循环是否正在运行</td>
+<td><code>.commit()</code></td>
+<td>对事务进行提交</td>
 </tr>
 <tr>
 <td><code>.close()</code></td>
-<td>关闭事件循环</td>
+<td>关闭连接，如果事务没有提交，则此操作包含了隐式回滚</td>
 </tr>
 <tr>
-<td><code>.is_closed()</code></td>
-<td>返回时间循环是否已经关闭</td>
+<td><code>.select_db(db)</code></td>
+<td>选择数据库</td>
 </tr>
 </tbody>
 </table>
-<ul>
-<li>asyncio.tasks</li>
-</ul>
-<table>
+<h2 id="err类"><a href="#err类" class="headerlink" title="err类"></a>err类</h2><table>
+<thead>
+<tr>
+<th>异常</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Warning</td>
+<td>当有严重警告时触发，例如插入数据是被截断等等。必须是 StandardError 的子类。</td>
+</tr>
+<tr>
+<td>Error</td>
+<td>警告以外所有其他错误类。必须是 StandardError 的子类。</td>
+</tr>
+<tr>
+<td>InterfaceError</td>
+<td>当有数据库接口模块本身的错误（而不是数据库的错误）发生时触发。 必须是Error的子类。</td>
+</tr>
+<tr>
+<td>DatabaseError</td>
+<td>和数据库有关的错误发生时触发。 必须是Error的子类。</td>
+</tr>
+<tr>
+<td>DataError</td>
+<td>当有数据处理时的错误发生时触发，例如：除零错误，数据超范围等等。 必须是DatabaseError的子类。</td>
+</tr>
+<tr>
+<td>OperationalError</td>
+<td>指非用户控制的，而是操作数据库时发生的错误。例如：连接意外断开、 数据库名未找到、事务处理失败、内存分配错误等等操作数据库是发生的错误。 必须是DatabaseError的子类。</td>
+</tr>
+<tr>
+<td>IntegrityError</td>
+<td>完整性相关的错误，例如外键检查失败等。必须是DatabaseError子类。</td>
+</tr>
+<tr>
+<td>InternalError</td>
+<td>数据库的内部错误，例如游标（cursor）失效了、事务同步失败等等。 必须是DatabaseError子类。</td>
+</tr>
+<tr>
+<td>ProgrammingError</td>
+<td>程序错误，例如数据表（table）没找到或已存在、SQL语句语法错误、 参数数量错误等等。必须是DatabaseError的子类。</td>
+</tr>
+<tr>
+<td>NotSupportedError</td>
+<td>不支持错误，指使用了数据库不支持的函数或API等。例如在连接对象上 使用.rollback()函数，然而数据库并不支持事务或者事务已关闭。 必须是DatabaseError的子类。</td>
+</tr>
+</tbody>
+</table>
+<h2 id="Cursor-Objects"><a href="#Cursor-Objects" class="headerlink" title="Cursor Objects"></a>Cursor Objects</h2><table>
 <thead>
 <tr>
 <th>方法</th>
@@ -522,19 +551,107 @@
 </thead>
 <tbody>
 <tr>
-<td><code>wait(fs, *, loop=None, timeout=None, return_when=&#39;ALL_COMPLETED&#39;)</code></td>
-<td>等待 <code>fs</code> 给出的 <code>future</code> 和协程完成。</td>
+<td><code>.callproc( procname [, parameters ] )</code></td>
+<td>调用存储过程并且传递参数，结果集可以通过 <code>.fetch*()</code> 得到</td>
 </tr>
 <tr>
-<td></td>
-<td></td>
+<td><code>.execute(operation [, parameters])</code></td>
+<td>执行数据库命令，<code>.execute(&#39;operation&#39;, (parameters))</code> 使用类似C风格的字符串格式化方法，可以防止SQL注入攻击</td>
 </tr>
 <tr>
-<td></td>
+<td><code>.executemany( operation, seq_of_parameters )</code></td>
+<td>批量操作，<code>.execute(&#39;operation&#39;, (seq_of_parameters))</code> 这里的参数可以是可迭代对象组成的序列，这会调用 <code>operation</code> 对序列中的每个元素执行操作</td>
+</tr>
+<tr>
+<td><code>.fetchone()</code></td>
+<td>获取查询结果集的下一行，返回单个序列，或在没有更多数据可用时返回<code>None</code></td>
+</tr>
+<tr>
+<td><code>.fetchmany([ size = cursor.arraysize ])</code></td>
+<td>获取查询结果的下一组行，返回一系列序列（例如元组列表）。没有更多行可用时返回空序列。</td>
+</tr>
+<tr>
+<td><code>.fetchall()</code></td>
+<td>获取查询结果的所有（剩余）行，并将它们作为一系列序列（例如元组列表）返回。请注意，游标的arraysize属性可能会影响此操作的性能。</td>
+</tr>
+<tr>
+<td><code>.close()</code></td>
+<td>关闭游标。也可以直接关闭连接，从而关闭游标</td>
+</tr>
+<tr>
+<td><code>.nextset()</code></td>
+<td>此方法将使光标跳到下一个可用集合，丢弃当前集合中的任何剩余行</td>
+</tr>
+<tr>
+<td><code>.setinputsizes(sizes)</code></td>
+<td>这可以在调用 <code>.execute*()</code> 之前使用，以预定义操作参数的内存区域。</td>
+</tr>
+<tr>
+<td><code>.setoutputsize(size [，column ])</code></td>
+<td>为大列提取设置列缓冲区大小（例如，LONG s，BLOB s等），该列被指定为结果序列的索引。不指定列将为游标中的所有大型列设置默认大小</td>
+</tr>
+<tr>
+<td><code>.scroll(value [, mode=&#39;relative&#39; ])</code></td>
+<td>根据 <code>mode</code> 移动游标到新位置，默认 <code>mode =&#39;relative&#39;</code> 表示相对当前的偏移量，当为 <code>mode =&#39;absolute&#39;</code> 时移动到绝对位置</td>
+</tr>
+<tr>
+<td><code>next()</code></td>
+<td>返回下一行数据</td>
+</tr>
+<tr>
+<td><code>.mogrify(query,args=None)</code></td>
+<td>参数化查询，防止SQL注入攻击，通过调用 <code>execute()</code> 方法返回发送到数据库的确切字符串。</td>
 </tr>
 </tbody>
 </table>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> asyncio</span><br><span class="line"><span class="keyword">import</span> datetime</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">func1</span><span class="params">()</span>:</span></span><br><span class="line">    print(<span class="string">'现在运行func1'</span>)</span><br><span class="line">    <span class="keyword">await</span> asyncio.sleep(<span class="number">3</span>)</span><br><span class="line">    print(<span class="string">'返回func1继续运行'</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">func2</span><span class="params">()</span>:</span></span><br><span class="line">    print(<span class="string">'现在运行func2'</span>)</span><br><span class="line">    <span class="keyword">await</span> asyncio.sleep(<span class="number">3</span>)</span><br><span class="line">    print(<span class="string">'返回func2继续运行'</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">func3</span><span class="params">()</span>:</span></span><br><span class="line">    print(<span class="string">'现在运行func3'</span>)</span><br><span class="line">    <span class="keyword">await</span> asyncio.sleep(<span class="number">3</span>)</span><br><span class="line">    print(<span class="string">'返回func3继续运行'</span>)</span><br><span class="line"></span><br><span class="line">t1 = datetime.datetime.now()</span><br><span class="line"></span><br><span class="line">loop = asyncio.get_event_loop()</span><br><span class="line">tasks = [func1(),func2(),func3()]</span><br><span class="line">loop.run_until_complete(asyncio.wait(tasks))</span><br><span class="line">loop.close()</span><br><span class="line"></span><br><span class="line">t2 = datetime.datetime.now()</span><br><span class="line"></span><br><span class="line">print(t2-t1)</span><br></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th>属性</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.description</code></td>
+<td>游标结果的字段描述信息，包含了：字段名，字段类型代码，显示尺寸，内部大小，精确度，规模，是否允许空</td>
+</tr>
+<tr>
+<td><code>.rownumber</code></td>
+<td>显示游标所在行</td>
+</tr>
+<tr>
+<td><code>.rowcount</code></td>
+<td>这是一个只读属性，并返回执行 <code>execute()</code> 方法后影响的行数</td>
+</tr>
+<tr>
+<td><code>.arraysize</code></td>
+<td>此读取/写入属性指定一次使用 <code>.fetchmany()</code> 提取的行数。它默认为1</td>
+</tr>
+<tr>
+<td><code>.connection</code></td>
+<td>此只读属性返回创建光标的Connection对象的引用。</td>
+</tr>
+<tr>
+<td><code>.__iter__</code></td>
+<td>将游标转换为可迭代对象</td>
+</tr>
+<tr>
+<td><code>.lastrowid</code></td>
+<td>获取新创建数据的自增ID</td>
+</tr>
+</tbody>
+</table>
+<h3 id="查询操作"><a href="#查询操作" class="headerlink" title="查询操作"></a>查询操作</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> pymysql</span><br><span class="line"></span><br><span class="line">config = &#123;</span><br><span class="line">          <span class="string">'host'</span>:<span class="string">'172.16.100.252'</span>,</span><br><span class="line">          <span class="string">'port'</span>:<span class="number">3306</span>,</span><br><span class="line">          <span class="string">'user'</span>:<span class="string">'root'</span>,</span><br><span class="line">          <span class="string">'password'</span>:<span class="string">'Jinheng890821@'</span>,</span><br><span class="line">          <span class="string">'db'</span>:<span class="string">'hellodb'</span>,</span><br><span class="line">          <span class="string">'charset'</span>:<span class="string">'utf8mb4'</span>,</span><br><span class="line">          <span class="string">'cursorclass'</span>:pymysql.cursors.DictCursor,</span><br><span class="line">          &#125;</span><br><span class="line"></span><br><span class="line">db = pymysql.Connect(**config)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 设置查询条件</span></span><br><span class="line">max_age = <span class="number">30</span></span><br><span class="line">mix_age = <span class="number">25</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 执行sql语句</span></span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    <span class="keyword">with</span> db.cursor() <span class="keyword">as</span> cursor:</span><br><span class="line">        sql = <span class="string">'SELECT * FROM students WHERE Age BETWEEN %s AND %s'</span></span><br><span class="line">        cursor.execute(sql, (mix_age, max_age))</span><br><span class="line">        result = cursor.fetchone()</span><br><span class="line">        print(result)</span><br><span class="line">        result = cursor.fetchone()</span><br><span class="line">        print(result)</span><br><span class="line">    db.commit()    <span class="comment"># 没有设置默认自动提交，需要主动提交，以保存所执行的语句</span></span><br><span class="line"><span class="keyword">finally</span>:</span><br><span class="line">    db.close()</span><br></pre></td></tr></table></figure>
+<ul>
+<li>查询结果</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">&#123;<span class="string">'StuID'</span>: <span class="number">5</span>, <span class="string">'Name'</span>: <span class="string">'Yu Yutong'</span>, <span class="string">'Age'</span>: <span class="number">26</span>, <span class="string">'Gender'</span>: <span class="string">'M'</span>, <span class="string">'ClassID'</span>: <span class="number">3</span>, <span class="string">'TeacherID'</span>: <span class="number">1</span>&#125;</span><br><span class="line">&#123;<span class="string">'StuID'</span>: <span class="number">17</span>, <span class="string">'Name'</span>: <span class="string">'Lin Chong'</span>, <span class="string">'Age'</span>: <span class="number">25</span>, <span class="string">'Gender'</span>: <span class="string">'M'</span>, <span class="string">'ClassID'</span>: <span class="number">4</span>, <span class="string">'TeacherID'</span>: <span class="keyword">None</span>&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="插入操作"><a href="#插入操作" class="headerlink" title="插入操作"></a>插入操作</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> pymysql</span><br><span class="line"></span><br><span class="line">config = &#123;</span><br><span class="line">          <span class="string">'host'</span>:<span class="string">'172.16.100.252'</span>,</span><br><span class="line">          <span class="string">'port'</span>:<span class="number">3306</span>,</span><br><span class="line">          <span class="string">'user'</span>:<span class="string">'root'</span>,</span><br><span class="line">          <span class="string">'password'</span>:<span class="string">'Jinheng890821@'</span>,</span><br><span class="line">          <span class="string">'db'</span>:<span class="string">'hellodb'</span>,</span><br><span class="line">          <span class="string">'charset'</span>:<span class="string">'utf8mb4'</span>,</span><br><span class="line">          <span class="string">'cursorclass'</span>:pymysql.cursors.DictCursor,</span><br><span class="line">          &#125;</span><br><span class="line"></span><br><span class="line">db = pymysql.Connect(**config)</span><br><span class="line"></span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    <span class="keyword">with</span> db.cursor() <span class="keyword">as</span> cursor:</span><br><span class="line">        sql = <span class="string">'INSERT INTO students VALUES (%s,%s,%s,%s,%s,%s)'</span></span><br><span class="line">        cursor.execute(sql, (NULL,<span class="string">'yangjinheng'</span>,<span class="string">'29'</span>,<span class="string">'M'</span>,<span class="number">10</span>,<span class="number">1</span>))</span><br><span class="line">    db.commit()    <span class="comment">#由于默认开启事务，所以需要自己提交，或者回滚</span></span><br><span class="line"><span class="keyword">finally</span>:</span><br><span class="line">    db.close()</span><br></pre></td></tr></table></figure>
+<ul>
+<li>官方示例</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> pymysql.cursors</span><br><span class="line"></span><br><span class="line"><span class="comment"># Connect to the database</span></span><br><span class="line">connection = pymysql.connect(host=<span class="string">'localhost'</span>,</span><br><span class="line">                             user=<span class="string">'user'</span>,</span><br><span class="line">                             password=<span class="string">'passwd'</span>,</span><br><span class="line">                             db=<span class="string">'db'</span>,</span><br><span class="line">                             charset=<span class="string">'utf8mb4'</span>,</span><br><span class="line">                             cursorclass=pymysql.cursors.DictCursor)</span><br><span class="line"></span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    <span class="keyword">with</span> connection.cursor() <span class="keyword">as</span> cursor:</span><br><span class="line">        <span class="comment"># Create a new record</span></span><br><span class="line">        sql = <span class="string">"INSERT INTO `users` (`email`, `password`) VALUES (%s, %s)"</span></span><br><span class="line">        cursor.execute(sql, (<span class="string">'webmaster@python.org'</span>, <span class="string">'very-secret'</span>))</span><br><span class="line"></span><br><span class="line">    <span class="comment"># connection is not autocommit by default. So you must commit to save</span></span><br><span class="line">    <span class="comment"># your changes.</span></span><br><span class="line">    connection.commit()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">with</span> connection.cursor() <span class="keyword">as</span> cursor:</span><br><span class="line">        <span class="comment"># Read a single record</span></span><br><span class="line">        sql = <span class="string">"SELECT `id`, `password` FROM `users` WHERE `email`=%s"</span></span><br><span class="line">        cursor.execute(sql, (<span class="string">'webmaster@python.org'</span>,))</span><br><span class="line">        result = cursor.fetchone()</span><br><span class="line">        print(result)</span><br><span class="line"><span class="keyword">finally</span>:</span><br><span class="line">    connection.close()</span><br></pre></td></tr></table></figure>
 
           
         
@@ -583,7 +700,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://yangjinheng.github.io/2017/09/30/python/21.selectorsIO复用/">
+    <link itemprop="mainEntityOfPage" href="https://yangjinheng.github.io/2017/10/02/python/23.元编程/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Jin Heng">
@@ -602,7 +719,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/09/30/python/21.selectorsIO复用/" itemprop="url">selectorsIO多路复用</a></h1>
+                <a class="post-title-link" href="/2017/10/02/python/23.元编程/" itemprop="url">元编程</a></h1>
         
 
         <div class="post-meta">
@@ -614,8 +731,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-30T00:00:00+08:00">
-                2017-09-30
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-02T00:00:00+08:00">
+                2017-10-02
               </time>
             
 
@@ -676,109 +793,21 @@
       
         
           
-            <h2 id="selectors"><a href="#selectors" class="headerlink" title="selectors"></a>selectors</h2><p>该模块允许基于 <code>select</code> 模块原语的高级和高效的I/O复用。鼓励用户使用此模块，除非他们需要精确控制所使用的操作系统级原语。</p>
-<p>模块定义了一个 BaseSelector的抽象基类， 以及它的子类，包括：SelectSelector， PollSelector, EpollSelector, DevpollSelector, KqueueSelector，另外还有 <code>DefaultSelector</code> 类实例化它，就可以返回当前平台上最好的I/O复用器实例。</p>
-<p>模块定义了两个常量，用于描述Event Mask，指示在给定文件对象上应该等待哪些I/O事件。 </p>
-<table>
-<thead>
-<tr>
-<th>属性</th>
-<th>含义</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>EVENT_READ</code></td>
-<td>表示可读，它的值是1</td>
-</tr>
-<tr>
-<td><code>EVENT_WRITE</code></td>
-<td>表示可写，它的值是2</td>
-</tr>
-</tbody>
-</table>
-<h2 id="selectors-SelectorKey"><a href="#selectors-SelectorKey" class="headerlink" title="selectors.SelectorKey"></a>selectors.SelectorKey</h2><p>是一个命名元祖类，SelectorKey 是用于将文件对象与其基础文件描述符，所选事件掩码和附加数据相关联的命名元祖。它由几个 BaseSelector 方法返回，它包含下列几个属性。</p>
-<table>
-<thead>
-<tr>
-<th>属性</th>
-<th>含义</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>fileobj</code></td>
-<td>需要监视的IO对象</td>
-</tr>
-<tr>
-<td><code>fd</code></td>
-<td>底层文件描述符</td>
-</tr>
-<tr>
-<td><code>events</code></td>
-<td>等待此IO对象发生的事件，可用：<code>EVENT_READ</code> 和 <code>EVENT_WRITE</code></td>
-</tr>
-<tr>
-<td><code>data</code></td>
-<td>与此文件对象关联的可选不透明数据：例如，这可以用于存储每个客户端的会话ID</td>
-</tr>
-</tbody>
-</table>
-<h2 id="selectors-BaseSelector"><a href="#selectors-BaseSelector" class="headerlink" title="selectors.BaseSelector"></a>selectors.BaseSelector</h2><p>BaseSelector 用于等待多个文件对象的I/O事件就绪。它支持文件流注册，注销和一种方法来等待这些流上的I/O事件，并具有可选的超时。它是一个抽象的基类，所以不能实例化，需要实例化 DefaultSelector 类才能使用。 BaseSelector 及其具体实现支持上下文管理协议。</p>
-<table>
-<thead>
-<tr>
-<th>方法</th>
-<th>作用</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>register(fileobj, events, data=None)</code></td>
-<td>注册文件对象以进行选择，监视文件对象的I/O事件。 <em>fileobj</em> 是要监视的文件对象。它可以是整数文件描述符或具有 <code>fileno()</code> 方法的对象。 <em>events</em> 是要监视的事件的按位掩码。 <em>data</em> 是一个不透明的对象。</td>
-</tr>
-<tr>
-<td><code>unregister(fileobj)</code></td>
-<td>从选择中取消注册文件对象，将其从监视中删除。文件对象在关闭前应该取消注册。 <em>fileobj</em> 必须是先前注册的文件对象。这将返回关联的 SelectorKey 实例，或者如果 fileobj 未注册，则引发 KeyError。如果 fileobj 无效，它将提高 ValueError （例如，它没有 fileno() 方法或其 fileno() 方法具有无效的返回值）。</td>
-</tr>
-<tr>
-<td><code>modify(fileobj, events, data=None)</code></td>
-<td>更改注册文件对象的受监视事件或附加数据。这相当于 <code>BaseSelector.unregister(fileobj)()</code> 随后是 <code>BaseSelector.register(fileobj, events, data)()</code>，除了它可以更有效地实现。</td>
-</tr>
-<tr>
-<td><code>select(timeout=None)</code></td>
-<td>等待直到某些已注册的文件对象准备就绪，或超时到期。如果是 timeout &gt; 0，则指定最大等待时间（以秒为单位）。如果是 timeout &lt;= 0，调用不会阻塞，并且会报告当前准备好的文件对象。如果 timeout 是 None，调用将阻塞，直到受监视的文件对象准备就绪。返回：SelectorKey和mark的元祖</td>
-</tr>
-<tr>
-<td><code>close()</code></td>
-<td>关闭选择器。必须调用此函数才能确保释放任何基础资源。选择器一旦关闭，不得使用。</td>
-</tr>
-<tr>
-<td><code>get_key(fileobj)</code></td>
-<td>返回与注册文件对象相关联的键。这将返回与此文件对象关联的 SelectorKey 实例，或者如果文件对象未注册，则引发 KeyError。</td>
-</tr>
-<tr>
-<td><code>get_map()</code></td>
-<td>返回阻塞IO复用器上已经 返回文件对象到选择器键的映射。这将返回 Mapping 实例将注册文件对象映射到其关联的 SelectorKey 实例。</td>
-</tr>
-<tr>
-<td><code>fileno()</code></td>
-<td>这将返回底层IO复用器对象使用的文件描述符。</td>
-</tr>
-</tbody>
-</table>
+            <h2 id="元编程"><a href="#元编程" class="headerlink" title="元编程"></a>元编程</h2><p>用元类进行编程，元类→类→对象，元类比类更抽象，生成类的类  元类定义的都是类的方法，类定义的都是实例方法 </p>
+<h2 id="type类"><a href="#type类" class="headerlink" title="type类"></a>type类</h2><p><code>type</code> 有一个功能，它可以在运行时产生类，<code>type</code> 可以传入一些参数，然后返回一个类。</p>
 <ul>
-<li>步骤</li>
+<li>语法</li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># 实例化一个 selector 对象</span><br><span class="line"># 在 selector 对象上注册监视一个文件描述符，选择监视类型，填写回调函数</span><br><span class="line"># 创建 selector 对象的事件循环</span><br><span class="line"># 遍历事件循环，在事件发生时候调用回调函数</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">type(name, bases, dict) -&gt; # 生成一个新类</span><br><span class="line">- name：类的名字</span><br><span class="line">- bases：父类的元组</span><br><span class="line">- dict：属性字典</span><br></pre></td></tr></table></figure>
 <ul>
-<li>官方示例</li>
+<li>示例</li>
 </ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> selectors</span><br><span class="line"><span class="keyword">import</span> socket</span><br><span class="line"></span><br><span class="line">sel = selectors.DefaultSelector()</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">accept</span><span class="params">(sock, mask)</span>:</span></span><br><span class="line">    conn, addr = sock.accept()  <span class="comment"># Should be ready</span></span><br><span class="line">    print(<span class="string">'accepted'</span>, conn, <span class="string">'from'</span>, addr)</span><br><span class="line">    conn.setblocking(<span class="keyword">False</span>)</span><br><span class="line">    sel.register(conn, selectors.EVENT_READ, read)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">read</span><span class="params">(conn, mask)</span>:</span></span><br><span class="line">    data = conn.recv(<span class="number">1000</span>)  <span class="comment"># Should be ready</span></span><br><span class="line">    <span class="keyword">if</span> data:</span><br><span class="line">        print(<span class="string">'echoing'</span>, repr(data), <span class="string">'to'</span>, conn)</span><br><span class="line">        conn.send(data)  <span class="comment"># Hope it won't block</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        print(<span class="string">'closing'</span>, conn)</span><br><span class="line">        sel.unregister(conn)</span><br><span class="line">        conn.close()</span><br><span class="line"></span><br><span class="line">sock = socket.socket()</span><br><span class="line">sock.bind((<span class="string">'localhost'</span>, <span class="number">1234</span>))</span><br><span class="line">sock.listen(<span class="number">100</span>)</span><br><span class="line">sock.setblocking(<span class="keyword">False</span>)</span><br><span class="line">sel.register(sock, selectors.EVENT_READ, accept)</span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span> <span class="keyword">True</span>:</span><br><span class="line">    events = sel.select()</span><br><span class="line">    <span class="keyword">for</span> key, mask <span class="keyword">in</span> events:</span><br><span class="line">        callback = key.data</span><br><span class="line">        callback(key.fileobj, mask)</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span></span><br><span class="line">    self.x = <span class="number">1000</span></span><br><span class="line">    </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">show</span><span class="params">(self)</span>:</span></span><br><span class="line">    print(self.__dict__)</span><br><span class="line">    </span><br><span class="line">Xclass = type(</span><br><span class="line">    <span class="string">'MyClass'</span>,</span><br><span class="line">    (object,),</span><br><span class="line">    &#123;<span class="string">'a'</span>:<span class="number">100</span>,<span class="string">'b'</span>:<span class="string">'string'</span>,<span class="string">'show'</span>:show,<span class="string">'__init__'</span>:__init__&#125;</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">print(Xclass.a,Xclass.b)</span><br><span class="line">cls = Xclass()</span><br><span class="line">cls.show()</span><br></pre></td></tr></table></figure>
+<h2 id="metaclass元类"><a href="#metaclass元类" class="headerlink" title="metaclass元类"></a>metaclass元类</h2><p><code>metaclass</code> 就是创建类的类，事实上 <code>type</code> 就是一个 <code>metaclass</code>，它就是用来创造 <code>类对象</code> 的类，它是 <code>类对象</code> 的 类，说白了，<code>type</code> 函数就是一个特殊的 <code>metaclass</code> ，<code>type</code> 是 Python 内置的 <code>metaclass</code> 不过我们可以编写自己的 <code>metaclass</code> 。</p>
 <ul>
-<li>基于事件驱动的群聊</li>
+<li>元类的使用</li>
 </ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> socket</span><br><span class="line"><span class="keyword">import</span> threading</span><br><span class="line"><span class="keyword">import</span> datetime</span><br><span class="line"><span class="keyword">import</span> logging</span><br><span class="line"><span class="keyword">import</span> selectors</span><br><span class="line"></span><br><span class="line">FORMAT = <span class="string">"%(asctime)s %(threadName)s %(thread)d %(message)s"</span></span><br><span class="line">logging.basicConfig(format=FORMAT, level=logging.INFO)</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ChatServer</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, ip=<span class="string">'127.0.0.1'</span>, port=<span class="number">60000</span>)</span>:</span> <span class="comment"># 启动服务</span></span><br><span class="line">        self.sock = socket.socket()</span><br><span class="line">        self.addr = (ip, port)</span><br><span class="line">        self.event = threading.Event()</span><br><span class="line">        self.selector = selectors.DefaultSelector() <span class="comment"># 创建selector</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">accept</span><span class="params">(self, sock)</span>:</span>  <span class="comment"># 多人连接</span></span><br><span class="line">        conn, addr = sock.accept()    <span class="comment">#接受连入的请求</span></span><br><span class="line">        conn.setblocking(<span class="keyword">False</span>)</span><br><span class="line">        self.selector.register(conn, selectors.EVENT_READ, self.recv)  <span class="comment"># 注册，监视每一个连接的 socket 对象</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">recv</span><span class="params">(self, sock)</span>:</span>  <span class="comment"># 接收客户端数据</span></span><br><span class="line">        data = sock.recv(<span class="number">1024</span>)  <span class="comment"># 数据已到达，接收数据</span></span><br><span class="line">        <span class="keyword">if</span> data == <span class="string">b''</span>:  <span class="comment"># 客户端主动断开，注销并关闭socket</span></span><br><span class="line">            self.selector.unregister(sock)</span><br><span class="line">            sock.close()</span><br><span class="line">            <span class="keyword">return</span></span><br><span class="line">        msg = <span class="string">"&#123;:%Y/%m/%d %H:%M:%S&#125; &#123;&#125;:&#123;&#125;\n&#123;&#125;\n"</span>.format(datetime.datetime.now(),*sock.getpeername(),data.decode())</span><br><span class="line">        logging.info(msg)</span><br><span class="line">        msg = msg.encode()</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> key <span class="keyword">in</span> self.selector.get_map().values():  <span class="comment"># 遍历目前在IO复用器上套接字</span></span><br><span class="line">            <span class="keyword">if</span> key.data == self.recv:  <span class="comment"># 排除 self.accept 套接字，向 recv 的套接字发送数据</span></span><br><span class="line">                key.fileobj.send(msg)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">start</span><span class="params">(self)</span>:</span> <span class="comment"># 启动监听</span></span><br><span class="line">        self.sock.bind(self.addr)  <span class="comment"># 绑定</span></span><br><span class="line">        self.sock.listen()  <span class="comment"># 监听</span></span><br><span class="line">        self.sock.setblocking(<span class="keyword">False</span>) <span class="comment"># 不阻塞</span></span><br><span class="line">        self.selector.register(self.sock, selectors.EVENT_READ, self.accept)  <span class="comment"># 注册</span></span><br><span class="line">        threading.Thread(target=self.select, name=<span class="string">'selector'</span>, daemon=<span class="keyword">True</span>).start()  <span class="comment"># 启动IO复用器</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">select</span><span class="params">(self)</span>:</span>  <span class="comment"># 阻塞</span></span><br><span class="line">        <span class="keyword">while</span> <span class="keyword">not</span> self.event.is_set():</span><br><span class="line">            events = self.selector.select()  <span class="comment"># 开始监视，一旦有请求连接过来，返回(key, mask)元组</span></span><br><span class="line">            print(<span class="string">'-'</span> * <span class="number">30</span>)</span><br><span class="line">            <span class="keyword">for</span> key, mask <span class="keyword">in</span> events:</span><br><span class="line">                logging.info(key)</span><br><span class="line">                logging.info(mask)</span><br><span class="line">                callback = key.data  <span class="comment"># 回调函数，此处是self.accept，self.recv 函数</span></span><br><span class="line">                callback(key.fileobj)  <span class="comment"># 调用 self.accept，self.recv 参数为连入的套接字</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">stop</span><span class="params">(self)</span>:</span> <span class="comment"># 停止服务</span></span><br><span class="line">        self.event.set()</span><br><span class="line">        fobjs = []</span><br><span class="line">        <span class="keyword">for</span> fd, key <span class="keyword">in</span> self.selector.get_map().items():</span><br><span class="line">            fobjs.append(key.fileobj)</span><br><span class="line">        <span class="keyword">for</span> fobj <span class="keyword">in</span> fobjs:</span><br><span class="line">            self.selector.unregister(fobj)</span><br><span class="line">            fobj.close()</span><br><span class="line">        self.selector.close()</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></span><br><span class="line">    cs = ChatServer()</span><br><span class="line">    cs.start()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> <span class="keyword">True</span>:</span><br><span class="line">        cmd = input(<span class="string">'&gt;&gt;'</span>).strip()</span><br><span class="line">        <span class="keyword">if</span> cmd == <span class="string">'quit'</span>:</span><br><span class="line">            cs.stop()</span><br><span class="line">            threading.Event().wait(<span class="number">3</span>)</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">        logging.info(threading.enumerate())</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Mcls</span><span class="params">(type)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__new__</span><span class="params">(cls,name,bases,dict)</span>:</span></span><br><span class="line">        <span class="comment"># __new__ 是在 __init__ 之前被调用的特殊方法，用来创建对象并返回这个对象</span></span><br><span class="line">        <span class="comment"># 而__init__只是将传入的参数初始化给对象</span></span><br><span class="line">        print(cls)</span><br><span class="line">        print(name)</span><br><span class="line">        print(bases)</span><br><span class="line">        print(dict)</span><br><span class="line">        <span class="keyword">return</span> super().__new__(cls,name,bases,dict)</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span><span class="params">(metaclass=Mcls)</span>:</span>        <span class="comment"># 第一种使用元类的方法，使用 metaclass 关键字指定元类</span></span><br><span class="line">    id = <span class="number">100</span></span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span></span><br><span class="line">        print(<span class="string">'...A-init...'</span>)</span><br><span class="line">        </span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">B</span><span class="params">(A)</span>:</span>                     <span class="comment"># 第二种使用元类的方法，从使用元类的类中继承依然是 metaclass 类型</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span></span><br><span class="line">        print(<span class="string">'...B-init...'</span>)</span><br><span class="line">        </span><br><span class="line">D = Mcls(<span class="string">'D'</span>,(),&#123;&#125;)             <span class="comment"># 第三种类似与 type 函数，它调用 元类的__new__ 方法</span></span><br></pre></td></tr></table></figure>
 
           
         
@@ -866,7 +895,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">63</span>
+                  <span class="site-state-item-count">64</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
