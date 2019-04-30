@@ -525,7 +525,7 @@
 </table>
 <h2 id="RequestHandler-钩子"><a href="#RequestHandler-钩子" class="headerlink" title="RequestHandler 钩子"></a>RequestHandler 钩子</h2><p>继承 RequestHandler 并重写下面的方法，可以在 HTTP 请求到达时，分别用不同的方法来处理 HTTP 的请求</p>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">head、get、post、delete、patch、put、optionse</span><br></pre></td></tr></table></figure>
-<h3 id="initialize"><a href="#initialize" class="headerlink" title="initialize"></a>initialize</h3><p>重写这个方法，可以接收路由向视图传递的参数</p>
+<h3 id="initialize"><a href="#initialize" class="headerlink" title="initialize"></a>initialize</h3><p>重写这个方法，可以接收路由向视图传递的参数，</p>
 <ul>
 <li>首先在定义路由时候传递参数给视图</li>
 </ul>
@@ -534,6 +534,8 @@
 <li>在视图类的 initialize 方法中接收并赋值</li>
 </ul>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ViewArgs</span><span class="params">(tornado.web.RequestHandler)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">initialize</span><span class="params">(self, key)</span>:</span></span><br><span class="line">        self.key = key</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get</span><span class="params">(self, *args, **kwargs)</span>:</span></span><br><span class="line">        self.write(<span class="string">'View Args is '</span> + self.key)</span><br></pre></td></tr></table></figure>
+<h3 id="prepare"><a href="#prepare" class="headerlink" title="prepare"></a>prepare</h3><p>prepare 钩子方法是一个预处理方法，在执行对应的请求之前调用</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Prepare</span><span class="params">(tornado.web.RequestHandler)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">prepare</span><span class="params">(self, *args, **kwargs)</span>:</span></span><br><span class="line">        self.data = <span class="string">"hello world"</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get</span><span class="params">(self, *args, **kwargs)</span>:</span></span><br><span class="line">        self.write(self.data)</span><br></pre></td></tr></table></figure>
 <h3 id="set-default-headers"><a href="#set-default-headers" class="headerlink" title="set_default_headers"></a>set_default_headers</h3><p>set_default_headers 它在进入 HTTP 响应处理方法之前被调用，可以重写该方法预先设置默认的 headers。</p>
 <p>如果在 get、post 方法内又调用了 self.set_header 那么 get 、post 方法内设置的会覆盖 set_default_headers 设置的头部信息</p>
 <ul>
@@ -542,6 +544,8 @@
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">HeaderHandler</span><span class="params">(tornado.web.RequestHandler)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">set_default_headers</span><span class="params">(self)</span>:</span></span><br><span class="line">        self.set_header(<span class="string">"Server"</span>, <span class="string">"127.0.0.1"</span>)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get</span><span class="params">(self, *args, **kwargs)</span>:</span></span><br><span class="line">        self.write(<span class="string">"get_set_default_headers"</span>)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">post</span><span class="params">(self, *args, **kwargs)</span>:</span></span><br><span class="line">        self.write(<span class="string">"post_set_default_headers"</span>)</span><br></pre></td></tr></table></figure>
 <h3 id="write-error"><a href="#write-error" class="headerlink" title="write_error"></a>write_error</h3><p>它接收 self.send_error 抛出的错误状态码，和一些信息，处理并返回页面</p>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Send_Error</span><span class="params">(tornado.web.RequestHandler)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">write_error</span><span class="params">(self, status_code, **kwargs)</span>:</span></span><br><span class="line">        <span class="keyword">if</span> status_code == <span class="number">500</span>:</span><br><span class="line">            self.write(<span class="string">"ERROR 500"</span>)</span><br><span class="line">            self.write(kwargs)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get</span><span class="params">(self, *args, **kwargs)</span>:</span></span><br><span class="line">        self.send_error(<span class="number">500</span>, key=<span class="string">"value"</span>)</span><br></pre></td></tr></table></figure>
+<h3 id="on-finish"><a href="#on-finish" class="headerlink" title="on_finish"></a>on_finish</h3><p>在请求结束之后进行调用。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Onfinish</span><span class="params">(tornado.web.RequestHandler)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">on_finish</span><span class="params">(self, *args, **kwargs)</span>:</span></span><br><span class="line">        print(<span class="string">"done"</span>)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get</span><span class="params">(self, *args, **kwargs)</span>:</span></span><br><span class="line">        self.write(<span class="string">"on_finish"</span>)</span><br></pre></td></tr></table></figure>
 <h2 id="RequestHandler-方法"><a href="#RequestHandler-方法" class="headerlink" title="RequestHandler 方法"></a>RequestHandler 方法</h2><p>继承 RequestHandler 后可以直接使用一些已经存在的方法</p>
 <h3 id="self-set-header"><a href="#self-set-header" class="headerlink" title="self.set_header"></a>self.set_header</h3><ul>
 <li>向响应报文设置一个头部</li>
@@ -622,6 +626,57 @@
 <li>self.clear_cookie 清除指定 Cookie，self.clear_all_cookies 清除所有的 Cookie</li>
 </ul>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">CleanCookie</span><span class="params">(tornado.web.RequestHandler)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get</span><span class="params">(self, *args, **kwargs)</span>:</span></span><br><span class="line">        cookie = self.get_secure_cookie(<span class="string">"key"</span>)</span><br><span class="line">        <span class="keyword">if</span> cookie:</span><br><span class="line">            cookie = cookie.decode(<span class="string">'utf-8'</span>)</span><br><span class="line">            self.write(<span class="string">"Clean Cookie: "</span> + cookie)</span><br><span class="line">            self.clear_cookie(<span class="string">"key"</span>, path=<span class="string">"/"</span>)</span><br><span class="line">            <span class="comment"># self.clear_all_cookies(path="/")</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            self.write(<span class="string">"No Cookie"</span>)</span><br></pre></td></tr></table></figure>
+<h2 id="基于协程的异步"><a href="#基于协程的异步" class="headerlink" title="基于协程的异步"></a>基于协程的异步</h2><h3 id="tornado-httpclient-AsyncHTTPClient"><a href="#tornado-httpclient-AsyncHTTPClient" class="headerlink" title="tornado.httpclient.AsyncHTTPClient"></a>tornado.httpclient.AsyncHTTPClient</h3><p>tornado 提供的异步 web 请求客户端，可以用来进行异步 web 请求</p>
+<ul>
+<li>fetch</li>
+</ul>
+<p>fetch(request) 用于执行一个 web 请求，并异步返回一个 tornado.httpclient.HTTPResponse，request 可以时一个 url，也可以是一个 tornado.httpclient.HTTPRequest 对象。</p>
+<ul>
+<li>HTTPRequest</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">- url       # 字符串类型，要访问的网址</span><br><span class="line">- method    # 字符串类型，HTTP 请求方法</span><br><span class="line">- headers   # 字典或者 HTTPHeaders 附加协议头</span><br><span class="line">- body      # 请求体</span><br></pre></td></tr></table></figure>
+<ul>
+<li>HTTPResponse</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">- code      # 响应状态码</span><br><span class="line">- rason     # 状态短语</span><br><span class="line">- body      # 返回的响应数据</span><br><span class="line">- error     # 异常</span><br></pre></td></tr></table></figure>
+<p>从 Tornado 3.1 版本开始，无需 @asynchronous，即仅需要使用 @gen.coroutine 就可以了，而且 @gen.coroutine 装饰的代码段执行完成后会自动调用finish。</p>
+<p>gen 模块的某些较旧部分已弃用，将在 6.0 中删除。 这包括 engine, YieldPoint, Callback, Wait, WaitAll, MultiYieldPoint, Task。</p>
+<blockquote>
+<p>   @asynchronous 装饰器已经过时，在 6.0 中删除。</p>
+</blockquote>
+<ul>
+<li>协程实现的异步处理请求</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Coroutine_Asyncio</span><span class="params">(tornado.web.RequestHandler)</span>:</span></span><br><span class="line"><span class="meta">    @gen.coroutine</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get</span><span class="params">(self, *args, **kwargs)</span>:</span></span><br><span class="line">        client = AsyncHTTPClient()</span><br><span class="line">        <span class="comment"># response = yield gen.sleep(20)</span></span><br><span class="line">        <span class="comment"># self.write("Coroutine_Asyncio Sleep 20 s")</span></span><br><span class="line">        response = <span class="keyword">yield</span> client.fetch(<span class="string">'https://api.douban.com/v2/movie/top250'</span>)</span><br><span class="line">        <span class="keyword">if</span> response.code == <span class="number">200</span>:</span><br><span class="line">            data = escape.json_decode(response)</span><br><span class="line">            self.write(data)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            data = &#123;<span class="string">"message"</span>: <span class="string">"Remote computer is not responding"</span>&#125;</span><br><span class="line">            self.write(data)</span><br></pre></td></tr></table></figure>
+<h2 id="WebSocketHandler"><a href="#WebSocketHandler" class="headerlink" title="WebSocketHandler"></a>WebSocketHandler</h2><ul>
+<li>self.write_message(message, binary=False)</li>
+</ul>
+<p>主动向客户端发送 message 消息，message 可以是字符串或者字典（自动转为 JSON 字符串），如果 binary 为 False ，则 message 会以 UTF-8 编码发送，如果 binary 为 False 则发送二进制模式，字节码。</p>
+<ul>
+<li>self.close</li>
+</ul>
+<p>关闭 websocket 连接</p>
+<ul>
+<li>self.open</li>
+</ul>
+<p>当 websocket 连接被建立时调用</p>
+<ul>
+<li>self.on_message</li>
+</ul>
+<p>当客户端发来消息时调用</p>
+<ul>
+<li>self.on_close</li>
+</ul>
+<p>当 websocket 连接关闭后调用</p>
+<ul>
+<li>self.check_origin</li>
+</ul>
+<p>判断源客户端，对于符合条件的请求允许连接，相当于是同源策略，返回布尔值决定是否允许连接</p>
+<h2 id="疑难问题"><a href="#疑难问题" class="headerlink" title="疑难问题"></a>疑难问题</h2><ul>
+<li>There is no current event loop in thread ‘Thread-4’</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">https://github.com/tornadoweb/tornado/issues/<span class="number">2308</span></span><br><span class="line">https://blog.csdn.net/jusang486/article/details/<span class="number">82382358</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> asyncio</span><br><span class="line"><span class="keyword">import</span> tornado.web</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">TestHandler</span><span class="params">(tornado.web.RequestHandler)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get</span><span class="params">(self)</span>:</span></span><br><span class="line">        self.write(<span class="string">"test success"</span>)</span><br><span class="line"></span><br><span class="line">urlpatterns = [</span><br><span class="line">    (<span class="string">r"/test"</span>, TestHandler),</span><br><span class="line">]</span><br><span class="line"></span><br><span class="line">settings = &#123;</span><br><span class="line">    <span class="string">'debug'</span>: <span class="keyword">True</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Application</span><span class="params">(tornado.web.Application)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span></span><br><span class="line">        super().__init__(urlpatterns, **settings)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">run</span><span class="params">(self, port=<span class="number">8886</span>)</span>:</span></span><br><span class="line">        self.listen(port)</span><br><span class="line">        tornado.ioloop.IOLoop.instance().start()</span><br><span class="line"></span><br><span class="line">app = Application()</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">start_server</span><span class="params">()</span>:</span></span><br><span class="line">    asyncio.set_event_loop(asyncio.new_event_loop())</span><br><span class="line">    app.run(port=<span class="number">5000</span>)    </span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> threading <span class="keyword">import</span> Thread</span><br><span class="line">t = Thread(target=start_server, args=())</span><br><span class="line">t.daemon = <span class="keyword">True</span></span><br><span class="line">t.start()</span><br><span class="line">t.join()</span><br></pre></td></tr></table></figure>
 
           
         
