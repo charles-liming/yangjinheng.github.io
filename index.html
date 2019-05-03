@@ -351,6 +351,263 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://yangjinheng.github.io/2019/05/02/python/webshell和paramiko/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Jin Heng">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="默默">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/05/02/python/webshell和paramiko/" itemprop="url">webshell和paramiko</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-05-02T00:00:00+08:00">
+                2019-05-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Python/" itemprop="url" rel="index">
+                    <span itemprop="name">Python</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>前两天和同事聊关于 CMDB 上如何增加一个远程执行 Ansible 的界面，最初的想法是使用一个定时器到服务器轮询命令行的输出，展示到页面上，于是写出来一个可以实现接近实时的展示 Ansible 的输出了，于是我试了一个别的命令 top ，完蛋！前端根本没法渲染，文字全部重复了。</p>
+<p>于是又上谷歌搜索解决方案，知道了 HTML5 有 Websocket 这个新技术，可以实时的进行前后端的双向通信，这正适合 webshell 的需求。</p>
+<p>先在网上搜索一下有没有轮子，果然轮子一大堆，没一个合适的，代码写的都跟屎一样，谁看得懂啊😩。</p>
+<p>最后在 jumpserver 这个跳板机源码中找到了轮子，照着 jumpserver 的跳板机写出一个 Tornado 版本的 webshell 的 demsha’xiaoo。</p>
+<p>核心功能一实现，剩下的就懒得写了，这毛病得改😂。。。。。</p>
+<h1 id="webshell"><a href="#webshell" class="headerlink" title="webshell"></a>webshell</h1><p>实现原理是：当 web 端发起请求 websocket 连接时候，Tornado 会实例化一个 paramiko 的 SSHClient 并获取一个交互式接口，从交互式接口返回的数据将通过 websocket 返回给前端的 xtrem.js 这个前端 term 字符处理的前端库。</p>
+<ul>
+<li>Tornado webshell Demo</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> asyncio</span><br><span class="line"><span class="keyword">import</span> threading</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> paramiko</span><br><span class="line"><span class="keyword">import</span> tornado</span><br><span class="line"><span class="keyword">import</span> tornado.websocket</span><br><span class="line"><span class="keyword">from</span> tornado <span class="keyword">import</span> gen</span><br><span class="line"></span><br><span class="line">HOSTS = <span class="string">"172.16.100.100"</span></span><br><span class="line">PORT = <span class="number">22</span></span><br><span class="line">USERNAME = <span class="string">"root"</span></span><br><span class="line">PASSWORD = <span class="string">"123456"</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyThread</span><span class="params">(threading.Thread)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, chan)</span>:</span></span><br><span class="line">        threading.Thread.__init__(self)</span><br><span class="line">        self.chan = chan</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">run</span><span class="params">(self)</span>:</span></span><br><span class="line">        asyncio.set_event_loop(asyncio.new_event_loop())</span><br><span class="line">        <span class="keyword">while</span> <span class="keyword">not</span> self.chan.chan.exit_status_ready():</span><br><span class="line">            <span class="comment"># time.sleep(0.1)</span></span><br><span class="line">            <span class="keyword">try</span>:</span><br><span class="line">                data = self.chan.chan.recv(<span class="number">1024</span>)</span><br><span class="line">                self.chan.write_message(data)</span><br><span class="line">            <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">                print(<span class="string">"没有收到 SSH 服务器的数据"</span>, str(e))</span><br><span class="line">        self.chan.sshclient.close()</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">False</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">WebSSHServer</span><span class="params">(tornado.websocket.WebSocketHandler)</span>:</span></span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">open</span><span class="params">(self)</span>:</span></span><br><span class="line">        self.sshclient = paramiko.SSHClient()</span><br><span class="line">        self.sshclient.load_system_host_keys()</span><br><span class="line">        self.sshclient.set_missing_host_key_policy(paramiko.AutoAddPolicy())</span><br><span class="line">        self.sshclient.connect(HOSTS, PORT, USERNAME, PASSWORD)</span><br><span class="line">        self.chan = self.sshclient.invoke_shell(term=<span class="string">'xterm'</span>)</span><br><span class="line">        self.chan.settimeout(<span class="number">10</span>)</span><br><span class="line"></span><br><span class="line">        thread = MyThread(self)</span><br><span class="line">        thread.setDaemon(<span class="keyword">True</span>)</span><br><span class="line">        thread.start()</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">on_message</span><span class="params">(self, message)</span>:</span></span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            self.chan.send(message)</span><br><span class="line">        <span class="keyword">except</span> Exception <span class="keyword">as</span> ex:</span><br><span class="line">            print(str(ex))</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">on_close</span><span class="params">(self)</span>:</span></span><br><span class="line">        self.sshclient.close()</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">check_origin</span><span class="params">(self, origin)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">True</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    app = tornado.web.Application([</span><br><span class="line">        (<span class="string">r"/terminals/"</span>, WebSSHServer),</span><br><span class="line">    ], debug=<span class="keyword">True</span>)</span><br><span class="line">    http_server = tornado.httpserver.HTTPServer(app)</span><br><span class="line">    http_server.listen(port=<span class="number">5000</span>,address=<span class="string">"0.0.0.0"</span>)</span><br><span class="line">    tornado.ioloop.IOLoop.current().start()</span><br></pre></td></tr></table></figure>
+<ul>
+<li>前端代码</li>
+</ul>
+<figure class="highlight"><table><tr><td class="code"><pre><span class="line">&lt;!doctype html&gt;</span><br><span class="line">&lt;html&gt;</span><br><span class="line"></span><br><span class="line">&lt;head&gt;</span><br><span class="line">    &lt;link rel=<span class="string">"stylesheet"</span> href=<span class="string">"./xterm.js/xterm.css"</span> /&gt;</span><br><span class="line">    &lt;link rel=<span class="string">"stylesheet"</span> href=<span class="string">"./xterm.js/addons/fullscreen/fullscreen.css"</span> /&gt;</span><br><span class="line">    &lt;script src="./xterm.js/xterm.js"&gt;&lt;/script&gt;</span><br><span class="line">    &lt;script src="./xterm.js/addons/fit/fit.js"&gt;&lt;/script&gt;</span><br><span class="line">    &lt;script src="./xterm.js/addons/attach/attach.js"&gt;&lt;/script&gt;</span><br><span class="line">    &lt;script src="./xterm.js/addons/fullscreen/fullscreen.js"&gt;&lt;/script&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line"></span><br><span class="line">&lt;body&gt;</span><br><span class="line">    &lt;div id="terminal" style="height: 800px; width: 1000px;"&gt;&lt;/div&gt;</span><br><span class="line">    &lt;script&gt;</span><br><span class="line">        Terminal.applyAddon(attach);</span><br><span class="line">        Terminal.applyAddon(fit);</span><br><span class="line">        Terminal.applyAddon(fullscreen);</span><br><span class="line">        var term = new Terminal(&#123;cursorBlink: true&#125;);</span><br><span class="line">        term.open(document.getElementById(<span class="string">'terminal'</span>), true);</span><br><span class="line">        var socket = new WebSocket(<span class="string">'ws://127.0.0.1:5000/terminals/'</span>);</span><br><span class="line">        term.attach(socket, true, true);</span><br><span class="line">        term._initialized = true</span><br><span class="line">        socket.onclose = function () &#123;</span><br><span class="line">            term.writeln(<span class="string">"closed. Thank you for use!"</span>);</span><br><span class="line">        &#125;;</span><br><span class="line">    &lt;/script&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line"></span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+<h1 id="SSHClient"><a href="#SSHClient" class="headerlink" title="SSHClient"></a>SSHClient</h1><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SSHClient</span> <span class="params">(ClosingContextManager)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span></span><br><span class="line">        self._system_host_keys = HostKeys()</span><br><span class="line">        self._host_keys = HostKeys()</span><br><span class="line">        self._host_keys_filename = <span class="keyword">None</span></span><br><span class="line">        self._log_channel = <span class="keyword">None</span></span><br><span class="line">        self._policy = RejectPolicy()</span><br><span class="line">        self._transport = <span class="keyword">None</span></span><br><span class="line">        self._agent = <span class="keyword">None</span></span><br></pre></td></tr></table></figure>
+<p>SSH 服务器会话的一种高级表示形式。这个类封装了 <code>.Transport</code>, <code>.Channel</code> 和 <code>.SFTPClient</code>，以处理验证和打开通道的大部分方面。一个典型的用例是：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">client = SSHClient()</span><br><span class="line">client.load_system_host_keys()</span><br><span class="line">client.connect(&apos;ssh.example.com&apos;)</span><br><span class="line">stdin, stdout, stderr = client.exec_command(&apos;ls -l&apos;)</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">您可以传递用于身份验证和服务器主机密钥检查的显式重写。默认机制是尝试使用本地密钥文件或 SSH 代理(如果正在运行)。此类的实例可用作上下文管理器。</span><br></pre></td></tr></table></figure>
+<h2 id="load-system-host-keys"><a href="#load-system-host-keys" class="headerlink" title="load_system_host_keys"></a>load_system_host_keys</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">load_system_host_keys</span><span class="params">(self, filename=None)</span>:</span></span><br></pre></td></tr></table></figure>
+<p>从系统(只读)文件加载主机密钥。使用此方法读取的主机密钥不会被 Save_host_keys 保存。此方法可多次调用。</p>
+<p>每个新的主机密钥集将与现有集合并(如果有冲突，则新的替换旧的)。</p>
+<p>如果将 filename 保留为 None，将尝试从 OpenSSH 使用的用户的本地 known hosts 文件中读取密钥，如果无法读取该文件，则不会引发任何例外。这可能只适用于POSIX。</p>
+<p>参数：filename 要读取的文件名，或 None</p>
+<p>异常引发：IOError，如果提供了文件名，但无法读取该文件</p>
+<h2 id="load-host-keys"><a href="#load-host-keys" class="headerlink" title="load_host_keys"></a>load_host_keys</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">load_host_keys</span><span class="params">(self, filename)</span>:</span></span><br></pre></td></tr></table></figure>
+<p>从本地主机密钥文件加载主机密钥。</p>
+<p>使用此方法读取的主机密钥将在通过 load_system_host_keys 加载的键之后进行检查，但将由 Save_host_keys 保存(这样就可以修改它们)。</p>
+<p>缺少的主机密钥策略 .AutoAddPolicy 在连接到先前未知的服务器时将密钥添加到此集合并保存它们。此方法可多次调用。</p>
+<p>每个新的主机密钥集将与现有集合并(如果有冲突，则新的替换旧的)。自动保存时，使用最后一个主机名。</p>
+<p>参数：filename 要读取的文件名</p>
+<p>异常引发：IOError，如果提供了文件名，但无法读取该文件</p>
+<h2 id="save-host-keys"><a href="#save-host-keys" class="headerlink" title="save_host_keys"></a>save_host_keys</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">save_host_keys</span><span class="params">(self, filename)</span>:</span></span><br></pre></td></tr></table></figure>
+<p>将主机密钥保存回文件。</p>
+<p>只有加载了 load_host_keys (加上任何直接添加的) 的主机密钥才会被保存-而不是加载了 load_system_host_keys 的任何主机密钥。</p>
+<p>参数：filename 保存到</p>
+<p>异常引发：IOError 如果无法写入文件</p>
+<h2 id="get-host-keys"><a href="#get-host-keys" class="headerlink" title="get_host_keys"></a>get_host_keys</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_host_keys</span><span class="params">(self)</span>:</span></span><br></pre></td></tr></table></figure>
+<p>获取本地的 .hostkeys 对象。这可用于检查本地主机密钥或更改它们。</p>
+<p>返回值：作为 .host keys 对象的本地主机密钥。</p>
+<h2 id="set-log-channel"><a href="#set-log-channel" class="headerlink" title="set_log_channel"></a>set_log_channel</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">set_log_channel</span><span class="params">(self, name)</span>:</span></span><br></pre></td></tr></table></figure>
+<p>设置日志记录通道。</p>
+<p>默认的是 Paramiko.transport，但是它可以设置为您想要的任何东西。</p>
+<p>参数：name 用于日志记录的新通道名称</p>
+<h2 id="set-missing-host-key-policy"><a href="#set-missing-host-key-policy" class="headerlink" title="set_missing_host_key_policy"></a>set_missing_host_key_policy</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">set_missing_host_key_policy</span><span class="params">(self, policy)</span>:</span></span><br></pre></td></tr></table></figure>
+<p>将策略设置为在没有已知主机密钥的情况下连接到服务器时使用。</p>
+<p>详细的说:</p>
+<p>Policy 是一个 policy class (或其实例)，即 .MissingHostKeyPolicy 的一些子类，如 .RejectPolicy (默认值)、.AutoAddPolicy .WarningPolicy 或用户创建的子类。</p>
+<p>当 host key 出现在客户端对象缓存的主机密钥结构中(由 load_system_host_keys 和 / 或 load_host_keys 操纵的主机密钥)时，主机密钥是已知的。</p>
+<p>参数：.MissingHostKeyPolicy policy 从先前未知的服务器接收主机密钥时要使用的策略</p>
+<h2 id="families-and-addresses"><a href="#families-and-addresses" class="headerlink" title="_families_and_addresses"></a>_families_and_addresses</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">_families_and_addresses</span><span class="params">(self, hostname, port)</span>:</span></span><br></pre></td></tr></table></figure>
+<p>生成准备连接的：地址家族 + IP + 端口</p>
+<p>参数：hostname 要连接到的服务器</p>
+<p>参数：port 要连接到的服务器端口</p>
+<p>返回值：yield 可迭代的 (家族，地址) 的元组</p>
+<h2 id="connect"><a href="#connect" class="headerlink" title="connect"></a>connect</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">connect</span><span class="params">(self, hostname, port=SSH_PORT, username=None, password=None, pkey=None, </span></span></span><br><span class="line"><span class="function"><span class="params">            key_filename=None, timeout=None, allow_agent=True, look_for_keys=True, compress=False, </span></span></span><br><span class="line"><span class="function"><span class="params">            sock=None, gss_auth=False, gss_kex=False, gss_deleg_creds=True, gss_host=None,</span></span></span><br><span class="line"><span class="function"><span class="params">            banner_timeout=None, auth_timeout=None, gss_trust_dns=True, passphrase=None,)</span>:</span></span><br></pre></td></tr></table></figure>
+<p>连接到SSH服务器并对其进行身份验证。服务器的主机密钥将根据系统主机密钥(参见 load_system_host_keys)和任何本地主机密钥(load_host_keys)进行检查。<br>如果在这两组主机密钥中都没有找到服务器的主机名，则使用丢失的主机密钥策略(请参阅set_missing_host_key_policy)。<br>默认策略是拒绝密钥并引发一个 .sshexception。</p>
+<p>身份验证按以下优先顺序进行:</p>
+<ol>
+<li><p>传入的 pkey 或 key_filename (如果有的话)<br> key_filename 可以包含 OpenSSH 公共证书路径和常规私有密钥路径;<br> 当找到以 cert.pub 结尾的文件时，假定它们与私钥匹配，并且将加载这两个组件。(私钥本身不需要在 key_filename 中列出，只需要证书即可。)</p>
+</li>
+<li><p>任何我们可以通过SSH代理找到的密钥</p>
+</li>
+<li><p>可在 ~/.ssh/ 中发现的任何 id_rsa、id_dsa 或 id_ecdsa 密钥<br> 当 OpenSSH-style 的公共证书与现有的此类私钥匹配时(例如，一个拥有 id_rsa 和 id_rsa-cert.pub)，证书将与私钥一起加载，并用于身份验证。</p>
+</li>
+<li><p>如果给定密码，则使用普通用户名/密码验证</p>
+</li>
+</ol>
+<p>如果私钥需要密码来解锁，并且传入了密码，则该密码将用于尝试解锁密钥。</p>
+<p>参数  hostname:        字符串   要连接到的服务器<br>参数  port:            整形     要连接到的服务器端口<br>参数  username:        字符串   进行身份验证的用户名(默认为当前本地用户名)<br>参数  password:        字符串   用于密码认证; 如果没有提供 passphrase ，也可用于私钥解密。<br>参数  passphrase:      字符串   用于解密私钥。<br>参数  pkey:            .PKey   用于身份验证的可选私钥<br>参数  key_filename:    字符串   要尝试验证的可选私钥和/或证书的文件名或文件名列表<br>参数  timeout:         浮点数   TCP连接的可选超时(以秒为单位)<br>参数  allow_agent:     布尔值   设置为 False 以禁用到 SSH 代理的连接<br>参数  look_for_keys:   布尔值   设置为 False 以禁用在 ~/.ssh/ 中搜索可发现的私钥文件<br>参数  compress:        布尔值   设置为 True 打开压缩<br>参数  sock:            socket  一个打开的套接字或类似套接字的对象(如 .Channel)，用于与目标主机通信<br>参数  gss_auth:        布尔值  如果您想使用 GSS-API 身份验证，请使用 True<br>参数  gss_kex:         布尔值  执行 GSS-API 密钥交换和用户身份验证<br>参数  gss_deleg_creds: 布尔值  是否委托 GSS-API 客户端凭据<br>参数  gss_host:        字符串  kerberos 数据库中的目标名称。默认值:主机名<br>参数  gss_trust_dns:   布尔值  指示是否信任 DNS 将连接到的主机的名称安全地规范化(默认为 True)。<br>参数  banner_timeout:  浮点数  可选超时(以秒为单位)，以等待出现 SSH banner。<br>参数  auth_timeout:    浮点数  等待身份验证响应的可选超时(以秒为单位)。</p>
+<h2 id="close"><a href="#close" class="headerlink" title="close"></a>close</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">close</span><span class="params">(self)</span>:</span></span><br></pre></td></tr></table></figure>
+<p>关闭这个 SSHClient 及其底层 . transport。</p>
+<p>警告::</p>
+<p>在某些情况下，如果不这样做，可能会导致 Python 解释器在关闭时挂起(通常是由于竞态条件)。</p>
+<p>当您使用完客户端对象时，最好是 close 它们，而不是依赖于垃圾收集。</p>
+<h2 id="exec-command"><a href="#exec-command" class="headerlink" title="exec_command"></a>exec_command</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">exec_command</span><span class="params">(self, command, bufsize=<span class="number">-1</span>, timeout=None, get_pty=False, environment=None,)</span>:</span></span><br></pre></td></tr></table></figure>
+<p>在 SSH 服务器上执行命令。打开一个新的 .Channel，并执行请求的命令。命令的输入和输出流作为 Python file-like 对象返回，这些对象表示 stdin、stdout 和 stderr。</p>
+<p>参数 command     字符串: 要执行的命令</p>
+<p>参数 bufsize     整形:   解释方式与 Python 中内置的 file() 函数相同。</p>
+<p>参数 timeout     整形:   设置命令的通道超时。见 .Channel.settimeout</p>
+<p>参数 environment 字典:   shell 环境变量的 dict，将合并到远程命令在其中执行的默认环境中。</p>
+<p>​                         警告：服务器可能静默地拒绝某些环境变量；有关详细信息，请参阅 .channel.set_Environment_variable 的警告。</p>
+<p>返回值：执行命令结果的三元组 stdin、stdout 和 stderr</p>
+<p>异常引发 .SSHException – 如果服务器无法执行该命令</p>
+<h2 id="invoke-shell"><a href="#invoke-shell" class="headerlink" title="invoke_shell"></a>invoke_shell</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">invoke_shell</span><span class="params">(self, term=<span class="string">'vt100'</span>, width=<span class="number">80</span>, height=<span class="number">24</span>, width_pixels=<span class="number">0</span>, height_pixels=<span class="number">0</span>, environment=None)</span>:</span></span><br></pre></td></tr></table></figure>
+<p>在 SSH 服务器上启动交互式shell会话。打开一个新的 .Channel 并使用请求的终端类型和大小连接到伪终端。</p>
+<p>参数：term 要模拟的终端类型（例如，vt100）</p>
+<p>参数：width 终端窗口的宽度（以字符为单位）</p>
+<p>参数：height 终端窗口的高度（以字符为单位）</p>
+<p>参数：width_pixels 终端窗口的宽度（以像素为单位）</p>
+<p>参数：height_pixels 终端窗口的高度（以像素为单位）</p>
+<p>参数：environment 命令的环境</p>
+<p>返回值：连接到远程 shell 的新 .Channel</p>
+<p>异常引发：.SSHException  - 如果服务器无法调用shell</p>
+<h2 id="open-sftp"><a href="#open-sftp" class="headerlink" title="open_sftp"></a>open_sftp</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">open_sftp</span><span class="params">(self)</span>:</span></span><br></pre></td></tr></table></figure>
+<p>在SSH服务器上打开一个SFTP会话。</p>
+<p>返回值：一个新的 .SFTPClient 会话对象</p>
+<h2 id="get-transport"><a href="#get-transport" class="headerlink" title="get_transport"></a>get_transport</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_transport</span><span class="params">(self)</span>:</span></span><br></pre></td></tr></table></figure>
+<p>返回此 SSH 连接的基础 <code>.Transport</code> 对象。</p>
+<p>这可以用于执行低级任务，例如打开特定类型的通道。</p>
+<h2 id="key-from-filepath"><a href="#key-from-filepath" class="headerlink" title="_key_from_filepath"></a>_key_from_filepath</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">_key_from_filepath</span><span class="params">(self, filename, klass, password)</span>:</span></span><br></pre></td></tr></table></figure>
+<p>尝试从给定的字符串路径 filename ：</p>
+<p>尝试从给定的字符串路径文件名推导出 .pkey</p>
+<ol>
+<li><p>如果 filename 看来是证书，则加载匹配的私钥。</p>
+</li>
+<li><p>否则，文件名将被假定为私钥，如果存在匹配的公共证书，则将加载它。</p>
+</li>
+</ol>
+<h2 id="auth"><a href="#auth" class="headerlink" title="_auth"></a>_auth</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">_auth</span><span class="params">(self, username, password, pkey, key_filenames, allow_agent, </span></span></span><br><span class="line"><span class="function"><span class="params">        look_for_keys, gss_auth, gss_kex, gss_deleg_creds, gss_host, passphrase,)</span>:</span></span><br></pre></td></tr></table></figure>
+<p>按以下顺序尝试：</p>
+<ul>
+<li>密钥传入，如果有传入。</li>
+<li>可以通过SSH代理找到任何密钥(如果允许的话)。</li>
+<li>在 ~/.ssh/（如果允许）中可发现的任何 id_rsa、id_dsa 或 id_ecdsa 密钥。</li>
+<li>如果提供了密码，请使用普通用户名/密码。<br>(可能需要密码来解锁私钥(如果 passphrase 也没有给出]，或者用于双因素身份验证(这是必需的)。</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://yangjinheng.github.io/2019/04/28/python/Tornado/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -712,165 +969,11 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://yangjinheng.github.io/2019/04/27/web/websocket/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Jin Heng">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="默默">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/04/27/web/websocket/" itemprop="url">Websocket 笔记</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-04-27T00:00:00+08:00">
-                2019-04-27
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/WEB前端/" itemprop="url" rel="index">
-                    <span itemprop="name">WEB前端</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="socket-io"><a href="#socket-io" class="headerlink" title="socket.io"></a>socket.io</h1><p>由于 Flask-SocketIO 这个库它只支持 socket.io 协议的客户端，不支持原生的 websocket 所以需要学习以下 socket.io 的使用。</p>
-<h2 id="socket-id"><a href="#socket-id" class="headerlink" title="socket.id"></a>socket.id</h2><p>websocket 套接字的唯一标志，在 connect 事件触发后才有值。</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">socket.on(<span class="string">'connect'</span>, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(socket.id)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
-<h2 id="socket-connected"><a href="#socket-connected" class="headerlink" title="socket.connected"></a>socket.connected</h2><p>websocket 套接字是否已经建立连接，布尔值</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">socket.on(<span class="string">'connect'</span>, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(socket.connected)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
-<h2 id="socket-disconnected"><a href="#socket-disconnected" class="headerlink" title="socket.disconnected"></a>socket.disconnected</h2><p>websocket 套接字连接是否已经断开，布尔值</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">socket.on(&apos;connect&apos;, function () &#123;</span><br><span class="line">    console.log(socket.disconnected)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
-<h2 id="socket-open"><a href="#socket-open" class="headerlink" title="socket.open"></a>socket.open</h2><p>手动打开套接字，socket.connect 是它的同义词</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> socket = io（&#123; </span><br><span class="line">    autoConnect：<span class="literal">false</span></span><br><span class="line">&#125;）;</span><br><span class="line"></span><br><span class="line">socket.open（）;</span><br></pre></td></tr></table></figure>
-<p>或者监听断开事件进行重连</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">socket.on（<span class="string">'disconnect'</span>，（）=&gt; &#123; </span><br><span class="line">  socket.open（）; </span><br><span class="line">&#125;）;</span><br></pre></td></tr></table></figure>
-<h2 id="socket-emit"><a href="#socket-emit" class="headerlink" title="socket.emit"></a>socket.emit</h2><p>将数据发送到由字符串名称标识的套接字，数据可以是任何可以序列化的数据结构。</p>
-<h1 id="TODO"><a href="#TODO" class="headerlink" title="TODO"></a>TODO</h1><p>未完待续</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/32/">32</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/33/">33</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -918,7 +1021,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">64</span>
+                  <span class="site-state-item-count">65</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
