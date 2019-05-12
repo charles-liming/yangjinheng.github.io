@@ -351,6 +351,380 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://yangjinheng.github.io/2017/09/23/python/14.argparse参数解析器/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Jin Heng">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="默默">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/09/23/python/14.argparse参数解析器/" itemprop="url">argparse参数解析器</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-23T00:00:00+08:00">
+                2017-09-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Python/" itemprop="url" rel="index">
+                    <span itemprop="name">Python</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="Argparse简介"><a href="#Argparse简介" class="headerlink" title="Argparse简介"></a>Argparse简介</h2><ul>
+<li><code>argparse</code> 是一个用于命令项选项与参数解析的模块</li>
+<li>在程序中定义需要的参数和修饰，模块就会从 <code>sys.argv</code> 中解析出这些参数，不符合定义则抛出异常</li>
+<li>它还可以根据定义自动生成命令行下 <code>-h</code> 帮助信息。</li>
+</ul>
+<h3 id="POSIX约定"><a href="#POSIX约定" class="headerlink" title="POSIX约定"></a>POSIX约定</h3><p>下面是POSIX标准中关于程序名、参数的约定：</p>
+<ul>
+<li>程序名不宜少于2个字符且不多于9个字符；</li>
+<li>程序名应只包含小写字母和阿拉伯数字；</li>
+<li>选项名应该是单字符活单数字，且以短横<code>-</code>为前綴；</li>
+<li>多个不需要选项参数的选项，可以合并。例如：<code>foo -a -b -c</code> 可以合并书写为 <code>foo -abc</code></li>
+<li>选项与其参数之间用空白符隔开；</li>
+<li>选项参数不可选。</li>
+<li>若选项参数有多值，要将其并为一个字串传进来。譬如：<code>myprog -u &quot;arnold,joe,jane&quot;</code>。这种情况下，需要自己解决这些参数的分离问题。</li>
+<li>选项应该在操作数出现之前出现。</li>
+<li>特殊参数<code>--</code>指明所有参数都结束了，其后任何参数都认为是操作数。</li>
+<li>选项如何排列没有什么关系，但对互相排斥的选项，如果一个选项的操作结果覆盖其他选项的操作结果时，最后一个选项起作用；如果选项重复，则顺序处理。</li>
+<li>允许操作数的顺序影响程序行为，但需要作文档说明。</li>
+<li>读写指定文件的程序应该将单个参数’-‘作为有意义的标准输入或输出来对待。</li>
+</ul>
+<h3 id="GNU选项"><a href="#GNU选项" class="headerlink" title="GNU选项"></a>GNU选项</h3><p>GNU鼓励程序员使用–help、–verbose等形式的长选项。这些选项不仅不与POSIX约定冲突，而且容易记忆，另外也提供了在所有GNU工具之间保持一致性的机会。GNU长选项有自己的约定：</p>
+<ul>
+<li>对于已经遵循POSIX约定的GNU程序，每个短选项都有一个对应的长选项。</li>
+<li>额外针对GNU的长选项不需要对应的短选项，仅仅推荐要有。</li>
+<li>长选项可以缩写成保持惟一性的最短的字串。</li>
+<li>选项参数与长选项之间或通过空白字符活通过一个’=’来分隔。</li>
+<li>选项参数是可选的（只对短选项有效）。</li>
+<li>长选项允许以一个短横线为前缀。</li>
+</ul>
+<h2 id="创建解析器"><a href="#创建解析器" class="headerlink" title="创建解析器"></a>创建解析器</h2><p><code>argparse.ArgumentParser()</code>是参数解析器的类，实例化它可以得到一个参数解析器，下面是实例化参数。</p>
+<p>语法：<code>argparse.ArgumentParser(prog=None, usage=None, description=None, epilog=None, parents=[], formatter_class=&lt;class &#39;argparse.HelpFormatter&#39;&gt;, prefix_chars=&#39;-&#39;, fromfile_prefix_chars=None, argument_default=None, conflict_handler=&#39;error&#39;, add_help=True, allow_abbrev=True)</code></p>
+<ul>
+<li>创建解析器对象</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">10</span>]:  parser = argparse.ArgumentParser()</span><br></pre></td></tr></table></figure>
+<ul>
+<li>可用参数</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>prog</td>
+<td>文件名，默认为 sys.argv[0]，用来在help信息中描述程序的名称</td>
+</tr>
+<tr>
+<td>usage</td>
+<td>描述程序用途的字符串</td>
+</tr>
+<tr>
+<td>description</td>
+<td>help 信息前显示的信息</td>
+</tr>
+<tr>
+<td>epilog</td>
+<td>help 信息之后显示的信息</td>
+</tr>
+<tr>
+<td>parents</td>
+<td>由ArgumentParser对象组成的列表，它们的arguments选项会被包含到新ArgumentParser对象中</td>
+</tr>
+<tr>
+<td>formatter_class</td>
+<td>help 信息输出的格式，为了美观…</td>
+</tr>
+<tr>
+<td>prefix_chars</td>
+<td>参数前缀，默认为 ‘-‘，（最好不要修改）</td>
+</tr>
+<tr>
+<td>fromfile_prefix_chars</td>
+<td>前缀字符，放在文件名之前</td>
+</tr>
+<tr>
+<td>argument_default</td>
+<td>设置一个全局的选项的缺省值，一般每个选项单独设置，基本没用</td>
+</tr>
+<tr>
+<td>conflict_handler</td>
+<td>解决冲突的策略，默认情况下冲突会发生错误，（最好不要修改）</td>
+</tr>
+<tr>
+<td>add_help</td>
+<td>是否增加 -h/-help 选项 (默认为True)，一般help信息都是必须的</td>
+</tr>
+<tr>
+<td>allow_abbrev</td>
+<td>允许长选项的缩写，默认为True</td>
+</tr>
+</tbody>
+</table>
+<h2 id="配置解析器"><a href="#配置解析器" class="headerlink" title="配置解析器"></a>配置解析器</h2><p>向参数解析器添加一个参数，和参数的一些修饰信息，决定了如何从命令行中解析这个参数。用法如下：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">ArgumentParser.add_argument(name <span class="keyword">or</span> flags...</span><br><span class="line">                            [, action=<span class="string">'...'</span>]</span><br><span class="line">                            [, nargs=<span class="string">'...'</span>]</span><br><span class="line">                            [, const=<span class="string">'...'</span>]</span><br><span class="line">                            [, default=<span class="string">'...'</span>]</span><br><span class="line">                            [, type=<span class="string">'...'</span>]</span><br><span class="line">                            [, choices=<span class="string">'...'</span>]</span><br><span class="line">                            [, required=<span class="string">'...'</span>]</span><br><span class="line">                            [, help=<span class="string">'...'</span>]</span><br><span class="line">                            [, metavar=<span class="string">'...'</span>]</span><br><span class="line">                            [, dest=<span class="string">'...'</span>]</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>name or flags：参数，分为两种</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>name</td>
+<td>位置参数，用引号括住的字符串，在程序中引用时候直接使用 <strong>参数解析器对象.参数名</strong> 形式引用</td>
+</tr>
+<tr>
+<td>flags</td>
+<td>可选参数，以 - 开头的字符串，–开头表示全称，在命令行传参时候，两种方式都可以。但在程序中引用时候需要使用   <strong>参数解析器对象.参数全称</strong> 形式引用</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p> 位置参数：</p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> argparse    <span class="comment">#导入模块</span></span><br><span class="line">parser = argparse.ArgumentParser()    <span class="comment">#定义一个参数解析器对象</span></span><br><span class="line">parser.add_argument(<span class="string">'path'</span>)    <span class="comment">#定义一个位置参数</span></span><br><span class="line"></span><br><span class="line">args = parser.parse_args()    <span class="comment">#参数解析结果</span></span><br><span class="line">print(args)</span><br><span class="line">print(args.path)    <span class="comment">#打印某个参数接收到的值</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">[python@localhost test]$ python args.py /etc/init.d/</span><br><span class="line">Namespace(path=<span class="string">'/etc/init.d/'</span>)</span><br><span class="line">/etc/init.d/</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>可选参数：</p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> argparse</span><br><span class="line">parser = argparse.ArgumentParser()</span><br><span class="line">parser.add_argument(<span class="string">'-p'</span>,<span class="string">'--path'</span>)</span><br><span class="line"></span><br><span class="line">args = parser.parse_args()</span><br><span class="line">print(args)</span><br><span class="line">print(args.path)</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">[python@localhost test]$ python args.py -p /etc/init.d/</span><br><span class="line">Namespace(path=<span class="string">'/etc/init.d/'</span>)</span><br><span class="line">/etc/init.d/</span><br></pre></td></tr></table></figure>
+<ul>
+<li>action：参数动作，表示从命令行接收到该参数时候如何处理，默认为 store。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>可用值</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>store</td>
+<td>设置参数值为命令行获取到该参数后提供的子参数</td>
+</tr>
+<tr>
+<td>store_const</td>
+<td>如果命令行获取到该参数，则设置参数值为 const 所保存的值</td>
+</tr>
+<tr>
+<td>store_true</td>
+<td>如果命令行获取到该参数，则设置参数值为True</td>
+</tr>
+<tr>
+<td>store_false</td>
+<td>如果命令行获取到该参数，则设置参数值为False</td>
+</tr>
+<tr>
+<td>append</td>
+<td>将该参数后的提供的子参数放入列表，例如：test.py -s 1 -s 2 -s 3，收集为 s=[‘1’, ‘2’, ‘3’]</td>
+</tr>
+<tr>
+<td>append_const</td>
+<td>每从命令行获取到该参数一次，就将 const 所保存的值放入列表一次</td>
+</tr>
+<tr>
+<td>count</td>
+<td>如果命令行获取到该参数，则设置参数值为 参数出现的次数</td>
+</tr>
+<tr>
+<td>version</td>
+<td>如果命令行获取到该参数，则显示 version 所保存的值</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>定义一个可选参数</p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> argparse</span><br><span class="line">parser = argparse.ArgumentParser()</span><br><span class="line">parser.add_argument(<span class="string">'-p'</span>,<span class="string">'--path'</span>,action=<span class="string">'store_true'</span>)</span><br><span class="line"></span><br><span class="line">args = parser.parse_args()</span><br><span class="line">print(args)</span><br><span class="line">print(args.path)</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">[python@localhost test]$ python args.py -p</span><br><span class="line">Namespace(path=<span class="keyword">True</span>)</span><br><span class="line"><span class="keyword">True</span></span><br><span class="line">[python@localhost test]$ python args.py </span><br><span class="line">Namespace(path=<span class="keyword">False</span>)</span><br><span class="line"><span class="keyword">False</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>nargs：参数数量</li>
+</ul>
+<p>需要注意的是 <code>*、+、?</code> 需要用引号括起来，而数字不用。</p>
+<table>
+<thead>
+<tr>
+<th>符号</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>‘*’</td>
+<td>0个或多个，可以没有</td>
+</tr>
+<tr>
+<td>‘+’</td>
+<td>1个或多个，至少有1个</td>
+</tr>
+<tr>
+<td>‘?’</td>
+<td>0个或1个，如果未能从命令行获得，则从 default 定义处获取。</td>
+</tr>
+<tr>
+<td>N</td>
+<td>N个，只接受这个数量的参数，多了少了都不行</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>有默认值的位置参数</p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> argparse</span><br><span class="line">parser = argparse.ArgumentParser()</span><br><span class="line">parser.add_argument(<span class="string">'path'</span>,nargs=<span class="string">'?'</span>,default=<span class="string">'.'</span>)</span><br><span class="line"></span><br><span class="line">args = parser.parse_args()</span><br><span class="line">print(args)</span><br><span class="line">print(args.path)</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">[python@localhost test]$ python args.py </span><br><span class="line">Namespace(path=<span class="string">'.'</span>)</span><br><span class="line">.</span><br><span class="line">[python@localhost test]$ python args.py /etc/init.d/</span><br><span class="line">Namespace(path=<span class="string">'/etc/init.d/'</span>)</span><br><span class="line">/etc/init.d/</span><br></pre></td></tr></table></figure>
+<ul>
+<li>choices：设置参数值的范围，如果 <code>choices</code> 中的类型不是字符串，记得指定 <code>type</code></li>
+</ul>
+<blockquote>
+<p>可选值的位置参数</p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> argparse</span><br><span class="line">parser = argparse.ArgumentParser()</span><br><span class="line">parser.add_argument(<span class="string">'path'</span>,choices=(<span class="string">'/tmp'</span>,<span class="string">'/etc'</span>))</span><br><span class="line"></span><br><span class="line">args = parser.parse_args()</span><br><span class="line">print(args)</span><br><span class="line">print(args.path)</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">[python@localhost test]$ python args.py /etc</span><br><span class="line">Namespace(path=<span class="string">'/etc'</span>)</span><br><span class="line">/etc</span><br><span class="line">[python@localhost test]$ python args.py /opt</span><br><span class="line">usage: args.py [-h] &#123;/tmp,/etc&#125;</span><br><span class="line">args.py: error: argument path: invalid choice: <span class="string">'/opt'</span> (choose <span class="keyword">from</span> <span class="string">'/tmp'</span>, <span class="string">'/etc'</span>)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>type：参数类型，默认为 <code>str</code></li>
+<li>metavar：帮助信息中显示的参数名称</li>
+<li>dest：可作为参数名，如果没有指定该参数则默认为选项名去掉前缀后作为参数名，对于位置参数无效</li>
+<li>const：保存一个常量</li>
+<li>default：参数的默认值</li>
+<li>required：是否必选，只针对可选参数，对位置参数无效</li>
+<li>version：保存版本信息</li>
+<li>help： help 信息</li>
+</ul>
+<h2 id="其他方法"><a href="#其他方法" class="headerlink" title="其他方法"></a>其他方法</h2><p>.add_argument_group<br>.add_mutually_exclusive_group<br>.add_subparsers<br>.convert_arg_line_to_args<br>.error<br>.exit<br>.format_help<br>.format_usage<br>.get_default<br>.parse_args<br>.parse_known_args<br>.print_help<br>.print_usage<br>.register<br>.set_defaults<br>.print_help</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://yangjinheng.github.io/2017/09/22/python/13.pathlib和shutil/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -614,381 +988,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://yangjinheng.github.io/2017/09/21/python/12.文件IO/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Jin Heng">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="默默">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/09/21/python/12.文件IO/" itemprop="url">文件I/O</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-21T00:00:00+08:00">
-                2017-09-21
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Python/" itemprop="url" rel="index">
-                    <span itemprop="name">Python</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="文件IO"><a href="#文件IO" class="headerlink" title="文件IO"></a>文件IO</h1><h2 id="文件的操作"><a href="#文件的操作" class="headerlink" title="文件的操作"></a>文件的操作</h2><h3 id="创建文件-open"><a href="#创建文件-open" class="headerlink" title="创建文件.open()"></a>创建文件.open()</h3><p>打开文件和创建文件对象，文件属于可迭代对象。</p>
-<h4 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h4><p><code>open(file, mode=&#39;r&#39;, buffering=-1, encoding=None, errors=None, newline=None, closefd=True, opener=None)</code></p>
-<h4 id="参数"><a href="#参数" class="headerlink" title="参数"></a>参数</h4><ul>
-<li><code>file</code> 文件路径或者打开文件的描述符，必须的参数。</li>
-</ul>
-<ul>
-<li><code>mode</code> 文件的打开模式</li>
-</ul>
-<table>
-<thead>
-<tr>
-<th>模式</th>
-<th>作用</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>r</td>
-<td>读模式（默认）</td>
-</tr>
-<tr>
-<td>w</td>
-<td>写模式，从首部直接覆盖文件</td>
-</tr>
-<tr>
-<td>x</td>
-<td>创建并写入一个新文件</td>
-</tr>
-<tr>
-<td>a</td>
-<td>追加模式</td>
-</tr>
-<tr>
-<td>b</td>
-<td>二进制模式，配合 <code>rw</code> 等参数使用</td>
-</tr>
-<tr>
-<td>t</td>
-<td>文本模式（默认）</td>
-</tr>
-<tr>
-<td>+</td>
-<td>读写模式，补全缺失的模式</td>
-</tr>
-</tbody>
-</table>
-<ul>
-<li><code>buffering</code> 设置缓冲的策略，正数表示使用指定大小的缓冲</li>
-</ul>
-<table>
-<thead>
-<tr>
-<th>参数</th>
-<th>含义</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>0</td>
-<td>表示禁用缓冲</td>
-</tr>
-<tr>
-<td>负数</td>
-<td>表示使用系统默认缓冲</td>
-</tr>
-<tr>
-<td>1</td>
-<td>表示缓冲一行数据</td>
-</tr>
-<tr>
-<td>大于1</td>
-<td>表示指定大小的缓冲。</td>
-</tr>
-</tbody>
-</table>
-<ul>
-<li><code>encoding</code> 文本文件的编码设置，windows 默认：GBK，LINUX默认：UTF-8。</li>
-<li><code>errors</code> 指定编码错误的可选字符串。</li>
-<li><code>newline</code> 控制通用换行符的工作方式。</li>
-</ul>
-<p>在读文件的时候：<code>newline=None</code> 表示<code>\r、\n、\r\n</code>都会被转换为<code>\n</code></p>
-<p>在写文件的时候：<code>newline=None</code> 表示使用系统的分行符号。</p>
-<h4 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h4><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">214</span>]: f = open(<span class="string">'test'</span>,mode=<span class="string">'w+'</span>)</span><br></pre></td></tr></table></figure>
-<h3 id="打开模式"><a href="#打开模式" class="headerlink" title="打开模式"></a>打开模式</h3><table>
-<thead>
-<tr>
-<th>模式</th>
-<th>描述</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>r</td>
-<td>以只读方式打开文件。文件的指针将会放在文件的开头。这是默认模式。</td>
-</tr>
-<tr>
-<td>rb</td>
-<td>以二进制格式打开一个文件用于只读。文件指针将会放在文件的开头。这是默认模式。一般用于非文本文件如图片等。</td>
-</tr>
-<tr>
-<td>r+</td>
-<td>打开一个文件用于读写。文件指针将会放在文件的开头。</td>
-</tr>
-<tr>
-<td>rb+</td>
-<td>以二进制格式打开一个文件用于读写。文件指针将会放在文件的开头。一般用于非文本文件如图片等。</td>
-</tr>
-<tr>
-<td>w</td>
-<td>打开一个文件只用于写入。如果该文件已存在则将其覆盖。如果该文件不存在，创建新文件。</td>
-</tr>
-<tr>
-<td>wb</td>
-<td>以二进制格式打开一个文件只用于写入。如果该文件已存在则将其覆盖。如果该文件不存在，创建新文件。一般用于非文本文件如图片等。</td>
-</tr>
-<tr>
-<td>w+</td>
-<td>打开一个文件用于读写。如果该文件已存在则将其覆盖。如果该文件不存在，创建新文件。</td>
-</tr>
-<tr>
-<td>wb+</td>
-<td>以二进制格式打开一个文件用于读写。如果该文件已存在则将其覆盖。如果该文件不存在，创建新文件。一般用于非文本文件如图片等。</td>
-</tr>
-<tr>
-<td>a</td>
-<td>打开一个文件用于追加。如果该文件已存在，文件指针将会放在文件的结尾。也就是说，新的内容将会被写入到已有内容之后。如果该文件不存在，创建新文件进行写入。</td>
-</tr>
-<tr>
-<td>ab</td>
-<td>以二进制格式打开一个文件用于追加。如果该文件已存在，文件指针将会放在文件的结尾。也就是说，新的内容将会被写入到已有内容之后。如果该文件不存在，创建新文件进行写入。</td>
-</tr>
-<tr>
-<td>a+</td>
-<td>打开一个文件用于读写。如果该文件已存在，文件指针将会放在文件的结尾。文件打开时会是追加模式。如果该文件不存在，创建新文件用于读写。</td>
-</tr>
-<tr>
-<td>ab+</td>
-<td>以二进制格式打开一个文件用于追加。如果该文件已存在，文件指针将会放在文件的结尾。如果该文件不存在，创建新文件用于读写。</td>
-</tr>
-</tbody>
-</table>
-<ul>
-<li>示例</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">31</span>]: f2 = open(<span class="string">'/tmp/1.jpg'</span>,<span class="string">'rb+'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">32</span>]: f2.read()</span><br><span class="line">Out[<span class="number">32</span>]: <span class="string">b'\xff\xd8\xff\xe0\x00\x10JFIF\x00\x0</span></span><br></pre></td></tr></table></figure>
-<h3 id="写入数据-write"><a href="#写入数据-write" class="headerlink" title="写入数据.write()"></a>写入数据.write()</h3><p>在写入模式下，向文件写入数据</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">215</span>]: f.write(<span class="string">'abcd'</span>)</span><br><span class="line">Out[<span class="number">215</span>]: <span class="number">4</span></span><br></pre></td></tr></table></figure>
-<h3 id="写入字符序列-writelines"><a href="#写入字符序列-writelines" class="headerlink" title="写入字符序列.writelines()"></a>写入字符序列.writelines()</h3><p>写入一个序列，只能是字符串，不自动添加换行，需要在序列中自己添加换行</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">82</span>]: <span class="keyword">import</span> os</span><br><span class="line"></span><br><span class="line">In [<span class="number">83</span>]: l1 = os.listdir(<span class="string">'/etc'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">85</span>]: f3.writelines(l1)</span><br><span class="line">    </span><br><span class="line">In [<span class="number">88</span>]: f3.flush()</span><br><span class="line"></span><br><span class="line">In [<span class="number">89</span>]: f3.read()</span><br><span class="line">Out[<span class="number">89</span>]: <span class="string">''</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">90</span>]: f3.seek(<span class="number">0</span>)</span><br><span class="line">Out[<span class="number">90</span>]: <span class="number">0</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">91</span>]: f3.read()</span><br><span class="line">Out[<span class="number">91</span>]: <span class="string">'fstabcrypttabmtabresolv.confgrub.dpkirpmyum.repos.dyummagiccentos-</span></span><br><span class="line"><span class="string">.........</span></span><br></pre></td></tr></table></figure>
-<h3 id="关闭文件-close"><a href="#关闭文件-close" class="headerlink" title="关闭文件.close()"></a>关闭文件.close()</h3><p>调用 <code>close</code> 方法以后文件对象还存在，但是不能再进行操作了，每次不需要对文件操作的时候需要显式执行关闭操作。</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">216</span>]: f.close()</span><br></pre></td></tr></table></figure>
-<h3 id="读取内容-read"><a href="#读取内容-read" class="headerlink" title="读取内容.read()"></a>读取内容.read()</h3><p>从文件中读取指定个字符，指针会移动到读取后的位置，默认读取到文件尾部。</p>
-<p>参数：<code>read(size=-1)</code></p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">217</span>]: f = open(<span class="string">'test'</span>,mode=<span class="string">'r+'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">218</span>]: f.read()</span><br><span class="line">Out[<span class="number">218</span>]: <span class="string">'abcd'</span></span><br></pre></td></tr></table></figure>
-<h3 id="读取一行-readline"><a href="#读取一行-readline" class="headerlink" title="读取一行.readline()"></a>读取一行.readline()</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">238</span>]: f = open(<span class="string">'/etc/rc.local'</span>,<span class="string">'r+'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">244</span>]: f.readline()</span><br><span class="line">Out[<span class="number">244</span>]: <span class="string">'#!/bin/bash\n'</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">245</span>]: f.readline()</span><br><span class="line">Out[<span class="number">245</span>]: <span class="string">'# THIS FILE IS ADDED FOR COMPATIBILITY PURPOSES\n'</span></span><br></pre></td></tr></table></figure>
-<h3 id="生成每行列表-readlines"><a href="#生成每行列表-readlines" class="headerlink" title="生成每行列表.readlines()"></a>生成每行列表.readlines()</h3><p>将文件内容的每一行当作列表的每一个元素</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">240</span>]: f.readlines()</span><br><span class="line">Out[<span class="number">240</span>]: </span><br><span class="line">[<span class="string">'#!/bin/bash\n'</span>,</span><br><span class="line"> <span class="string">'# THIS FILE IS ADDED FOR COMPATIBILITY PURPOSES\n'</span>,</span><br><span class="line"> <span class="string">'#\n'</span>,</span><br><span class="line"> <span class="string">'# It is highly advisable to create own systemd services or udev rules\n'</span>,</span><br><span class="line"> <span class="string">'# to run scripts during boot instead of using this file.\n'</span>,</span><br><span class="line"> <span class="string">'#\n'</span>,</span><br><span class="line"> <span class="string">'# In contrast to previous versions due to parallel execution during boot\n'</span>,</span><br><span class="line"> <span class="string">'# this script will NOT be run after all other services.\n'</span>,</span><br><span class="line"> <span class="string">'#\n'</span>,</span><br><span class="line"> <span class="string">"# Please note that you must run 'chmod +x /etc/rc.d/rc.local' to ensure\n"</span>,</span><br><span class="line"> <span class="string">'# that this script will be executed during boot.\n'</span>,</span><br><span class="line"> <span class="string">'\n'</span>,</span><br><span class="line"> <span class="string">'touch /var/lock/subsys/local\n'</span>,</span><br><span class="line"> <span class="string">"su - python -c 'cd /home/python/magedu/projects/test &amp;&amp; jupyter-notebook --ip=0.0.0.0'\n"</span>]</span><br></pre></td></tr></table></figure>
-<h3 id="移动指针-seek"><a href="#移动指针-seek" class="headerlink" title="移动指针.seek()"></a>移动指针.seek()</h3><p>把当前的操作指针移动从<code>whence</code> 定义的位置开始偏移 <code>offset</code> 的字节量。 </p>
-<ul>
-<li>用法：<code>seek(offset [,whence])</code></li>
-</ul>
-<p><code>offset</code> 偏移量，（当 <code>whence</code> 为1时可以为负数）</p>
-<p><code>whence</code> 指定偏移的开始位置</p>
-<table>
-<thead>
-<tr>
-<th>参数</th>
-<th>含义</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>0</td>
-<td>whence的默认值，表示从文件的头部开始</td>
-</tr>
-<tr>
-<td>1</td>
-<td>表示从当前位置开始</td>
-</tr>
-<tr>
-<td>2</td>
-<td>表示从文件的尾部开始</td>
-</tr>
-</tbody>
-</table>
-<ul>
-<li>示例<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">250</span>]: f = open(<span class="string">'/etc/rc.local'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">251</span>]: f.readlines()</span><br><span class="line">Out[<span class="number">251</span>]: </span><br><span class="line">[<span class="string">'#!/bin/bash\n'</span>,</span><br><span class="line"> <span class="string">'# THIS FILE IS ADDED FOR COMPATIBILITY PURPOSES\n'</span>,</span><br><span class="line"> <span class="string">'#\n'</span>,</span><br><span class="line"> <span class="string">'# It is highly advisable to create own systemd services or udev rules\n'</span>,</span><br><span class="line"> <span class="string">'# to run scripts during boot instead of using this file.\n'</span>,</span><br><span class="line"> <span class="string">'#\n'</span>,</span><br><span class="line"> <span class="string">'# In contrast to previous versions due to parallel execution during boot\n'</span>,</span><br><span class="line"> <span class="string">'# this script will NOT be run after all other services.\n'</span>,</span><br><span class="line"> <span class="string">'#\n'</span>,</span><br><span class="line"> <span class="string">"# Please note that you must run 'chmod +x /etc/rc.d/rc.local' to ensure\n"</span>,</span><br><span class="line"> <span class="string">'# that this script will be executed during boot.\n'</span>,</span><br><span class="line"> <span class="string">'\n'</span>,</span><br><span class="line"> <span class="string">'touch /var/lock/subsys/local\n'</span>,</span><br><span class="line"> <span class="string">"su - python -c 'cd /home/python/magedu/projects/test &amp;&amp; jupyter-notebook --ip=0.0.0.0'\n"</span>]</span><br><span class="line"></span><br><span class="line">In [<span class="number">252</span>]: f.readline()</span><br><span class="line">Out[<span class="number">252</span>]: <span class="string">''</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">253</span>]: f.seek(<span class="number">0</span>)</span><br><span class="line">Out[<span class="number">253</span>]: <span class="number">0</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">254</span>]: f.readline()</span><br><span class="line">Out[<span class="number">254</span>]: <span class="string">'#!/bin/bash\n'</span></span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<h3 id="指针位置-tell"><a href="#指针位置-tell" class="headerlink" title="指针位置.tell()"></a>指针位置.tell()</h3><p>显示当前指针所在的字节数</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">14</span>]: f.readline()</span><br><span class="line">Out[<span class="number">14</span>]: <span class="string">'# to run scripts during boot instead of using this file.\n'</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">15</span>]: f.tell()</span><br><span class="line">Out[<span class="number">15</span>]: <span class="number">189</span></span><br></pre></td></tr></table></figure>
-<h3 id="写入磁盘-flush"><a href="#写入磁盘-flush" class="headerlink" title="写入磁盘.flush()"></a>写入磁盘.flush()</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">72</span>]: f1.flush()</span><br></pre></td></tr></table></figure>
-<h2 id="属性检测"><a href="#属性检测" class="headerlink" title="属性检测"></a>属性检测</h2><h3 id="可读检测-readable"><a href="#可读检测-readable" class="headerlink" title="可读检测.readable()"></a>可读检测.readable()</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">94</span>]: f3.readable()</span><br><span class="line">Out[<span class="number">94</span>]: <span class="keyword">True</span></span><br></pre></td></tr></table></figure>
-<h3 id="可写检测-writable"><a href="#可写检测-writable" class="headerlink" title="可写检测.writable()"></a>可写检测.writable()</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">95</span>]: f3.writable()</span><br><span class="line">Out[<span class="number">95</span>]: <span class="keyword">True</span></span><br></pre></td></tr></table></figure>
-<h3 id="是否为终端-isatty"><a href="#是否为终端-isatty" class="headerlink" title="是否为终端.isatty()"></a>是否为终端.isatty()</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">97</span>]: f3.isatty()</span><br><span class="line">Out[<span class="number">97</span>]: <span class="keyword">False</span></span><br></pre></td></tr></table></figure>
-<h3 id="是否已关闭-closed"><a href="#是否已关闭-closed" class="headerlink" title="是否已关闭.closed"></a>是否已关闭.closed</h3><p>显示文件是否已经关闭</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">219</span>]: f.close()</span><br><span class="line"></span><br><span class="line">In [<span class="number">220</span>]: f.closed</span><br><span class="line">Out[<span class="number">220</span>]: <span class="keyword">True</span></span><br></pre></td></tr></table></figure>
-<h2 id="属性获取"><a href="#属性获取" class="headerlink" title="属性获取"></a>属性获取</h2><h3 id="文件描述符-fileno"><a href="#文件描述符-fileno" class="headerlink" title="文件描述符.fileno"></a>文件描述符.fileno</h3><p>是文件对象的属性，可以得到系统文件描述符，（是一个整数，用来引用的文件）。</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">226</span>]: f.fileno()</span><br><span class="line">Out[<span class="number">226</span>]: <span class="number">13</span></span><br></pre></td></tr></table></figure>
-<h3 id="文件名称-name"><a href="#文件名称-name" class="headerlink" title="文件名称.name"></a>文件名称.name</h3><p>获取文件对象的名称</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">257</span>]: f.name</span><br><span class="line">Out[<span class="number">257</span>]: <span class="string">'/etc/rc.local'</span></span><br></pre></td></tr></table></figure>
-<h3 id="操作模式-mode"><a href="#操作模式-mode" class="headerlink" title="操作模式.mode"></a>操作模式.mode</h3><p>显示文件的操作模式</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">58</span>]: f1.mode</span><br><span class="line">Out[<span class="number">58</span>]: <span class="string">'r+'</span></span><br></pre></td></tr></table></figure>
-<h3 id="文件编码-encoding"><a href="#文件编码-encoding" class="headerlink" title="文件编码.encoding"></a>文件编码.encoding</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">103</span>]: f3.encoding</span><br><span class="line">Out[<span class="number">103</span>]: <span class="string">'UTF-8'</span></span><br></pre></td></tr></table></figure>
-<h3 id="换行符号-newlines"><a href="#换行符号-newlines" class="headerlink" title="换行符号.newlines"></a>换行符号.newlines</h3><p>显示从文件头到当前指针处所遇到的所有换行符</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">107</span>]: f1 = open(<span class="string">'test1'</span>,<span class="string">'w+'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">108</span>]: f1.write(<span class="string">'hello\nworld\r\nthis is a test\r'</span>)</span><br><span class="line">Out[<span class="number">108</span>]: <span class="number">28</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">109</span>]: f1.close()</span><br><span class="line"></span><br><span class="line">In [<span class="number">110</span>]: f1 = open(<span class="string">'test1'</span>,<span class="string">'r+'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">111</span>]: f1.read()</span><br><span class="line">Out[<span class="number">111</span>]: <span class="string">'hello\nworld\nthis is a test\n'</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">112</span>]: f1.newlines</span><br><span class="line">Out[<span class="number">112</span>]: (<span class="string">'\r'</span>, <span class="string">'\n'</span>, <span class="string">'\r\n'</span>)</span><br></pre></td></tr></table></figure>
-<h2 id="异常处理"><a href="#异常处理" class="headerlink" title="异常处理"></a>异常处理</h2><p>无论如何保证文件被关闭。</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">134</span>]: <span class="keyword">try</span>:</span><br><span class="line">     ...:     f3.write(<span class="string">'hello'</span>)</span><br><span class="line">     ...: <span class="keyword">finally</span>:</span><br><span class="line">     ...:     f3.close()</span><br><span class="line">     ...:     </span><br><span class="line"></span><br><span class="line">In [<span class="number">135</span>]: f3</span><br><span class="line">Out[<span class="number">135</span>]: &lt;_io.TextIOWrapper name=<span class="string">'test'</span> mode=<span class="string">'w+'</span> encoding=<span class="string">'UTF-8'</span>&gt;</span><br><span class="line"></span><br><span class="line">In [<span class="number">136</span>]: f3.read()</span><br><span class="line">---------------------------------------------------------------------------</span><br><span class="line">ValueError                                Traceback (most recent call last)</span><br><span class="line">&lt;ipython-input<span class="number">-136</span><span class="number">-26180816</span>d387&gt; <span class="keyword">in</span> &lt;module&gt;()</span><br><span class="line">----&gt; 1 f3.read()</span><br><span class="line"></span><br><span class="line">ValueError: I/O operation on closed file.</span><br></pre></td></tr></table></figure>
-<h2 id="上下文管理"><a href="#上下文管理" class="headerlink" title="上下文管理"></a>上下文管理</h2><p>文件对象打开的时候会获得一个系统的文件描述符，计算机的文件描述符资源是有限的，为了保护资源不被耗尽，所以可以使用with语句来自动关闭文件对象。</p>
-<p>上下文管理的语句块不会开启新的作用域，with语句块执行完的时候，会自动关闭文件对象。</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">151</span>]: <span class="keyword">with</span> open(<span class="string">'test'</span>) <span class="keyword">as</span> f1:</span><br><span class="line">     ...:     f1.write(<span class="string">'world'</span>)</span><br><span class="line">     ...:     </span><br><span class="line">---------------------------------------------------------------------------</span><br><span class="line">UnsupportedOperation                      Traceback (most recent call last)</span><br><span class="line">&lt;ipython-input<span class="number">-151</span>-e8f2dd01d41e&gt; <span class="keyword">in</span> &lt;module&gt;()</span><br><span class="line">      <span class="number">1</span> <span class="keyword">with</span> open(<span class="string">'test'</span>) <span class="keyword">as</span> f1:</span><br><span class="line">----&gt; 2     f1.write('world')</span><br><span class="line">      <span class="number">3</span> </span><br><span class="line"></span><br><span class="line">UnsupportedOperation: <span class="keyword">not</span> writable</span><br><span class="line"></span><br><span class="line">In [<span class="number">152</span>]: <span class="keyword">with</span> open(<span class="string">'test'</span>,<span class="string">'w+'</span>) <span class="keyword">as</span> f1:</span><br><span class="line">     ...:     f1.write(<span class="string">'world'</span>)</span><br><span class="line">     ...:</span><br></pre></td></tr></table></figure>
-<h2 id="示例-1"><a href="#示例-1" class="headerlink" title="示例"></a>示例</h2><ul>
-<li>按行迭代复制文件内容</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">copy</span><span class="params">(src,dst)</span>:</span></span><br><span class="line">    <span class="keyword">with</span> open(dst) <span class="keyword">as</span> file1:</span><br><span class="line">		<span class="keyword">with</span> open(src,<span class="string">'w+'</span>) <span class="keyword">as</span> file2:</span><br><span class="line">			<span class="keyword">for</span> i <span class="keyword">in</span> file1:</span><br><span class="line">				file2.write(i)</span><br></pre></td></tr></table></figure>
-<ul>
-<li>统计文件的单词不区分大小写，显示重复最多的10个单词</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">makekey</span><span class="params">(s:str)</span>:</span></span><br><span class="line">    chars = set(<span class="string">r'''!@#$%^&amp;*()_+-='/\&lt;&gt;;[]|.,?&#123;&#125;~`:'''</span>)</span><br><span class="line">    key = s.lower()</span><br><span class="line">    ret = []</span><br><span class="line">    <span class="keyword">for</span> i,c <span class="keyword">in</span> enumerate(key):</span><br><span class="line">        <span class="keyword">if</span> c <span class="keyword">in</span> chars:</span><br><span class="line">            ret.append(<span class="string">' '</span>)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            ret.append(c)</span><br><span class="line">    <span class="keyword">return</span> <span class="string">''</span>.join(ret).split()</span><br><span class="line"></span><br><span class="line">d = &#123;&#125;</span><br><span class="line"><span class="keyword">with</span> open(<span class="string">'sample.txt'</span>,encoding=<span class="string">'utf-8'</span>) <span class="keyword">as</span> f:</span><br><span class="line">    <span class="keyword">for</span> line <span class="keyword">in</span> f:</span><br><span class="line">        words = line.split()</span><br><span class="line">        <span class="keyword">for</span> wordlist <span class="keyword">in</span> map(makekey,words):</span><br><span class="line">            <span class="keyword">for</span> word <span class="keyword">in</span> wordlist:</span><br><span class="line">                d[word] = d.get(word,<span class="number">0</span>) + <span class="number">1</span></span><br><span class="line"><span class="keyword">for</span> k,v <span class="keyword">in</span> sorted(d.items(),key=<span class="keyword">lambda</span> item: item[<span class="number">1</span>],reverse=<span class="keyword">True</span>):</span><br><span class="line">    print(k,v)</span><br></pre></td></tr></table></figure>
-<h1 id="StringIO"><a href="#StringIO" class="headerlink" title="StringIO"></a>StringIO</h1><p>StringIO 顾名思义就是在内存中以 I/O 流的方式读写 str，当文件关闭后内存释放。</p>
-<p>除了可以像文件一样对其读写，还支持下面的方法。</p>
-<h2 id="创建对象StringIO"><a href="#创建对象StringIO" class="headerlink" title="创建对象StringIO()"></a>创建对象StringIO()</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">In [4]: from io import StringIO</span><br><span class="line">In [8]: f = StringIO()</span><br></pre></td></tr></table></figure>
-<h2 id="读取文件内容-getvalue"><a href="#读取文件内容-getvalue" class="headerlink" title="读取文件内容.getvalue"></a>读取文件内容.getvalue</h2><p>无视指针的作用读取文件的所有内容</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">94</span>]: f.getvalue()</span><br><span class="line">Out[<span class="number">94</span>]: <span class="string">'abcdefghijklmn\nopqrst\n'</span></span><br></pre></td></tr></table></figure>
-<h2 id="从指针处删除-truncate"><a href="#从指针处删除-truncate" class="headerlink" title="从指针处删除.truncate"></a>从指针处删除.truncate</h2><p>用法：<code>truncate([size])</code> ，不指定 <code>size</code> 则删除到文件尾部</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">152</span>]: f.write(<span class="string">'0123456789'</span>)</span><br><span class="line">Out[<span class="number">152</span>]: <span class="number">10</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">153</span>]: f.write(<span class="string">'0123456789'</span>)</span><br><span class="line">Out[<span class="number">153</span>]: <span class="number">10</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">154</span>]: f.getvalue()</span><br><span class="line">Out[<span class="number">154</span>]: <span class="string">'01234567890123456789'</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">156</span>]: f.seek(<span class="number">10</span>)</span><br><span class="line">Out[<span class="number">156</span>]: <span class="number">10</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">157</span>]: f.truncate()</span><br><span class="line">Out[<span class="number">157</span>]: <span class="number">10</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">158</span>]: f.getvalue()</span><br><span class="line">Out[<span class="number">158</span>]: <span class="string">'0123456789'</span></span><br></pre></td></tr></table></figure>
-<h2 id="示例-2"><a href="#示例-2" class="headerlink" title="示例"></a>示例</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">with</span> StringIO <span class="keyword">as</span> f:</span><br><span class="line">    f.write (<span class="string">'yangjinheng'</span>)</span><br></pre></td></tr></table></figure>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> io <span class="keyword">import</span> StringIO</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>f = StringIO(<span class="string">'Hello!\nHi!\nGoodbye!'</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">while</span> <span class="keyword">True</span>:</span><br><span class="line"><span class="meta">... </span>    s = f.readline()</span><br><span class="line"><span class="meta">... </span>    <span class="keyword">if</span> s == <span class="string">''</span>:</span><br><span class="line"><span class="meta">... </span>        <span class="keyword">break</span></span><br><span class="line"><span class="meta">... </span>    print(s.strip())</span><br><span class="line">...</span><br><span class="line">Hello!</span><br><span class="line">Hi!</span><br><span class="line">Goodbye!</span><br></pre></td></tr></table></figure>
-<h1 id="BytesIO"><a href="#BytesIO" class="headerlink" title="BytesIO"></a>BytesIO</h1><p>内存中开辟的一个<strong>二进制</strong>模式的buffer，也可以像文件对象一样操作它，当close方法调用的时候，这个buffer也会被释放。</p>
-<h2 id="创建对象BytesIO"><a href="#创建对象BytesIO" class="headerlink" title="创建对象BytesIO"></a>创建对象BytesIO</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">167</span>]: <span class="keyword">from</span> io <span class="keyword">import</span> BytesIO</span><br><span class="line"></span><br><span class="line">In [<span class="number">168</span>]: f = BytesIO()</span><br></pre></td></tr></table></figure>
-<h2 id="读取文件内容-getvalue-1"><a href="#读取文件内容-getvalue-1" class="headerlink" title="读取文件内容.getvalue"></a>读取文件内容.getvalue</h2><p>无视文件指针读取文件内容</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">185</span>]: f.getvalue()</span><br><span class="line">Out[<span class="number">185</span>]: <span class="string">b'\xe4\xb8\xad\xe6\x96\x87'</span></span><br></pre></td></tr></table></figure>
-<h2 id="示例-3"><a href="#示例-3" class="headerlink" title="示例"></a>示例</h2><p>请注意，写入的不是str，而是经过UTF-8编码的bytes。</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> io <span class="keyword">import</span> BytesIO</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>f = BytesIO()</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>f.write(<span class="string">'中文'</span>.encode(<span class="string">'utf-8'</span>))</span><br><span class="line"><span class="number">12</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>print(f.getvalue())</span><br><span class="line"><span class="string">b'\xe6\x88\x91\xe6\x98\xaf\xe4\xb8\xad\xe6\x96\x87'</span></span><br></pre></td></tr></table></figure>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1041,7 +1040,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">65</span>
+                  <span class="site-state-item-count">66</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
