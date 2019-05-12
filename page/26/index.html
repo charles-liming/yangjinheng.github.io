@@ -351,6 +351,282 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://yangjinheng.github.io/2017/09/22/python/13.pathlib和shutil/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Jin Heng">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="默默">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/09/22/python/13.pathlib和shutil/" itemprop="url">pathlib和shutil</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-22T00:00:00+08:00">
+                2017-09-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Python/" itemprop="url" rel="index">
+                    <span itemprop="name">Python</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="路径处理Path"><a href="#路径处理Path" class="headerlink" title="路径处理Path"></a>路径处理Path</h1><h2 id="模块的导入"><a href="#模块的导入" class="headerlink" title="模块的导入"></a>模块的导入</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> pathlib <span class="keyword">import</span> Path</span><br><span class="line">p1 = Path(<span class="string">'/etc/rc.local'</span>)</span><br></pre></td></tr></table></figure>
+<h2 id="绝对路径-absolute"><a href="#绝对路径-absolute" class="headerlink" title="绝对路径.absolute"></a>绝对路径.absolute</h2><p>显示文件的绝对路径</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">245</span>]: p1 = Path(<span class="string">'sample.txt'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">247</span>]: p1.absolute()</span><br><span class="line">Out[<span class="number">247</span>]: PosixPath(<span class="string">'/home/python/magedu/projects/test/sample.txt'</span>)</span><br></pre></td></tr></table></figure>
+<h2 id="统一资源标识符-as-uri"><a href="#统一资源标识符-as-uri" class="headerlink" title="统一资源标识符.as_uri"></a>统一资源标识符.as_uri</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">39</span>]: p2 = Path(<span class="string">'/home/python/magedu/projects/test/sample.txt'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">42</span>]: p2.as_uri()</span><br><span class="line">Out[<span class="number">42</span>]: <span class="string">'file:///home/python/magedu/projects/test/sample.txt'</span></span><br></pre></td></tr></table></figure>
+<h2 id="当前工作目录-cwd"><a href="#当前工作目录-cwd" class="headerlink" title="当前工作目录.cwd"></a>当前工作目录.cwd</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">111</span>]: p2</span><br><span class="line">Out[<span class="number">111</span>]: PosixPath(<span class="string">'/home/python/magedu/projects/test/sample.txt'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">112</span>]: p2.cwd()</span><br><span class="line">Out[<span class="number">112</span>]: PosixPath(<span class="string">'/home/python/magedu/projects'</span>)</span><br></pre></td></tr></table></figure>
+<h2 id="磁盘根前戳-drive"><a href="#磁盘根前戳-drive" class="headerlink" title="磁盘根前戳.drive"></a>磁盘根前戳.drive</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>p3 = Path(<span class="string">'D:\Program Files\XMind\XMind.exe'</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>p3.drive</span><br><span class="line"><span class="string">'D:'</span></span><br></pre></td></tr></table></figure>
+<h2 id="对-进行扩展-expanduser"><a href="#对-进行扩展-expanduser" class="headerlink" title="对~进行扩展.expanduser"></a>对~进行扩展.expanduser</h2><p>返回扩展的 <code>~</code> 和 <code>~user</code> 的一个新路径</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">136</span>]: p4 = Path(<span class="string">'~/magedu/projects/test/sample.txt'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">137</span>]: p4.expanduser()</span><br><span class="line">Out[<span class="number">137</span>]: PosixPath(<span class="string">'/home/python/magedu/projects/test/sample.txt'</span>)</span><br></pre></td></tr></table></figure>
+<h2 id="用户家目录-home"><a href="#用户家目录-home" class="headerlink" title="用户家目录.home"></a>用户家目录.home</h2><p>这是公共方法</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">175</span>]: p4.home()</span><br><span class="line">Out[<span class="number">175</span>]: PosixPath(<span class="string">'/home/python'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">176</span>]: p3.home()</span><br><span class="line">Out[<span class="number">176</span>]: PosixPath(<span class="string">'/home/python'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">178</span>]: p3</span><br><span class="line">Out[<span class="number">178</span>]: PosixPath(<span class="string">'D:\\Program Files\\XMind\\XMind.exe'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">179</span>]: p4</span><br><span class="line">Out[<span class="number">179</span>]: PosixPath(<span class="string">'~/magedu/projects/test/sample.txt'</span>)</span><br></pre></td></tr></table></figure>
+<h2 id="路径拼接-joinpath"><a href="#路径拼接-joinpath" class="headerlink" title="路径拼接.joinpath"></a>路径拼接.joinpath</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">369</span>]: p5</span><br><span class="line">Out[<span class="number">369</span>]: PosixPath(<span class="string">'/dev'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">370</span>]: p5.joinpath(<span class="string">'tty'</span>)</span><br><span class="line">Out[<span class="number">370</span>]: PosixPath(<span class="string">'/dev/tty'</span>)</span><br></pre></td></tr></table></figure>
+<h2 id="路径模式匹配-match"><a href="#路径模式匹配-match" class="headerlink" title="路径模式匹配.match"></a>路径模式匹配.match</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">424</span>]: p2</span><br><span class="line">Out[<span class="number">424</span>]: PosixPath(<span class="string">'/home/python/magedu/projects/test/sample.txt'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">425</span>]: p2.match(<span class="string">'*.txt'</span>)</span><br><span class="line">Out[<span class="number">425</span>]: <span class="keyword">True</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">436</span>]: p2.match(<span class="string">'**/*.txt'</span>)</span><br><span class="line">Out[<span class="number">436</span>]: <span class="keyword">True</span></span><br></pre></td></tr></table></figure>
+<h2 id="父目录-parent"><a href="#父目录-parent" class="headerlink" title="父目录.parent"></a>父目录.parent</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">37</span>]: p2</span><br><span class="line">Out[<span class="number">37</span>]: PosixPath(<span class="string">'/etc/sysconfig/network-scripts/ifcfg-ens34'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">38</span>]: p2.parent</span><br><span class="line">Out[<span class="number">38</span>]: PosixPath(<span class="string">'/etc/sysconfig/network-scripts'</span>)</span><br></pre></td></tr></table></figure>
+<h2 id="所有的父目录-parents"><a href="#所有的父目录-parents" class="headerlink" title="所有的父目录.parents"></a>所有的父目录.parents</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">41</span>]: list(p2.parents)</span><br><span class="line">Out[<span class="number">41</span>]: </span><br><span class="line">[PosixPath(<span class="string">'/etc/sysconfig/network-scripts'</span>),</span><br><span class="line"> PosixPath(<span class="string">'/etc/sysconfig'</span>),</span><br><span class="line"> PosixPath(<span class="string">'/etc'</span>),</span><br><span class="line"> PosixPath(<span class="string">'/'</span>)]</span><br></pre></td></tr></table></figure>
+<h2 id="文件全名-name"><a href="#文件全名-name" class="headerlink" title="文件全名.name"></a>文件全名.name</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">15</span>]: p2 = Path(<span class="string">'/etc/sysconfig/network-scripts/ifcfg-ens34'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">16</span>]: p2.name</span><br><span class="line">Out[<span class="number">16</span>]: <span class="string">'ifcfg-ens34'</span></span><br></pre></td></tr></table></figure>
+<h2 id="取得文件和目录的二元组"><a href="#取得文件和目录的二元组" class="headerlink" title="取得文件和目录的二元组"></a>取得文件和目录的二元组</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">545</span>]: <span class="keyword">from</span> os <span class="keyword">import</span> path</span><br><span class="line"></span><br><span class="line">In [<span class="number">548</span>]: p2</span><br><span class="line">Out[<span class="number">548</span>]: PosixPath(<span class="string">'/etc/sysconfig/network-scripts/ifcfg-ens34'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">547</span>]: print(path.split(path.abspath(str(p2))))</span><br><span class="line">(<span class="string">'/etc/sysconfig/network-scripts'</span>, <span class="string">'ifcfg-ens34'</span>)</span><br></pre></td></tr></table></figure>
+<h2 id="不含扩展名的文件名称-stem"><a href="#不含扩展名的文件名称-stem" class="headerlink" title="不含扩展名的文件名称.stem"></a>不含扩展名的文件名称.stem</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">368</span>]: p7 = Path(<span class="string">'/etc/rc.local'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">369</span>]: p7.stem</span><br><span class="line">Out[<span class="number">369</span>]: <span class="string">'rc'</span></span><br></pre></td></tr></table></figure>
+<h2 id="显示文件扩展名-suffix"><a href="#显示文件扩展名-suffix" class="headerlink" title="显示文件扩展名.suffix"></a>显示文件扩展名.suffix</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">368</span>]: p7 = Path(<span class="string">'/etc/rc.local'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">370</span>]: p7.suffix</span><br><span class="line">Out[<span class="number">370</span>]: <span class="string">'.local'</span></span><br></pre></td></tr></table></figure>
+<h2 id="显示所有扩展名-suffixes"><a href="#显示所有扩展名-suffixes" class="headerlink" title="显示所有扩展名.suffixes"></a>显示所有扩展名.suffixes</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">372</span>]: p8 = Path(<span class="string">'/tmp/mysql.tar.gz'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">373</span>]: p8.suffixes</span><br><span class="line">Out[<span class="number">373</span>]: [<span class="string">'.tar'</span>, <span class="string">'.gz'</span>]</span><br></pre></td></tr></table></figure>
+<h2 id="路径拆分为列表-parts"><a href="#路径拆分为列表-parts" class="headerlink" title="路径拆分为列表.parts"></a>路径拆分为列表.parts</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">42</span>]: list(p2.parts)</span><br><span class="line">Out[<span class="number">42</span>]: [<span class="string">'/'</span>, <span class="string">'etc'</span>, <span class="string">'sysconfig'</span>, <span class="string">'network-scripts'</span>, <span class="string">'ifcfg-ens34'</span>]</span><br></pre></td></tr></table></figure>
+<h2 id="计算相对剩余路径-relative-to"><a href="#计算相对剩余路径-relative-to" class="headerlink" title="计算相对剩余路径.relative_to"></a>计算相对剩余路径.relative_to</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">78</span>]: p3 = Path(<span class="string">'python/project/cmdb'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">79</span>]: p3.relative_to(<span class="string">'python'</span>)</span><br><span class="line">Out[<span class="number">79</span>]: PosixPath(<span class="string">'project/cmdb'</span>)</span><br></pre></td></tr></table></figure>
+<h2 id="显示根目录-root"><a href="#显示根目录-root" class="headerlink" title="显示根目录.root"></a>显示根目录.root</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">297</span>]: p2</span><br><span class="line">Out[<span class="number">297</span>]: PosixPath(<span class="string">'/etc/sysconfig/network-scripts/ifcfg-ens34'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">298</span>]: p2.root</span><br><span class="line">Out[<span class="number">298</span>]: <span class="string">'/'</span></span><br></pre></td></tr></table></figure>
+<h2 id="替换显示-with-name"><a href="#替换显示-with-name" class="headerlink" title="替换显示.with_name"></a>替换显示.with_name</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">504</span>]: p2</span><br><span class="line">Out[<span class="number">504</span>]: PosixPath(<span class="string">'/etc/sysconfig/network-scripts/ifcfg-ens34'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">505</span>]: p2.with_name(<span class="string">'ifcfg-ens33'</span>)</span><br><span class="line">Out[<span class="number">505</span>]: PosixPath(<span class="string">'/etc/sysconfig/network-scripts/ifcfg-ens33'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">506</span>]: p2</span><br><span class="line">Out[<span class="number">506</span>]: PosixPath(<span class="string">'/etc/sysconfig/network-scripts/ifcfg-ens34'</span>)</span><br></pre></td></tr></table></figure>
+<h2 id="替换显示扩展名-with-suffix"><a href="#替换显示扩展名-with-suffix" class="headerlink" title="替换显示扩展名.with_suffix"></a>替换显示扩展名.with_suffix</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">510</span>]: p1</span><br><span class="line">Out[<span class="number">510</span>]: PosixPath(<span class="string">'D:\\Program Files\\Foxmail 7.2\\Foxmail.exe'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">511</span>]: p1.with_suffix(<span class="string">'.msi'</span>)</span><br><span class="line">Out[<span class="number">511</span>]: PosixPath(<span class="string">'D:\\Program Files\\Foxmail 7.2\\Foxmail.msi'</span>)</span><br><span class="line">    </span><br><span class="line">In [<span class="number">512</span>]: p1</span><br><span class="line">Out[<span class="number">512</span>]: PosixPath(<span class="string">'D:\\Program Files\\Foxmail 7.2\\Foxmail.exe'</span>)</span><br></pre></td></tr></table></figure>
+<h1 id="文件检测Path"><a href="#文件检测Path" class="headerlink" title="文件检测Path"></a>文件检测Path</h1><h2 id="模块的导入-1"><a href="#模块的导入-1" class="headerlink" title="模块的导入"></a>模块的导入</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> pathlib <span class="keyword">import</span> Path</span><br><span class="line">p1 = Path(<span class="string">'/etc/rc.local'</span>)</span><br></pre></td></tr></table></figure>
+<h2 id="是否绝对路径-is-absolute"><a href="#是否绝对路径-is-absolute" class="headerlink" title="是否绝对路径.is_absolute"></a>是否绝对路径.is_absolute</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">183</span>]: p1</span><br><span class="line">Out[<span class="number">183</span>]: PosixPath(<span class="string">'sample.txt'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">185</span>]: p1.is_absolute()</span><br><span class="line">Out[<span class="number">185</span>]: <span class="keyword">False</span></span><br><span class="line">    </span><br><span class="line">In [<span class="number">187</span>]: p2</span><br><span class="line">Out[<span class="number">187</span>]: PosixPath(<span class="string">'/home/python/magedu/projects/test/sample.txt'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">188</span>]: p2.is_absolute()</span><br><span class="line">Out[<span class="number">188</span>]: <span class="keyword">True</span></span><br></pre></td></tr></table></figure>
+<h2 id="是否为块设备-is-block-device"><a href="#是否为块设备-is-block-device" class="headerlink" title="是否为块设备.is_block_device"></a>是否为块设备.is_block_device</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">193</span>]: p6 = Path(<span class="string">'/dev/sda'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">194</span>]: p6.is_block_device()</span><br><span class="line">Out[<span class="number">194</span>]: <span class="keyword">True</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">195</span>]: p5</span><br><span class="line">Out[<span class="number">195</span>]: PosixPath(<span class="string">'/dev'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">196</span>]: p5.is_block_device()</span><br><span class="line">Out[<span class="number">196</span>]: <span class="keyword">False</span></span><br></pre></td></tr></table></figure>
+<h2 id="是否为字符设备-is-char-device"><a href="#是否为字符设备-is-char-device" class="headerlink" title="是否为字符设备.is_char_device"></a>是否为字符设备.is_char_device</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">197</span>]: p7 = Path(<span class="string">'/dev/tty'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">198</span>]: p7.is_char_device()</span><br><span class="line">Out[<span class="number">198</span>]: <span class="keyword">True</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">199</span>]: p6</span><br><span class="line">Out[<span class="number">199</span>]: PosixPath(<span class="string">'/dev/sda'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">200</span>]: p6.is_char_device()</span><br><span class="line">Out[<span class="number">200</span>]: <span class="keyword">False</span></span><br></pre></td></tr></table></figure>
+<h2 id="是否为目录-is-dir"><a href="#是否为目录-is-dir" class="headerlink" title="是否为目录.is_dir"></a>是否为目录.is_dir</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">204</span>]: p4</span><br><span class="line">Out[<span class="number">204</span>]: PosixPath(<span class="string">'~/magedu/projects/test/sample.txt'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">205</span>]: p5</span><br><span class="line">Out[<span class="number">205</span>]: PosixPath(<span class="string">'/dev'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">206</span>]: p4.is_dir()</span><br><span class="line">Out[<span class="number">206</span>]: <span class="keyword">False</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">207</span>]: p5.is_dir()</span><br><span class="line">Out[<span class="number">207</span>]: <span class="keyword">True</span></span><br></pre></td></tr></table></figure>
+<h2 id="是否为先进先出文件-is-fifo"><a href="#是否为先进先出文件-is-fifo" class="headerlink" title="是否为先进先出文件.is_fifo"></a>是否为先进先出文件.is_fifo</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">253</span>]: p8 = Path(<span class="string">'/run/systemd/initctl/fifo'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">254</span>]: p8.is_fifo()</span><br><span class="line">Out[<span class="number">254</span>]: <span class="keyword">True</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">256</span>]: p7</span><br><span class="line">Out[<span class="number">256</span>]: PosixPath(<span class="string">'/dev/tty'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">257</span>]: p7.is_fifo()</span><br><span class="line">Out[<span class="number">257</span>]: <span class="keyword">False</span></span><br></pre></td></tr></table></figure>
+<h2 id="是否为普通文件-is-file"><a href="#是否为普通文件-is-file" class="headerlink" title="是否为普通文件.is_file"></a>是否为普通文件.is_file</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">266</span>]: p3</span><br><span class="line">Out[<span class="number">266</span>]: PosixPath(<span class="string">'D:\\Program Files\\XMind\\XMind.exe'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">267</span>]: p3.is_file()</span><br><span class="line">Out[<span class="number">267</span>]: <span class="keyword">False</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">270</span>]: p2</span><br><span class="line">Out[<span class="number">270</span>]: PosixPath(<span class="string">'/home/python/magedu/projects/test/sample.txt'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">271</span>]: p2.is_file()</span><br><span class="line">Out[<span class="number">271</span>]: <span class="keyword">True</span></span><br></pre></td></tr></table></figure>
+<h2 id="有无系统保留名称-is-reserved"><a href="#有无系统保留名称-is-reserved" class="headerlink" title="有无系统保留名称.is_reserved"></a>有无系统保留名称.is_reserved</h2><p>如果路径包含系统保留的特殊名称之一（如果有），则返回True。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">272</span>]: p2</span><br><span class="line">Out[<span class="number">272</span>]: PosixPath(<span class="string">'/home/python/magedu/projects/test/sample.txt'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">273</span>]: p2.is_reserved()</span><br><span class="line">Out[<span class="number">273</span>]: <span class="keyword">False</span></span><br></pre></td></tr></table></figure>
+<h2 id="是否为套接字文件-is-socket"><a href="#是否为套接字文件-is-socket" class="headerlink" title="是否为套接字文件.is_socket"></a>是否为套接字文件.is_socket</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">307</span>]: p9 = Path(<span class="string">'/run/docker.sock'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">308</span>]: p9.is_socket()</span><br><span class="line">Out[<span class="number">308</span>]: <span class="keyword">True</span></span><br></pre></td></tr></table></figure>
+<h2 id="是否为软链接-is-symlink"><a href="#是否为软链接-is-symlink" class="headerlink" title="是否为软链接.is_symlink"></a>是否为软链接.is_symlink</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">310</span>]: p7</span><br><span class="line">Out[<span class="number">310</span>]: PosixPath(<span class="string">'/dev/tty'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">311</span>]: p7.is_symlink()</span><br><span class="line">Out[<span class="number">311</span>]: <span class="keyword">False</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">312</span>]: p9 = Path(<span class="string">'/etc/rc.local'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">313</span>]: p9.is_symlink()</span><br><span class="line">Out[<span class="number">313</span>]: <span class="keyword">True</span></span><br></pre></td></tr></table></figure>
+<h2 id="是否为同一个路径-samefile"><a href="#是否为同一个路径-samefile" class="headerlink" title="是否为同一个路径.samefile"></a>是否为同一个路径.samefile</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">309</span>]: p2</span><br><span class="line">Out[<span class="number">309</span>]: PosixPath(<span class="string">'/etc/sysconfig/network-scripts/ifcfg-ens34'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">310</span>]: p4</span><br><span class="line">Out[<span class="number">310</span>]: PosixPath(<span class="string">'ifcfg-ens34'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">311</span>]: p4.samefile(p2)</span><br><span class="line">Out[<span class="number">311</span>]: <span class="keyword">True</span></span><br><span class="line">    </span><br><span class="line">In [<span class="number">356</span>]: p5</span><br><span class="line">Out[<span class="number">356</span>]: PosixPath(<span class="string">'/tmp/test'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">357</span>]: p5.samefile(<span class="string">'test'</span>)</span><br><span class="line">Out[<span class="number">357</span>]: <span class="keyword">False</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">358</span>]: p5.samefile(<span class="string">'/tmp/test'</span>)</span><br><span class="line">Out[<span class="number">358</span>]: <span class="keyword">True</span></span><br></pre></td></tr></table></figure>
+<h2 id="文件存在性-exists"><a href="#文件存在性-exists" class="headerlink" title="文件存在性.exists"></a>文件存在性.exists</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>p3 = Path(<span class="string">'D:\Program Files\XMind\XMind.exe'</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>p3.exists()</span><br><span class="line"><span class="keyword">True</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>p3 = Path(<span class="string">'D:\Program Files\XMind\XMind.exe.bak'</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>p3.exists()</span><br><span class="line"><span class="keyword">False</span></span><br></pre></td></tr></table></figure>
+<h1 id="文件操作Path"><a href="#文件操作Path" class="headerlink" title="文件操作Path"></a>文件操作Path</h1><h2 id="模块的导入-2"><a href="#模块的导入-2" class="headerlink" title="模块的导入"></a>模块的导入</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> pathlib <span class="keyword">import</span> Path</span><br><span class="line">p1 = Path(<span class="string">'/etc/rc.local'</span>)</span><br></pre></td></tr></table></figure>
+<h2 id="通配文件迭代器-glob"><a href="#通配文件迭代器-glob" class="headerlink" title="通配文件迭代器.glob"></a>通配文件迭代器.glob</h2><p>使用指定的模式迭代目录下的文件，列出符合条件的文件</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">146</span>]: p5 =Path(<span class="string">'/dev'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">147</span>]: list(p5.glob(<span class="string">'sda*'</span>))</span><br><span class="line">Out[<span class="number">147</span>]: </span><br><span class="line">[PosixPath(<span class="string">'/dev/sda4'</span>),</span><br><span class="line"> PosixPath(<span class="string">'/dev/sda3'</span>),</span><br><span class="line"> PosixPath(<span class="string">'/dev/sda2'</span>),</span><br><span class="line"> PosixPath(<span class="string">'/dev/sda1'</span>),</span><br><span class="line"> PosixPath(<span class="string">'/dev/sda'</span>)]</span><br><span class="line">In [<span class="number">152</span>]: list(p5.glob(<span class="string">'map*'</span>))</span><br><span class="line">Out[<span class="number">152</span>]: [PosixPath(<span class="string">'/dev/mapper'</span>)]</span><br></pre></td></tr></table></figure>
+<h2 id="递归统配迭代器-rglob"><a href="#递归统配迭代器-rglob" class="headerlink" title="递归统配迭代器.rglob"></a>递归统配迭代器.rglob</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">162</span>]: list(p5.rglob(<span class="string">'vfio'</span>))</span><br><span class="line">Out[<span class="number">162</span>]: [PosixPath(<span class="string">'/dev/vfio'</span>), PosixPath(<span class="string">'/dev/vfio/vfio'</span>)]</span><br></pre></td></tr></table></figure>
+<h2 id="非递归目录迭代器-iterdir"><a href="#非递归目录迭代器-iterdir" class="headerlink" title="非递归目录迭代器.iterdir"></a>非递归目录迭代器.iterdir</h2> <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">364</span>]: p10 = Path(<span class="string">'/home'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">365</span>]: p10.iterdir()</span><br><span class="line">Out[<span class="number">365</span>]: &lt;generator object Path.iterdir at <span class="number">0x7fe1e91114c0</span>&gt;</span><br><span class="line"></span><br><span class="line">In [<span class="number">366</span>]: list(p10.iterdir())</span><br><span class="line">Out[<span class="number">366</span>]: [PosixPath(<span class="string">'/home/python'</span>)]</span><br></pre></td></tr></table></figure>
+<h2 id="创建目录-mkdir"><a href="#创建目录-mkdir" class="headerlink" title="创建目录.mkdir"></a>创建目录.mkdir</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">8</span>]: p1 = Path(<span class="string">'./test'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">11</span>]: ll</span><br><span class="line">总用量 <span class="number">16</span></span><br><span class="line">-rwxr-xr-x <span class="number">1</span> python <span class="number">13099</span> <span class="number">10</span>月 <span class="number">23</span> <span class="number">2017</span> sample.txt*</span><br><span class="line"></span><br><span class="line">In [<span class="number">12</span>]: p1.mkdir()</span><br><span class="line"></span><br><span class="line">In [<span class="number">13</span>]: ll</span><br><span class="line">总用量 <span class="number">16</span></span><br><span class="line">-rwxr-xr-x <span class="number">1</span> python <span class="number">13099</span> <span class="number">10</span>月 <span class="number">23</span> <span class="number">2017</span> sample.txt*</span><br><span class="line">drwxrwxr-x <span class="number">2</span> python     <span class="number">6</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">09</span>:<span class="number">01</span> test/</span><br></pre></td></tr></table></figure>
+<h2 id="删除空目录-rmdir"><a href="#删除空目录-rmdir" class="headerlink" title="删除空目录.rmdir"></a>删除空目录.rmdir</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">284</span>]: ll</span><br><span class="line">总用量 <span class="number">0</span></span><br><span class="line">lrwxrwxrwx 1 python 42 4月  25 09:59 ifcfg-ens34 -&gt; /etc/sysconfig/network-scripts/ifcfg-ens34</span><br><span class="line">drwxrwxr-x <span class="number">3</span> python <span class="number">22</span> <span class="number">3</span>月   <span class="number">6</span> <span class="number">09</span>:<span class="number">47</span> magedu/</span><br><span class="line">-rw-rw-r-- <span class="number">1</span> python  <span class="number">0</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">09</span>:<span class="number">58</span> test</span><br><span class="line">drwxrwxr-x <span class="number">2</span> python  <span class="number">6</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">10</span>:<span class="number">00</span> testdir/</span><br><span class="line"></span><br><span class="line">In [<span class="number">285</span>]: p5</span><br><span class="line">Out[<span class="number">285</span>]: PosixPath(<span class="string">'testdir'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">286</span>]: p5.rmdir()</span><br><span class="line"></span><br><span class="line">In [<span class="number">287</span>]: ll</span><br><span class="line">总用量 <span class="number">0</span></span><br><span class="line">lrwxrwxrwx 1 python 42 4月  25 09:59 ifcfg-ens34 -&gt; /etc/sysconfig/network-scripts/ifcfg-ens34</span><br><span class="line">drwxrwxr-x <span class="number">3</span> python <span class="number">22</span> <span class="number">3</span>月   <span class="number">6</span> <span class="number">09</span>:<span class="number">47</span> magedu/</span><br><span class="line">-rw-rw-r-- <span class="number">1</span> python  <span class="number">0</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">09</span>:<span class="number">58</span> test</span><br></pre></td></tr></table></figure>
+<h2 id="文件属主-owner"><a href="#文件属主-owner" class="headerlink" title="文件属主.owner"></a>文件属主.owner</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">169</span>]: p5.owner()</span><br><span class="line">Out[<span class="number">169</span>]: <span class="string">'root'</span></span><br></pre></td></tr></table></figure>
+<h2 id="文件属组-group"><a href="#文件属组-group" class="headerlink" title="文件属组.group"></a>文件属组.group</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">170</span>]: p5.group()</span><br><span class="line">Out[<span class="number">170</span>]: <span class="string">'root'</span></span><br></pre></td></tr></table></figure>
+<h2 id="打开文件-open"><a href="#打开文件-open" class="headerlink" title="打开文件.open"></a>打开文件.open</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">15</span>]: p2 = Path(<span class="string">'/etc/sysconfig/network-scripts/ifcfg-ens34'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">21</span>]: netfile = p2.open()</span><br><span class="line"></span><br><span class="line">In [<span class="number">22</span>]: netfile.read()</span><br><span class="line">Out[<span class="number">22</span>]: <span class="string">'BOOTPROTO=static\nDEVICE=ens34\nONBOOT=yes\nIPADDR=192.168.100.253\nNETMASK=255.255.255.0\n'</span></span><br></pre></td></tr></table></figure>
+<h3 id="字节模式"><a href="#字节模式" class="headerlink" title="字节模式"></a>字节模式</h3><ul>
+<li>读取.read_bytes</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">47</span>]: p2.read_bytes()</span><br><span class="line">Out[<span class="number">47</span>]: <span class="string">b'BOOTPROTO=static\nDEVICE=ens34\nONBOOT=yes\nIPADDR=192.168.100.253\nNETMASK=255.255.255.0\n'</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>写入.write_bytes</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">525</span>]: p5</span><br><span class="line">Out[<span class="number">525</span>]: PosixPath(<span class="string">'/tmp/test'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">527</span>]: p5.write_bytes(<span class="string">b'abc'</span>)</span><br><span class="line">Out[<span class="number">527</span>]: <span class="number">3</span></span><br><span class="line">    </span><br><span class="line">In [<span class="number">530</span>]: cat test</span><br><span class="line">abc</span><br></pre></td></tr></table></figure>
+<h3 id="文本模式"><a href="#文本模式" class="headerlink" title="文本模式"></a>文本模式</h3><ul>
+<li>读取.read_text</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">49</span>]: p2.read_text()</span><br><span class="line">Out[<span class="number">49</span>]: <span class="string">'BOOTPROTO=static\nDEVICE=ens34\nONBOOT=yes\nIPADDR=192.168.100.253\nNETMASK=255.255.255.0\n'</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>写入.write_text</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">535</span>]: ll</span><br><span class="line">总用量 <span class="number">0</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">536</span>]: p5</span><br><span class="line">Out[<span class="number">536</span>]: PosixPath(<span class="string">'/tmp/test'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">537</span>]: p5.write_text(<span class="string">'你好'</span>)</span><br><span class="line">Out[<span class="number">537</span>]: <span class="number">2</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">538</span>]: cat test</span><br><span class="line">你好</span><br></pre></td></tr></table></figure>
+<h2 id="显示链接文件属性-lstat"><a href="#显示链接文件属性-lstat" class="headerlink" title="显示链接文件属性.lstat"></a>显示链接文件属性.lstat</h2><p>文件如果为链接文件则显示链接文件的属性</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">405</span>]: p2.lstat()</span><br><span class="line">Out[<span class="number">405</span>]: os.stat_result(st_mode=<span class="number">33261</span>, st_ino=<span class="number">34651681</span>, st_dev=<span class="number">2052</span>, st_nlink=<span class="number">1</span>, st_uid=<span class="number">1000</span>, st_gid=<span class="number">1000</span>, st_size=<span class="number">13099</span>, st_atime=<span class="number">1524531777</span>, st_mtime=<span class="number">1508733030</span>, st_ctime=<span class="number">1524568268</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">406</span>]: p2</span><br><span class="line">Out[<span class="number">406</span>]: PosixPath(<span class="string">'/home/python/magedu/projects/test/sample.txt'</span>)</span><br></pre></td></tr></table></figure>
+<h2 id="显示文件详细属性-stat"><a href="#显示文件详细属性-stat" class="headerlink" title="显示文件详细属性.stat"></a>显示文件详细属性.stat</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">360</span>]: p5.stat()</span><br><span class="line">Out[<span class="number">360</span>]: os.stat_result(st_mode=<span class="number">33204</span>, st_ino=<span class="number">17029845</span>, st_dev=<span class="number">2052</span>, st_nlink=<span class="number">1</span>, st_uid=<span class="number">1000</span>, st_gid=<span class="number">1000</span>, st_size=<span class="number">0</span>, st_atime=<span class="number">1524622003</span>, st_mtime=<span class="number">1524622003</span>, st_ctime=<span class="number">1524622003</span>)</span><br></pre></td></tr></table></figure>
+<h2 id="创建空文件更新时间戳-touch"><a href="#创建空文件更新时间戳-touch" class="headerlink" title="创建空文件更新时间戳.touch"></a>创建空文件更新时间戳.touch</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">433</span>]: p4</span><br><span class="line">Out[<span class="number">433</span>]: PosixPath(<span class="string">'/tmp/test'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">436</span>]: p4.touch()</span><br><span class="line"></span><br><span class="line">In [<span class="number">437</span>]: ll</span><br><span class="line">总用量 <span class="number">0</span></span><br><span class="line">-rw-rw-r-- <span class="number">1</span> python <span class="number">0</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">10</span>:<span class="number">23</span> test</span><br></pre></td></tr></table></figure>
+<h2 id="修改文件名称-rename"><a href="#修改文件名称-rename" class="headerlink" title="修改文件名称.rename"></a>修改文件名称.rename</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">166</span>]: p4</span><br><span class="line">Out[<span class="number">166</span>]: PosixPath(<span class="string">'test1'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">167</span>]: p4.rename(<span class="string">'test2'</span>)</span><br></pre></td></tr></table></figure>
+<h2 id="移动或改名-replace"><a href="#移动或改名-replace" class="headerlink" title="移动或改名.replace"></a>移动或改名.replace</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">217</span>]: ll</span><br><span class="line">总用量 <span class="number">0</span></span><br><span class="line">drwxrwxr-x <span class="number">3</span> python <span class="number">22</span> <span class="number">3</span>月   <span class="number">6</span> <span class="number">09</span>:<span class="number">47</span> magedu/</span><br><span class="line">---------- <span class="number">1</span> python  <span class="number">0</span> <span class="number">4</span>月  <span class="number">24</span> <span class="number">20</span>:<span class="number">05</span> test</span><br><span class="line"></span><br><span class="line">In [<span class="number">218</span>]: p4 = Path(<span class="string">'./test'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">219</span>]: p4.replace(<span class="string">'/tmp/test'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">220</span>]: ll</span><br><span class="line">总用量 <span class="number">0</span></span><br><span class="line">drwxrwxr-x <span class="number">3</span> python <span class="number">22</span> <span class="number">3</span>月   <span class="number">6</span> <span class="number">09</span>:<span class="number">47</span> magedu/</span><br></pre></td></tr></table></figure>
+<h2 id="新建链接指向目标-symlink-to"><a href="#新建链接指向目标-symlink-to" class="headerlink" title="新建链接指向目标.symlink_to"></a>新建链接指向目标.symlink_to</h2><figure class="highlight"><table><tr><td class="code"><pre><span class="line">In [<span class="number">422</span>]: p4 = Path(<span class="string">'/tmp/test'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">423</span>]: p4.symlink_to(<span class="string">'/etc/rc.local'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">424</span>]: ll</span><br><span class="line">总用量 <span class="number">0</span></span><br><span class="line">lrwxrwxrwx 1 python 13 4月  25 10:21 test -&gt; /etc/rc.local*</span><br></pre></td></tr></table></figure>
+<h2 id="解析软连接位置-resolve"><a href="#解析软连接位置-resolve" class="headerlink" title="解析软连接位置.resolve"></a>解析软连接位置.resolve</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">261</span>]: ll</span><br><span class="line">总用量 <span class="number">0</span></span><br><span class="line">lrwxrwxrwx 1 python 42 4月  25 09:59 ifcfg-ens34 -&gt; /etc/sysconfig/network-scripts/ifcfg-ens34</span><br><span class="line">drwxrwxr-x <span class="number">3</span> python <span class="number">22</span> <span class="number">3</span>月   <span class="number">6</span> <span class="number">09</span>:<span class="number">47</span> magedu/</span><br><span class="line">-rw-rw-r-- <span class="number">1</span> python  <span class="number">0</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">09</span>:<span class="number">58</span> test</span><br><span class="line"></span><br><span class="line">In [<span class="number">263</span>]: p4 = Path(<span class="string">'ifcfg-ens34'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">264</span>]: p4.resolve()</span><br><span class="line">Out[<span class="number">264</span>]: PosixPath(<span class="string">'/etc/sysconfig/network-scripts/ifcfg-ens34'</span>)</span><br></pre></td></tr></table></figure>
+<h2 id="删除文件或取消链接-unlink"><a href="#删除文件或取消链接-unlink" class="headerlink" title="删除文件或取消链接.unlink"></a>删除文件或取消链接.unlink</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">491</span>]: ll</span><br><span class="line">总用量 <span class="number">0</span></span><br><span class="line">-rw-rw-r-- <span class="number">1</span> python <span class="number">0</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">10</span>:<span class="number">31</span> test</span><br><span class="line"></span><br><span class="line">In [<span class="number">492</span>]: p4</span><br><span class="line">Out[<span class="number">492</span>]: PosixPath(<span class="string">'/tmp/test'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">494</span>]: p4.unlink()</span><br><span class="line"></span><br><span class="line">In [<span class="number">495</span>]: ll</span><br><span class="line">总用量 <span class="number">0</span></span><br></pre></td></tr></table></figure>
+<h2 id="文件权限-chmod"><a href="#文件权限-chmod" class="headerlink" title="文件权限.chmod"></a>文件权限.chmod</h2><p>接受一个十进制的权限描述</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">101</span>]: p2.chmod(<span class="number">493</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">102</span>]: ll</span><br><span class="line">总用量 <span class="number">16</span></span><br><span class="line">-rwxr-xr-x <span class="number">1</span> python <span class="number">13099</span> <span class="number">10</span>月 <span class="number">23</span> <span class="number">2017</span> sample.txt*</span><br></pre></td></tr></table></figure>
+<h2 id="链接文件权限-lchmod"><a href="#链接文件权限-lchmod" class="headerlink" title="链接文件权限.lchmod"></a>链接文件权限.lchmod</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h1 id="文件复制shutil"><a href="#文件复制shutil" class="headerlink" title="文件复制shutil"></a>文件复制shutil</h1><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> shutil</span><br></pre></td></tr></table></figure>
+<h2 id="返回sh命令位置-which"><a href="#返回sh命令位置-which" class="headerlink" title="返回sh命令位置.which"></a>返回sh命令位置.which</h2><p>语法: <code>shutil.which(cmd, mode=os.F_OK | os.X_OK, path=None)</code></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">106</span>]: shutil.which(<span class="string">'copy'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">107</span>]: shutil.which(<span class="string">'cat'</span>)</span><br><span class="line">Out[<span class="number">107</span>]: <span class="string">'/usr/bin/cat'</span></span><br></pre></td></tr></table></figure>
+<h2 id="复制文件-copyfile"><a href="#复制文件-copyfile" class="headerlink" title="复制文件.copyfile"></a>复制文件.copyfile</h2><p>默认从指定源复制到目标，如果 <code>follow_symlinks=False</code> 则复制仅复制链接。</p>
+<p>语法: <code>shutil.copyfile(src, dst, *, follow_symlinks=True)</code></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">34</span>]: shutil.copyfile(<span class="string">'sample.txt'</span>,<span class="string">'sample.txt.bak'</span>)</span><br><span class="line">Out[<span class="number">34</span>]: <span class="string">'sample.txt.bak'</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">35</span>]: ll</span><br><span class="line">总用量 <span class="number">32</span></span><br><span class="line">-rwxr-xr-x <span class="number">1</span> python <span class="number">13099</span> <span class="number">10</span>月 <span class="number">23</span> <span class="number">2017</span> sample.txt*</span><br><span class="line">-rw-rw-r-- <span class="number">1</span> python <span class="number">13099</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">14</span>:<span class="number">25</span> sample.txt.bak</span><br><span class="line">drwxrwxr-x <span class="number">2</span> python     <span class="number">6</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">09</span>:<span class="number">01</span> test/</span><br></pre></td></tr></table></figure>
+<h2 id="从指针处复制文件-copyfileobj"><a href="#从指针处复制文件-copyfileobj" class="headerlink" title="从指针处复制文件.copyfileobj"></a>从指针处复制文件.copyfileobj</h2><p>语法: <code>shutil.copyfileobj(fsrc, fdst[, length])</code></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">8</span>]: <span class="keyword">with</span> open(<span class="string">'sample.txt'</span>,<span class="string">'r+'</span>) <span class="keyword">as</span> file1:</span><br><span class="line">   ...:     file1.seek(<span class="number">200</span>)</span><br><span class="line">   ...:     <span class="keyword">with</span> open(<span class="string">'sample.txt.bak'</span>,<span class="string">'w+'</span>) <span class="keyword">as</span> file2:</span><br><span class="line">   ...:         <span class="keyword">import</span> shutil</span><br><span class="line">   ...:         shutil.copyfileobj(file1,file2)</span><br></pre></td></tr></table></figure>
+<h2 id="复制文件-copy"><a href="#复制文件-copy" class="headerlink" title="复制文件.copy"></a>复制文件.copy</h2><blockquote>
+<p>仅复制文件不能复制目录</p>
+</blockquote>
+<p>复制文件到目标，如果目标为目录则复制到目标目录中。<code>(copyfile函数如果目标为目录会报错)</code></p>
+<p>语法: <code>shutil.copy(src, dst, *, follow_symlinks=True)</code></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">135</span>]: shutil.copy(<span class="string">'sample.txt'</span>,<span class="string">'test'</span>)</span><br><span class="line">Out[<span class="number">135</span>]: <span class="string">'test/sample.txt'</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">136</span>]: ll</span><br><span class="line">总用量 <span class="number">32</span></span><br><span class="line">-rw-r--r-- <span class="number">1</span> python <span class="number">13099</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">14</span>:<span class="number">33</span> sample.txt</span><br><span class="line">-rw-r--r-- <span class="number">1</span> python <span class="number">13099</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">14</span>:<span class="number">33</span> sample.txt.bak</span><br><span class="line">lrwxrwxrwx 1 python    10 4月  25 14:25 sample.txt.lnk -&gt; sample.txt</span><br><span class="line">drwxrwxr-x <span class="number">2</span> python    <span class="number">24</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">14</span>:<span class="number">50</span> test/</span><br><span class="line"></span><br><span class="line">In [<span class="number">137</span>]: ll test/</span><br><span class="line">总用量 <span class="number">16</span></span><br><span class="line">-rw-r--r-- <span class="number">1</span> python <span class="number">13099</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">14</span>:<span class="number">50</span> sample.txt</span><br></pre></td></tr></table></figure>
+<h2 id="复制文件元数据-copy2"><a href="#复制文件元数据-copy2" class="headerlink" title="复制文件元数据.copy2"></a>复制文件元数据.copy2</h2><blockquote>
+<p> 仅复制文件不能复制目录</p>
+</blockquote>
+<p>语法: <code>shutil.copy2(src, dst, *, follow_symlinks=True)</code></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">146</span>]: shutil.copy2(<span class="string">'sample.txt'</span>,<span class="string">'test'</span>)</span><br><span class="line">Out[<span class="number">146</span>]: <span class="string">'test/sample.txt'</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">147</span>]: ll ./sample.txt ./test/sample.txt</span><br><span class="line">-rw-r--r-- <span class="number">1</span> python <span class="number">13099</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">14</span>:<span class="number">33</span> ./sample.txt</span><br><span class="line">-rw-r--r-- <span class="number">1</span> python <span class="number">13099</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">14</span>:<span class="number">33</span> ./test/sample.txt</span><br></pre></td></tr></table></figure>
+<h2 id="递归复制目录-copytree"><a href="#递归复制目录-copytree" class="headerlink" title="递归复制目录.copytree"></a>递归复制目录.copytree</h2><p>递归的复制一个目录，目标目录存在则报错。</p>
+<p>语法: <code>shutil.copytree(src, dst, symlinks=False, ignore=None, copy_function=copy2, ignore_dangling_symlinks=False)</code></p>
+<p><code>copy_function</code> 指定复制函数，它必须是可用于复制每个文件的可调用函数。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">4</span>]: ll project/</span><br><span class="line">总用量 <span class="number">0</span></span><br><span class="line">drwxrwxr-x <span class="number">2</span> python <span class="number">6</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">15</span>:<span class="number">15</span> <span class="number">0</span>/</span><br><span class="line">drwxrwxr-x <span class="number">2</span> python <span class="number">6</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">15</span>:<span class="number">15</span> <span class="number">1</span>/</span><br><span class="line">drwxrwxr-x <span class="number">2</span> python <span class="number">6</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">15</span>:<span class="number">15</span> <span class="number">2</span>/</span><br><span class="line">drwxrwxr-x <span class="number">2</span> python <span class="number">6</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">15</span>:<span class="number">15</span> <span class="number">3</span>/</span><br><span class="line">drwxrwxr-x <span class="number">2</span> python <span class="number">6</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">15</span>:<span class="number">15</span> <span class="number">4</span>/</span><br><span class="line">-rw-rw-r-- <span class="number">1</span> python <span class="number">0</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">15</span>:<span class="number">15</span> <span class="number">5</span></span><br><span class="line">-rw-rw-r-- <span class="number">1</span> python <span class="number">0</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">15</span>:<span class="number">15</span> <span class="number">6</span></span><br><span class="line">-rw-rw-r-- <span class="number">1</span> python <span class="number">0</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">15</span>:<span class="number">15</span> <span class="number">7</span></span><br><span class="line">-rw-rw-r-- <span class="number">1</span> python <span class="number">0</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">15</span>:<span class="number">15</span> <span class="number">8</span></span><br><span class="line">-rw-rw-r-- <span class="number">1</span> python <span class="number">0</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">15</span>:<span class="number">15</span> <span class="number">9</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">9</span>]: shutil.copytree(<span class="string">'project'</span>,<span class="string">'project.bak'</span>,ignore=shutil.ignore_patterns(<span class="string">'0'</span>,<span class="string">'9'</span>))</span><br><span class="line">Out[<span class="number">9</span>]: <span class="string">'project.bak'</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">10</span>]: ll project.bak/</span><br><span class="line">总用量 <span class="number">0</span></span><br><span class="line">drwxrwxr-x <span class="number">2</span> python <span class="number">6</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">15</span>:<span class="number">15</span> <span class="number">1</span>/</span><br><span class="line">drwxrwxr-x <span class="number">2</span> python <span class="number">6</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">15</span>:<span class="number">15</span> <span class="number">2</span>/</span><br><span class="line">drwxrwxr-x <span class="number">2</span> python <span class="number">6</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">15</span>:<span class="number">15</span> <span class="number">3</span>/</span><br><span class="line">drwxrwxr-x <span class="number">2</span> python <span class="number">6</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">15</span>:<span class="number">15</span> <span class="number">4</span>/</span><br><span class="line">-rw-rw-r-- <span class="number">1</span> python <span class="number">0</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">15</span>:<span class="number">15</span> <span class="number">5</span></span><br><span class="line">-rw-rw-r-- <span class="number">1</span> python <span class="number">0</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">15</span>:<span class="number">15</span> <span class="number">6</span></span><br><span class="line">-rw-rw-r-- <span class="number">1</span> python <span class="number">0</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">15</span>:<span class="number">15</span> <span class="number">7</span></span><br><span class="line">-rw-rw-r-- <span class="number">1</span> python <span class="number">0</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">15</span>:<span class="number">15</span> <span class="number">8</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>忽略参数.ignore_patterns</li>
+</ul>
+<p>可以为 <code>copytree</code> 函数的 <code>ignore</code> 参数提供忽略的内容</p>
+<p>语法: <code>shutil.ignore_patterns(*patterns)</code></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">shutil.ignore_patterns(<span class="string">'file1'</span>,<span class="string">'file2'</span>)</span><br></pre></td></tr></table></figure>
+<h2 id="递归删除目录-rmtree"><a href="#递归删除目录-rmtree" class="headerlink" title="递归删除目录.rmtree"></a>递归删除目录.rmtree</h2><p>语法: <code>shutil.rmtree(path, ignore_errors=False, onerror=None)</code></p>
+<p><code>ignore_errors=True</code> 忽略删除过程中出现的错误</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">12</span>]: ll</span><br><span class="line">总用量 <span class="number">32</span></span><br><span class="line">drwxrwxr-x <span class="number">7</span> python    <span class="number">96</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">15</span>:<span class="number">15</span> project/</span><br><span class="line">drwxrwxr-x <span class="number">6</span> python    <span class="number">78</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">15</span>:<span class="number">15</span> project.bak/</span><br><span class="line">-rw-r--r-- <span class="number">1</span> python <span class="number">13099</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">14</span>:<span class="number">33</span> sample.txt</span><br><span class="line">-rw-r--r-- <span class="number">1</span> python <span class="number">13099</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">14</span>:<span class="number">33</span> sample.txt.bak</span><br><span class="line">lrwxrwxrwx 1 python    10 4月  25 14:25 sample.txt.lnk -&gt; sample.txt</span><br><span class="line">drwxrwxr-x <span class="number">2</span> python    <span class="number">24</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">14</span>:<span class="number">54</span> test/</span><br><span class="line"></span><br><span class="line">In [<span class="number">14</span>]: shutil.rmtree(<span class="string">'project.bak'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">15</span>]: ll</span><br><span class="line">总用量 <span class="number">32</span></span><br><span class="line">drwxrwxr-x <span class="number">7</span> python    <span class="number">96</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">15</span>:<span class="number">15</span> project/</span><br><span class="line">-rw-r--r-- <span class="number">1</span> python <span class="number">13099</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">14</span>:<span class="number">33</span> sample.txt</span><br><span class="line">-rw-r--r-- <span class="number">1</span> python <span class="number">13099</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">14</span>:<span class="number">33</span> sample.txt.bak</span><br><span class="line">lrwxrwxrwx 1 python    10 4月  25 14:25 sample.txt.lnk -&gt; sample.txt</span><br><span class="line">drwxrwxr-x <span class="number">2</span> python    <span class="number">24</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">14</span>:<span class="number">54</span> test/</span><br></pre></td></tr></table></figure>
+<h2 id="权限复制-copymode"><a href="#权限复制-copymode" class="headerlink" title="权限复制.copymode"></a>权限复制.copymode</h2><p>两个文件之间的权限复制，从文件到目录，从目录到文件皆可。</p>
+<p>复制文件的权限到另外的文件，注意：软链接文件权限不可以修改，（默认777）</p>
+<p>语法: <code>shutil.copymode(src, dst, *, follow_symlinks=True)</code></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">100</span>]: ll</span><br><span class="line">总用量 <span class="number">32</span></span><br><span class="line">-rw-r--r-- <span class="number">1</span> python <span class="number">13099</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">14</span>:<span class="number">33</span> sample.txt</span><br><span class="line">---------- <span class="number">1</span> python <span class="number">13099</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">14</span>:<span class="number">33</span> sample.txt.bak</span><br><span class="line">lrwxrwxrwx 1 python    10 4月  25 14:25 sample.txt.lnk -&gt; sample.txt</span><br><span class="line">drwxrwxr-x <span class="number">2</span> python     <span class="number">6</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">14</span>:<span class="number">33</span> test/</span><br><span class="line"></span><br><span class="line">In [<span class="number">108</span>]: shutil.copymode(<span class="string">'sample.txt'</span>,<span class="string">'sample.txt.bak'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">109</span>]: ll</span><br><span class="line">总用量 <span class="number">32</span></span><br><span class="line">-rw-r--r-- <span class="number">1</span> python <span class="number">13099</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">14</span>:<span class="number">33</span> sample.txt</span><br><span class="line">-rw-r--r-- <span class="number">1</span> python <span class="number">13099</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">14</span>:<span class="number">33</span> sample.txt.bak</span><br><span class="line">lrwxrwxrwx 1 python    10 4月  25 14:25 sample.txt.lnk -&gt; sample.txt</span><br><span class="line">drwxrwxr-x <span class="number">2</span> python     <span class="number">6</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">14</span>:<span class="number">33</span> test/</span><br></pre></td></tr></table></figure>
+<h2 id="元数据复制-copystat"><a href="#元数据复制-copystat" class="headerlink" title="元数据复制.copystat"></a>元数据复制.copystat</h2><p>两个文件之间的元数据复制，从文件到目录，从目录到文件皆可。</p>
+<p>语法: <code>shutil.copystat(src, dst, *, follow_symlinks=True)</code></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">124</span>]: !chmod <span class="number">000</span> sample.txt.bak</span><br><span class="line">    </span><br><span class="line">In [<span class="number">121</span>]: ll</span><br><span class="line">总用量 <span class="number">32</span></span><br><span class="line">-rw-r--r-- <span class="number">1</span> python <span class="number">13099</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">14</span>:<span class="number">33</span> sample.txt</span><br><span class="line">---------- <span class="number">1</span> python <span class="number">13099</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">14</span>:<span class="number">39</span> sample.txt.bak</span><br><span class="line">lrwxrwxrwx 1 python    10 4月  25 14:25 sample.txt.lnk -&gt; sample.txt</span><br><span class="line">drwxrwxr-x <span class="number">2</span> python     <span class="number">6</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">14</span>:<span class="number">33</span> test/</span><br><span class="line"></span><br><span class="line">In [<span class="number">125</span>]: shutil.copystat(<span class="string">'sample.txt'</span>,<span class="string">'sample.txt.bak'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">126</span>]: ll</span><br><span class="line">总用量 <span class="number">32</span></span><br><span class="line">-rw-r--r-- <span class="number">1</span> python <span class="number">13099</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">14</span>:<span class="number">33</span> sample.txt</span><br><span class="line">-rw-r--r-- <span class="number">1</span> python <span class="number">13099</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">14</span>:<span class="number">33</span> sample.txt.bak</span><br><span class="line">lrwxrwxrwx 1 python    10 4月  25 14:25 sample.txt.lnk -&gt; sample.txt</span><br><span class="line">drwxrwxr-x <span class="number">2</span> python     <span class="number">6</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">14</span>:<span class="number">33</span> test/</span><br></pre></td></tr></table></figure>
+<h2 id="移动文件或目录-move"><a href="#移动文件或目录-move" class="headerlink" title="移动文件或目录.move"></a>移动文件或目录.move</h2><p>语法: <code>shutil.move(src, dst, copy_function=copy2)</code></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">32</span>]: ll</span><br><span class="line">总用量 <span class="number">32</span></span><br><span class="line">drwxrwxr-x <span class="number">7</span> python    <span class="number">96</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">15</span>:<span class="number">15</span> project/</span><br><span class="line">-rw-r--r-- <span class="number">1</span> python <span class="number">13099</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">14</span>:<span class="number">33</span> sample.txt</span><br><span class="line">-rw-r--r-- <span class="number">1</span> python <span class="number">13099</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">14</span>:<span class="number">33</span> sample.txt.bak</span><br><span class="line">lrwxrwxrwx 1 python    10 4月  25 14:25 sample.txt.lnk -&gt; sample.txt</span><br><span class="line">drwxrwxr-x <span class="number">2</span> python    <span class="number">24</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">14</span>:<span class="number">54</span> test/</span><br><span class="line"></span><br><span class="line">In [<span class="number">34</span>]: shutil.move(<span class="string">'project'</span>,<span class="string">'test'</span>)</span><br><span class="line">Out[<span class="number">34</span>]: <span class="string">'test/project'</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">36</span>]: ll test/</span><br><span class="line">总用量 <span class="number">16</span></span><br><span class="line">drwxrwxr-x <span class="number">7</span> python    <span class="number">96</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">15</span>:<span class="number">15</span> project/</span><br><span class="line">-rw-r--r-- <span class="number">1</span> python <span class="number">13099</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">14</span>:<span class="number">33</span> sample.txt</span><br><span class="line"></span><br><span class="line">In [<span class="number">37</span>]: shutil.move(<span class="string">'test/project'</span>,<span class="string">'./'</span>)</span><br><span class="line">Out[<span class="number">37</span>]: <span class="string">'./project'</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">38</span>]: ll</span><br><span class="line">总用量 <span class="number">32</span></span><br><span class="line">drwxrwxr-x <span class="number">7</span> python    <span class="number">96</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">15</span>:<span class="number">15</span> project/</span><br><span class="line">-rw-r--r-- <span class="number">1</span> python <span class="number">13099</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">14</span>:<span class="number">33</span> sample.txt</span><br><span class="line">-rw-r--r-- <span class="number">1</span> python <span class="number">13099</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">14</span>:<span class="number">33</span> sample.txt.bak</span><br><span class="line">lrwxrwxrwx 1 python    10 4月  25 14:25 sample.txt.lnk -&gt; sample.txt</span><br><span class="line">drwxrwxr-x <span class="number">2</span> python    <span class="number">24</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">15</span>:<span class="number">30</span> test/</span><br></pre></td></tr></table></figure>
+<h2 id="磁盘使用量-disk-usage"><a href="#磁盘使用量-disk-usage" class="headerlink" title="磁盘使用量.disk_usage"></a>磁盘使用量.disk_usage</h2><p>语法: <code>shutil.disk_usage(path)</code></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">51</span>]: shutil.disk_usage(<span class="string">'/'</span>)</span><br><span class="line">Out[<span class="number">51</span>]: usage(total=<span class="number">19641925632</span>, used=<span class="number">2332303360</span>, free=<span class="number">17309622272</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">52</span>]: shutil.disk_usage(<span class="string">'/dev'</span>)</span><br><span class="line">Out[<span class="number">52</span>]: usage(total=<span class="number">236752896</span>, used=<span class="number">0</span>, free=<span class="number">236752896</span>)</span><br></pre></td></tr></table></figure>
+<h2 id="修改文件属主属组-chown"><a href="#修改文件属主属组-chown" class="headerlink" title="修改文件属主属组.chown"></a>修改文件属主属组.chown</h2><p>语法: <code>shutil.chown(path, user=None, group=None)</code></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">[root@localhost tmp]<span class="comment"># ll</span></span><br><span class="line">总用量 <span class="number">4</span></span><br><span class="line">-rw-rw-r-- <span class="number">1</span> python python <span class="number">6</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">10</span>:<span class="number">40</span> test</span><br><span class="line">[root@localhost bin]<span class="comment"># python3</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">import</span> shutil</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>shutil.chown(<span class="string">'/tmp/test'</span>,user=<span class="string">'rooot'</span>,group=<span class="string">'root'</span>)</span><br><span class="line">[root@localhost tmp]<span class="comment"># ll</span></span><br><span class="line">总用量 <span class="number">4</span></span><br><span class="line">-rw-rw-r-- <span class="number">1</span> root root <span class="number">6</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">10</span>:<span class="number">40</span> test</span><br></pre></td></tr></table></figure>
+<h1 id="文件打包shutil"><a href="#文件打包shutil" class="headerlink" title="文件打包shutil"></a>文件打包shutil</h1><h2 id="打包文件-make-archive"><a href="#打包文件-make-archive" class="headerlink" title="打包文件.make_archive"></a>打包文件.make_archive</h2><p>语法: <code>shutil.make_archive(base_name, format[, root_dir[, base_dir[, verbose[, dry_run[, owner[, group[, logger]]]]]]])</code></p>
+<ul>
+<li>将 <code>/etc</code> 目录以 <code>.tar.gz</code> 格式打包，放在<code>/tmp/mytar</code></li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">289</span>]: shutil.make_archive(<span class="string">'/tmp/mytar'</span>,<span class="string">'gztar'</span>,root_dir=<span class="string">'/etc'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">290</span>]: ll</span><br><span class="line">总用量 <span class="number">4</span></span><br><span class="line">-rw-rw-r-- <span class="number">1</span> python <span class="number">493</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">16</span>:<span class="number">32</span> mytar.tar.gz</span><br></pre></td></tr></table></figure>
+<h2 id="解包文件-unpack-archive"><a href="#解包文件-unpack-archive" class="headerlink" title="解包文件.unpack_archive"></a>解包文件.unpack_archive</h2><p>语法: <code>shutil.unpack_archive(filename[, extract_dir[, format]])</code></p>
+<ul>
+<li>将 <code>/tmp/mytar.tar.gz</code> 文件解压到 <code>/home/python</code> 格式为：<code>gztar</code></li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">299</span>]: shutil.unpack_archive(<span class="string">'/tmp/mytar.tar.gz'</span>,<span class="string">'/home/python'</span>,<span class="string">'gztar'</span>)</span><br></pre></td></tr></table></figure>
+<h2 id="存档格式-get-archive-formats"><a href="#存档格式-get-archive-formats" class="headerlink" title="存档格式.get_archive_formats"></a>存档格式.get_archive_formats</h2><p>显示支持的存档格式</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">109</span>]: shutil.get_archive_formats()</span><br><span class="line">Out[<span class="number">109</span>]: </span><br><span class="line">[(<span class="string">'bztar'</span>, <span class="string">"bzip2'ed tar-file"</span>),</span><br><span class="line"> (<span class="string">'gztar'</span>, <span class="string">"gzip'ed tar-file"</span>),</span><br><span class="line"> (<span class="string">'tar'</span>, <span class="string">'uncompressed tar file'</span>),</span><br><span class="line"> (<span class="string">'zip'</span>, <span class="string">'ZIP file'</span>)]</span><br></pre></td></tr></table></figure>
+<h2 id="解包格式-get-unpack-formats"><a href="#解包格式-get-unpack-formats" class="headerlink" title="解包格式.get_unpack_formats"></a>解包格式.get_unpack_formats</h2><p>显示支持的解包格式</p>
+<p>语法: <code>shutil.unregister_unpack_format(name)</code></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">303</span>]: shutil.get_unpack_formats()</span><br><span class="line">Out[<span class="number">303</span>]: </span><br><span class="line">[(<span class="string">'bztar'</span>, [<span class="string">'.tar.bz2'</span>, <span class="string">'.tbz2'</span>], <span class="string">"bzip2'ed tar-file"</span>),</span><br><span class="line"> (<span class="string">'gztar'</span>, [<span class="string">'.tar.gz'</span>, <span class="string">'.tgz'</span>], <span class="string">"gzip'ed tar-file"</span>),</span><br><span class="line"> (<span class="string">'tar'</span>, [<span class="string">'.tar'</span>], <span class="string">'uncompressed tar file'</span>),</span><br><span class="line"> (<span class="string">'zip'</span>, [<span class="string">'.zip'</span>], <span class="string">'ZIP file'</span>)]</span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://yangjinheng.github.io/2017/09/21/python/12.文件IO/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -713,634 +989,11 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://yangjinheng.github.io/2017/09/20/python/11.datetime日期时间/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Jin Heng">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="默默">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/09/20/python/11.datetime日期时间/" itemprop="url">datetime日期时间模块</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-20T00:00:00+08:00">
-                2017-09-20
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Python/" itemprop="url" rel="index">
-                    <span itemprop="name">Python</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="datetime模块"><a href="#datetime模块" class="headerlink" title="datetime模块"></a>datetime模块</h2><p>datetime 模块提供了操作日期和时间功能, 该模块提供了五种核心对象：</p>
-<ul>
-<li>datetime(时间日期类型)</li>
-<li>date（日期类型）</li>
-<li>time（时间类型）</li>
-<li>tzinfo（时区类型）</li>
-<li>timedelta（时间差类型）</li>
-</ul>
-<table>
-<thead>
-<tr>
-<th>函数</th>
-<th>用法</th>
-<th>作用</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>.datetime()</td>
-<td>.datetime(y,m,d,H,M,S)</td>
-<td>返回一个日期时间对象</td>
-</tr>
-<tr>
-<td>.strftime()</td>
-<td>.date.strftime(format)</td>
-<td>返回自定义格式化字符串表示日期</td>
-</tr>
-<tr>
-<td>.now()</td>
-<td>.now()</td>
-<td>返回当前时间的datetime对象</td>
-</tr>
-<tr>
-<td>.utcnow()</td>
-<td>.utcnow()</td>
-<td>返回没有时区的当前时间，也就是格林威治时间</td>
-</tr>
-<tr>
-<td>.today()</td>
-<td>.today()</td>
-<td>返回本地时区当前时间的 datetime 对象</td>
-</tr>
-<tr>
-<td>.date()</td>
-<td>.date()</td>
-<td>取出日期时间对象中的日期</td>
-</tr>
-<tr>
-<td>.time()</td>
-<td>.time()</td>
-<td>取出日期时间对象中的时间</td>
-</tr>
-<tr>
-<td>.year()</td>
-<td>.year()</td>
-<td>返回年</td>
-</tr>
-<tr>
-<td>.month()</td>
-<td>.month()</td>
-<td>返回月</td>
-</tr>
-<tr>
-<td>.day()</td>
-<td>.day()</td>
-<td>返回日</td>
-</tr>
-<tr>
-<td>.hour()</td>
-<td>.hour()</td>
-<td>返回时</td>
-</tr>
-<tr>
-<td>.minute()</td>
-<td>.minute()</td>
-<td>返回分</td>
-</tr>
-<tr>
-<td>.second()</td>
-<td>.second()</td>
-<td>返回秒</td>
-</tr>
-<tr>
-<td>.microsecond()</td>
-<td>.microsecond()</td>
-<td>返回微秒</td>
-</tr>
-<tr>
-<td>.tzinfo</td>
-<td>.tzinfo</td>
-<td>时区属性</td>
-</tr>
-<tr>
-<td>.weekday()</td>
-<td>date.weekday()</td>
-<td>返回时间对象所处一周的哪一天，格式：周一为0，周日为7</td>
-</tr>
-<tr>
-<td>.isoweekday()</td>
-<td>datetime.isoweekday()</td>
-<td>返回时间对象所处一周的哪一天，格式：周一为1，周日为0，中国默认。</td>
-</tr>
-<tr>
-<td>.isoformat()</td>
-<td>date.isocalendar()</td>
-<td>得到iso格式的时间，以-分隔</td>
-</tr>
-<tr>
-<td>.isocalendar()</td>
-<td>date.isocalendar()</td>
-<td>返回3元组（ISO年，ISO周编号，ISO工作日）。</td>
-</tr>
-<tr>
-<td>.replace()</td>
-<td>datetime.replace(*)</td>
-<td>修改并返回新的时间对象</td>
-</tr>
-<tr>
-<td>.astimezone()</td>
-<td>datetime.astimezone(tz=None)</td>
-<td>转换带有时区的对象</td>
-</tr>
-<tr>
-<td>.timestamp()</td>
-<td>datetime.timestamp()</td>
-<td>将对象转换为时间戳格式</td>
-</tr>
-<tr>
-<td>.utcfromtimestamp()</td>
-<td>.utcfromtimestamp()</td>
-<td>将时间戳转换为格林威治时间</td>
-</tr>
-<tr>
-<td>.fromtimestamp()</td>
-<td>.fromtimestamp()</td>
-<td>将时间戳转换为本地时间</td>
-</tr>
-<tr>
-<td>.fromordinal()</td>
-<td>.fromordinal()</td>
-<td>将 Gregorian 日历时间转换为date对象。</td>
-</tr>
-<tr>
-<td>.combine()</td>
-<td>datetime.combine(date, time, tzinfo=self.tzinfo)</td>
-<td>根据 <code>date</code> 和 <code>time</code> 对象，创建一个 <code>datetime</code> 对象。</td>
-</tr>
-<tr>
-<td>.ctime()</td>
-<td>.ctime()</td>
-<td>转换为英文格式的日期时间</td>
-</tr>
-<tr>
-<td>.dst()</td>
-<td>.dst()</td>
-<td>显示夏令时对时间调整</td>
-</tr>
-<tr>
-<td>.max()、min()</td>
-<td>.max()、min()</td>
-<td>显示一个时间对象的最大和最小值</td>
-</tr>
-<tr>
-<td>.resolution()</td>
-<td>.resolution()</td>
-<td>设置一个时间差值，用来计算时间</td>
-</tr>
-<tr>
-<td>.strptime()</td>
-<td>.strptime()</td>
-<td>将字符串格式化为时间对象</td>
-</tr>
-<tr>
-<td>.timetz()</td>
-<td>.timetz()</td>
-<td>返回一个时间对象带有时区属性</td>
-</tr>
-<tr>
-<td>.toordinal()</td>
-<td>.toordinal()</td>
-<td>返回日期对应的 Gregorian日期，国外有采用，类似中国农历，不常用。</td>
-</tr>
-<tr>
-<td>.tzname()</td>
-<td>.tzname()</td>
-<td>返回时区信息</td>
-</tr>
-<tr>
-<td>.utcoffset()</td>
-<td>.utcoffset()</td>
-<td>返回时区的偏移量</td>
-</tr>
-<tr>
-<td>.timetuple()</td>
-<td>.timetuple()</td>
-<td>把时间转换为元组</td>
-</tr>
-<tr>
-<td>.utctimetuple()</td>
-<td>.utctimetuple()</td>
-<td>把UTC时间转换为元组</td>
-</tr>
-</tbody>
-</table>
-<h2 id="datetime-日期对象"><a href="#datetime-日期对象" class="headerlink" title=".datetime() 日期对象"></a>.datetime() 日期对象</h2><p>datetime对象可以用来表示精确的日期和时间，其实例化方法如下</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">In [61]: datetime.datetime(1970,1,1,23,59,59,999999)</span><br><span class="line">Out[61]: datetime.datetime(1970, 1, 1, 23, 59, 59, 999999)</span><br></pre></td></tr></table></figure>
-<h3 id="strftime-格式化为字符串"><a href="#strftime-格式化为字符串" class="headerlink" title=".strftime() 格式化为字符串"></a>.strftime() 格式化为字符串</h3><p>返回自定义格式化字符串表示日期</p>
-<p>语法：<code>date.strftime(format)</code></p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">178</span>]: datetime.datetime.now().strftime(<span class="string">'%Y-%m-%d %H:%M:%S'</span>)</span><br><span class="line">Out[<span class="number">178</span>]: <span class="string">'2018-04-04 15:31:56'</span></span><br></pre></td></tr></table></figure>
-<h3 id="strptime-字符串转时间"><a href="#strptime-字符串转时间" class="headerlink" title=".strptime() 字符串转时间"></a>.strptime() 字符串转时间</h3><p>将字符串格式化为时间对象</p>
-<p>语法：<code>datetime.strptime(date_string, format)</code></p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">181</span>]: datetime.datetime.strptime(<span class="string">'1989-08-21 12:20:20'</span>,<span class="string">'%Y-%m-%d %H:%M:%S'</span>)</span><br><span class="line">Out[<span class="number">181</span>]: datetime.datetime(<span class="number">1989</span>, <span class="number">8</span>, <span class="number">21</span>, <span class="number">12</span>, <span class="number">20</span>, <span class="number">20</span>)</span><br><span class="line"></span><br><span class="line">datestr = <span class="string">'19/Feb/2013:10:23:29 +0800'</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">181</span>]: datetime.datetime.strptime(datestr,<span class="string">'%d/%b/%Y:%H:%M:%S %z'</span>)</span><br></pre></td></tr></table></figure>
-<ul>
-<li>格式化符号</li>
-</ul>
-<table>
-<thead>
-<tr>
-<th>指令</th>
-<th><strong>含义</strong></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>%a</td>
-<td>星期的简写（星期一 ~ 天：Mon, Tue, Wed, Thu, Fri, Sat, Sun）</td>
-</tr>
-<tr>
-<td>%A</td>
-<td>星期的全写（星期一 ~ 天：Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday）</td>
-</tr>
-<tr>
-<td>%w</td>
-<td>在一个星期中的第几天（ 0 表示星期天 … 6 表示星期六）</td>
-</tr>
-<tr>
-<td>%d</td>
-<td>在一个月中的第几天（01, 02, …, 31）</td>
-</tr>
-<tr>
-<td>%b</td>
-<td>月份的简写（一月 ~ 十二月：Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec）</td>
-</tr>
-<tr>
-<td>%B</td>
-<td>月份的全写（一月 ~ 十二月：January, February, March, April, May, June, July, August, September, October, November, December）</td>
-</tr>
-<tr>
-<td>%m</td>
-<td>月份（01, 02, …, 12）</td>
-</tr>
-<tr>
-<td>%y</td>
-<td>用两个数字表示年份（例如 2014年 == 14）</td>
-</tr>
-<tr>
-<td>%Y</td>
-<td>用四个数字表示年份</td>
-</tr>
-<tr>
-<td>%H</td>
-<td>二十四小时制（00, 01, …, 23）</td>
-</tr>
-<tr>
-<td>%I</td>
-<td>十二小时制（01, 02, …, 11）</td>
-</tr>
-<tr>
-<td>%p</td>
-<td>AM 或者 PM</td>
-</tr>
-<tr>
-<td>%M</td>
-<td>分钟（00, 01, …, 59）</td>
-</tr>
-<tr>
-<td>%S</td>
-<td>秒（00, 01, …, 59）</td>
-</tr>
-<tr>
-<td>%f</td>
-<td>微秒（000000, 000001, …, 999999）</td>
-</tr>
-<tr>
-<td>%z</td>
-<td>与 UTC 时间的间隔 ；如果是本地时间，返回空字符串（(empty), +0000, -0400, +1030）</td>
-</tr>
-<tr>
-<td>%Z</td>
-<td>时区名称；如果是本地时间，返回空字符串（(empty), UTC, EST, CST）</td>
-</tr>
-<tr>
-<td>%j</td>
-<td>在一年中的第几天（001, 002, …, 366）</td>
-</tr>
-<tr>
-<td>%U</td>
-<td>在一年中的第几周，星期天作为第一天（00, 01, …, 53）</td>
-</tr>
-<tr>
-<td>%W</td>
-<td>在一年中的第几周，星期一作为第一天（00, 01, …, 53）</td>
-</tr>
-<tr>
-<td>%c</td>
-<td>用字符串表示日期和时间（Tue Aug 16 21:30:00 2014）</td>
-</tr>
-<tr>
-<td>%x</td>
-<td>用字符串表示日期（08/16/14）</td>
-</tr>
-<tr>
-<td>%X</td>
-<td>用字符串表示时间（21:30:00）</td>
-</tr>
-<tr>
-<td>%%</td>
-<td>表示百分号</td>
-</tr>
-</tbody>
-</table>
-<h3 id="now-当前时间"><a href="#now-当前时间" class="headerlink" title=".now() 当前时间"></a>.now() 当前时间</h3><p>返回当前时间的datetime对象</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">10</span>]: datetime.datetime.now()</span><br><span class="line">Out[<span class="number">10</span>]: datetime.datetime(<span class="number">2018</span>, <span class="number">4</span>, <span class="number">4</span>, <span class="number">9</span>, <span class="number">23</span>, <span class="number">51</span>, <span class="number">326016</span>)</span><br><span class="line"><span class="comment">#带时区信息的当前时间</span></span><br><span class="line">In [<span class="number">2</span>]: datetime.datetime.now(datetime.timezone(datetime.timedelta(hours=<span class="number">8</span>)))</span><br><span class="line">Out[<span class="number">2</span>]: datetime.datetime(<span class="number">2018</span>, <span class="number">5</span>, <span class="number">2</span>, <span class="number">18</span>, <span class="number">5</span>, <span class="number">46</span>, <span class="number">264658</span>, tzinfo=datetime.timezone(datetime.timedelta(<span class="number">0</span>, <span class="number">28800</span>)))</span><br></pre></td></tr></table></figure>
-<h3 id="utcnow-格林威治时间"><a href="#utcnow-格林威治时间" class="headerlink" title=".utcnow() 格林威治时间"></a>.utcnow() 格林威治时间</h3><p>返回没有时区的当前时间，也就是格林威治时间</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">266</span>]: datetime.datetime.now()</span><br><span class="line">Out[<span class="number">266</span>]: datetime.datetime(<span class="number">2018</span>, <span class="number">4</span>, <span class="number">4</span>, <span class="number">11</span>, <span class="number">38</span>, <span class="number">37</span>, <span class="number">299010</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">267</span>]: datetime.datetime.utcnow()</span><br><span class="line">Out[<span class="number">267</span>]: datetime.datetime(<span class="number">2018</span>, <span class="number">4</span>, <span class="number">4</span>, <span class="number">3</span>, <span class="number">38</span>, <span class="number">46</span>, <span class="number">530644</span>)</span><br></pre></td></tr></table></figure>
-<h3 id="today-本地时区当前时间"><a href="#today-本地时区当前时间" class="headerlink" title=".today() 本地时区当前时间"></a>.today() 本地时区当前时间</h3><p>返回本地时区当前时间的datetime对象</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">135</span>]: datetime.datetime.now().today()</span><br><span class="line">Out[<span class="number">135</span>]: datetime.datetime(<span class="number">2018</span>, <span class="number">4</span>, <span class="number">4</span>, <span class="number">11</span>, <span class="number">45</span>, <span class="number">26</span>, <span class="number">788182</span>)</span><br></pre></td></tr></table></figure>
-<h3 id="date-返回日期对象"><a href="#date-返回日期对象" class="headerlink" title=".date() 返回日期对象"></a>.date() 返回日期对象</h3><p>取出日期时间对象中的日期</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">263</span>]: datetime.datetime.now().date()</span><br><span class="line">Out[<span class="number">263</span>]: datetime.date(<span class="number">2018</span>, <span class="number">4</span>, <span class="number">4</span>)</span><br></pre></td></tr></table></figure>
-<h3 id="time-返回时间对象"><a href="#time-返回时间对象" class="headerlink" title=".time() 返回时间对象"></a>.time() 返回时间对象</h3><p>取出日期时间对象中的时间</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">265</span>]: datetime.datetime.now().time()</span><br><span class="line">Out[<span class="number">265</span>]: datetime.time(<span class="number">11</span>, <span class="number">37</span>, <span class="number">23</span>, <span class="number">381177</span>)</span><br></pre></td></tr></table></figure>
-<h3 id="year-返回年份字符串"><a href="#year-返回年份字符串" class="headerlink" title=".year() 返回年份字符串"></a>.year() 返回年份字符串</h3><p>返回年份</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">In [122]: datetime.datetime.now().year</span><br><span class="line">Out[122]: 2018</span><br></pre></td></tr></table></figure>
-<h3 id="month-返回月份字符串"><a href="#month-返回月份字符串" class="headerlink" title=".month() 返回月份字符串"></a>.month() 返回月份字符串</h3><p>返回月份</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">123</span>]: datetime.datetime.now().month</span><br><span class="line">Out[<span class="number">123</span>]: <span class="number">4</span></span><br></pre></td></tr></table></figure>
-<h3 id="day-返回日的字符串"><a href="#day-返回日的字符串" class="headerlink" title=".day() 返回日的字符串"></a>.day() 返回日的字符串</h3><p>返回天</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">124</span>]: datetime.datetime.now().day</span><br><span class="line">Out[<span class="number">124</span>]: <span class="number">4</span></span><br></pre></td></tr></table></figure>
-<h3 id="hour-返回小时的字符串"><a href="#hour-返回小时的字符串" class="headerlink" title=".hour() 返回小时的字符串"></a>.hour() 返回小时的字符串</h3><p>返回小时</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">131</span>]: datetime.datetime.now().hour</span><br><span class="line">Out[<span class="number">131</span>]: <span class="number">11</span></span><br></pre></td></tr></table></figure>
-<h3 id="minute-返回分钟的字符串"><a href="#minute-返回分钟的字符串" class="headerlink" title=".minute() 返回分钟的字符串"></a>.minute() 返回分钟的字符串</h3><p>返回分钟</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">132</span>]: datetime.datetime.now().minute</span><br><span class="line">Out[<span class="number">132</span>]: <span class="number">44</span></span><br></pre></td></tr></table></figure>
-<h3 id="second-返回秒的字符串"><a href="#second-返回秒的字符串" class="headerlink" title=".second() 返回秒的字符串"></a>.second() 返回秒的字符串</h3><p>返回秒</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">133</span>]: datetime.datetime.now().second</span><br><span class="line">Out[<span class="number">133</span>]: <span class="number">5</span></span><br></pre></td></tr></table></figure>
-<h3 id="microsecond-返回微秒字符串"><a href="#microsecond-返回微秒字符串" class="headerlink" title=".microsecond() 返回微秒字符串"></a>.microsecond() 返回微秒字符串</h3><p>返回微秒</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">182</span>]: datetime.datetime.now().microsecond</span><br><span class="line">Out[<span class="number">182</span>]: <span class="number">317667</span></span><br></pre></td></tr></table></figure>
-<h3 id="tzinfo-时区对象"><a href="#tzinfo-时区对象" class="headerlink" title=".tzinfo 时区对象"></a>.tzinfo 时区对象</h3><p>每个 <code>datetime</code> 对象都有个时区属性<code>tzinfo</code>，默认情况为<code>None</code> ，除非给这个对象设置一个时区属性。</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">25</span>]: utctime = datetime.datetime.utcnow().replace(tzinfo=datetime.timezone.utc)</span><br><span class="line"></span><br><span class="line">In [<span class="number">26</span>]: utctime</span><br><span class="line">Out[<span class="number">26</span>]: datetime.datetime(<span class="number">2018</span>, <span class="number">4</span>, <span class="number">4</span>, <span class="number">6</span>, <span class="number">17</span>, <span class="number">10</span>, <span class="number">588587</span>, tzinfo=datetime.timezone.utc)</span><br><span class="line"></span><br><span class="line">In [<span class="number">27</span>]: utctime.tzinfo</span><br><span class="line">Out[<span class="number">27</span>]: datetime.timezone.utc</span><br></pre></td></tr></table></figure>
-<h3 id="weekday-返回在周的哪一天"><a href="#weekday-返回在周的哪一天" class="headerlink" title=".weekday() 返回在周的哪一天"></a>.weekday() 返回在周的哪一天</h3><p>返回时间对象所处一周的哪一天，格式：周一为0，周日为7</p>
-<p>语法：<code>date.weekday()</code></p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">165</span>]: datetime.datetime.now().weekday()</span><br><span class="line">Out[<span class="number">165</span>]: <span class="number">2</span></span><br></pre></td></tr></table></figure>
-<h3 id="isoweekday-返回在周的哪一天"><a href="#isoweekday-返回在周的哪一天" class="headerlink" title=".isoweekday() 返回在周的哪一天"></a>.isoweekday() 返回在周的哪一天</h3><p>返回时间对象所处一周的哪一天，格式：周一为1，周日为0，中国默认。</p>
-<p>语法：<code>datetime.isoweekday()</code></p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">179</span>]: datetime.datetime.now().isoweekday()</span><br><span class="line">Out[<span class="number">179</span>]: <span class="number">3</span></span><br></pre></td></tr></table></figure>
-<h3 id="isoformat-iso格式的时间字符串"><a href="#isoformat-iso格式的时间字符串" class="headerlink" title=".isoformat() iso格式的时间字符串"></a>.isoformat() iso格式的时间字符串</h3><p>得到iso格式的时间，以-分隔</p>
-<p>语法：<code>date.isocalendar()</code></p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">8</span>]: datetime.datetime.now().isoformat()</span><br><span class="line">Out[<span class="number">8</span>]: <span class="string">'2018-04-04T13:10:34.889170'</span></span><br></pre></td></tr></table></figure>
-<h3 id="isocalendar-iso-格式的日历时间"><a href="#isocalendar-iso-格式的日历时间" class="headerlink" title=".isocalendar() iso 格式的日历时间"></a>.isocalendar() iso 格式的日历时间</h3><p>返回3元组（ISO年，ISO周编号，ISO工作日）。</p>
-<p>用法：<code>date.isocalendar()</code></p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">13</span>]: datetime.datetime.now().isocalendar()</span><br><span class="line">Out[<span class="number">13</span>]: (<span class="number">2018</span>, <span class="number">14</span>, <span class="number">3</span>)</span><br></pre></td></tr></table></figure>
-<h3 id="replace-修改并返回新时间"><a href="#replace-修改并返回新时间" class="headerlink" title=".replace() 修改并返回新时间"></a>.replace() 修改并返回新时间</h3><p>修改并且返回新的时间</p>
-<p>语法：<code>datetime.replace(year=self.year, month=self.month, day=self.day, hour=self.hour, minute=self.minute, second=self.second, microsecond=self.microsecond, tzinfo=self.tzinfo, * fold=0)</code></p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">15</span>]: datetime.datetime.now().replace(<span class="number">1989</span>,<span class="number">8</span>,<span class="number">21</span>,<span class="number">12</span>,<span class="number">12</span>,<span class="number">30</span>)</span><br><span class="line">Out[<span class="number">15</span>]: datetime.datetime(<span class="number">1989</span>, <span class="number">8</span>, <span class="number">21</span>, <span class="number">12</span>, <span class="number">12</span>, <span class="number">30</span>, <span class="number">672904</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">24</span>]: datetime.datetime.now().replace(month=<span class="number">12</span>,day=<span class="number">12</span>)</span><br><span class="line">Out[<span class="number">24</span>]: datetime.datetime(<span class="number">2018</span>, <span class="number">12</span>, <span class="number">12</span>, <span class="number">13</span>, <span class="number">55</span>, <span class="number">10</span>, <span class="number">734012</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">3</span>]: datetime.datetime.utcnow().replace(tzinfo=datetime.timezone.utc)</span><br><span class="line">Out[<span class="number">3</span>]: datetime.datetime(<span class="number">2018</span>, <span class="number">4</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">56</span>, <span class="number">11</span>, <span class="number">307940</span>, tzinfo=datetime.timezone.utc)</span><br></pre></td></tr></table></figure>
-<h3 id="astimezone-转换带有时区的时间"><a href="#astimezone-转换带有时区的时间" class="headerlink" title=".astimezone() 转换带有时区的时间"></a>.astimezone() 转换带有时区的时间</h3><p>转换带有时区的时间对象</p>
-<p>语法：<code>datetime.astimezone(tz=None)</code></p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">229</span>]: utctime = datetime.datetime.utcnow().replace(tzinfo=datetime.timezone.utc)</span><br><span class="line"></span><br><span class="line">In [<span class="number">230</span>]: utctime</span><br><span class="line">Out[<span class="number">230</span>]: datetime.datetime(<span class="number">2018</span>, <span class="number">4</span>, <span class="number">4</span>, <span class="number">2</span>, <span class="number">51</span>, <span class="number">4</span>, <span class="number">644039</span>, tzinfo=datetime.timezone.utc)</span><br><span class="line"></span><br><span class="line">In [<span class="number">231</span>]: utctime.astimezone(datetime.timezone(datetime.timedelta(hours=<span class="number">8</span>)))</span><br><span class="line">Out[<span class="number">231</span>]: datetime.datetime(<span class="number">2018</span>, <span class="number">4</span>, <span class="number">4</span>, <span class="number">10</span>, <span class="number">51</span>, <span class="number">4</span>, <span class="number">644039</span>, tzinfo=datetime.timezone(datetime.timedelta(<span class="number">0</span>, <span class="number">28800</span>)))</span><br></pre></td></tr></table></figure>
-<h3 id="timestamp-转换为时间戳格式"><a href="#timestamp-转换为时间戳格式" class="headerlink" title=".timestamp() 转换为时间戳格式"></a>.timestamp() 转换为时间戳格式</h3><p>将时间对象转换为时间戳格式</p>
-<p>语法：<code>datetime.timestamp()</code></p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">81</span>]: utctime = datetime.datetime.utcnow().replace(tzinfo=datetime.timezone.utc)</span><br><span class="line"></span><br><span class="line">In [<span class="number">82</span>]: utctime.timestamp()</span><br><span class="line">Out[<span class="number">82</span>]: <span class="number">1522811647.788616</span></span><br></pre></td></tr></table></figure>
-<h3 id="utcfromtimestamp-时间戳转换为格林威治时间"><a href="#utcfromtimestamp-时间戳转换为格林威治时间" class="headerlink" title=".utcfromtimestamp() 时间戳转换为格林威治时间"></a>.utcfromtimestamp() 时间戳转换为格林威治时间</h3><p>将时间戳转换为格林威治时间</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">215</span>]: datetime.datetime.utcfromtimestamp(unix)</span><br><span class="line">Out[<span class="number">215</span>]: datetime.datetime(<span class="number">2018</span>, <span class="number">4</span>, <span class="number">4</span>, <span class="number">7</span>, <span class="number">50</span>, <span class="number">12</span>, <span class="number">704802</span>)</span><br></pre></td></tr></table></figure>
-<h3 id="fromtimestamp-时间戳转换为本地时间"><a href="#fromtimestamp-时间戳转换为本地时间" class="headerlink" title=".fromtimestamp() 时间戳转换为本地时间"></a>.fromtimestamp() 时间戳转换为本地时间</h3><p>将unix时间戳转为本地日期时间</p>
-<p>语法：<code>date.fromtimestamp(timestamp)</code></p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">97</span>]: utctime = datetime.datetime.utcnow().replace(tzinfo=datetime.timezone.utc)</span><br><span class="line"></span><br><span class="line">In [<span class="number">98</span>]: unix = utctime.timestamp()</span><br><span class="line"></span><br><span class="line">In [<span class="number">99</span>]: datetime.datetime.fromtimestamp(unix)</span><br><span class="line">Out[<span class="number">99</span>]: datetime.datetime(<span class="number">2018</span>, <span class="number">4</span>, <span class="number">4</span>, <span class="number">11</span>, <span class="number">18</span>, <span class="number">26</span>, <span class="number">243829</span>)</span><br></pre></td></tr></table></figure>
-<h3 id="fromordinal-Gregorian-日历转换为时间"><a href="#fromordinal-Gregorian-日历转换为时间" class="headerlink" title=".fromordinal() Gregorian 日历转换为时间"></a>.fromordinal() Gregorian 日历转换为时间</h3><p>将Gregorian日历时间转换为date对象；（Gregorian Calendar ：一种日历表示方法，类似于我国的农历，西方国家使用比较多。</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">26</span>]: datetime.datetime.fromordinal(<span class="number">700101</span>)</span><br><span class="line">Out[<span class="number">26</span>]: datetime.datetime(<span class="number">1917</span>, <span class="number">10</span>, <span class="number">24</span>, <span class="number">0</span>, <span class="number">0</span>)</span><br></pre></td></tr></table></figure>
-<h3 id="combine-拼接日期和时间"><a href="#combine-拼接日期和时间" class="headerlink" title=".combine() 拼接日期和时间"></a>.combine() 拼接日期和时间</h3><p>根据 <code>date</code> 和 <code>time</code> 对象，创建一个 <code>datetime</code> 对象。</p>
-<p>用法：<code>datetime.combine(date, time, tzinfo=self.tzinfo)</code></p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">42</span>]: a = datetime.date(<span class="number">1989</span>,<span class="number">8</span>,<span class="number">21</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">43</span>]: b = datetime.time(<span class="number">12</span>,<span class="number">30</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">44</span>]: datetime.datetime.combine(a,b)</span><br><span class="line">Out[<span class="number">44</span>]: datetime.datetime(<span class="number">1989</span>, <span class="number">8</span>, <span class="number">21</span>, <span class="number">12</span>, <span class="number">30</span>)</span><br></pre></td></tr></table></figure>
-<h3 id="ctime-英文格式的日期"><a href="#ctime-英文格式的日期" class="headerlink" title=".ctime() 英文格式的日期"></a>.ctime() 英文格式的日期</h3><p>转换为英文格式的时间日期</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">99</span>]: datetime.datetime.now().ctime()</span><br><span class="line">Out[<span class="number">99</span>]: <span class="string">'Wed Apr  4 15:02:42 2018'</span></span><br></pre></td></tr></table></figure>
-<h3 id="dst-夏令时"><a href="#dst-夏令时" class="headerlink" title=".dst() 夏令时"></a>.dst() 夏令时</h3><p>夏令时相关</p>
-<h3 id="max-时间最大值"><a href="#max-时间最大值" class="headerlink" title=".max() 时间最大值"></a>.max() 时间最大值</h3><p>返回日期时间的最大值</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">136</span>]: datetime.datetime.now().max</span><br><span class="line">Out[<span class="number">136</span>]: datetime.datetime(<span class="number">9999</span>, <span class="number">12</span>, <span class="number">31</span>, <span class="number">23</span>, <span class="number">59</span>, <span class="number">59</span>, <span class="number">999999</span>)</span><br></pre></td></tr></table></figure>
-<h3 id="min-时间最小值"><a href="#min-时间最小值" class="headerlink" title=".min() 时间最小值"></a>.min() 时间最小值</h3><p>返回日期时候的最小值</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">137</span>]: datetime.datetime.now().min</span><br><span class="line">Out[<span class="number">137</span>]: datetime.datetime(<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>)</span><br></pre></td></tr></table></figure>
-<h3 id="resolution-时间解析度"><a href="#resolution-时间解析度" class="headerlink" title=".resolution() 时间解析度"></a>.resolution() 时间解析度</h3><p>时间解析度，一般用来计算时间</p>
-<ul>
-<li>默认的解析度</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">149</span>]: datetime.date.resolution</span><br><span class="line">Out[<span class="number">149</span>]: datetime.timedelta(<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">150</span>]: datetime.time.resolution</span><br><span class="line">Out[<span class="number">150</span>]: datetime.timedelta(<span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">151</span>]: datetime.datetime.resolution</span><br><span class="line">Out[<span class="number">151</span>]: datetime.timedelta(<span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>)</span><br></pre></td></tr></table></figure>
-<ul>
-<li>计算前100天</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">In [154]: datetime.datetime.now() - datetime.date.resolution * 100</span><br><span class="line">Out[154]: datetime.datetime(2017, 12, 25, 15, 26, 0, 143025)</span><br></pre></td></tr></table></figure>
-<ul>
-<li>计算后一天</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">In [157]: datetime.datetime.now() + datetime.date.resolution</span><br><span class="line">Out[157]: datetime.datetime(2018, 4, 5, 15, 26, 48, 416832)</span><br></pre></td></tr></table></figure>
-<h3 id="timetz-带有时区对象的时间"><a href="#timetz-带有时区对象的时间" class="headerlink" title=".timetz() 带有时区对象的时间"></a>.timetz() 带有时区对象的时间</h3><p>返回一个时间对象，带有时区属性</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">190</span>]: datetime.datetime.now().timetz()</span><br><span class="line">Out[<span class="number">190</span>]: datetime.time(<span class="number">15</span>, <span class="number">40</span>, <span class="number">49</span>, <span class="number">140247</span>)</span><br></pre></td></tr></table></figure>
-<h3 id="toordinal-返回-Gregorian-日期"><a href="#toordinal-返回-Gregorian-日期" class="headerlink" title=".toordinal() 返回 Gregorian 日期"></a>.toordinal() 返回 Gregorian 日期</h3><p>返回日期对应的 Gregorian Calendar 日期，国外有采用，类似中国农历，不常用。</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">197</span>]: datetime.datetime.utcnow().replace(tzinfo=datetime.timezone.utc).toordinal()</span><br><span class="line">Out[<span class="number">197</span>]: <span class="number">736788</span></span><br></pre></td></tr></table></figure>
-<h3 id="tzname-返回时区名称"><a href="#tzname-返回时区名称" class="headerlink" title=".tzname() 返回时区名称"></a>.tzname() 返回时区名称</h3><p>返回时区的名称</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">194</span>]: datetime.datetime.utcnow().replace(tzinfo=datetime.timezone.utc).tzname()</span><br><span class="line">Out[<span class="number">194</span>]: <span class="string">'UTC+00:00'</span></span><br></pre></td></tr></table></figure>
-<h3 id="utcoffset-返回时区偏移量"><a href="#utcoffset-返回时区偏移量" class="headerlink" title=".utcoffset() 返回时区偏移量"></a>.utcoffset() 返回时区偏移量</h3><p>返回时区的时间偏移量， 如果 tzinfo 属性是 None，则返回 None；</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">228</span>]: datetime.datetime.utcnow().utcoffset()</span><br><span class="line"></span><br><span class="line">In [<span class="number">230</span>]: datetime.datetime.now().utcoffset()</span><br></pre></td></tr></table></figure>
-<h3 id="timetuple-转换为元组"><a href="#timetuple-转换为元组" class="headerlink" title=".timetuple() 转换为元组"></a>.timetuple() 转换为元组</h3><p>6个元素的时间元组可以转换成9个元素的时间元组，供time模块使用</p>
-<p>语法：<code>date.timetuple()</code></p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">184</span>]: datetime.datetime.now().timetuple()</span><br><span class="line">Out[<span class="number">184</span>]: time.struct_time(tm_year=<span class="number">2018</span>, tm_mon=<span class="number">4</span>, tm_mday=<span class="number">4</span>, tm_hour=<span class="number">15</span>, tm_min=<span class="number">36</span>, tm_sec=<span class="number">52</span>, tm_wday=<span class="number">2</span>, tm_yday=<span class="number">94</span>, tm_isdst=<span class="number">-1</span>)</span><br></pre></td></tr></table></figure>
-<h3 id="utctimetuple-UTC转元组"><a href="#utctimetuple-UTC转元组" class="headerlink" title=".utctimetuple() UTC转元组"></a>.utctimetuple() UTC转元组</h3><p>将UTC时间转换为元组</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">232</span>]: datetime.datetime.now().utctimetuple()</span><br><span class="line">Out[<span class="number">232</span>]: time.struct_time(tm_year=<span class="number">2018</span>, tm_mon=<span class="number">4</span>, tm_mday=<span class="number">4</span>, tm_hour=<span class="number">16</span>, tm_min=<span class="number">1</span>, tm_sec=<span class="number">32</span>, tm_wday=<span class="number">2</span>, tm_yday=<span class="number">94</span>, tm_isdst=<span class="number">0</span>)</span><br></pre></td></tr></table></figure>
-<h2 id="date-日期对象"><a href="#date-日期对象" class="headerlink" title=".date 日期对象"></a>.date 日期对象</h2><p>日期对象</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">39</span>]: datetime.date(<span class="number">1989</span>,<span class="number">8</span>,<span class="number">21</span>)</span><br><span class="line">Out[<span class="number">39</span>]: datetime.date(<span class="number">1989</span>, <span class="number">8</span>, <span class="number">21</span>)</span><br></pre></td></tr></table></figure>
-<h2 id="time-时间对象"><a href="#time-时间对象" class="headerlink" title=".time 时间对象"></a>.time 时间对象</h2><p>时间对象</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">40</span>]: datetime.time(<span class="number">12</span>,<span class="number">30</span>,<span class="number">30</span>)</span><br><span class="line">Out[<span class="number">40</span>]: datetime.time(<span class="number">12</span>, <span class="number">30</span>, <span class="number">30</span>)</span><br></pre></td></tr></table></figure>
-<h2 id="timedelta-时间差"><a href="#timedelta-时间差" class="headerlink" title=".timedelta 时间差"></a>.timedelta 时间差</h2><p>这个对象用来表示时间差距，即两个日期或时间之间的差异。</p>
-<p>用法：</p>
-<p><code>datetime.timedelta(days=0, seconds=0, microseconds=0, milliseconds=0, minutes=0, hours=0, weeks=0)</code></p>
-<ul>
-<li>对时间的加减</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">282</span>]: datetime.datetime.now() + datetime.timedelta(hours=<span class="number">12</span>)</span><br><span class="line">Out[<span class="number">282</span>]: datetime.datetime(<span class="number">2018</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">4</span>, <span class="number">32</span>, <span class="number">57</span>, <span class="number">816865</span>)</span><br></pre></td></tr></table></figure>
-<table>
-<thead>
-<tr>
-<th>名词</th>
-<th>解释</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>year</td>
-<td>年</td>
-</tr>
-<tr>
-<td>month</td>
-<td>月</td>
-</tr>
-<tr>
-<td>weeks</td>
-<td>周</td>
-</tr>
-<tr>
-<td>days</td>
-<td>日</td>
-</tr>
-<tr>
-<td>hours</td>
-<td>时</td>
-</tr>
-<tr>
-<td>minutes</td>
-<td>分</td>
-</tr>
-<tr>
-<td>seconds</td>
-<td>秒</td>
-</tr>
-<tr>
-<td>micrseconds</td>
-<td>微秒</td>
-</tr>
-<tr>
-<td>milliseconds</td>
-<td>毫秒</td>
-</tr>
-</tbody>
-</table>
-<h2 id="timezone-时区"><a href="#timezone-时区" class="headerlink" title=".timezone 时区"></a>.timezone 时区</h2><p>设置时区</p>
-<ul>
-<li>设置时区为UTC</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">229</span>]: utctime = datetime.datetime.utcnow().replace(tzinfo=datetime.timezone.utc)</span><br><span class="line"></span><br><span class="line">In [<span class="number">230</span>]: utctime</span><br><span class="line">Out[<span class="number">230</span>]: datetime.datetime(<span class="number">2018</span>, <span class="number">4</span>, <span class="number">4</span>, <span class="number">2</span>, <span class="number">51</span>, <span class="number">4</span>, <span class="number">644039</span>, tzinfo=datetime.timezone.utc)</span><br><span class="line"></span><br><span class="line">In [<span class="number">231</span>]: utctime.astimezone(datetime.timezone(datetime.timedelta(hours=<span class="number">8</span>)))</span><br><span class="line">Out[<span class="number">231</span>]: datetime.datetime(<span class="number">2018</span>, <span class="number">4</span>, <span class="number">4</span>, <span class="number">10</span>, <span class="number">51</span>, <span class="number">4</span>, <span class="number">644039</span>, tzinfo=datetime.timezone(datetime.timedelta(<span class="number">0</span>, <span class="number">28800</span>)))</span><br></pre></td></tr></table></figure>
-<ul>
-<li>设置时区为东八区</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">231</span>]: utctime.astimezone(datetime.timezone(datetime.timedelta(hours=<span class="number">8</span>)))</span><br><span class="line">Out[<span class="number">231</span>]: datetime.datetime(<span class="number">2018</span>, <span class="number">4</span>, <span class="number">4</span>, <span class="number">10</span>, <span class="number">51</span>, <span class="number">4</span>, <span class="number">644039</span>, tzinfo=datetime.timezone(datetime.timedelta(<span class="number">0</span>, <span class="number">28800</span>)))</span><br></pre></td></tr></table></figure>
-<h2 id="tzinfo-时区"><a href="#tzinfo-时区" class="headerlink" title=".tzinfo 时区"></a>.tzinfo 时区</h2><p>每个 <code>datetime</code> 对象都有个时区属性<code>tzinfo</code>，默认情况为<code>None</code> ，除非给这个对象设置一个时区属性。</p>
-<ul>
-<li>设置时区为UTC</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">25</span>]: utctime = datetime.datetime.utcnow().replace(tzinfo=datetime.timezone.utc)</span><br><span class="line"></span><br><span class="line">In [<span class="number">26</span>]: utctime</span><br><span class="line">Out[<span class="number">26</span>]: datetime.datetime(<span class="number">2018</span>, <span class="number">4</span>, <span class="number">4</span>, <span class="number">6</span>, <span class="number">17</span>, <span class="number">10</span>, <span class="number">588587</span>, tzinfo=datetime.timezone.utc)</span><br><span class="line"></span><br><span class="line">In [<span class="number">27</span>]: utctime.tzinfo</span><br><span class="line">Out[<span class="number">27</span>]: datetime.timezone.utc</span><br></pre></td></tr></table></figure>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/25/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/25/">25</a><span class="page-number current">26</span><a class="page-number" href="/page/27/">27</a><span class="space">&hellip;</span><a class="page-number" href="/page/33/">33</a><a class="extend next" rel="next" href="/page/27/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/page/25/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/25/">25</a><span class="page-number current">26</span><a class="page-number" href="/page/27/">27</a><span class="space">&hellip;</span><a class="page-number" href="/page/34/">34</a><a class="extend next" rel="next" href="/page/27/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1388,7 +1041,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">66</span>
+                  <span class="site-state-item-count">67</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

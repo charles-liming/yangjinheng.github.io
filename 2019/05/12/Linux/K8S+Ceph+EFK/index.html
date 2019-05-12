@@ -79,16 +79,17 @@
 
 
 
-<meta name="description" content="越努力越幸运">
-<meta property="og:type" content="website">
-<meta property="og:title" content="默默">
-<meta property="og:url" content="https://yangjinheng.github.io/index.html">
+<meta name="description" content="本文使用 K8S 集群上运行 EFK，使用 Ceph 集群作为 ElasticSearch 集群的持久存储。 用到知识有：Storage Class、PVC、Helm，另外，很多服务镜像需要翻墙。 helm install 阻塞过程会下载镜像可能会比较慢。 helm 里面有很多可以定制的项目，这里我就不定制了，反正我的资源也够用，懒得调了。 感觉没啥可以写的 😂 Storage Class---">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Helm + storageclass + EFK">
+<meta property="og:url" content="https://yangjinheng.github.io/2019/05/12/Linux/K8S+Ceph+EFK/index.html">
 <meta property="og:site_name" content="默默">
-<meta property="og:description" content="越努力越幸运">
+<meta property="og:description" content="本文使用 K8S 集群上运行 EFK，使用 Ceph 集群作为 ElasticSearch 集群的持久存储。 用到知识有：Storage Class、PVC、Helm，另外，很多服务镜像需要翻墙。 helm install 阻塞过程会下载镜像可能会比较慢。 helm 里面有很多可以定制的项目，这里我就不定制了，反正我的资源也够用，懒得调了。 感觉没啥可以写的 😂 Storage Class---">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-05-12T13:47:07.654Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="默默">
-<meta name="twitter:description" content="越努力越幸运">
+<meta name="twitter:title" content="Helm + storageclass + EFK">
+<meta name="twitter:description" content="本文使用 K8S 集群上运行 EFK，使用 Ceph 集群作为 ElasticSearch 集群的持久存储。 用到知识有：Storage Class、PVC、Helm，另外，很多服务镜像需要翻墙。 helm install 阻塞过程会下载镜像可能会比较慢。 helm 里面有很多可以定制的项目，这里我就不定制了，反正我的资源也够用，懒得调了。 感觉没啥可以写的 😂 Storage Class---">
 
 
 
@@ -118,13 +119,13 @@
 
 
 
-  <link rel="canonical" href="https://yangjinheng.github.io/">
+  <link rel="canonical" href="https://yangjinheng.github.io/2019/05/12/Linux/K8S+Ceph+EFK/">
 
 
 
 
 
-  <title>默默</title>
+  <title>Helm + storageclass + EFK | 默默</title>
   
 
 
@@ -153,8 +154,7 @@
     
   
 
-  <div class="container sidebar-position-left 
-  page-home">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -336,9 +336,9 @@
         <div class="content-wrap">
           <div id="content" class="content">
             
-  <section id="posts" class="posts-expand">
+
+  <div id="posts" class="posts-expand">
     
-      
 
   
 
@@ -368,9 +368,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/05/12/Linux/K8S+Ceph+EFK/" itemprop="url">Helm + storageclass + EFK</a></h1>
+          <h1 class="post-title" itemprop="name headline">Helm + storageclass + EFK</h1>
         
 
         <div class="post-meta">
@@ -442,9 +440,7 @@
       
 
       
-        
-          
-            <p>本文使用 K8S 集群上运行 EFK，使用 Ceph 集群作为 ElasticSearch 集群的持久存储。</p>
+        <p>本文使用 K8S 集群上运行 EFK，使用 Ceph 集群作为 ElasticSearch 集群的持久存储。</p>
 <p>用到知识有：Storage Class、PVC、Helm，另外，很多服务镜像需要翻墙。</p>
 <p>helm install 阻塞过程会下载镜像可能会比较慢。</p>
 <p>helm 里面有很多可以定制的项目，这里我就不定制了，反正我的资源也够用，懒得调了。</p>
@@ -535,8 +531,6 @@
 </li>
 </ul>
 
-          
-        
       
     </div>
     
@@ -553,190 +547,28 @@
       
 
       
-
-      
-
       
       
-        <div class="post-eof"></div>
+
       
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://yangjinheng.github.io/2019/05/12/Linux/使用Ceph-RBD-实现动态卷/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Jin Heng">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="默默">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/05/12/Linux/使用Ceph-RBD-实现动态卷/" itemprop="url">使用Ceph-RBD-实现动态卷</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
             
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-05-12T00:00:00+08:00">
-                2019-05-12
-              </time>
+              <a href="/2019/05/12/Linux/使用Ceph-RBD-实现动态卷/" rel="next" title="使用Ceph-RBD-实现动态卷">
+                <i class="fa fa-chevron-left"></i> 使用Ceph-RBD-实现动态卷
+              </a>
             
+          </div>
 
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
             
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/运维笔记/" itemprop="url" rel="index">
-                    <span itemprop="name">运维笔记</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
+          </div>
         </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
       
 
       
-        
-          
-            <h2 id="StorageClass-Ceph-RBD"><a href="#StorageClass-Ceph-RBD" class="headerlink" title="StorageClass Ceph RBD"></a>StorageClass Ceph RBD</h2><p>实验走通了就懒得记笔记了，简单说下过程：</p>
-<ol>
-<li>搭建一个 Ceph 集群</li>
-<li>在 Ceph 集群中创建一个存储池，供 K8S 的 StorageClass 来申请</li>
-<li>部署 rbd-provisioner（自1.12版本之后必须安装的插件），StorageClass 需要调用它产生实例</li>
-<li>新建 StorageClass 访问 Ceph 的 Secret</li>
-<li>新建 StorageClass 并将 provisioner 指向 ceph.com/rbd</li>
-<li>新建 PersistentVolumeClaim 声明请求存储的大小类型等</li>
-<li>在 POD 中使用 PersistentVolumeClaim 类型的 Volume，并在容器中挂载</li>
-</ol>
-<h3 id="配置-Ceph-储存池"><a href="#配置-Ceph-储存池" class="headerlink" title="配置 Ceph 储存池"></a>配置 Ceph 储存池</h3><ul>
-<li>创建 ceph 存储池</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">yum install -y ceph-common                                                                   <span class="comment"># 在所有节点安装 ceph-common</span></span><br></pre></td></tr></table></figure>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ceph osd pool create kube 4096                                                               <span class="comment"># 创建 pool</span></span><br><span class="line">ceph osd pool ls                                                                             <span class="comment"># 查看 pool</span></span><br><span class="line"></span><br><span class="line">ceph auth get-or-create client.kube mon <span class="string">'allow r'</span> osd <span class="string">'allow rwx pool=kube'</span> -o /etc/ceph/ceph.client.kube.keyring</span><br><span class="line">ceph auth list                                                                               <span class="comment"># 授权 client.kube 用户访问 kube 这个 pool</span></span><br><span class="line"></span><br><span class="line">scp /etc/ceph/ceph.client.kube.keyring node1:/etc/ceph/                                      <span class="comment"># 将用户 keyring 文件拷贝到各个 ceph 节点</span></span><br><span class="line">scp /etc/ceph/ceph.client.kube.keyring node1:/etc/ceph/</span><br></pre></td></tr></table></figure>
-<h3 id="安装-rbd-provisioner"><a href="#安装-rbd-provisioner" class="headerlink" title="安装 rbd-provisioner"></a>安装 rbd-provisioner</h3><ul>
-<li>1.12 版本后 kube-controller-manager 不再内置 rbd 命令，所以 StorageClass 的 provisioner 而是通过外部的插件来实现</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">https://github.com/kubernetes-incubator/external-storage/tree/master/ceph/rbd/deploy/rbac    <span class="comment"># rbd-provisioner</span></span><br></pre></td></tr></table></figure>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git <span class="built_in">clone</span> https://github.com/kubernetes-incubator/external-storage.git                     <span class="comment"># 下载 rbd-provisioner</span></span><br><span class="line">$ cat &gt;&gt;external-storage/ceph/rbd/deploy/rbac/clusterrole.yaml&lt;&lt;EOF                          <span class="comment"># 允许 rbd-provisioner 访问 ceph 的密钥</span></span><br><span class="line">  - apiGroups: [<span class="string">""</span>]</span><br><span class="line">    resources: [<span class="string">"secrets"</span>]</span><br><span class="line">    verbs: [<span class="string">"create"</span>, <span class="string">"get"</span>, <span class="string">"list"</span>, <span class="string">"watch"</span>]</span><br><span class="line">EOF</span><br><span class="line">$ kubectl apply -f external-storage/ceph/rbd/deploy/rbac/                                    <span class="comment"># 安装 rbd-provisioner</span></span><br></pre></td></tr></table></figure>
-<h3 id="使用-StorageClass"><a href="#使用-StorageClass" class="headerlink" title="使用 StorageClass"></a>使用 StorageClass</h3><ul>
-<li>创建 CephX 验证 secret</li>
-</ul>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">https:</span><span class="string">//github.com/kubernetes-incubator/external-storage/tree/master/ceph/rbd/examples</span>       <span class="comment"># rbd-provisioner 使用 ceph rbd 的示例</span></span><br></pre></td></tr></table></figure>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Secret</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line"><span class="attr">  name:</span> <span class="string">ceph-admin-secret</span></span><br><span class="line"><span class="attr">  namespace:</span> <span class="string">kube-system</span></span><br><span class="line"><span class="attr">type:</span> <span class="string">"kubernetes.io/rbd"</span></span><br><span class="line"><span class="attr">data:</span></span><br><span class="line">  <span class="comment"># ceph auth get-key client.admin | base64                                                  # 从这个命令中取得 keyring 认证的 base64 密钥串复制到下面</span></span><br><span class="line"><span class="attr">  key:</span> <span class="string">QVFER3U5TmM1NXQ4SlJBQXhHMGltdXCCCCCCUXRvN2tTZ1BENGc9PQ==</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Secret</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line"><span class="attr">  name:</span> <span class="string">ceph-secret</span></span><br><span class="line"><span class="attr">  namespace:</span> <span class="string">kube-system</span></span><br><span class="line"><span class="attr">type:</span> <span class="string">"kubernetes.io/rbd"</span></span><br><span class="line"><span class="attr">data:</span></span><br><span class="line">  <span class="comment"># ceph auth get-key client.kube | base64                                                  # 从这个命令中取得 keyring 认证的 base64 密钥串复制到下面</span></span><br><span class="line"><span class="attr">  key:</span> <span class="string">QVFCcUM5VmNAAAAAAAJBQWR1NUxFNzVKeThiazdUWVhOa3N2UWc9PQ==</span></span><br></pre></td></tr></table></figure>
-<ul>
-<li>创建 StorageClass 指向 rbd-provisioner，</li>
-</ul>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">StorageClass</span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">storage.k8s.io/v1</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line"><span class="attr">  name:</span> <span class="string">ceph-rbd</span></span><br><span class="line"><span class="attr">provisioner:</span> <span class="string">ceph.com/rbd</span></span><br><span class="line"><span class="attr">parameters:</span></span><br><span class="line"><span class="attr">  monitors:</span> <span class="number">172.16</span><span class="number">.100</span><span class="number">.9</span><span class="string">:6789</span></span><br><span class="line"><span class="attr">  pool:</span> <span class="string">kube</span></span><br><span class="line"><span class="attr">  adminId:</span> <span class="string">admin</span></span><br><span class="line"><span class="attr">  adminSecretName:</span> <span class="string">ceph-admin-secret</span></span><br><span class="line"><span class="attr">  adminSecretNamespace:</span> <span class="string">kube-system</span></span><br><span class="line"><span class="attr">  userId:</span> <span class="string">kube</span></span><br><span class="line"><span class="attr">  userSecretName:</span> <span class="string">ceph-secret</span></span><br><span class="line"><span class="attr">  userSecretNamespace:</span> <span class="string">kube-system</span></span><br><span class="line"><span class="attr">  fsType:</span> <span class="string">ext4</span></span><br><span class="line"><span class="attr">  imageFormat:</span> <span class="string">"2"</span></span><br><span class="line"><span class="attr">  imageFeatures:</span> <span class="string">"layering"</span></span><br></pre></td></tr></table></figure>
-<ul>
-<li>创建 PersistentVolumeClaim</li>
-</ul>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">PersistentVolumeClaim</span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line"><span class="attr">  name:</span> <span class="string">ceph-rbd-pvc</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line"><span class="attr">  storageClassName:</span> <span class="string">ceph-rbd</span></span><br><span class="line"><span class="attr">  accessModes:</span></span><br><span class="line"><span class="bullet">  -</span> <span class="string">ReadWriteOnce</span></span><br><span class="line"><span class="attr">  resources:</span></span><br><span class="line"><span class="attr">    requests:</span></span><br><span class="line"><span class="attr">      storage:</span> <span class="number">1</span><span class="string">Gi</span></span><br></pre></td></tr></table></figure>
-<ul>
-<li>在 POD 中使用 PVC，最后在容器中挂载 PVC。</li>
-</ul>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Pod</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line"><span class="attr">  name:</span> <span class="string">ceph-sc-pvc-demo</span></span><br><span class="line"><span class="attr">  namespace:</span> <span class="string">default</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line"><span class="attr">  containers:</span></span><br><span class="line"><span class="attr">  - name:</span> <span class="string">myapp</span></span><br><span class="line"><span class="attr">    image:</span> <span class="string">ikubernetes/myapp:v1</span></span><br><span class="line"><span class="attr">    volumeMounts:</span></span><br><span class="line"><span class="attr">      - name:</span> <span class="string">pvc-volume</span></span><br><span class="line"><span class="attr">        mountPath:</span> <span class="string">/usr/share/nginx/html/</span></span><br><span class="line"><span class="attr">  volumes:</span></span><br><span class="line"><span class="attr">    - name:</span> <span class="string">pvc-volume</span></span><br><span class="line"><span class="attr">      persistentVolumeClaim:</span></span><br><span class="line"><span class="attr">        claimName:</span> <span class="string">ceph-rbd-pvc</span></span><br></pre></td></tr></table></figure>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
       
     </footer>
   </div>
@@ -746,14 +578,11 @@
   </article>
 
 
-    
-  </section>
 
-  
-  <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/34/">34</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
-  </nav>
-
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -761,6 +590,15 @@
 
 
           
+
+  
+    <div class="comments" id="comments">
+      <div id="lv-container" data-id="city" data-uid="MTAyMC80MzE1My8xOTY5OQ=="></div>
+    </div>
+
+  
+
+
 
         </div>
         
@@ -781,8 +619,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -850,6 +697,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Storage-Class"><span class="nav-number">1.</span> <span class="nav-text">Storage Class</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Helm-Elasticsearch"><span class="nav-number">2.</span> <span class="nav-text">Helm Elasticsearch</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Helm-fluentd-elasticsearch"><span class="nav-number">3.</span> <span class="nav-text">Helm fluentd-elasticsearch</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Helm-kibana"><span class="nav-number">4.</span> <span class="nav-text">Helm kibana</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -990,6 +853,10 @@
 
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
 
   
 
@@ -1018,6 +885,17 @@
 
 
 
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
   
 
 
