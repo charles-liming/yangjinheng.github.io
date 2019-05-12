@@ -79,17 +79,17 @@
 
 
 
-<meta name="description" content="前言大年初一，在家没什么意思，就整理整理博客，算起来用 HEXO 写博客两年多了。 让我别扭的一点是我写的 Markdown 总要保存两份，一份是自己的笔记，一份是博客文章，两者的区别就是一个头的区别，作为一个程序员，应该尽量避免冗余、我想能否通过软链接的方式链接呢？(试过快捷方式无效)，于是查了资料，进行了实验，结果是可以的，功能实现以后就懒得写博客这些客套话了，自己看吧，直接上脚本。 链接命令">
+<meta name="description" content="StorageClass Ceph RBD实验走通了就懒得记笔记了，简单说下过程：  搭建一个 Ceph 集群 在 Ceph 集群中创建一个存储池，供 K8S 的 StorageClass 来申请 部署 rbd-provisioner（自1.12版本之后必须安装的插件），StorageClass 需要调用它产生实例 新建 StorageClass 访问 Ceph 的 Secret 新建 Stora">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Windows 软硬链接右键脚本">
-<meta property="og:url" content="https://yangjinheng.github.io/2019/02/07/Linux/windows软硬链接/index.html">
+<meta property="og:title" content="使用Ceph-RBD-实现动态卷">
+<meta property="og:url" content="https://yangjinheng.github.io/2019/05/12/Linux/使用Ceph-RBD-实现动态卷/index.html">
 <meta property="og:site_name" content="默默">
-<meta property="og:description" content="前言大年初一，在家没什么意思，就整理整理博客，算起来用 HEXO 写博客两年多了。 让我别扭的一点是我写的 Markdown 总要保存两份，一份是自己的笔记，一份是博客文章，两者的区别就是一个头的区别，作为一个程序员，应该尽量避免冗余、我想能否通过软链接的方式链接呢？(试过快捷方式无效)，于是查了资料，进行了实验，结果是可以的，功能实现以后就懒得写博客这些客套话了，自己看吧，直接上脚本。 链接命令">
+<meta property="og:description" content="StorageClass Ceph RBD实验走通了就懒得记笔记了，简单说下过程：  搭建一个 Ceph 集群 在 Ceph 集群中创建一个存储池，供 K8S 的 StorageClass 来申请 部署 rbd-provisioner（自1.12版本之后必须安装的插件），StorageClass 需要调用它产生实例 新建 StorageClass 访问 Ceph 的 Secret 新建 Stora">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-03-03T14:11:21.069Z">
+<meta property="og:updated_time" content="2019-05-12T07:43:22.755Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Windows 软硬链接右键脚本">
-<meta name="twitter:description" content="前言大年初一，在家没什么意思，就整理整理博客，算起来用 HEXO 写博客两年多了。 让我别扭的一点是我写的 Markdown 总要保存两份，一份是自己的笔记，一份是博客文章，两者的区别就是一个头的区别，作为一个程序员，应该尽量避免冗余、我想能否通过软链接的方式链接呢？(试过快捷方式无效)，于是查了资料，进行了实验，结果是可以的，功能实现以后就懒得写博客这些客套话了，自己看吧，直接上脚本。 链接命令">
+<meta name="twitter:title" content="使用Ceph-RBD-实现动态卷">
+<meta name="twitter:description" content="StorageClass Ceph RBD实验走通了就懒得记笔记了，简单说下过程：  搭建一个 Ceph 集群 在 Ceph 集群中创建一个存储池，供 K8S 的 StorageClass 来申请 部署 rbd-provisioner（自1.12版本之后必须安装的插件），StorageClass 需要调用它产生实例 新建 StorageClass 访问 Ceph 的 Secret 新建 Stora">
 
 
 
@@ -119,13 +119,13 @@
 
 
 
-  <link rel="canonical" href="https://yangjinheng.github.io/2019/02/07/Linux/windows软硬链接/">
+  <link rel="canonical" href="https://yangjinheng.github.io/2019/05/12/Linux/使用Ceph-RBD-实现动态卷/">
 
 
 
 
 
-  <title>Windows 软硬链接右键脚本 | 默默</title>
+  <title>使用Ceph-RBD-实现动态卷 | 默默</title>
   
 
 
@@ -351,7 +351,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://yangjinheng.github.io/2019/02/07/Linux/windows软硬链接/">
+    <link itemprop="mainEntityOfPage" href="https://yangjinheng.github.io/2019/05/12/Linux/使用Ceph-RBD-实现动态卷/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Jin Heng">
@@ -368,7 +368,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Windows 软硬链接右键脚本</h1>
+          <h1 class="post-title" itemprop="name headline">使用Ceph-RBD-实现动态卷</h1>
         
 
         <div class="post-meta">
@@ -380,8 +380,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-02-07T00:00:00+08:00">
-                2019-02-07
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-05-12T00:00:00+08:00">
+                2019-05-12
               </time>
             
 
@@ -440,67 +440,43 @@
       
 
       
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>大年初一，在家没什么意思，就整理整理博客，算起来用 HEXO 写博客两年多了。</p>
-<p>让我别扭的一点是我写的 Markdown 总要保存两份，一份是自己的笔记，一份是博客文章，两者的区别就是一个头的区别，作为一个程序员，应该尽量避免冗余、我想能否通过软链接的方式链接呢？(试过快捷方式无效)，于是查了资料，进行了实验，结果是可以的，功能实现以后就懒得写博客这些客套话了，自己看吧，直接上脚本。</p>
-<h2 id="链接命令"><a href="#链接命令" class="headerlink" title="链接命令"></a>链接命令</h2><ul>
-<li>mklink 命令帮助</li>
+        <h2 id="StorageClass-Ceph-RBD"><a href="#StorageClass-Ceph-RBD" class="headerlink" title="StorageClass Ceph RBD"></a>StorageClass Ceph RBD</h2><p>实验走通了就懒得记笔记了，简单说下过程：</p>
+<ol>
+<li>搭建一个 Ceph 集群</li>
+<li>在 Ceph 集群中创建一个存储池，供 K8S 的 StorageClass 来申请</li>
+<li>部署 rbd-provisioner（自1.12版本之后必须安装的插件），StorageClass 需要调用它产生实例</li>
+<li>新建 StorageClass 访问 Ceph 的 Secret</li>
+<li>新建 StorageClass 并将 provisioner 指向 ceph.com/rbd</li>
+<li>新建 PersistentVolumeClaim 声明请求存储的大小类型等</li>
+<li>在 POD 中使用 PersistentVolumeClaim 类型的 Volume，并在容器中挂载</li>
+</ol>
+<h3 id="配置-Ceph-储存池"><a href="#配置-Ceph-储存池" class="headerlink" title="配置 Ceph 储存池"></a>配置 Ceph 储存池</h3><ul>
+<li>创建 ceph 存储池</li>
 </ul>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">MKLINK [[/D] | [/H] | [/J]] Link Target</span><br><span class="line"></span><br><span class="line">        /D      创建目录符号链接。默认为文件</span><br><span class="line">                符号链接。</span><br><span class="line">        /H      创建硬链接而非符号链接。</span><br><span class="line">        /J      创建目录联接。</span><br><span class="line">        Link    指定新的符号链接名称。</span><br><span class="line">        Target  指定新链接引用的路径</span><br><span class="line">                (相对或绝对)。</span><br></pre></td></tr></table></figure>
-<h2 id="软硬链接的区别"><a href="#软硬链接的区别" class="headerlink" title="软硬链接的区别"></a>软硬链接的区别</h2><table>
-<thead>
-<tr>
-<th>类型</th>
-<th>参数</th>
-<th>支持路径</th>
-<th>占用空间</th>
-<th>跨磁盘性</th>
-<th>特性</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>符号链接.symlinkd</td>
-<td>/d</td>
-<td>相对/绝对</td>
-<td>不占用</td>
-<td>跨分区/跨网络</td>
-<td>只是源目录的引用，源目录删除则不可用，链接文件删除不影响源文件，在操作系统层面解析，系统认为它是一个符号链接。</td>
-</tr>
-<tr>
-<td>目录联接.junction</td>
-<td>/j</td>
-<td>绝对</td>
-<td>不占用</td>
-<td>跨分区</td>
-<td>同上</td>
-</tr>
-<tr>
-<td>硬链接</td>
-<td>/h</td>
-<td>绝对</td>
-<td>不占用</td>
-<td>仅本分区</td>
-<td>源文件的元数据级别引用，它们的数据块是同一个数据块，所以修改任意一个，另外一个也会发生变动，源文件删除不影响链接文件</td>
-</tr>
-<tr>
-<td>快捷方式.lnk</td>
-<td>右键</td>
-<td>绝对</td>
-<td>很小</td>
-<td>跨分区</td>
-<td>只是操作级别的解析，系统认为它只是一个文件</td>
-</tr>
-</tbody>
-</table>
-<h2 id="我的VBS脚本"><a href="#我的VBS脚本" class="headerlink" title="我的VBS脚本"></a>我的VBS脚本</h2><p>我写了一个 VBS 脚本，方便链接的创建，主要实现了：智能判断源文件类型来实现创建软硬链接、拖放（支持多个文件）或者注册表右键的方式（传参问题！目前支持单个文件）调用，方便快捷</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">yum install -y ceph-common                                                                   <span class="comment"># 在所有节点安装 ceph-common</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ceph osd pool create kube 4096                                                               <span class="comment"># 创建 pool</span></span><br><span class="line">ceph osd pool ls                                                                             <span class="comment"># 查看 pool</span></span><br><span class="line"></span><br><span class="line">ceph auth get-or-create client.kube mon <span class="string">'allow r'</span> osd <span class="string">'allow rwx pool=kube'</span> -o /etc/ceph/ceph.client.kube.keyring</span><br><span class="line">ceph auth list                                                                               <span class="comment"># 授权 client.kube 用户访问 kube 这个 pool</span></span><br><span class="line"></span><br><span class="line">scp /etc/ceph/ceph.client.kube.keyring node1:/etc/ceph/                                      <span class="comment"># 将用户 keyring 文件拷贝到各个 ceph 节点</span></span><br><span class="line">scp /etc/ceph/ceph.client.kube.keyring node1:/etc/ceph/</span><br></pre></td></tr></table></figure>
+<h3 id="安装-rbd-provisioner"><a href="#安装-rbd-provisioner" class="headerlink" title="安装 rbd-provisioner"></a>安装 rbd-provisioner</h3><ul>
+<li>1.12 版本后 kube-controller-manager 不再内置 rbd 命令，所以 StorageClass 的 provisioner 而是通过外部的插件来实现</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">https://github.com/kubernetes-incubator/external-storage/tree/master/ceph/rbd/deploy/rbac    <span class="comment"># rbd-provisioner</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git <span class="built_in">clone</span> https://github.com/kubernetes-incubator/external-storage.git                     <span class="comment"># 下载 rbd-provisioner</span></span><br><span class="line">$ cat &gt;&gt;external-storage/ceph/rbd/deploy/rbac/clusterrole.yaml&lt;&lt;EOF                          <span class="comment"># 允许 rbd-provisioner 访问 ceph 的密钥</span></span><br><span class="line">  - apiGroups: [<span class="string">""</span>]</span><br><span class="line">    resources: [<span class="string">"secrets"</span>]</span><br><span class="line">    verbs: [<span class="string">"create"</span>, <span class="string">"get"</span>, <span class="string">"list"</span>, <span class="string">"watch"</span>]</span><br><span class="line">EOF</span><br><span class="line">$ kubectl apply -f external-storage/ceph/rbd/deploy/rbac/                                    <span class="comment"># 安装 rbd-provisioner</span></span><br></pre></td></tr></table></figure>
+<h3 id="使用-StorageClass"><a href="#使用-StorageClass" class="headerlink" title="使用 StorageClass"></a>使用 StorageClass</h3><ul>
+<li>创建 CephX 验证 secret</li>
+</ul>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">https:</span><span class="string">//github.com/kubernetes-incubator/external-storage/tree/master/ceph/rbd/examples</span>       <span class="comment"># rbd-provisioner 使用 ceph rbd 的示例</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Secret</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line"><span class="attr">  name:</span> <span class="string">ceph-admin-secret</span></span><br><span class="line"><span class="attr">  namespace:</span> <span class="string">kube-system</span></span><br><span class="line"><span class="attr">type:</span> <span class="string">"kubernetes.io/rbd"</span></span><br><span class="line"><span class="attr">data:</span></span><br><span class="line">  <span class="comment"># ceph auth get-key client.admin | base64                                                  # 从这个命令中取得 keyring 认证的 base64 密钥串复制到下面</span></span><br><span class="line"><span class="attr">  key:</span> <span class="string">QVFER3U5TmM1NXQ4SlJBQXhHMGltdXZlNFZkUXRvN2tTZ1BENGc9PQ==</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Secret</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line"><span class="attr">  name:</span> <span class="string">ceph-secret</span></span><br><span class="line"><span class="attr">  namespace:</span> <span class="string">kube-system</span></span><br><span class="line"><span class="attr">type:</span> <span class="string">"kubernetes.io/rbd"</span></span><br><span class="line"><span class="attr">data:</span></span><br><span class="line">  <span class="comment"># ceph auth get-key client.kube | base64                                                  # 从这个命令中取得 keyring 认证的 base64 密钥串复制到下面</span></span><br><span class="line"><span class="attr">  key:</span> <span class="string">QVFCcUM5VmNWVDdQRlJBQWR1NUxFNzVKeThiazdUWVhOa3N2UWc9PQ==</span></span><br></pre></td></tr></table></figure>
 <ul>
-<li>VBS脚本放在 C:\Windows\mklink.vbs</li>
+<li>创建 StorageClass 指向 rbd-provisioner，</li>
 </ul>
-<figure class="highlight vbscript"><table><tr><td class="code"><pre><span class="line"><span class="comment">' 判断传递参数个数</span></span><br><span class="line"><span class="keyword">If</span> WScript.Arguments.Count = <span class="number">0</span> <span class="keyword">Then</span>  </span><br><span class="line">    <span class="built_in">MsgBox</span> <span class="string">"将需要创建链接的文件拖放到本程序"</span>, vbOKOnly,<span class="string">"用法"</span></span><br><span class="line">    WScript.quit</span><br><span class="line"><span class="keyword">End</span> <span class="keyword">If</span></span><br><span class="line"></span><br><span class="line"><span class="comment">' 变量声明、对象创建</span></span><br><span class="line"><span class="keyword">Dim</span> FileName, BaseName, DiskName, TargetPath, Command</span><br><span class="line"><span class="keyword">Set</span> Fso = <span class="built_in">CreateObject</span>(<span class="string">"Scripting.FileSystemObject"</span>)</span><br><span class="line"><span class="keyword">Set</span> ObjShell = <span class="built_in">CreateObject</span>(<span class="string">"Shell.Application"</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">' 根据文件类型，决定目标范围</span></span><br><span class="line"><span class="keyword">If</span> Fso.FileExists(WScript.Arguments(<span class="number">0</span>))  <span class="keyword">Then</span></span><br><span class="line">    DiskName = Fso.GetDriveName(WScript.Arguments(<span class="number">0</span>))</span><br><span class="line"><span class="keyword">End</span> <span class="keyword">If</span></span><br><span class="line"></span><br><span class="line"><span class="comment">' 弹出目标选择框，取得选择值</span></span><br><span class="line"><span class="keyword">Set</span> ObjFolder = ObjShell.BrowseForFolder(<span class="number">0</span>, <span class="string">"选择一个目录"</span>, <span class="number">0</span>, DiskName)</span><br><span class="line"><span class="keyword">If</span> ObjFolder <span class="keyword">Is</span> <span class="literal">Nothing</span> <span class="keyword">Then</span></span><br><span class="line">    WScript.Quit</span><br><span class="line"><span class="keyword">Else</span></span><br><span class="line">    TargetPath = ObjFolder.Self.Path</span><br><span class="line"><span class="keyword">End</span> <span class="keyword">If</span></span><br><span class="line"></span><br><span class="line"><span class="comment">' 判断要处理多少个文件</span></span><br><span class="line"><span class="keyword">If</span> WScript.Arguments.Count &gt; <span class="number">1</span> <span class="keyword">Then</span></span><br><span class="line">    <span class="keyword">For</span> i = <span class="number">0</span> <span class="keyword">to</span> WScript.Arguments.Count - <span class="number">1</span></span><br><span class="line">        <span class="comment">' filename = filename &amp; cstr(WScript.Arguments(i))</span></span><br><span class="line">        Handler(WScript.Arguments(i))</span><br><span class="line">    <span class="keyword">Next</span></span><br><span class="line"><span class="keyword">Else</span></span><br><span class="line">    Handler(WScript.Arguments(<span class="number">0</span>))</span><br><span class="line"><span class="keyword">End</span> <span class="keyword">If</span></span><br><span class="line"></span><br><span class="line"><span class="comment">' 根据收集的信息拼接命令</span></span><br><span class="line"><span class="keyword">Function</span> Handler(File)</span><br><span class="line">    <span class="comment">' 分析文件名称，等到文件名和路径名</span></span><br><span class="line">    FileName = File</span><br><span class="line">    BaseName = Fso.GetFileName(FileName)</span><br><span class="line"></span><br><span class="line">    <span class="comment">' 根据文件类型，决定创建软或硬链接</span></span><br><span class="line">    <span class="keyword">If</span> Fso.FolderExists(FileName)  <span class="keyword">Then</span></span><br><span class="line">        Command = Command &amp; <span class="string">"MKLINK /D "</span> &amp; TargetPath &amp; <span class="string">"\"</span> &amp; BaseName &amp; <span class="string">" "</span> &amp; FileName &amp; <span class="string">"&amp;"</span></span><br><span class="line">    <span class="keyword">Else</span></span><br><span class="line">        Command = Command &amp; <span class="string">"MKLINK /H "</span> &amp; TargetPath &amp; <span class="string">"\"</span> &amp; BaseName &amp; <span class="string">" "</span> &amp; FileName &amp; <span class="string">"&amp;"</span></span><br><span class="line">    <span class="keyword">End</span> <span class="keyword">If</span></span><br><span class="line"><span class="keyword">End</span> <span class="keyword">Function</span></span><br><span class="line"></span><br><span class="line"><span class="comment">' 执行最终拼接的命令</span></span><br><span class="line">ObjShell.ShellExecute <span class="string">"cmd.exe"</span>, <span class="string">"/C "</span> &amp; Command, <span class="string">""</span>, <span class="string">"runas"</span>, <span class="number">0</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">StorageClass</span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">storage.k8s.io/v1</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line"><span class="attr">  name:</span> <span class="string">ceph-rbd</span></span><br><span class="line"><span class="attr">provisioner:</span> <span class="string">ceph.com/rbd</span></span><br><span class="line"><span class="attr">parameters:</span></span><br><span class="line"><span class="attr">  monitors:</span> <span class="number">172.16</span><span class="number">.100</span><span class="number">.9</span><span class="string">:6789</span></span><br><span class="line"><span class="attr">  pool:</span> <span class="string">kube</span></span><br><span class="line"><span class="attr">  adminId:</span> <span class="string">admin</span></span><br><span class="line"><span class="attr">  adminSecretName:</span> <span class="string">ceph-admin-secret</span></span><br><span class="line"><span class="attr">  adminSecretNamespace:</span> <span class="string">kube-system</span></span><br><span class="line"><span class="attr">  userId:</span> <span class="string">kube</span></span><br><span class="line"><span class="attr">  userSecretName:</span> <span class="string">ceph-secret</span></span><br><span class="line"><span class="attr">  userSecretNamespace:</span> <span class="string">kube-system</span></span><br><span class="line"><span class="attr">  fsType:</span> <span class="string">ext4</span></span><br><span class="line"><span class="attr">  imageFormat:</span> <span class="string">"2"</span></span><br><span class="line"><span class="attr">  imageFeatures:</span> <span class="string">"layering"</span></span><br></pre></td></tr></table></figure>
 <ul>
-<li>添加右键菜单 mklink.reg</li>
+<li>创建 PersistentVolumeClaim</li>
 </ul>
-<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-tag">Windows</span> <span class="selector-tag">Registry</span> <span class="selector-tag">Editor</span> <span class="selector-tag">Version</span> 5<span class="selector-class">.00</span></span><br><span class="line"></span><br><span class="line"><span class="selector-attr">[HKEY_CLASSES_ROOT\*\shell\mklink]</span></span><br><span class="line">@="创建硬链接"</span><br><span class="line">"<span class="keyword">Icon</span>"="%<span class="keyword">SystemRoot</span>%\\<span class="keyword">System32</span>\\<span class="keyword">SHELL32</span>.<span class="keyword">dll</span>,<span class="keyword">68</span>"</span><br><span class="line"></span><br><span class="line">[<span class="keyword">HKEY_CLASSES_ROOT</span>\*\<span class="keyword">shell</span>\<span class="keyword">mklink</span>\<span class="keyword">command</span>]</span><br><span class="line">@="<span class="keyword">wscript</span>.<span class="keyword">exe</span> C:\\Windows\\mklink.vbs \<span class="string">"%1\""</span></span><br><span class="line"></span><br><span class="line">[HKEY_CLASSES_ROOT\Directory\shell\mklink]</span><br><span class="line">@=<span class="string">"创建软链接"</span></span><br><span class="line"><span class="string">"Icon"</span>=<span class="string">"%SystemRoot%\\System32\\SHELL32.dll,68"</span></span><br><span class="line"></span><br><span class="line">[HKEY_CLASSES_ROOT\Directory\shell\mklink\command]</span><br><span class="line">@=<span class="string">"wscript.exe C:\\Windows\\mklink.vbs \"%1\""</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">PersistentVolumeClaim</span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line"><span class="attr">  name:</span> <span class="string">ceph-rbd-pvc</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line"><span class="attr">  storageClassName:</span> <span class="string">ceph-rbd</span></span><br><span class="line"><span class="attr">  accessModes:</span></span><br><span class="line"><span class="bullet">  -</span> <span class="string">ReadWriteOnce</span></span><br><span class="line"><span class="attr">  resources:</span></span><br><span class="line"><span class="attr">    requests:</span></span><br><span class="line"><span class="attr">      storage:</span> <span class="number">1</span><span class="string">Gi</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>在 POD 中使用 PVC，最后在容器中挂载 PVC。</li>
+</ul>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Pod</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line"><span class="attr">  name:</span> <span class="string">ceph-sc-pvc-demo</span></span><br><span class="line"><span class="attr">  namespace:</span> <span class="string">default</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line"><span class="attr">  containers:</span></span><br><span class="line"><span class="attr">  - name:</span> <span class="string">myapp</span></span><br><span class="line"><span class="attr">    image:</span> <span class="string">ikubernetes/myapp:v1</span></span><br><span class="line"><span class="attr">    volumeMounts:</span></span><br><span class="line"><span class="attr">      - name:</span> <span class="string">pvc-volume</span></span><br><span class="line"><span class="attr">        mountPath:</span> <span class="string">/usr/share/nginx/html/</span></span><br><span class="line"><span class="attr">  volumes:</span></span><br><span class="line"><span class="attr">    - name:</span> <span class="string">pvc-volume</span></span><br><span class="line"><span class="attr">      persistentVolumeClaim:</span></span><br><span class="line"><span class="attr">        claimName:</span> <span class="string">ceph-rbd-pvc</span></span><br></pre></td></tr></table></figure>
 
       
     </div>
@@ -525,8 +501,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/01/25/personal/进制转换/" rel="next" title="教初学者如何进制转换">
-                <i class="fa fa-chevron-left"></i> 教初学者如何进制转换
+              <a href="/2019/05/02/python/webshell和paramiko/" rel="next" title="webshell和paramiko">
+                <i class="fa fa-chevron-left"></i> webshell和paramiko
               </a>
             
           </div>
@@ -534,10 +510,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/02/27/python/离群值计算/" rel="prev" title="利用方差剔除数据中的离群点">
-                利用方差剔除数据中的离群点 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -682,7 +654,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#链接命令"><span class="nav-number">2.</span> <span class="nav-text">链接命令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#软硬链接的区别"><span class="nav-number">3.</span> <span class="nav-text">软硬链接的区别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#我的VBS脚本"><span class="nav-number">4.</span> <span class="nav-text">我的VBS脚本</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#StorageClass-Ceph-RBD"><span class="nav-number">1.</span> <span class="nav-text">StorageClass Ceph RBD</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#配置-Ceph-储存池"><span class="nav-number">1.1.</span> <span class="nav-text">配置 Ceph 储存池</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#安装-rbd-provisioner"><span class="nav-number">1.2.</span> <span class="nav-text">安装 rbd-provisioner</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用-StorageClass"><span class="nav-number">1.3.</span> <span class="nav-text">使用 StorageClass</span></a></li></ol></li></ol></div>
             
 
           </div>
