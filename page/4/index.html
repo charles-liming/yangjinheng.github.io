@@ -221,7 +221,7 @@
       
         
         <li class="menu-item menu-item-kubernetes">
-          <a href="/2019/03/29/Linux/k8s笔记/" rel="section">
+          <a href="/2019/03/29/Linux/kubernetes/" rel="section">
             
               <i class="menu-item-icon fa fa-fw fa-cog"></i> <br>
             
@@ -1077,37 +1077,29 @@
       
         
           
-            <h1 id="Kubernetes简介"><a href="#Kubernetes简介" class="headerlink" title="Kubernetes简介"></a>Kubernetes简介</h1><blockquote>
-<p>  引用：<a href="http://www.magedu.com" target="_blank" rel="noopener">http://www.magedu.com</a></p>
-<p>  引用：<a href="https://draveness.me/" target="_blank" rel="noopener">https://draveness.me/</a></p>
-</blockquote>
-<h2 id="容器编排工具"><a href="#容器编排工具" class="headerlink" title="容器编排工具"></a>容器编排工具</h2><ul>
-<li>docker 官方编排</li>
+            <h1 id="Kubernetes简介"><a href="#Kubernetes简介" class="headerlink" title="Kubernetes简介"></a>Kubernetes简介</h1><h2 id="容器编排工具"><a href="#容器编排工具" class="headerlink" title="容器编排工具"></a>容器编排工具</h2><ul>
+<li>docker 官方编排工具</li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">docker compose</span><br><span class="line">	单机编排工具</span><br><span class="line"></span><br><span class="line">docker swarm</span><br><span class="line">	将多台 docker 提供的计算资源整合的接口，随后docker compose编排的时候只需要面向这个整合的接口进行编排就行，无论接口下有多少个主机。</span><br><span class="line"></span><br><span class="line">docker mechine</span><br><span class="line">	将一个主机初始化为一个能够加入 docker swarm 集群中的预置程序</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">docker compose    # 单机编排工具</span><br><span class="line">docker swarm      # 将多台 docker 提供的计算资源整合的接口，随后 docker compose 编排的时候只需要面向这个整合的接口进行编排就行，无论接口下有多少个主机。</span><br><span class="line">docker mechine    # 将一个主机初始化为一个能够加入 docker swarm 集群中的预置程序</span><br></pre></td></tr></table></figure>
 <ul>
-<li>mesos</li>
+<li>mesos IDC 操作系统</li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">IDC操作系统，能将一个IDC提供的硬件资源，统一调度和分配，它只是一个资源分配工具，非能够直接托管容器的，所以它提供了以个能够直接编排框架，marathon。</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">IDC 操作系统，能将一个 IDC 提供的硬件资源，统一调度和分配，它只是一个资源分配工具，非能够直接托管容器的，所以它提供了以个能够直接编排框架，marathon。</span><br></pre></td></tr></table></figure>
 <ul>
 <li>kubernetes</li>
 </ul>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">目前最流行的容器编排工具，市场占有率最高</span><br></pre></td></tr></table></figure>
-<h2 id="自动化运维"><a href="#自动化运维" class="headerlink" title="自动化运维"></a>自动化运维</h2><ul>
-<li>CI</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">持续集成</span><br><span class="line">当程序员提交到 GITHUB ，Jenkins 会自动从 GITHUB 下载代码并构建，并部署到测试环境进行测试，如果测试没有问题，则提交到运维的共享存储上，运维需要手动部署到线上。</span><br></pre></td></tr></table></figure>
-<ul>
-<li>CD</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">持续交付（Delivery）、持续部署（Deplcoment）</span><br><span class="line"></span><br><span class="line">如果有一款工具能够在测试完成后自动触发并部署到生产环境，不需要运维再干预，那么这就是持续部署，这个过程就叫 DevOps。</span><br><span class="line"></span><br><span class="line">而当容器技术出现，这最后一部就可以实现自动化了，那么最后在测试完成后直接构建为镜像，然后把镜像运行为容器，就可以实现自动部署了。</span><br><span class="line"></span><br><span class="line">正是因为容器技术的出现，DevOps 实现了真正的落地。</span><br></pre></td></tr></table></figure>
-<h2 id="kubernetes"><a href="#kubernetes" class="headerlink" title="kubernetes"></a>kubernetes</h2><p>是希腊语，翻译过来是：舵手的意思，是谷歌内部使用 Borg 的集群管理系统构建的，在 2014 年发布了第一个版本，目前开源并托管在GITHUB上。</p>
+<h2 id="kubernetes"><a href="#kubernetes" class="headerlink" title="kubernetes"></a>kubernetes</h2><p>kubernetes 是希腊语，翻译过来是：舵手的意思，它的原型是谷歌内部使用 Borg 集群管理系统，可以说是集结了 Borg 设计思想的精华，并且吸收了 Borg 系统中的经验和教训。</p>
+<p>它的目标不仅仅是一个编排系统，而是提供一个规范，可以让你来描述集群的架构，定义服务的最终状态，Kubernetes可以帮你将系统自动地达到和维持在这个状态。Kubernetes作为云原生应用的基石，相当于一个云操作系统，其重要性不言而喻。</p>
+<p>kubernetes 在 2014 年发布了第一个版本，目前开源并托管在 Github 上。</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">https://github.com/Kubernetes</span><br></pre></td></tr></table></figure>
-<p>目前：AWS、阿里云、微软云，目前已经原生支持 K8S ，目前已经可以让用户直接部署云原生的服务。</p>
-<p>Kubernetes 可以实现</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">- 自动装箱，自动修复，水平扩展，服务发现和负载均衡，自动发布和回滚</span><br><span class="line">- 密钥和配置管理、存储编排、批量处理执行</span><br></pre></td></tr></table></figure>
+<p>目前，AWS、阿里云、微软云，目前已经原生支持 K8S ，目前已经可以让用户直接部署云原生的服务。</p>
+<ul>
+<li>有什么优势</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">- 基于 Borg 系统，设计成熟，开源、且轻量级，简单易学、容易理解；</span><br><span class="line">- 模块化，可插拔，支持钩子，可任意组合，例如：网络组件 flannel，存储插件；</span><br><span class="line">- 故障发现（存活性探针）和自我修复能力（副本数量）、服务滚动升级（就绪探针）和在线扩容（副本数量）；</span><br><span class="line">- 可扩展的资源自动调度机制（多维度的水平自动扩容）、多粒度的资源配额管理能力（资源限制）。</span><br></pre></td></tr></table></figure>
 <h2 id="环境架构"><a href="#环境架构" class="headerlink" title="环境架构"></a>环境架构</h2><p>Kubernetes 是一个集群，整合多台计算机的计算能力，它是一种有中心节点模式的集群，在 K8S 集群中主机分为两种角色：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Master：集群的管理节点，有一个或者一组节点，一般3个足够了。</span><br><span class="line">nodes：提供计算资源的节点，就是运行容器的节点，可以扩展。</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Master：集群的管理节点，有一个或者一组节点，一般 3 个足够了。</span><br><span class="line">nodes：提供计算资源的节点，就是运行容器的节点，可以扩展。</span><br></pre></td></tr></table></figure>
 <p>客户端创建启动容器的请求交给 Master ，Master 上有一个<strong>调度器</strong>它能分析各 nodes 节点上的资源状态，找一个最适合运行用户容器的节点，并在这个节点上使用 Docker 启动这个容器，node 节点的 Docker 在启动容器时候会首先检查本地有没有镜像，如果没有就从仓库中 pull 然后运行。</p>
 <p>那么仓库可以运行为容器，所以也可以托管在 Kubernetes 之上，其实 Kubernetes 可以托管自身，即自托管。</p>
 <ul>
@@ -1150,7 +1142,26 @@
 <p>集群中运行的众多 POD ，前面提到一个控制器可以管理若干个 POD ，那么控制器如何从集群中运行的所有 POD 中挑选出来自己需要管理的 POD 呢？ </p>
 <p>在创建一个 POD 的时候为 POD 打上一个标签，让程序可以通过这个标签来识别出来这个POD，还可以用来区分一组相同功能的POD，例如：创建四个nginx pod，可以给每个pod加一个 K/V类型的标签如：app=nginx，将来找出这四个 nginx pod，那么条件就是根据 拥有 key 为 app 的pod 并且 value 为 nginx 来挑出这组 POD。</p>
 <p>标签不是 POD 唯一具有的机制，其他的组件同样可以有标签。</p>
-<h2 id="组件总结"><a href="#组件总结" class="headerlink" title="组件总结"></a>组件总结</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Matser：主节点上运行的组件</span><br><span class="line">    ApiServer：提供一个可以接收用户请求的守护进程</span><br><span class="line">    Scheduler：接收用户请求后调度接收到的任务到指定的节点</span><br><span class="line">    Controller-Master：</span><br><span class="line">node：工作节点上的组件</span><br><span class="line">    kubelet：</span><br><span class="line">    docker：</span><br><span class="line">    kube-proxy：随时与 apiserver 进行通信</span><br></pre></td></tr></table></figure>
+<h2 id="架构和组件"><a href="#架构和组件" class="headerlink" title="架构和组件"></a>架构和组件</h2><ul>
+<li>etcd</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">用于 Kubernetes 的后端数据存储，所有集群数据都存储在此处</span><br></pre></td></tr></table></figure>
+<ul>
+<li>Master 节点负责维护集群的目标状态，上面运行的主控组件有</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kube-apiserver                 <span class="comment"># 对外暴露了 Kubernetes API，它是的 Kubernetes 前端控制层，只有 API Server 会与 etcd 通信，其它模块都必须通过 API Server 访问集群状态</span></span><br><span class="line">kube-controller-manager        <span class="comment"># 处理集群中常规任务，它是单独的进程，内部包含多个控制器，例如维护 POD 数量</span></span><br><span class="line">kube-scheduler                 <span class="comment"># 监视新创建的 Pod 为新创建的 POD 分配合适的 node 节点</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>Node 节点实际负责实施，也就是运行 POD 的节点，上面运行的组件有</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubelet                        <span class="comment"># 它监测已经分配给自己的 Pod，为 POD 准备卷，下载 POD 所需的 Secret，下载镜像并运行，进行生命周期探测，上报 POD 和节点状态</span></span><br><span class="line">kube-proxy                     <span class="comment"># 通过维护主机上的网络规则并执行连接转发，将 Kubernetes 提供的网络服务代理到每个节点上，实现了Kubernetes服务抽象</span></span><br><span class="line">docker                         <span class="comment"># 用于运行容器</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>插件</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">插件是增强集群功能的 Pod 和 Service，插件对象本身是受命名空间限制的，被创建于 kube-system 命名空间。</span><br></pre></td></tr></table></figure>
+<ul>
+<li>DNS</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">虽然其他插件并不是必需的，但所有 Kubernetes 集群都应该具有Cluster DNS，许多应用依赖于它，为 Kubernetes 服务提供DNS记录，容器启动该后会自动将 DNS 服务器包含在 resolv.conf 中。</span><br></pre></td></tr></table></figure>
 <h1 id="组件和附件"><a href="#组件和附件" class="headerlink" title="组件和附件"></a>组件和附件</h1><h2 id="Controller"><a href="#Controller" class="headerlink" title="Controller"></a>Controller</h2><p>这些控制器分别用于确保不同类型的 POD 资源运行于符合用户所期望的状态。</p>
 <ul>
 <li>RelicationController</li>
@@ -1217,144 +1228,150 @@
 <li>node</li>
 </ul>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">kubelet                    # </span><br><span class="line">kube-proxy                 # </span><br><span class="line">docker                     # 容器引擎</span><br></pre></td></tr></table></figure>
-<h1 id="安装集群"><a href="#安装集群" class="headerlink" title="安装集群"></a>安装集群</h1><h2 id="部署架构"><a href="#部署架构" class="headerlink" title="部署架构"></a>部署架构</h2><p><img src="C:\Users\LENOVO\AppData\Roaming\Typora\typora-user-images\1553776698329.png" alt="1553776698329"></p>
-<p>节点网络：172.20.0.0/16</p>
-<p>POD 网络：10.244.0.0/16</p>
-<p>Service 网络：10.96.0.0/12</p>
-<h2 id="安装-Master"><a href="#安装-Master" class="headerlink" title="安装 Master"></a>安装 Master</h2><h3 id="配置-kuberetes-安装源"><a href="#配置-kuberetes-安装源" class="headerlink" title="配置 kuberetes 安装源"></a>配置 kuberetes 安装源</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">cat &gt;&gt;/etc/yum.repos.d/kuberetes.repo&lt;&lt;EOF</span><br><span class="line">[kuberneres]</span><br><span class="line">name=Kubernetes</span><br><span class="line">baseurl=https://mirrors.aliyun.com/kubernetes/yum/repos/kubernetes-el7-x86_64/</span><br><span class="line">gpgcheck=0</span><br><span class="line">gpgkey=https://mirrors.aliyun.com/kubernetes/yum/doc/yum-key.gpg</span><br><span class="line">enabled=1</span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
-<h3 id="配置-docker-安装源"><a href="#配置-docker-安装源" class="headerlink" title="配置 docker 安装源"></a>配置 docker 安装源</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">curl -o /etc/yum.repos.d/docker-ce.repo https://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo</span><br></pre></td></tr></table></figure>
-<h3 id="安装-kubernetes"><a href="#安装-kubernetes" class="headerlink" title="安装 kubernetes"></a>安装 kubernetes</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">yum install docker-ce kubelet kubeadm kubectl</span><br></pre></td></tr></table></figure>
-<h3 id="配置-Docker"><a href="#配置-Docker" class="headerlink" title="配置 Docker"></a>配置 Docker</h3><ul>
-<li>编辑docker，设置Docker下载镜像时候使用代理，注意本地使用：shadowsockets </li>
+<h1 id="集群部署"><a href="#集群部署" class="headerlink" title="集群部署"></a>集群部署</h1><p>Kubeadm 是 K8S 官方提供的快速部署工具，它提供了 kubeadm init 以及 kubeadm join 这两个命令作为快速创建 kubernetes 集群的最佳实践，本章节说明了使用 kubeadm 来部署 K8S 集群的过程。</p>
+<ul>
+<li>集群组织结构</li>
 </ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">vim /usr/lib/systemd/system/docker.service</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[Service]</span><br><span class="line">Environment=&quot;HTTPS_PROXY=10.0.0.2:1080&quot;</span><br><span class="line">Environment=&quot;NO_PROXY=127.0.0.0/8,172.16.0.0/16&quot;</span><br></pre></td></tr></table></figure>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">systemctl daemon-reload</span><br><span class="line">systemctl start docker</span><br></pre></td></tr></table></figure>
-<h3 id="配置-ipvs"><a href="#配置-ipvs" class="headerlink" title="配置 ipvs"></a>配置 ipvs</h3><ul>
-<li>在所有节点安装</li>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>集群规模</td>
+<td>Master、node1、node2</td>
+</tr>
+<tr>
+<td>网络规划</td>
+<td>POD：10.244.0.0/16、Service：10.96.0.0/12</td>
+</tr>
+</tbody>
+</table>
+<h2 id="部署前准备"><a href="#部署前准备" class="headerlink" title="部署前准备"></a>部署前准备</h2><blockquote>
+<p>  本小节的所有的操作，在所有的节点上进行</p>
+</blockquote>
+<h3 id="关闭-firewalld-和-selinux"><a href="#关闭-firewalld-和-selinux" class="headerlink" title="关闭 firewalld 和 selinux"></a>关闭 firewalld 和 selinux</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">setenforce 0</span><br><span class="line">sed -i <span class="string">'/^SELINUX=/cSELINUX=disabled'</span> /etc/selinux/config</span><br><span class="line"></span><br><span class="line">systemctl stopfirewalld</span><br><span class="line">systemctl <span class="built_in">disable</span> firewalld</span><br></pre></td></tr></table></figure>
+<h3 id="加载-ipvs-内核模块"><a href="#加载-ipvs-内核模块" class="headerlink" title="加载 ipvs 内核模块"></a>加载 ipvs 内核模块</h3><ul>
+<li>安装 IPVS 模块</li>
 </ul>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">yum install ipvsadm ipset sysstat conntrack libseccomp</span><br></pre></td></tr></table></figure>
 <ul>
-<li>开启 ipvs 模块，编辑 /etc/modules-load.d/ipvs.conf，systemctl enable systemd-modules-load.service</li>
+<li>设置开机加载配置文件</li>
 </ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ip_vs_dh</span><br><span class="line">ip_vs_ftp</span><br><span class="line">ip_vs</span><br><span class="line">ip_vs_lblc</span><br><span class="line">ip_vs_lblcr</span><br><span class="line">ip_vs_lc</span><br><span class="line">ip_vs_nq</span><br><span class="line">ip_vs_pe_sip</span><br><span class="line">ip_vs_rr</span><br><span class="line">ip_vs_sed</span><br><span class="line">ip_vs_sh</span><br><span class="line">ip_vs_wlc</span><br><span class="line">ip_vs_wrr</span><br><span class="line">nf_conntrack_ipv4</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">cat &gt;&gt;/etc/modules-load.d/ipvs.conf&lt;&lt;EOF</span><br><span class="line">ip_vs_dh</span><br><span class="line">ip_vs_ftp</span><br><span class="line">ip_vs</span><br><span class="line">ip_vs_lblc</span><br><span class="line">ip_vs_lblcr</span><br><span class="line">ip_vs_lc</span><br><span class="line">ip_vs_nq</span><br><span class="line">ip_vs_pe_sip</span><br><span class="line">ip_vs_rr</span><br><span class="line">ip_vs_sed</span><br><span class="line">ip_vs_sh</span><br><span class="line">ip_vs_wlc</span><br><span class="line">ip_vs_wrr</span><br><span class="line">nf_conntrack_ipv4</span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
 <ul>
-<li>检查 ipvs 模块</li>
+<li>设置开机加载 IPVS 模块</li>
 </ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">lsmod | grep -e ip_vs -e nf_conntrack_ipv4</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">systemctl <span class="built_in">enable</span> systemd-modules-load.service   <span class="comment"># 设置开机加载内核模块</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">lsmod | grep -e ip_vs -e nf_conntrack_ipv4      <span class="comment"># 重启后检查 ipvs 模块是否加载</span></span><br></pre></td></tr></table></figure>
 <ul>
-<li>配置集群使用 ipvs 方式，修改 mode 为 ipvs 重启集群即可，ipvs 比 iptables 的效率要高</li>
+<li>如果集群已经部署在了 iptables 模式下，可以通过下面命令修改，修改 mode 为 ipvs 重启集群即可。</li>
 </ul>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl edit -n kube-system configmap kube-proxy</span><br></pre></td></tr></table></figure>
-<h3 id="初始化-kubelet"><a href="#初始化-kubelet" class="headerlink" title="初始化 kubelet"></a>初始化 kubelet</h3><ul>
-<li>确保如下两个内核功能为开启状态</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">cat &gt;&gt;/etc/sysctl.conf&lt;&lt;EOF</span><br><span class="line">net.bridge.bridge-nf-call-ip6tables = 1</span><br><span class="line">net.bridge.bridge-nf-call-iptables = 1</span><br><span class="line">net.ipv4.ip_forward = 1</span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
-<ul>
-<li>vim /etc/sysconfig/kubelet，关闭 swap 的警告，使用 ipvs 作为 service 的代理模型</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">KUBELET_EXTRA_ARGS=<span class="string">"--fail-swap-on=false"</span></span><br><span class="line">KUBE_PROXY_MODE=ipvs</span><br></pre></td></tr></table></figure>
-<ul>
-<li>首先尝试把镜像下载下来，需要科学上网</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubeadm config images pull</span><br></pre></td></tr></table></figure>
-<ul>
-<li>初始化 kubeadm</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubeadm init --kubernetes-version=v1.14.0 --pod-network-cidr=10.244.0.0/16 --service-cidr=10.96.0.0/12 --ignore-preflight-errors=Swap</span><br></pre></td></tr></table></figure>
-<ul>
-<li>如果报错可以使用下面命令查看</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">journalctl -xeu kubelet</span><br></pre></td></tr></table></figure>
-<ul>
-<li>如果过程出错而中断，可以使用下面命令来清理环境，重新初始化</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubeadm reset</span><br></pre></td></tr></table></figure>
-<ul>
-<li>初始化过程可以查看</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[root@node1 ~]<span class="comment"># docker image ls</span></span><br><span class="line">REPOSITORY                           TAG        IMAGE ID        CREATED          SIZE</span><br><span class="line">k8s.gcr.io/kube-proxy                v1.14.0    5cd54e388aba    2 days ago       82.1MB</span><br><span class="line">k8s.gcr.io/kube-apiserver            v1.14.0    ecf910f40d6e    2 days ago       210MB</span><br><span class="line">k8s.gcr.io/kube-controller-manager   v1.14.0    b95b1efa0436    2 days ago       158MB</span><br><span class="line">k8s.gcr.io/kube-scheduler            v1.14.0    00638a24688b    2 days ago       81.6MB</span><br><span class="line">k8s.gcr.io/coredns                   1.3.1      eb516548c180    2 months ago     40.3MB</span><br><span class="line">k8s.gcr.io/etcd                      3.3.10     2c4adeb21b4f    3 months ago     258MB</span><br><span class="line">k8s.gcr.io/pause                     3.1        da86e6ba6ca1    15 months ago    742kB</span><br></pre></td></tr></table></figure>
-<ul>
-<li>出现错误可能需要关闭 swap</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 关闭Swap，机器重启后不生效</span></span><br><span class="line">swapoff -a</span><br><span class="line"></span><br><span class="line"><span class="comment"># 修改/etc/fstab永久关闭Swap</span></span><br><span class="line">cp -p /etc/fstab /etc/fstab.bak$(date <span class="string">'+%Y%m%d%H%M%S'</span>)</span><br><span class="line"><span class="comment"># Redhat</span></span><br><span class="line">sed -i <span class="string">"s/\/dev\/mapper\/rhel-swap/\#\/dev\/mapper\/rhel-swap/g"</span> /etc/fstab</span><br><span class="line"><span class="comment"># CentOS</span></span><br><span class="line">sed -i <span class="string">"s/\/dev\/mapper\/centos-swap/\#\/dev\/mapper\/centos-swap/g"</span> /etc/fstab</span><br><span class="line"><span class="comment"># 修改后重新挂载全部挂载点</span></span><br><span class="line">mount -a</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看Swap</span></span><br><span class="line">free -m</span><br><span class="line">cat /proc/swaps</span><br></pre></td></tr></table></figure>
-<ul>
-<li>最后执行成功，保存这个执行结果</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">Your Kubernetes master has initialized successfully!</span><br><span class="line">您的 Kubernetes Master 已成功初始化！</span><br><span class="line"></span><br><span class="line">To start using your cluster, you need to run the following as a regular user:</span><br><span class="line">要开始使用群集，您需要以普通用户身份运行以下命令：</span><br><span class="line"></span><br><span class="line">  mkdir -p <span class="variable">$HOME</span>/.kube</span><br><span class="line">  sudo cp -i /etc/kubernetes/admin.conf <span class="variable">$HOME</span>/.kube/config</span><br><span class="line">  sudo chown $(id -u):$(id -g) <span class="variable">$HOME</span>/.kube/config</span><br><span class="line"></span><br><span class="line">You should now deploy a pod network to the cluster.</span><br><span class="line">您现在应该将 pod 网络部署到群集。</span><br><span class="line"></span><br><span class="line">Run <span class="string">"kubectl apply -f [podnetwork].yaml"</span> with one of the options listed at:</span><br><span class="line">使用以下列出的选项之一运行 <span class="string">"kubectl apply -f [podnetwork] .yaml"</span></span><br><span class="line"></span><br><span class="line">  https://kubernetes.io/docs/concepts/cluster-administration/addons/</span><br><span class="line"></span><br><span class="line">You can now join any number of machines by running the following on each node</span><br><span class="line">as root:</span><br><span class="line">您现在可以在每个节点上以 root 身份运行以下命令来加入任意数量的计算机：</span><br><span class="line"></span><br><span class="line">  kubeadm join 172.16.100.101:6443 --token ygve26.fwxm6lsynrtyv7lp --discovery-token-ca-cert-hash sha256:3b24af40a5039253670f1cb3af68431de3716f85bd17159f87b6910e41980d27</span><br></pre></td></tr></table></figure>
-<ul>
-<li>以普通用户身份运行以下命令，在这我用 root</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">mkdir -p <span class="variable">$HOME</span>/.kube</span><br><span class="line">sudo cp -i /etc/kubernetes/admin.conf <span class="variable">$HOME</span>/.kube/config</span><br><span class="line">sudo chown $(id -u):$(id -g) <span class="variable">$HOME</span>/.kube/config</span><br></pre></td></tr></table></figure>
-<h3 id="部署-flannel"><a href="#部署-flannel" class="headerlink" title="部署 flannel"></a>部署 flannel</h3><ul>
-<li>部署 flannel</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml</span><br></pre></td></tr></table></figure>
-<ul>
-<li>查看 Master 应该处于 Ready 状态</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl get cs                    <span class="comment"># 查看集群信息</span></span><br><span class="line">kubectl get nodes                 <span class="comment"># 查看节点信息</span></span><br></pre></td></tr></table></figure>
-<ul>
-<li>查看 kube-system 名称空间的 pods ，都处于 Runing 就好</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl get pods -n kube-system</span><br><span class="line">kubectl get ns                    <span class="comment"># 查看目前有什么名称空间</span></span><br></pre></td></tr></table></figure>
-<h3 id="设置开机启动"><a href="#设置开机启动" class="headerlink" title="设置开机启动"></a>设置开机启动</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">systemctl <span class="built_in">enable</span> docker</span><br><span class="line">systemctl <span class="built_in">enable</span> kubelet</span><br></pre></td></tr></table></figure>
-<h2 id="安装-node"><a href="#安装-node" class="headerlink" title="安装 node"></a>安装 node</h2><ul>
-<li>配置 kuberetes 安装源</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">cat &gt;&gt;/etc/yum.repos.d/kuberetes.repo&lt;&lt;EOF</span><br><span class="line">[kuberneres]</span><br><span class="line">name=Kubernetes</span><br><span class="line">baseurl=https://mirrors.aliyun.com/kubernetes/yum/repos/kubernetes-el7-x86_64/</span><br><span class="line">gpgcheck=0</span><br><span class="line">gpgkey=https://mirrors.aliyun.com/kubernetes/yum/doc/yum-key.gpg</span><br><span class="line">enabled=1</span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
-<ul>
-<li>配置 docker 安装源</li>
+<h3 id="下载-Docker-和-K8S"><a href="#下载-Docker-和-K8S" class="headerlink" title="下载 Docker 和 K8S"></a>下载 Docker 和 K8S</h3><ul>
+<li>设置 docker 源</li>
 </ul>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">curl -o /etc/yum.repos.d/docker-ce.repo https://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo</span><br></pre></td></tr></table></figure>
 <ul>
-<li>在 master 和 node 节点安装</li>
+<li>设置 k8s 源</li>
 </ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">yum install docker-ce kubelet kubeadm kubectl</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">cat &gt;&gt;/etc/yum.repos.d/kuberetes.repo&lt;&lt;EOF</span><br><span class="line">[kuberneres]</span><br><span class="line">name=Kubernetes</span><br><span class="line">baseurl=https://mirrors.aliyun.com/kubernetes/yum/repos/kubernetes-el7-x86_64/</span><br><span class="line">gpgcheck=0</span><br><span class="line">gpgkey=https://mirrors.aliyun.com/kubernetes/yum/doc/yum-key.gpg</span><br><span class="line">enabled=1</span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
 <ul>
-<li>编辑docker，设置Docker下载镜像时候使用代理</li>
+<li>安装 docker-ce 和 kubernetes</li>
 </ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">vim /usr/lib/systemd/system/docker.service</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[Service]</span><br><span class="line">Environment=&quot;HTTPS_PROXY=127.0.0.1:9666&quot;</span><br><span class="line">Environment=&quot;NO_PROXY=127.0.0.0/8,172.16.0.0/16&quot;</span><br></pre></td></tr></table></figure>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">systemctl daemon-reload</span><br></pre></td></tr></table></figure>
-<ul>
-<li>确保如下两个内核功能为开启状态，应该添加到 sysctl.conf ，否则 POD 访问可能会出现问题</li>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">yum install docker-ce kubelet kubectl kubeadm</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">systemctl start docker</span><br><span class="line"></span><br><span class="line">systemctl <span class="built_in">enable</span> docker</span><br><span class="line">systemctl <span class="built_in">enable</span> kubelet</span><br></pre></td></tr></table></figure>
+<h3 id="设置内核及-K8S-参数"><a href="#设置内核及-K8S-参数" class="headerlink" title="设置内核及 K8S 参数"></a>设置内核及 K8S 参数</h3><ul>
+<li>设置内核参数</li>
 </ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">cat /proc/sys/net/bridge/bridge-nf-call-ip6tables</span><br><span class="line">cat /proc/sys/net/bridge/bridge-nf-call-iptables</span><br></pre></td></tr></table></figure>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">cat &gt;&gt;/etc/sysctl.conf&lt;&lt;EOF</span><br><span class="line">net.bridge.bridge-nf-call-ip6tables = 1</span><br><span class="line">net.bridge.bridge-nf-call-iptables = 1</span><br><span class="line">net.ipv4.ip_forward = 1</span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
 <ul>
-<li>设置开机启动 kubelet</li>
+<li>设置 kubelet 忽略 swap，使用 ipvs</li>
 </ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">systemctl <span class="built_in">enable</span> kubelet</span><br><span class="line">systemctl <span class="built_in">enable</span> docker</span><br><span class="line">systemctl start docker</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">cat &gt;/etc/sysconfig/kubelet&lt;&lt;EOF</span><br><span class="line">KUBELET_EXTRA_ARGS=<span class="string">"--fail-swap-on=false"</span></span><br><span class="line">KUBE_PROXY_MODE=ipvs</span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
+<h2 id="部署-Master"><a href="#部署-Master" class="headerlink" title="部署 Master"></a>部署 Master</h2><blockquote>
+<p>  本小节的所有的操作，只在 Master 节点上进行</p>
+</blockquote>
+<h3 id="提前拉取镜像"><a href="#提前拉取镜像" class="headerlink" title="提前拉取镜像"></a>提前拉取镜像</h3><p>kubeadm init 在初始化的时候会到谷歌的 docker hub 拉取镜像，所以我们要提前做好翻墙的准备，需要在本机 9666 端口启动翻墙的软件。</p>
 <ul>
-<li>关闭 swap 的警告</li>
+<li>配置 Docker 拉取镜像时候的代理地址，vim /usr/lib/systemd/system/docker.service。</li>
 </ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">vim /etc/sysconfig/kubelet</span><br></pre></td></tr></table></figure>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">KUBELET_EXTRA_ARGS=<span class="string">"--fail-swap-on=false"</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[Service]</span><br><span class="line">Environment=<span class="string">"HTTPS_PROXY=127.0.0.1:9666"</span></span><br><span class="line">Environment=<span class="string">"NO_PROXY=127.0.0.0/8,172.16.0.0/16"</span></span><br></pre></td></tr></table></figure>
 <ul>
-<li>加入 Matser 刚创建的集群，即 Matser 初始化成功的提示信息内的代码，再加上：<code>--ignore-preflight-errors=Swap</code></li>
+<li>提前拉取初始化需要的镜像</li>
 </ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubeadm join 172.16.100.101:6443 --token 2yamq7.x590aiatbt3qy9o6 --discovery-token-ca-cert-hash sha256:afcbe82d3720418d02f54e8cc19052bff17fe2374c35865c0f4b079d08c98790 --ignore-preflight-errors=Swap</span><br></pre></td></tr></table></figure>
-<ul>
-<li>执行的结果</li>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubeadm config images pull</span><br></pre></td></tr></table></figure>
+<h3 id="初始化Master"><a href="#初始化Master" class="headerlink" title="初始化Master"></a>初始化Master</h3><ul>
+<li>使用 kubeadm 初始化 k8s 集群</li>
 </ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">This node has joined the cluster:</span><br><span class="line">此节点已加入群集：</span><br><span class="line">* Certificate signing request was sent to master and a response was received.</span><br><span class="line">证书签名请求已发送给 Master ，并收到了回复。</span><br><span class="line"></span><br><span class="line">* The Kubelet was informed of the new secure connection details.</span><br><span class="line">Kubelet 被告知新的安全连接细节。</span><br><span class="line"></span><br><span class="line">Run <span class="string">'kubectl get nodes'</span> on the master to see this node join the cluster.</span><br><span class="line">在主服务器上运行 <span class="string">'kubectl get nodes'</span> 以查看此节点是否加入群集。</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubeadm init --kubernetes-version=v1.14.0 --pod-network-cidr=10.244.0.0/16 --service-cidr=10.96.0.0/12 --ignore-preflight-errors=Swap</span><br></pre></td></tr></table></figure>
 <ul>
-<li>加入成功后 Master 会要求该节点下载相关的 docker 镜像运行，应该保持科学上网，一般需要下载3个。</li>
+<li>如果有报错使用下面命令查看</li>
 </ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker image ls    <span class="comment"># 查看包的下载进度</span></span><br><span class="line">kubectl get nodes  <span class="comment"># 在 Master 查看 node 节点是否准备好</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">journalctl -xeu kubelet</span><br></pre></td></tr></table></figure>
 <ul>
-<li>在 Matser 节点运行指令，可以看到 kube-proxy 和 kube-flannel 在 Matser 和 node 节点都运行了</li>
+<li>如果初始化过程被中断可以使用下面命令来恢复</li>
 </ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl get pods -n kube-system -o wide</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubeadm reset</span><br></pre></td></tr></table></figure>
 <ul>
-<li>node 节点需要翻墙下载镜像太慢，建议使用 docker 镜像的导入导出功能</li>
+<li>下面是最后执行成功显示的结果，需要保存这个执行结果，以让 node 节点加入集群</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">Your Kubernetes control-plane has initialized successfully!</span><br><span class="line"></span><br><span class="line">To start using your cluster, you need to run the following as a regular user:</span><br><span class="line"></span><br><span class="line">  mkdir -p <span class="variable">$HOME</span>/.kube</span><br><span class="line">  sudo cp -i /etc/kubernetes/admin.conf <span class="variable">$HOME</span>/.kube/config</span><br><span class="line">  sudo chown $(id -u):$(id -g) <span class="variable">$HOME</span>/.kube/config</span><br><span class="line"></span><br><span class="line">You should now deploy a pod network to the cluster.</span><br><span class="line">Run <span class="string">"kubectl apply -f [podnetwork].yaml"</span> with one of the options listed at:</span><br><span class="line">  https://kubernetes.io/docs/concepts/cluster-administration/addons/</span><br><span class="line"></span><br><span class="line">Then you can join any number of worker nodes by running the following on each as root:</span><br><span class="line"></span><br><span class="line">kubeadm join 172.16.100.9:6443 --token 2dyd69.hrfsjkkxs4stim7n \</span><br><span class="line">    --discovery-token-ca-cert-hash sha256:4e30c1f41aefb177b708a404ccb7e818e31647c7dbdd2d42f6c5c9894b6f41e7</span><br></pre></td></tr></table></figure>
+<ul>
+<li>最好以普通用户的身份运行下面的命令</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">mkdir -p <span class="variable">$HOME</span>/.kube</span><br><span class="line">sudo cp -i /etc/kubernetes/admin.conf <span class="variable">$HOME</span>/.kube/config</span><br><span class="line">sudo chown $(id -u):$(id -g) <span class="variable">$HOME</span>/.kube/config</span><br></pre></td></tr></table></figure>
+<ul>
+<li>部署 flannel 网络插件</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml</span><br></pre></td></tr></table></figure>
+<ul>
+<li>查看 kube-system 命名空间中运行的 pods</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl get pods -n kube-system</span><br></pre></td></tr></table></figure>
+<ul>
+<li>查看 k8s 集群组件的状态</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl get ComponentStatus</span><br></pre></td></tr></table></figure>
+<h2 id="部署-Node"><a href="#部署-Node" class="headerlink" title="部署 Node"></a>部署 Node</h2><blockquote>
+<p>  本小节的所有的操作，只在 Node 节点上进行。</p>
+</blockquote>
+<h3 id="加入集群"><a href="#加入集群" class="headerlink" title="加入集群"></a>加入集群</h3><ul>
+<li>加入集群，注意在命令尾部加上 –ignore-preflight-errors=Swap ，以忽略 k8s 对主机 swap 的检查（k8s为了性能所以要求进制 swap ）</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubeadm join 172.16.100.9:6443 --token 2dyd69.hrfsjkkxs4stim7n \</span><br><span class="line">    --discovery-token-ca-cert-hash sha256:4e30c1f41aefb177b708a404ccb7e818e31647c7dbdd2d42f6c5c9894b6f41e7 --ignore-preflight-errors=Swap</span><br></pre></td></tr></table></figure>
+<ul>
+<li>返回结果，表示加入集群成功</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">This node has joined the cluster:</span><br><span class="line">* Certificate signing request was sent to apiserver and a response was received.</span><br><span class="line">* The Kubelet was informed of the new secure connection details.</span><br><span class="line"></span><br><span class="line">Run <span class="string">'kubectl get nodes'</span> on the control-plane to see this node join the cluster.</span><br></pre></td></tr></table></figure>
+<h3 id="查看进度"><a href="#查看进度" class="headerlink" title="查看进度"></a>查看进度</h3><p>当 node 节点加入 K8S 集群中后，Master 会调度到 Node 节点上一些组件，用于处理集群事务，这些组件没有下载完成之前 Node 节点在集群中还是未就绪状态</p>
+<ul>
+<li>在 node 执行下面命令，可以查看镜像的下载进度，下面是最终结果显示</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ docker image ls</span><br><span class="line">REPOSITORY               TAG                 IMAGE ID            CREATED             SIZE</span><br><span class="line">k8s.gcr.io/kube-proxy    v1.14.0             5cd54e388aba        6 weeks ago         82.1MB</span><br><span class="line">quay.io/coreos/flannel   v0.11.0-amd64       ff281650a721        3 months ago        52.6MB</span><br><span class="line">k8s.gcr.io/pause         3.1                 da86e6ba6ca1        16 months ago       742kB</span><br></pre></td></tr></table></figure>
+<ul>
+<li>可以在 Master 上使用下面命令来查看新加入的节点状态</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ kubectl get nodes</span><br><span class="line">NAME     STATUS   ROLES    AGE     VERSION</span><br><span class="line">master   Ready    master   3d21h   v1.14.1</span><br><span class="line">node1    Ready    &lt;none&gt;   3d21h   v1.14.1</span><br><span class="line">node2    Ready    &lt;none&gt;   3d21h   v1.14.1</span><br></pre></td></tr></table></figure>
+<ul>
+<li>查看 kube-system 这个 k8s 命名空间中有哪些组件，分别运行在哪个节点，-o wide 是以详细方式显示。</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ kubectl get pods -n kube-system -o wide</span><br><span class="line"></span><br><span class="line">NAME                                 READY   STATUS    RESTARTS   AGE     IP              NODE         NOMINATED NODE   READINESS GATES</span><br><span class="line">coredns-fb8b8dccf-cp24r              1/1     Running   0          26m     10.244.0.2      i-xeahpl98   &lt;none&gt;           &lt;none&gt;</span><br><span class="line">coredns-fb8b8dccf-ljswp              1/1     Running   0          26m     10.244.0.3      i-xeahpl98   &lt;none&gt;           &lt;none&gt;</span><br><span class="line">etcd-i-xeahpl98                      1/1     Running   0          25m     172.16.100.9    i-xeahpl98   &lt;none&gt;           &lt;none&gt;</span><br><span class="line">kube-apiserver-i-xeahpl98            1/1     Running   0          25m     172.16.100.9    i-xeahpl98   &lt;none&gt;           &lt;none&gt;</span><br><span class="line">kube-controller-manager-i-xeahpl98   1/1     Running   0          25m     172.16.100.9    i-xeahpl98   &lt;none&gt;           &lt;none&gt;</span><br><span class="line">kube-flannel-ds-amd64-crft8          1/1     Running   3          16m     172.16.100.6    i-me87b6gw   &lt;none&gt;           &lt;none&gt;</span><br><span class="line">kube-flannel-ds-amd64-nckw4          1/1     Running   0          6m41s   172.16.100.10   i-qhcc2owe   &lt;none&gt;           &lt;none&gt;</span><br><span class="line">kube-flannel-ds-amd64-zb7sg          1/1     Running   0          23m     172.16.100.9    i-xeahpl98   &lt;none&gt;           &lt;none&gt;</span><br><span class="line">kube-proxy-7kjkf                     1/1     Running   0          6m41s   172.16.100.10   i-qhcc2owe   &lt;none&gt;           &lt;none&gt;</span><br><span class="line">kube-proxy-c5xs2                     1/1     Running   2          16m     172.16.100.6    i-me87b6gw   &lt;none&gt;           &lt;none&gt;</span><br><span class="line">kube-proxy-rdzq2                     1/1     Running   0          26m     172.16.100.9    i-xeahpl98   &lt;none&gt;           &lt;none&gt;</span><br><span class="line">kube-scheduler-i-xeahpl98            1/1     Running   0          25m     172.16.100.9    i-xeahpl98   &lt;none&gt;           &lt;none&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="下载太慢"><a href="#下载太慢" class="headerlink" title="下载太慢"></a>下载太慢</h3><p>node 节点需要翻墙下载镜像太慢，建议使用 docker 镜像的导入导出功能</p>
+<ul>
+<li>导出</li>
 </ul>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker image save -o /tmp/kube-proxy.tar k8s.gcr.io/kube-proxy</span><br><span class="line">docker image save -o /tmp/flannel.tar quay.io/coreos/flannel</span><br><span class="line">docker image save -o /tmp/pause.tar k8s.gcr.io/pause</span><br></pre></td></tr></table></figure>
+<ul>
+<li>导入</li>
+</ul>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker image load -i /tmp/kube-proxy.tar</span><br><span class="line">docker image load -i /tmp/pause.tar</span><br><span class="line">docker image load -i /tmp/flannel.tar</span><br></pre></td></tr></table></figure>
-<h2 id="kubectl"><a href="#kubectl" class="headerlink" title="kubectl"></a>kubectl</h2><p>kubectl 是 apiserver 的客户端程序，这个客户端程序是通过连接 master 节点上的 apiserver ，实现各种 k8s 对象的增删改查等基本操作，在 k8s 可被管理的对象有很多个</p>
+<h1 id="入门命令"><a href="#入门命令" class="headerlink" title="入门命令"></a>入门命令</h1><h2 id="kubectl"><a href="#kubectl" class="headerlink" title="kubectl"></a>kubectl</h2><p>kubectl 是 apiserver 的客户端程序，这个客户端程序是通过连接 master 节点上的 apiserver ，实现各种 k8s 对象的增删改查等基本操作，在 k8s 可被管理的对象有很多个</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">基本命令 (初级):</span><br><span class="line">  create         从文件或标准输入创建资源</span><br><span class="line">  expose         获取一个复制控制器，服务，部署或者暴露一个 POD 将其作为新的 Kubernetes 服务公开</span><br><span class="line">  run            创建并运行特定的镜像，创建使用 deployment 或 job 管理的容器</span><br><span class="line">  <span class="built_in">set</span>            设置对象的特定功能</span><br><span class="line"></span><br><span class="line">基本命令 (中级):</span><br><span class="line">  explain        文档或者资源</span><br><span class="line">  get            显示一个或多个资源</span><br><span class="line">  edit           编辑服务器上的资源</span><br><span class="line">  delete         按文件名，标准输入，资源和名称或资源和标签选择器删除资源</span><br><span class="line"></span><br><span class="line">部署命令:</span><br><span class="line">  rollout        管理资源的部署</span><br><span class="line">  scale          为部署设置新大小，ReplicaSet, Replication Controller, Job</span><br><span class="line">  autoscale      自动扩展一个部署, ReplicaSet, 或者 ReplicationController</span><br><span class="line"></span><br><span class="line">群集管理命令:</span><br><span class="line">  certificate    修改证书资源.</span><br><span class="line">  cluster-info   显示群集信息</span><br><span class="line">  top            显示资源（CPU /内存/存储）使用情况。</span><br><span class="line">  cordon         将节点标记为不可调度</span><br><span class="line">  uncordon       将节点标记为可调度</span><br><span class="line">  drain          设定 node 进入维护模式</span><br><span class="line">  taint          更新一个或多个节点上的污点</span><br><span class="line"></span><br><span class="line">故障排除和调试命令:</span><br><span class="line">  describe       显示特定资源或资源组的详细信息</span><br><span class="line">  logs           在容器中打印容器的日志</span><br><span class="line">  attach         附加到正在运行的容器</span><br><span class="line">  <span class="built_in">exec</span>           在容器中执行命令</span><br><span class="line">  port-forward   将一个或多个本地端口转发到 pod</span><br><span class="line">  proxy          运行代理到 Kubernetes API 服务器</span><br><span class="line">  cp             将文件和目录复制到容器，和从容器复制，跨容器复制文件</span><br><span class="line">  auth           检查授权</span><br><span class="line"></span><br><span class="line">高级命令:</span><br><span class="line">  diff           针对将要应用的版本的 Diff 实时版本</span><br><span class="line">  apply          通过文件名或标准输入将配置应用于资源</span><br><span class="line">  patch          使用策略合并补丁更新资源的字段</span><br><span class="line">  replace        用文件名或标准输入替换资源</span><br><span class="line">  <span class="built_in">wait</span>           实验阶段命令：在一个或多个资源上等待特定条件，定义一个触发器</span><br><span class="line">  convert        在不同的API版本之间转换配置文件</span><br><span class="line">  kustomize      从目录或远程 URL 构建 kustomization 目标</span><br><span class="line"></span><br><span class="line">设置命令:</span><br><span class="line">  label          更新资源上的标签</span><br><span class="line">  annotate       更新资源上的注释</span><br><span class="line">  completion     命令补全相关功能</span><br><span class="line"></span><br><span class="line">其他命令:</span><br><span class="line">  api-resources  在服务器上打印支持的API资源</span><br><span class="line">  api-versions   以 <span class="string">"group/version"</span> 的形式在服务器上打印支持的API版本</span><br><span class="line">  config         修改 kubeconfig 文件</span><br><span class="line">  plugin         提供与插件交互的实用程序</span><br><span class="line">  version        打印客户端和服务器版本信息</span><br></pre></td></tr></table></figure>
-<h1 id="入门命令"><a href="#入门命令" class="headerlink" title="入门命令"></a>入门命令</h1><h2 id="run"><a href="#run" class="headerlink" title="run"></a>run</h2><ul>
+<h2 id="run"><a href="#run" class="headerlink" title="run"></a>run</h2><ul>
 <li>创建控制器并运行镜像</li>
 </ul>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl run nginx --image=nginx:latest    <span class="comment"># 创建一个名为 nginx 的控制器，运行 nginx:latest 版本的镜像</span></span><br></pre></td></tr></table></figure>
@@ -2239,7 +2256,7 @@
 <ul>
 <li>创建 StorageClass 指向 rbd-provisioner，</li>
 </ul>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">StorageClass</span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">storage.k8s.io/v1</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line"><span class="attr">  name:</span> <span class="string">ceph-rbd</span></span><br><span class="line"><span class="attr">provisioner:</span> <span class="string">ceph.com/rbd</span></span><br><span class="line"><span class="attr">parameters:</span></span><br><span class="line"><span class="attr">  monitors:</span> <span class="number">172.16</span><span class="number">.100</span><span class="number">.9</span><span class="string">:6789</span></span><br><span class="line"><span class="attr">  pool:</span> <span class="string">kube</span></span><br><span class="line"><span class="attr">  adminId:</span> <span class="string">admin</span></span><br><span class="line"><span class="attr">  adminSecretName:</span> <span class="string">ceph-admin-secret</span></span><br><span class="line"><span class="attr">  adminSecretNamespace:</span> <span class="string">kube-system</span></span><br><span class="line"><span class="attr">  userId:</span> <span class="string">kube</span></span><br><span class="line"><span class="attr">  userSecretName:</span> <span class="string">ceph-secret</span></span><br><span class="line"><span class="attr">  userSecretNamespace:</span> <span class="string">kube-system</span></span><br><span class="line"><span class="attr">  fsType:</span> <span class="string">ext4</span></span><br><span class="line"><span class="attr">  imageFormat:</span> <span class="string">"2"</span></span><br><span class="line"><span class="attr">  imageFeatures:</span> <span class="string">"layering"</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">StorageClass</span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">storage.k8s.io/v1</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line"><span class="attr">  name:</span> <span class="string">ceph-rbd</span></span><br><span class="line"><span class="attr">provisioner:</span> <span class="string">ceph.com/rbd</span></span><br><span class="line"><span class="attr">reclaimPolicy:</span> <span class="string">Retain</span></span><br><span class="line"><span class="attr">parameters:</span></span><br><span class="line"><span class="attr">  monitors:</span> <span class="number">172.16</span><span class="number">.100</span><span class="number">.9</span><span class="string">:6789</span></span><br><span class="line"><span class="attr">  pool:</span> <span class="string">kube</span></span><br><span class="line"><span class="attr">  adminId:</span> <span class="string">admin</span></span><br><span class="line"><span class="attr">  adminSecretName:</span> <span class="string">ceph-admin-secret</span></span><br><span class="line"><span class="attr">  adminSecretNamespace:</span> <span class="string">kube-system</span></span><br><span class="line"><span class="attr">  userId:</span> <span class="string">kube</span></span><br><span class="line"><span class="attr">  userSecretName:</span> <span class="string">ceph-secret</span></span><br><span class="line"><span class="attr">  userSecretNamespace:</span> <span class="string">kube-system</span></span><br><span class="line"><span class="attr">  fsType:</span> <span class="string">ext4</span></span><br><span class="line"><span class="attr">  imageFormat:</span> <span class="string">"2"</span></span><br><span class="line"><span class="attr">  imageFeatures:</span> <span class="string">"layering"</span></span><br></pre></td></tr></table></figure>
 <ul>
 <li>创建 PersistentVolumeClaim</li>
 </ul>
@@ -2351,12 +2368,20 @@
 <li>StatefulSet （控制器）</li>
 <li>volumeClaimTemplate（存储卷申请模板）</li>
 </ol>
+<p>各个 POD 用到的存储卷必须使用由 StorageClass 动态供给或者由管理员事先创建好的 PV。</p>
+<p>删除 StatefulSet 或者缩减其规模导致 POD 被删除时不会自动删除其存储卷以确保数据安全。</p>
+<p>StatefulSet 控制器依赖于一个事先存在的 headless Service 对象实现 POD 对象的持久、唯一的标识符配置；此 headless Service 需要由用户手动配置，它能实现在 POD 出现故障被重构时候，依然能够使用之前的主机名。</p>
 <h2 id="清单格式"><a href="#清单格式" class="headerlink" title="清单格式"></a>清单格式</h2><figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="string">podManagementPolicy</span>    <span class="string">&lt;string&gt;</span>      <span class="comment"># 控制扩展时候的顺序策略</span></span><br><span class="line"><span class="string">replicas</span>	           <span class="string">&lt;integer&gt;</span>     <span class="comment"># 模板运行的副本数</span></span><br><span class="line"><span class="string">revisionHistoryLimit</span>   <span class="string">&lt;integer&gt;</span>     <span class="comment"># 更新历史最大保存数量</span></span><br><span class="line"><span class="string">selector</span>               <span class="string">&lt;Object&gt;</span>      <span class="comment"># 标签选择器</span></span><br><span class="line"><span class="string">serviceName</span>            <span class="string">&lt;string&gt;</span>      <span class="comment"># headless service 的名称，基于这个 service 为 POD 分配标识符</span></span><br><span class="line"><span class="string">template</span>               <span class="string">&lt;Object&gt;</span>      <span class="comment"># POD 对象模板，需要配置挂载存储卷，应该使用 PCV 类型</span></span><br><span class="line"><span class="string">updateStrategy</span>         <span class="string">&lt;Object&gt;</span>      <span class="comment"># StatefulSet 更新策略</span></span><br><span class="line"><span class="string">volumeClaimTemplates</span>   <span class="string">&lt;[]Object&gt;</span>    <span class="comment"># pvs 的列表</span></span><br></pre></td></tr></table></figure>
 <ul>
 <li>POD 关联使用 PVC 逻辑</li>
 </ul>
 <p>每个 POD 中应该定义一个 PVC 类型的 volume ，这个 PVC 类型的 volume 应该关联到一个当前同一个名称空间的 PVC，这个 PVC 应该关联到集群级别的 PV 上。</p>
 <p>statefullset 会为 POD 自动创建 PVC 类型的 Volume ，并且在 POD 所在的名称空间中自动创建 PVC。</p>
+<p>在 StatefulSet 中，每一个 POD 的名字是固定且唯一的，即有序的数字来标识，例如：web-0 挂了，重建的 POD 还叫做 web-0。</p>
+<p>访问 Service 时候的格式：$(servicename).$(namespace).svc.cluster.local，这个无头 Service 名字在解析时，解析为 POD 名称的别名。</p>
+<p>headless 能保证，对 service 的访问能够解析为 POD IP，但是现在需要标识的是每个 POD 的名字，所以，只需要在 Service 前加上 POD 的名称即可。</p>
+<p>例如：pod 名称为 web-0，服务名为：myapp，那么访问这个 POD 就使用</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">web-0.myapp.default.svc.cluster.local</span><br></pre></td></tr></table></figure>
 <h2 id="创建-NFS-PV"><a href="#创建-NFS-PV" class="headerlink" title="创建 NFS PV"></a>创建 NFS PV</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">apiVersion: v1</span><br><span class="line">kind: PersistentVolume</span><br><span class="line">metadata:</span><br><span class="line">  name: pv-001</span><br><span class="line">  labels:</span><br><span class="line">    name: pv001</span><br><span class="line">spec:</span><br><span class="line">  accessModes:</span><br><span class="line">    - ReadWriteMany</span><br><span class="line">    - ReadWriteOnce</span><br><span class="line">  capacity:</span><br><span class="line">    storage: 5Gi</span><br><span class="line">  nfs:</span><br><span class="line">    path: /data/volumes/v1</span><br><span class="line">    server: 172.16.100.104</span><br><span class="line">---</span><br><span class="line"></span><br><span class="line">apiVersion: v1</span><br><span class="line">kind: PersistentVolume</span><br><span class="line">metadata:</span><br><span class="line">  name: pv-002</span><br><span class="line">  labels:</span><br><span class="line">    name: pv003</span><br><span class="line">spec:</span><br><span class="line">  accessModes:</span><br><span class="line">    - ReadWriteMany</span><br><span class="line">    - ReadWriteOnce</span><br><span class="line">  capacity:</span><br><span class="line">    storage: 5Gi</span><br><span class="line">  nfs:</span><br><span class="line">    path: /data/volumes/v2</span><br><span class="line">    server: 172.16.100.104</span><br><span class="line"></span><br><span class="line">---</span><br><span class="line"></span><br><span class="line">apiVersion: v1</span><br><span class="line">kind: PersistentVolume</span><br><span class="line">metadata:</span><br><span class="line">  name: pv-003</span><br><span class="line">  labels:</span><br><span class="line">    name: pv003</span><br><span class="line">spec:</span><br><span class="line">  accessModes:</span><br><span class="line">    - ReadWriteMany</span><br><span class="line">    - ReadWriteOnce</span><br><span class="line">  capacity:</span><br><span class="line">    storage: 5Gi</span><br><span class="line">  nfs:</span><br><span class="line">    path: /data/volumes/v3</span><br><span class="line">    server: 172.16.100.104</span><br><span class="line"></span><br><span class="line">---</span><br><span class="line"></span><br><span class="line">apiVersion: v1</span><br><span class="line">kind: PersistentVolume</span><br><span class="line">metadata:</span><br><span class="line">  name: pv-004</span><br><span class="line">  labels:</span><br><span class="line">    name: pv004</span><br><span class="line">spec:</span><br><span class="line">  accessModes:</span><br><span class="line">    - ReadWriteMany</span><br><span class="line">    - ReadWriteOnce</span><br><span class="line">  capacity:</span><br><span class="line">    storage: 10Gi</span><br><span class="line">  nfs:</span><br><span class="line">    path: /data/volumes/v4</span><br><span class="line">    server: 172.16.100.104</span><br><span class="line"></span><br><span class="line">---</span><br><span class="line"></span><br><span class="line">apiVersion: v1</span><br><span class="line">kind: PersistentVolume</span><br><span class="line">metadata:</span><br><span class="line">  name: pv-005</span><br><span class="line">  labels:</span><br><span class="line">    name: pv005</span><br><span class="line">spec:</span><br><span class="line">  accessModes:</span><br><span class="line">    - ReadWriteMany</span><br><span class="line">    - ReadWriteOnce</span><br><span class="line">  capacity:</span><br><span class="line">    storage: 10Gi</span><br><span class="line">  nfs:</span><br><span class="line">    path: /data/volumes/v5</span><br><span class="line">    server: 172.16.100.104</span><br></pre></td></tr></table></figure>
 <h2 id="创建-statefulSet"><a href="#创建-statefulSet" class="headerlink" title="创建 statefulSet"></a>创建 statefulSet</h2><figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Service</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line"><span class="attr">  name:</span> <span class="string">myapp</span></span><br><span class="line"><span class="attr">  labels:</span></span><br><span class="line"><span class="attr">    app:</span> <span class="string">myapp</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line"><span class="attr">  ports:</span></span><br><span class="line"><span class="attr">    - port:</span> <span class="number">80</span></span><br><span class="line"><span class="attr">      name:</span> <span class="string">web</span></span><br><span class="line"><span class="attr">  clusterIP:</span> <span class="string">None</span></span><br><span class="line"><span class="attr">  selector:</span></span><br><span class="line"><span class="attr">    app:</span> <span class="string">myapp-pod</span></span><br><span class="line"></span><br><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">apps/v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">StatefulSet</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line"><span class="attr">  name:</span> <span class="string">myapp</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line"><span class="attr">  serviceName:</span> <span class="string">myapp</span></span><br><span class="line"><span class="attr">  replicas:</span> <span class="number">3</span></span><br><span class="line"><span class="attr">  selector:</span></span><br><span class="line"><span class="attr">    matchLabels:</span></span><br><span class="line"><span class="attr">      app:</span> <span class="string">myapp-pod</span></span><br><span class="line"><span class="attr">  template:</span></span><br><span class="line"><span class="attr">    metadata:</span></span><br><span class="line"><span class="attr">      labels:</span></span><br><span class="line"><span class="attr">        app:</span> <span class="string">myapp-pod</span></span><br><span class="line"><span class="attr">    spec:</span></span><br><span class="line"><span class="attr">      containers:</span></span><br><span class="line"><span class="attr">        - name:</span> <span class="string">myapp</span></span><br><span class="line"><span class="attr">          image:</span> <span class="string">ikubernetes/myapp:v1</span></span><br><span class="line"><span class="attr">          ports:</span></span><br><span class="line"><span class="attr">            - containerPort:</span> <span class="number">80</span></span><br><span class="line"><span class="attr">              name:</span> <span class="string">web</span></span><br><span class="line"><span class="attr">          volumeMounts:</span></span><br><span class="line"><span class="attr">            - name:</span> <span class="string">myappdata</span></span><br><span class="line"><span class="attr">              mountPath:</span> <span class="string">/usr/share/nginx/html</span></span><br><span class="line"><span class="attr">  volumeClaimTemplates:</span></span><br><span class="line"><span class="attr">    - metadata:</span></span><br><span class="line"><span class="attr">        name:</span> <span class="string">myappdata</span></span><br><span class="line"><span class="attr">      spec:</span></span><br><span class="line"><span class="attr">        accessModes:</span></span><br><span class="line"><span class="bullet">          -</span> <span class="string">ReadWriteOnce</span></span><br><span class="line"><span class="attr">        resources:</span></span><br><span class="line"><span class="attr">          requests:</span></span><br><span class="line"><span class="attr">            storage:</span> <span class="number">5</span><span class="string">Gi</span></span><br></pre></td></tr></table></figure>
 <ul>
@@ -3161,8 +3186,10 @@
 <p>CNCF下的第二大项目，收集各种维度的指标，</p>
 <p>它收集的信息，来决定是否进行 HPA（自动伸缩） 的一个标准</p>
 <p>prometheus 既作为监控系统使用，也作为特殊指标的提供者来使用，但是如果想要作为特殊指标提供给 HPA 这样的机制使用，需要转换格式，而这个转换为特殊指标的一个插件叫：k8s-prometheus-adapter。</p>
-<h2 id="安装-metrics-server"><a href="#安装-metrics-server" class="headerlink" title="安装 metrics-server"></a>安装 metrics-server</h2><p>官方仓库1：<a href="https://github.com/kubernetes-incubator/metrics-server" target="_blank" rel="noopener">https://github.com/kubernetes-incubator/metrics-server</a></p>
-<p>官方仓库2：<a href="https://github.com/kubernetes/kubernetes/tree/master/cluster/addons/metrics-server" target="_blank" rel="noopener">https://github.com/kubernetes/kubernetes/tree/master/cluster/addons/metrics-server</a></p>
+<h2 id="安装-metrics-server"><a href="#安装-metrics-server" class="headerlink" title="安装 metrics-server"></a>安装 metrics-server</h2><ul>
+<li>官方仓库，这里我使用第一个</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">https://github.com/kubernetes-incubator/metrics-server/tree/master/deploy/1.8%2B      <span class="comment"># 插件官方地址</span></span><br><span class="line">https://github.com/kubernetes/kubernetes/tree/master/cluster/addons/metrics-server    <span class="comment"># k8s 官方插件示例</span></span><br></pre></td></tr></table></figure>
 <ul>
 <li>安装部署相关的文件：/tree/master/deploy/，修改 metrics-server-deployment.yaml 文件</li>
 </ul>
@@ -3288,7 +3315,117 @@
 <li>命令基本使用</li>
 </ul>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">completion 	<span class="comment"># 为指定的shell生成自动完成脚本（bash或zsh）</span></span><br><span class="line">create     	<span class="comment"># 创建一个具有给定名称的新 chart</span></span><br><span class="line">delete     	<span class="comment"># 从 Kubernetes 删除指定名称的 release</span></span><br><span class="line">dependency 	<span class="comment"># 管理 chart 的依赖关系</span></span><br><span class="line">fetch      	<span class="comment"># 从存储库下载 chart 并（可选）将其解压缩到本地目录中</span></span><br><span class="line">get        	<span class="comment"># 下载一个命名 release</span></span><br><span class="line"><span class="built_in">help</span>       	<span class="comment"># 列出所有帮助信息</span></span><br><span class="line"><span class="built_in">history</span>    	<span class="comment"># 获取 release 历史</span></span><br><span class="line">home       	<span class="comment"># 显示 HELM_HOME 的位置</span></span><br><span class="line">init       	<span class="comment"># 在客户端和服务器上初始化Helm</span></span><br><span class="line">inspect    	<span class="comment"># 检查 chart 详细信息</span></span><br><span class="line">install    	<span class="comment"># 安装 chart 存档</span></span><br><span class="line">lint       	<span class="comment"># 对 chart 进行语法检查</span></span><br><span class="line">list       	<span class="comment"># releases 列表</span></span><br><span class="line">package    	<span class="comment"># 将 chart 目录打包成 chart 档案</span></span><br><span class="line">plugin     	<span class="comment"># 添加列表或删除 helm 插件</span></span><br><span class="line">repo       	<span class="comment"># 添加列表删除更新和索引 chart 存储库</span></span><br><span class="line">reset      	<span class="comment"># 从集群中卸载 Tiller</span></span><br><span class="line">rollback   	<span class="comment"># 将版本回滚到以前的版本</span></span><br><span class="line">search     	<span class="comment"># 在 chart 存储库中搜索关键字</span></span><br><span class="line">serve      	<span class="comment"># 启动本地http网络服务器</span></span><br><span class="line">status     	<span class="comment"># 显示指定 release 的状态</span></span><br><span class="line">template   	<span class="comment"># 本地渲染模板</span></span><br><span class="line"><span class="built_in">test</span>       	<span class="comment"># 测试一个 release</span></span><br><span class="line">upgrade    	<span class="comment"># 升级一个 release</span></span><br><span class="line">verify     	<span class="comment"># 验证给定路径上的 chart 是否已签名且有效</span></span><br><span class="line">version    	<span class="comment"># 打印客户端/服务器版本信息</span></span><br><span class="line">dep         <span class="comment"># 分析 Chart 并下载依赖</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>指定 values.yaml 部署一个 chart</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">helm install --name els1 -f values.yaml stable/elasticsearch</span><br></pre></td></tr></table></figure>
+<ul>
+<li>升级一个 chart</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">helm upgrade --<span class="built_in">set</span> mysqlRootPassword=passwd db-mysql stable/mysql</span><br></pre></td></tr></table></figure>
+<ul>
+<li>回滚一个 chart</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">helm rollback db-mysql 1</span><br></pre></td></tr></table></figure>
+<ul>
+<li>删除一个 release</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">helm delete --purge db-mysql</span><br></pre></td></tr></table></figure>
+<ul>
+<li>只对模板进行渲染然后输出，不进行安装</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">helm install/upgrade xxx --dry-run --debug</span><br></pre></td></tr></table></figure>
 <h2 id="Chart文件组织"><a href="#Chart文件组织" class="headerlink" title="Chart文件组织"></a>Chart文件组织</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">myapp/                               <span class="comment"># Chart 目录</span></span><br><span class="line">├── charts                           <span class="comment"># 这个 charts 依赖的其他 charts，始终被安装</span></span><br><span class="line">├── Chart.yaml                       <span class="comment"># 描述这个 Chart 的相关信息、包括名字、描述信息、版本等</span></span><br><span class="line">├── templates                        <span class="comment"># 模板目录</span></span><br><span class="line">│   ├── deployment.yaml              <span class="comment"># deployment 控制器的 Go 模板文件</span></span><br><span class="line">│   ├── _helpers.tpl                 <span class="comment"># 以 _ 开头的文件不会部署到 k8s 上，可用于定制通用信息</span></span><br><span class="line">│   ├── ingress.yaml                 <span class="comment"># ingress 的模板文件</span></span><br><span class="line">│   ├── NOTES.txt                    <span class="comment"># Chart 部署到集群后的一些信息，例如：如何使用、列出缺省值</span></span><br><span class="line">│   ├── service.yaml                 <span class="comment"># service 的 Go 模板文件</span></span><br><span class="line">│   └── tests</span><br><span class="line">│       └── <span class="built_in">test</span>-connection.yaml</span><br><span class="line">└── values.yaml                      <span class="comment"># 模板的值文件，这些值会在安装时应用到 GO 模板生成部署文件</span></span><br></pre></td></tr></table></figure>
+<h2 id="使用-Helm-Ceph-部署-EFK"><a href="#使用-Helm-Ceph-部署-EFK" class="headerlink" title="使用 Helm + Ceph 部署 EFK"></a>使用 Helm + Ceph 部署 EFK</h2><p>本文使用 K8S 集群上运行 EFK，使用 Ceph 集群作为 ElasticSearch 集群的持久存储。</p>
+<p>用到知识有：Storage Class、PVC、Helm，另外，很多服务镜像需要翻墙。</p>
+<p>helm install 阻塞过程会下载镜像可能会比较慢。</p>
+<p>helm 里面有很多可以定制的项目，这里我就不定制了，反正我的资源也够用，懒得调了。</p>
+<p>感觉没啥可以写的 😂</p>
+<h2 id="Storage-Class"><a href="#Storage-Class" class="headerlink" title="Storage Class"></a>Storage Class</h2><figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Secret</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line"><span class="attr">  name:</span> <span class="string">ceph-admin-secret</span></span><br><span class="line"><span class="attr">  namespace:</span> <span class="string">kube-system</span></span><br><span class="line"><span class="attr">type:</span> <span class="string">"kubernetes.io/rbd"</span></span><br><span class="line"><span class="attr">data:</span></span><br><span class="line">  <span class="comment"># ceph auth get-key client.admin | base64</span></span><br><span class="line"><span class="attr">  key:</span> <span class="string">QVFER3U5TmMQNXQ4SlJBAAhHMGltdXZlNFZkUXAvN2tTZ1BENGc9PQ==</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Secret</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line"><span class="attr">  name:</span> <span class="string">ceph-secret</span></span><br><span class="line"><span class="attr">  namespace:</span> <span class="string">kube-system</span></span><br><span class="line"><span class="attr">type:</span> <span class="string">"kubernetes.io/rbd"</span></span><br><span class="line"><span class="attr">data:</span></span><br><span class="line">  <span class="comment"># ceph auth get-key client.kube | base64</span></span><br><span class="line"><span class="attr">  key:</span> <span class="string">QVFCcUM5VmNWVDdQCCCCWR1NUxFNfVKeTAiazdUWVhOa3N2UWc9PQ==</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">StorageClass</span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">storage.k8s.io/v1</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line"><span class="attr">  name:</span> <span class="string">ceph-rbd</span></span><br><span class="line"><span class="attr">provisioner:</span> <span class="string">ceph.com/rbd</span></span><br><span class="line"><span class="attr">reclaimPolicy:</span> <span class="string">Retain</span></span><br><span class="line"><span class="attr">parameters:</span></span><br><span class="line"><span class="attr">  monitors:</span> <span class="number">172.16</span><span class="number">.100</span><span class="number">.9</span><span class="string">:6789</span></span><br><span class="line"><span class="attr">  pool:</span> <span class="string">kube</span></span><br><span class="line"><span class="attr">  adminId:</span> <span class="string">admin</span></span><br><span class="line"><span class="attr">  adminSecretName:</span> <span class="string">ceph-admin-secret</span></span><br><span class="line"><span class="attr">  adminSecretNamespace:</span> <span class="string">kube-system</span></span><br><span class="line"><span class="attr">  userId:</span> <span class="string">kube</span></span><br><span class="line"><span class="attr">  userSecretName:</span> <span class="string">ceph-secret</span></span><br><span class="line"><span class="attr">  userSecretNamespace:</span> <span class="string">kube-system</span></span><br><span class="line"><span class="attr">  fsType:</span> <span class="string">ext4</span></span><br><span class="line"><span class="attr">  imageFormat:</span> <span class="string">"2"</span></span><br><span class="line"><span class="attr">  imageFeatures:</span> <span class="string">"layering"</span></span><br></pre></td></tr></table></figure>
+<h2 id="Helm-Elasticsearch"><a href="#Helm-Elasticsearch" class="headerlink" title="Helm Elasticsearch"></a>Helm Elasticsearch</h2><ul>
+<li>下载 elasticsearch 的 StatfullSet 的 chart</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">helm fetch stable/elasticsearch</span><br></pre></td></tr></table></figure>
+<ul>
+<li>编辑 values.yaml，修改 storageClass 指向上面创建的 storageClass</li>
+</ul>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">storageClass:</span> <span class="string">"ceph-rbd"</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>使用 helm 指定 values.yaml 部署 elasticsearch</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">helm install --name els1 -f values.yaml stable/elasticsearch</span><br></pre></td></tr></table></figure>
+<ul>
+<li>安装后查看，调试直到全部处于 READY 状态</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ kubectl get pods</span><br><span class="line">NAME                                         READY   STATUS    RESTARTS   AGE</span><br><span class="line">els1-elasticsearch-client-55696f5bdd-qczbf   1/1     Running   1          78m</span><br><span class="line">els1-elasticsearch-client-55696f5bdd-tdwdc   1/1     Running   1          78m</span><br><span class="line">els1-elasticsearch-data-0                    1/1     Running   1          78m</span><br><span class="line">els1-elasticsearch-data-1                    1/1     Running   1          56m</span><br><span class="line">els1-elasticsearch-master-0                  1/1     Running   1          78m</span><br><span class="line">els1-elasticsearch-master-1                  1/1     Running   1          53m</span><br><span class="line">els1-elasticsearch-master-2                  1/1     Running   1          52m</span><br><span class="line">rbd-provisioner-9b8ffbcc-nxdjd               1/1     Running   2          81m</span><br></pre></td></tr></table></figure>
+<ul>
+<li>也可以使用 helm 命令查看</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ helm status els1</span><br><span class="line"></span><br><span class="line">LAST DEPLOYED: Sun May 12 16:28:56 2019</span><br><span class="line">NAMESPACE: default</span><br><span class="line">STATUS: DEPLOYED</span><br><span class="line"></span><br><span class="line">RESOURCES:</span><br><span class="line">==&gt; v1/ConfigMap</span><br><span class="line">NAME                     DATA  AGE</span><br><span class="line">els1-elasticsearch       4     88m</span><br><span class="line">els1-elasticsearch-test  1     88m</span><br><span class="line"></span><br><span class="line">==&gt; v1/Pod(related)</span><br><span class="line">NAME                                        READY  STATUS   RESTARTS  AGE</span><br><span class="line">els1-elasticsearch-client-55696f5bdd-qczbf  1/1    Running  1         88m</span><br><span class="line">els1-elasticsearch-client-55696f5bdd-tdwdc  1/1    Running  1         88m</span><br><span class="line">els1-elasticsearch-data-0                   1/1    Running  1         88m</span><br><span class="line">els1-elasticsearch-data-1                   1/1    Running  1         66m</span><br><span class="line">els1-elasticsearch-master-0                 1/1    Running  1         88m</span><br><span class="line">els1-elasticsearch-master-1                 1/1    Running  1         63m</span><br><span class="line">els1-elasticsearch-master-2                 1/1    Running  1         62m</span><br><span class="line"></span><br><span class="line">==&gt; v1/Service</span><br><span class="line">NAME                          TYPE       CLUSTER-IP     EXTERNAL-IP  PORT(S)   AGE</span><br><span class="line">els1-elasticsearch-client     ClusterIP  10.98.197.185  &lt;none&gt;       9200/TCP  88m</span><br><span class="line">els1-elasticsearch-discovery  ClusterIP  None           &lt;none&gt;       9300/TCP  88m</span><br><span class="line"></span><br><span class="line">==&gt; v1/ServiceAccount</span><br><span class="line">NAME                       SECRETS  AGE</span><br><span class="line">els1-elasticsearch-client  1        88m</span><br><span class="line">els1-elasticsearch-data    1        88m</span><br><span class="line">els1-elasticsearch-master  1        88m</span><br><span class="line"></span><br><span class="line">==&gt; v1beta1/Deployment</span><br><span class="line">NAME                       READY  UP-TO-DATE  AVAILABLE  AGE</span><br><span class="line">els1-elasticsearch-client  2/2    2           2          88m</span><br><span class="line"></span><br><span class="line">==&gt; v1beta1/StatefulSet</span><br><span class="line">NAME                       READY  AGE</span><br><span class="line">els1-elasticsearch-data    2/2    88m</span><br><span class="line">els1-elasticsearch-master  3/3    88m</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">NOTES:</span><br><span class="line">The elasticsearch cluster has been installed.</span><br><span class="line"></span><br><span class="line">Elasticsearch can be accessed:</span><br><span class="line"></span><br><span class="line">  * Within your cluster, at the following DNS name at port 9200:</span><br><span class="line"></span><br><span class="line">    els1-elasticsearch-client.default.svc</span><br><span class="line"></span><br><span class="line">  * From outside the cluster, run these commands <span class="keyword">in</span> the same shell:</span><br><span class="line"></span><br><span class="line">    <span class="built_in">export</span> POD_NAME=$(kubectl get pods --namespace default -l <span class="string">"app=elasticsearch,component=client,release=els1"</span> -o jsonpath=<span class="string">"&#123;.items[0].metadata.name&#125;"</span>)</span><br><span class="line">    <span class="built_in">echo</span> <span class="string">"Visit http://127.0.0.1:9200 to use Elasticsearch"</span></span><br><span class="line">    kubectl port-forward --namespace default <span class="variable">$POD_NAME</span> 9200:9200</span><br></pre></td></tr></table></figure>
+<ul>
+<li>启动一个临时的容器，解析集群地址，测试集群信息，查看集群节点</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ kubectl run cirros1 --rm -it --image=cirros -- /bin/sh</span><br><span class="line"></span><br><span class="line">/ <span class="comment"># nslookup els1-elasticsearch-client.default.svc</span></span><br><span class="line">Server:    10.96.0.10</span><br><span class="line">Address 1: 10.96.0.10 kube-dns.kube-system.svc.cluster.local</span><br><span class="line"></span><br><span class="line">Name:      els1-elasticsearch-client.default.svc</span><br><span class="line">Address 1: 10.98.197.185 els1-elasticsearch-client.default.svc.cluster.local</span><br><span class="line">/ <span class="comment"># curl els1-elasticsearch-client.default.svc.cluster.local:9200/_cat/nodes</span></span><br><span class="line">10.244.2.28  7 96 2 0.85 0.26 0.16 di - els1-elasticsearch-data-0</span><br><span class="line">10.244.1.37  7 83 1 0.04 0.06 0.11 di - els1-elasticsearch-data-1</span><br><span class="line">10.244.2.25 19 96 2 0.85 0.26 0.16 i  - els1-elasticsearch-client-55696f5bdd-tdwdc</span><br><span class="line">10.244.2.27 28 96 2 0.85 0.26 0.16 mi * els1-elasticsearch-master-2</span><br><span class="line">10.244.1.39 19 83 1 0.04 0.06 0.11 i  - els1-elasticsearch-client-55696f5bdd-qczbf</span><br><span class="line">10.244.2.29 21 96 2 0.85 0.26 0.16 mi - els1-elasticsearch-master-1</span><br><span class="line">10.244.1.38 23 83 1 0.04 0.06 0.11 mi - els1-elasticsearch-master-0</span><br></pre></td></tr></table></figure>
+<h2 id="Helm-fluentd-elasticsearch"><a href="#Helm-fluentd-elasticsearch" class="headerlink" title="Helm fluentd-elasticsearch"></a>Helm fluentd-elasticsearch</h2><ul>
+<li>安装 kiwigrid 源</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">helm repo add kiwigrid https://kiwigrid.github.io</span><br></pre></td></tr></table></figure>
+<ul>
+<li>下载 fluentd-elasticsearch</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">helm fetch kiwigrid/fluentd-elasticsearch</span><br></pre></td></tr></table></figure>
+<ul>
+<li>获取集群地址</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">els1-elasticsearch-client.default.svc.cluster.local:9200</span><br></pre></td></tr></table></figure>
+<ul>
+<li>编辑修改 values.yaml，指定 elasticsearch 集群的位置</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">elasticsearch:</span><br><span class="line">  host: <span class="string">'els1-elasticsearch-client.default.svc.cluster.local'</span></span><br><span class="line">  port: 9200</span><br></pre></td></tr></table></figure>
+<ul>
+<li>修改对污点的容忍程度，使其容忍 Master 节点的污点，也运行在 Master 节点上收集信息</li>
+</ul>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">tolerations:</span> </span><br><span class="line"><span class="attr">  - key:</span> <span class="string">node-role.kubernetes.io/master</span></span><br><span class="line"><span class="attr">    operator:</span> <span class="string">Exists</span></span><br><span class="line"><span class="attr">    effect:</span> <span class="string">NoSchedule</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>如果使用 prometheus 监控应该打开 prometheusRole 规则</li>
+</ul>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">podAnnotations:</span></span><br><span class="line">  <span class="string">prometheus.io/scrape:</span> <span class="string">"true"</span></span><br><span class="line">  <span class="string">prometheus.io/port:</span> <span class="string">"24231"</span></span><br><span class="line">  </span><br><span class="line"><span class="attr">service:</span></span><br><span class="line"><span class="attr">  type:</span> <span class="string">ClusterIP</span></span><br><span class="line"><span class="attr">  ports:</span></span><br><span class="line"><span class="attr">    - name:</span> <span class="string">"monitor-agent"</span></span><br><span class="line"><span class="attr">      port:</span> <span class="number">24231</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>使用 helm 指定 values.yaml 部署 fluentd-elasticsearch</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">helm install --name flu1 -f values.yaml kiwigrid/fluentd-elasticsearch</span><br></pre></td></tr></table></figure>
+<ul>
+<li>查看状态 flu1 这个 helm 服务的运行状态</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[root@master fluentd-elasticsearch]<span class="comment"># helm status flu1</span></span><br><span class="line">LAST DEPLOYED: Sun May 12 18:13:12 2019</span><br><span class="line">NAMESPACE: default</span><br><span class="line">STATUS: DEPLOYED</span><br><span class="line"></span><br><span class="line">RESOURCES:</span><br><span class="line">==&gt; v1/ClusterRole</span><br><span class="line">NAME                        AGE</span><br><span class="line">flu1-fluentd-elasticsearch  17m</span><br><span class="line"></span><br><span class="line">==&gt; v1/ClusterRoleBinding</span><br><span class="line">NAME                        AGE</span><br><span class="line">flu1-fluentd-elasticsearch  17m</span><br><span class="line"></span><br><span class="line">==&gt; v1/ConfigMap</span><br><span class="line">NAME                        DATA  AGE</span><br><span class="line">flu1-fluentd-elasticsearch  6     17m</span><br><span class="line"></span><br><span class="line">==&gt; v1/DaemonSet</span><br><span class="line">NAME                        DESIRED  CURRENT  READY  UP-TO-DATE  AVAILABLE  NODE SELECTOR  AGE</span><br><span class="line">flu1-fluentd-elasticsearch  3        3        3      3           3          &lt;none&gt;         17m</span><br><span class="line"></span><br><span class="line">==&gt; v1/Pod(related)</span><br><span class="line">NAME                              READY  STATUS   RESTARTS  AGE</span><br><span class="line">flu1-fluentd-elasticsearch-p49fc  1/1    Running  1         17m</span><br><span class="line">flu1-fluentd-elasticsearch-q5b9k  1/1    Running  0         17m</span><br><span class="line">flu1-fluentd-elasticsearch-swfvt  1/1    Running  0         17m</span><br><span class="line"></span><br><span class="line">==&gt; v1/Service</span><br><span class="line">NAME                        TYPE       CLUSTER-IP      EXTERNAL-IP  PORT(S)    AGE</span><br><span class="line">flu1-fluentd-elasticsearch  ClusterIP  10.106.106.209  &lt;none&gt;       24231/TCP  17m</span><br><span class="line"></span><br><span class="line">==&gt; v1/ServiceAccount</span><br><span class="line">NAME                        SECRETS  AGE</span><br><span class="line">flu1-fluentd-elasticsearch  1        17m</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">NOTES:</span><br><span class="line">1. To verify that Fluentd has started, run:</span><br><span class="line"></span><br><span class="line">  kubectl --namespace=default get pods -l <span class="string">"app.kubernetes.io/name=fluentd-elasticsearch,app.kubernetes.io/instance=flu1"</span></span><br><span class="line"></span><br><span class="line">THIS APPLICATION CAPTURES ALL CONSOLE OUTPUT AND FORWARDS IT TO elasticsearch . Anything that might be identifying,</span><br><span class="line">including things like IP addresses, container images, and object names will NOT be anonymized.</span><br><span class="line">2. Get the application URL by running these commands:</span><br><span class="line">  <span class="built_in">export</span> POD_NAME=$(kubectl get pods --namespace default -l <span class="string">"app.kubernetes.io/name=fluentd-elasticsearch,app.kubernetes.io/instance=flu1"</span> -o jsonpath=<span class="string">"&#123;.items[0].metadata.name&#125;"</span>)</span><br><span class="line">  <span class="built_in">echo</span> <span class="string">"Visit http://127.0.0.1:8080 to use your application"</span></span><br><span class="line">  kubectl port-forward <span class="variable">$POD_NAME</span> 8080:80</span><br></pre></td></tr></table></figure>
+<ul>
+<li>是否生成了索引，直接使用访问 elasticsearch 的 RESTfull API 接口。</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ kubectl run cirros1 --rm -it --image=cirros -- /bin/sh</span><br><span class="line">/ <span class="comment"># curl els1-elasticsearch-client.default.svc.cluster.local:9200/_cat/indices</span></span><br><span class="line">green open logstash-2019.05.10 a2b-GyKsSLOZPqGKbCpyJw 5 1   158 0 84.2kb   460b</span><br><span class="line">green open logstash-2019.05.09 CwYylNhdRf-A5UELhrzHow 5 1 71418 0 34.3mb 17.4mb</span><br><span class="line">green open logstash-2019.05.12 5qRFpV46RGG_bWC4xbsyVA 5 1 34496 0 26.1mb 13.2mb</span><br></pre></td></tr></table></figure>
+<h2 id="Helm-kibana"><a href="#Helm-kibana" class="headerlink" title="Helm kibana"></a>Helm kibana</h2><ul>
+<li>下载 stable/kibana</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">helm fetch stable/kibana</span><br></pre></td></tr></table></figure>
+<ul>
+<li>编辑 values.yaml，修改 elasticsearch 指向 elasticsearch 集群的地址</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">elasticsearch.hosts: http://els1-elasticsearch-client.default.svc.cluster.local:920</span><br></pre></td></tr></table></figure>
+<ul>
+<li>修改 service 的工作模式，使得可以从集群外部访问</li>
+</ul>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">service:</span></span><br><span class="line"><span class="attr">  type:</span> <span class="string">NodePort</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>使用 helm 指定 values.yaml 部署 kibana</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">helm install --name kib1 -f values.yaml stable/kibana</span><br></pre></td></tr></table></figure>
+<ul>
+<li>获取 service 端口</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ kubectl get svc</span><br><span class="line">NAME                           TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)         AGE</span><br><span class="line">els1-elasticsearch-client      ClusterIP   10.98.197.185   &lt;none&gt;        9200/TCP        4h51m</span><br><span class="line">els1-elasticsearch-discovery   ClusterIP   None            &lt;none&gt;        9300/TCP        4h51m</span><br><span class="line">flu1-fluentd-elasticsearch     ClusterIP   10.101.97.11    &lt;none&gt;        24231/TCP       157m</span><br><span class="line">kib1-kibana                    NodePort    10.103.7.215    &lt;none&gt;        443:31537/TCP   6m50s</span><br><span class="line">kubernetes                     ClusterIP   10.96.0.1       &lt;none&gt;        443/TCP         3d4h</span><br></pre></td></tr></table></figure>
+<ul>
+<li>由于 service 工作在 NodePort 模式下，所以可以在集群外部访问了</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">172.16.100.6:31537</span><br></pre></td></tr></table></figure>
 
           
         

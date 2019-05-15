@@ -221,7 +221,7 @@
       
         
         <li class="menu-item menu-item-kubernetes">
-          <a href="/2019/03/29/Linux/k8s笔记/" rel="section">
+          <a href="/2019/03/29/Linux/kubernetes/" rel="section">
             
               <i class="menu-item-icon fa fa-fw fa-cog"></i> <br>
             
@@ -531,10 +531,9 @@
 </ul>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ kubectl get svc</span><br><span class="line">NAME                           TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)         AGE</span><br><span class="line">els1-elasticsearch-client      ClusterIP   10.98.197.185   &lt;none&gt;        9200/TCP        4h51m</span><br><span class="line">els1-elasticsearch-discovery   ClusterIP   None            &lt;none&gt;        9300/TCP        4h51m</span><br><span class="line">flu1-fluentd-elasticsearch     ClusterIP   10.101.97.11    &lt;none&gt;        24231/TCP       157m</span><br><span class="line">kib1-kibana                    NodePort    10.103.7.215    &lt;none&gt;        443:31537/TCP   6m50s</span><br><span class="line">kubernetes                     ClusterIP   10.96.0.1       &lt;none&gt;        443/TCP         3d4h</span><br></pre></td></tr></table></figure>
 <ul>
-<li>由于 service 工作在 NodePort 模式下，所以可以在集群外部访问了<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">172.16.100.6:31537</span><br></pre></td></tr></table></figure>
-</li>
+<li>由于 service 工作在 NodePort 模式下，所以可以在集群外部访问了</li>
 </ul>
-
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">172.16.100.6:31537</span><br></pre></td></tr></table></figure>
           
         
       
