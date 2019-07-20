@@ -82,11 +82,11 @@
 <meta name="description" content="StorageClass Ceph RBD实验走通了就懒得记笔记了，简单说下过程：  搭建一个 Ceph 集群 在 Ceph 集群中创建一个存储池，供 K8S 的 StorageClass 来申请 部署 rbd-provisioner（自1.12版本之后必须安装的插件），StorageClass 需要调用它产生实例 新建 StorageClass 访问 Ceph 的 Secret 新建 Stora">
 <meta property="og:type" content="article">
 <meta property="og:title" content="使用Ceph-RBD-实现动态卷">
-<meta property="og:url" content="https://yangjinheng.github.io/2019/05/12/Linux/使用Ceph-RBD-实现动态卷/index.html">
+<meta property="og:url" content="https://yangjinheng.github.io/2019/05/12/kubernetes/使用Ceph-RBD-实现动态卷/index.html">
 <meta property="og:site_name" content="默默">
 <meta property="og:description" content="StorageClass Ceph RBD实验走通了就懒得记笔记了，简单说下过程：  搭建一个 Ceph 集群 在 Ceph 集群中创建一个存储池，供 K8S 的 StorageClass 来申请 部署 rbd-provisioner（自1.12版本之后必须安装的插件），StorageClass 需要调用它产生实例 新建 StorageClass 访问 Ceph 的 Secret 新建 Stora">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-05-12T13:46:59.620Z">
+<meta property="og:updated_time" content="2019-07-20T10:12:36.207Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="使用Ceph-RBD-实现动态卷">
 <meta name="twitter:description" content="StorageClass Ceph RBD实验走通了就懒得记笔记了，简单说下过程：  搭建一个 Ceph 集群 在 Ceph 集群中创建一个存储池，供 K8S 的 StorageClass 来申请 部署 rbd-provisioner（自1.12版本之后必须安装的插件），StorageClass 需要调用它产生实例 新建 StorageClass 访问 Ceph 的 Secret 新建 Stora">
@@ -119,7 +119,7 @@
 
 
 
-  <link rel="canonical" href="https://yangjinheng.github.io/2019/05/12/Linux/使用Ceph-RBD-实现动态卷/">
+  <link rel="canonical" href="https://yangjinheng.github.io/2019/05/12/kubernetes/使用Ceph-RBD-实现动态卷/">
 
 
 
@@ -210,18 +210,18 @@
         </li>
       
         
-        <li class="menu-item menu-item-个人日志">
-          <a href="/categories/个人日志/" rel="section">
+        <li class="menu-item menu-item-前端知识">
+          <a href="/categories/web/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-github-alt"></i> <br>
+              <i class="menu-item-icon fa fa-fw fa-asterisk"></i> <br>
             
-            个人日志
+            前端知识
           </a>
         </li>
       
         
         <li class="menu-item menu-item-kubernetes">
-          <a href="/2019/03/29/Linux/kubernetes/" rel="section">
+          <a href="/categories/Kubernetes/" rel="section">
             
               <i class="menu-item-icon fa fa-fw fa-cog"></i> <br>
             
@@ -230,32 +230,12 @@
         </li>
       
         
-        <li class="menu-item menu-item-docker">
-          <a href="/2018/07/10/Linux/Docker/" rel="section">
+        <li class="menu-item menu-item-运维笔记">
+          <a href="/categories/运维笔记/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-fighter-jet"></i> <br>
+              <i class="menu-item-icon fa fa-fw fa-sitemap"></i> <br>
             
-            Docker
-          </a>
-        </li>
-      
-        
-        <li class="menu-item menu-item-react">
-          <a href="/2019/01/21/web/react/" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-asterisk"></i> <br>
-            
-            React
-          </a>
-        </li>
-      
-        
-        <li class="menu-item menu-item-css">
-          <a href="/2019/01/02/web/CSS/" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-dashboard"></i> <br>
-            
-            CSS
+            运维笔记
           </a>
         </li>
       
@@ -270,52 +250,12 @@
         </li>
       
         
-        <li class="menu-item menu-item-django">
-          <a href="/2017/10/06/python/27.Django笔记/" rel="section">
+        <li class="menu-item menu-item-个人日志">
+          <a href="/categories/个人日志/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-globe"></i> <br>
+              <i class="menu-item-icon fa fa-fw fa-github-alt"></i> <br>
             
-            Django
-          </a>
-        </li>
-      
-        
-        <li class="menu-item menu-item-git">
-          <a href="/2017/06/21/Linux/git/" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-github"></i> <br>
-            
-            Git
-          </a>
-        </li>
-      
-        
-        <li class="menu-item menu-item-mysql">
-          <a href="/2017/01/20/Linux/MYSQL/" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-table"></i> <br>
-            
-            MySQL
-          </a>
-        </li>
-      
-        
-        <li class="menu-item menu-item-ansible">
-          <a href="/2017/03/20/Linux/Ansible/" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-download"></i> <br>
-            
-            Ansible
-          </a>
-        </li>
-      
-        
-        <li class="menu-item menu-item-saltstack">
-          <a href="/2018/01/10/Linux/SaltStack/" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-sitemap"></i> <br>
-            
-            SaltStack
+            个人日志
           </a>
         </li>
       
@@ -351,7 +291,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://yangjinheng.github.io/2019/05/12/Linux/使用Ceph-RBD-实现动态卷/">
+    <link itemprop="mainEntityOfPage" href="https://yangjinheng.github.io/2019/05/12/kubernetes/使用Ceph-RBD-实现动态卷/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Jin Heng">
@@ -403,8 +343,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/运维笔记/" itemprop="url" rel="index">
-                    <span itemprop="name">运维笔记</span>
+                  <a href="/categories/Kubernetes/" itemprop="url" rel="index">
+                    <span itemprop="name">Kubernetes</span>
                   </a>
                 </span>
 
@@ -501,8 +441,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/05/02/python/webshell和paramiko/" rel="next" title="webshell和paramiko">
-                <i class="fa fa-chevron-left"></i> webshell和paramiko
+              <a href="/2019/05/12/kubernetes/K8S+Ceph+EFK/" rel="next" title="Helm + storageclass + EFK">
+                <i class="fa fa-chevron-left"></i> Helm + storageclass + EFK
               </a>
             
           </div>
@@ -511,8 +451,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2019/05/12/Linux/K8S+Ceph+EFK/" rel="prev" title="Helm + storageclass + EFK">
-                Helm + storageclass + EFK <i class="fa fa-chevron-right"></i>
+              <a href="/2019/06/20/kubernetes/nfs_client/" rel="prev" title="nfs-client-provisioner 实现 StorageClass">
+                nfs-client-provisioner 实现 StorageClass <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -597,7 +537,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">67</span>
+                  <span class="site-state-item-count">70</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -608,7 +548,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-count">5</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>

@@ -210,18 +210,18 @@
         </li>
       
         
-        <li class="menu-item menu-item-个人日志">
-          <a href="/categories/个人日志/" rel="section">
+        <li class="menu-item menu-item-前端知识">
+          <a href="/categories/web/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-github-alt"></i> <br>
+              <i class="menu-item-icon fa fa-fw fa-asterisk"></i> <br>
             
-            个人日志
+            前端知识
           </a>
         </li>
       
         
         <li class="menu-item menu-item-kubernetes">
-          <a href="/2019/03/29/Linux/kubernetes/" rel="section">
+          <a href="/categories/Kubernetes/" rel="section">
             
               <i class="menu-item-icon fa fa-fw fa-cog"></i> <br>
             
@@ -230,32 +230,12 @@
         </li>
       
         
-        <li class="menu-item menu-item-docker">
-          <a href="/2018/07/10/Linux/Docker/" rel="section">
+        <li class="menu-item menu-item-运维笔记">
+          <a href="/categories/运维笔记/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-fighter-jet"></i> <br>
+              <i class="menu-item-icon fa fa-fw fa-sitemap"></i> <br>
             
-            Docker
-          </a>
-        </li>
-      
-        
-        <li class="menu-item menu-item-react">
-          <a href="/2019/01/21/web/react/" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-asterisk"></i> <br>
-            
-            React
-          </a>
-        </li>
-      
-        
-        <li class="menu-item menu-item-css">
-          <a href="/2019/01/02/web/CSS/" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-dashboard"></i> <br>
-            
-            CSS
+            运维笔记
           </a>
         </li>
       
@@ -270,52 +250,12 @@
         </li>
       
         
-        <li class="menu-item menu-item-django">
-          <a href="/2017/10/06/python/27.Django笔记/" rel="section">
+        <li class="menu-item menu-item-个人日志">
+          <a href="/categories/个人日志/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-globe"></i> <br>
+              <i class="menu-item-icon fa fa-fw fa-github-alt"></i> <br>
             
-            Django
-          </a>
-        </li>
-      
-        
-        <li class="menu-item menu-item-git">
-          <a href="/2017/06/21/Linux/git/" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-github"></i> <br>
-            
-            Git
-          </a>
-        </li>
-      
-        
-        <li class="menu-item menu-item-mysql">
-          <a href="/2017/01/20/Linux/MYSQL/" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-table"></i> <br>
-            
-            MySQL
-          </a>
-        </li>
-      
-        
-        <li class="menu-item menu-item-ansible">
-          <a href="/2017/03/20/Linux/Ansible/" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-download"></i> <br>
-            
-            Ansible
-          </a>
-        </li>
-      
-        
-        <li class="menu-item menu-item-saltstack">
-          <a href="/2018/01/10/Linux/SaltStack/" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-sitemap"></i> <br>
-            
-            SaltStack
+            个人日志
           </a>
         </li>
       
@@ -351,7 +291,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://yangjinheng.github.io/2019/05/12/Linux/K8S+Ceph+EFK/">
+    <link itemprop="mainEntityOfPage" href="https://yangjinheng.github.io/2019/06/20/kubernetes/nfs_client/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Jin Heng">
@@ -370,7 +310,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2019/05/12/Linux/K8S+Ceph+EFK/" itemprop="url">Helm + storageclass + EFK</a></h1>
+                <a class="post-title-link" href="/2019/06/20/kubernetes/nfs_client/" itemprop="url">nfs-client-provisioner 实现 StorageClass</a></h1>
         
 
         <div class="post-meta">
@@ -382,8 +322,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-05-12T00:00:00+08:00">
-                2019-05-12
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-06-20T00:00:00+08:00">
+                2019-06-20
               </time>
             
 
@@ -405,8 +345,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/运维笔记/" itemprop="url" rel="index">
-                    <span itemprop="name">运维笔记</span>
+                  <a href="/categories/Kubernetes/" itemprop="url" rel="index">
+                    <span itemprop="name">Kubernetes</span>
                   </a>
                 </span>
 
@@ -444,96 +384,57 @@
       
         
           
-            <p>本文使用 K8S 集群上运行 EFK，使用 Ceph 集群作为 ElasticSearch 集群的持久存储。</p>
-<p>用到知识有：Storage Class、PVC、Helm，另外，很多服务镜像需要翻墙。</p>
-<p>helm install 阻塞过程会下载镜像可能会比较慢。</p>
-<p>helm 里面有很多可以定制的项目，这里我就不定制了，反正我的资源也够用，懒得调了。</p>
-<p>感觉没啥可以写的 😂</p>
-<h2 id="Storage-Class"><a href="#Storage-Class" class="headerlink" title="Storage Class"></a>Storage Class</h2><figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Secret</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line"><span class="attr">  name:</span> <span class="string">ceph-admin-secret</span></span><br><span class="line"><span class="attr">  namespace:</span> <span class="string">kube-system</span></span><br><span class="line"><span class="attr">type:</span> <span class="string">"kubernetes.io/rbd"</span></span><br><span class="line"><span class="attr">data:</span></span><br><span class="line">  <span class="comment"># ceph auth get-key client.admin | base64</span></span><br><span class="line"><span class="attr">  key:</span> <span class="string">QVFER3U5TmMQNXQ4SlJBAAhHMGltdXZlNFZkUXAvN2tTZ1BENGc9PQ==</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Secret</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line"><span class="attr">  name:</span> <span class="string">ceph-secret</span></span><br><span class="line"><span class="attr">  namespace:</span> <span class="string">kube-system</span></span><br><span class="line"><span class="attr">type:</span> <span class="string">"kubernetes.io/rbd"</span></span><br><span class="line"><span class="attr">data:</span></span><br><span class="line">  <span class="comment"># ceph auth get-key client.kube | base64</span></span><br><span class="line"><span class="attr">  key:</span> <span class="string">QVFCcUM5VmNWVDdQCCCCWR1NUxFNfVKeTAiazdUWVhOa3N2UWc9PQ==</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">StorageClass</span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">storage.k8s.io/v1</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line"><span class="attr">  name:</span> <span class="string">ceph-rbd</span></span><br><span class="line"><span class="attr">provisioner:</span> <span class="string">ceph.com/rbd</span></span><br><span class="line"><span class="attr">parameters:</span></span><br><span class="line"><span class="attr">  monitors:</span> <span class="number">172.16</span><span class="number">.100</span><span class="number">.9</span><span class="string">:6789</span></span><br><span class="line"><span class="attr">  pool:</span> <span class="string">kube</span></span><br><span class="line"><span class="attr">  adminId:</span> <span class="string">admin</span></span><br><span class="line"><span class="attr">  adminSecretName:</span> <span class="string">ceph-admin-secret</span></span><br><span class="line"><span class="attr">  adminSecretNamespace:</span> <span class="string">kube-system</span></span><br><span class="line"><span class="attr">  userId:</span> <span class="string">kube</span></span><br><span class="line"><span class="attr">  userSecretName:</span> <span class="string">ceph-secret</span></span><br><span class="line"><span class="attr">  userSecretNamespace:</span> <span class="string">kube-system</span></span><br><span class="line"><span class="attr">  fsType:</span> <span class="string">ext4</span></span><br><span class="line"><span class="attr">  imageFormat:</span> <span class="string">"2"</span></span><br><span class="line"><span class="attr">  imageFeatures:</span> <span class="string">"layering"</span></span><br></pre></td></tr></table></figure>
-<h2 id="Helm-Elasticsearch"><a href="#Helm-Elasticsearch" class="headerlink" title="Helm Elasticsearch"></a>Helm Elasticsearch</h2><ul>
-<li>下载 elasticsearch 的 StatfullSet 的 chart</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">helm fetch stable/elasticsearch</span><br></pre></td></tr></table></figure>
+            <h2 id="NFS-Client"><a href="#NFS-Client" class="headerlink" title="NFS-Client"></a>NFS-Client</h2><p>nfs-client 是一个自动配置程序，它使用现有的和已配置的 NFS服务器来支持通过持久卷声明动态配置Kubernetes持久卷。</p>
 <ul>
-<li>编辑 values.yaml，修改 storageClass 指向上面创建的 storageClass</li>
+<li>地址</li>
 </ul>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">storageClass:</span> <span class="string">"ceph-rbd"</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">https://github.com/kubernetes-incubator/external-storage/tree/master/nfs-client</span><br></pre></td></tr></table></figure>
+<h2 id="准备NFS服务器"><a href="#准备NFS服务器" class="headerlink" title="准备NFS服务器"></a>准备NFS服务器</h2><ul>
+<li>安装 NFS</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">yum install nfs-utils</span><br></pre></td></tr></table></figure>
 <ul>
-<li>使用 helm 指定 values.yaml 部署 elasticsearch</li>
+<li>配置 NFS</li>
 </ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">helm install --name els1 -f values.yaml stable/elasticsearch</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">/data/nfs 172.16.100.0/16(rw,sync,no_root_squash)</span><br></pre></td></tr></table></figure>
 <ul>
-<li>安装后查看，调试直到全部处于 READY 状态</li>
+<li>准备目录</li>
 </ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ kubectl get pods</span><br><span class="line">NAME                                         READY   STATUS    RESTARTS   AGE</span><br><span class="line">els1-elasticsearch-client-55696f5bdd-qczbf   1/1     Running   1          78m</span><br><span class="line">els1-elasticsearch-client-55696f5bdd-tdwdc   1/1     Running   1          78m</span><br><span class="line">els1-elasticsearch-data-0                    1/1     Running   1          78m</span><br><span class="line">els1-elasticsearch-data-1                    1/1     Running   1          56m</span><br><span class="line">els1-elasticsearch-master-0                  1/1     Running   1          78m</span><br><span class="line">els1-elasticsearch-master-1                  1/1     Running   1          53m</span><br><span class="line">els1-elasticsearch-master-2                  1/1     Running   1          52m</span><br><span class="line">rbd-provisioner-9b8ffbcc-nxdjd               1/1     Running   2          81m</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mkdir -p /data/nfs</span><br></pre></td></tr></table></figure>
 <ul>
-<li>也可以使用 helm 命令查看</li>
+<li>启动 NFS 并设置开机启动</li>
 </ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ helm status els1</span><br><span class="line"></span><br><span class="line">LAST DEPLOYED: Sun May 12 16:28:56 2019</span><br><span class="line">NAMESPACE: default</span><br><span class="line">STATUS: DEPLOYED</span><br><span class="line"></span><br><span class="line">RESOURCES:</span><br><span class="line">==&gt; v1/ConfigMap</span><br><span class="line">NAME                     DATA  AGE</span><br><span class="line">els1-elasticsearch       4     88m</span><br><span class="line">els1-elasticsearch-test  1     88m</span><br><span class="line"></span><br><span class="line">==&gt; v1/Pod(related)</span><br><span class="line">NAME                                        READY  STATUS   RESTARTS  AGE</span><br><span class="line">els1-elasticsearch-client-55696f5bdd-qczbf  1/1    Running  1         88m</span><br><span class="line">els1-elasticsearch-client-55696f5bdd-tdwdc  1/1    Running  1         88m</span><br><span class="line">els1-elasticsearch-data-0                   1/1    Running  1         88m</span><br><span class="line">els1-elasticsearch-data-1                   1/1    Running  1         66m</span><br><span class="line">els1-elasticsearch-master-0                 1/1    Running  1         88m</span><br><span class="line">els1-elasticsearch-master-1                 1/1    Running  1         63m</span><br><span class="line">els1-elasticsearch-master-2                 1/1    Running  1         62m</span><br><span class="line"></span><br><span class="line">==&gt; v1/Service</span><br><span class="line">NAME                          TYPE       CLUSTER-IP     EXTERNAL-IP  PORT(S)   AGE</span><br><span class="line">els1-elasticsearch-client     ClusterIP  10.98.197.185  &lt;none&gt;       9200/TCP  88m</span><br><span class="line">els1-elasticsearch-discovery  ClusterIP  None           &lt;none&gt;       9300/TCP  88m</span><br><span class="line"></span><br><span class="line">==&gt; v1/ServiceAccount</span><br><span class="line">NAME                       SECRETS  AGE</span><br><span class="line">els1-elasticsearch-client  1        88m</span><br><span class="line">els1-elasticsearch-data    1        88m</span><br><span class="line">els1-elasticsearch-master  1        88m</span><br><span class="line"></span><br><span class="line">==&gt; v1beta1/Deployment</span><br><span class="line">NAME                       READY  UP-TO-DATE  AVAILABLE  AGE</span><br><span class="line">els1-elasticsearch-client  2/2    2           2          88m</span><br><span class="line"></span><br><span class="line">==&gt; v1beta1/StatefulSet</span><br><span class="line">NAME                       READY  AGE</span><br><span class="line">els1-elasticsearch-data    2/2    88m</span><br><span class="line">els1-elasticsearch-master  3/3    88m</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">NOTES:</span><br><span class="line">The elasticsearch cluster has been installed.</span><br><span class="line"></span><br><span class="line">Elasticsearch can be accessed:</span><br><span class="line"></span><br><span class="line">  * Within your cluster, at the following DNS name at port 9200:</span><br><span class="line"></span><br><span class="line">    els1-elasticsearch-client.default.svc</span><br><span class="line"></span><br><span class="line">  * From outside the cluster, run these commands <span class="keyword">in</span> the same shell:</span><br><span class="line"></span><br><span class="line">    <span class="built_in">export</span> POD_NAME=$(kubectl get pods --namespace default -l <span class="string">"app=elasticsearch,component=client,release=els1"</span> -o jsonpath=<span class="string">"&#123;.items[0].metadata.name&#125;"</span>)</span><br><span class="line">    <span class="built_in">echo</span> <span class="string">"Visit http://127.0.0.1:9200 to use Elasticsearch"</span></span><br><span class="line">    kubectl port-forward --namespace default <span class="variable">$POD_NAME</span> 9200:9200</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">systemctl start nfs-server</span><br><span class="line">systemctl start rpcbind</span><br><span class="line">systemctl enable rpcbind.service</span><br><span class="line">systemctl enable nfs-server.service</span><br></pre></td></tr></table></figure>
 <ul>
-<li>启动一个临时的容器，解析集群地址，测试集群信息，查看集群节点</li>
+<li>在所有的 node 节点安装 rpcbind</li>
 </ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ kubectl run cirros1 --rm -it --image=cirros -- /bin/sh</span><br><span class="line"></span><br><span class="line">/ <span class="comment"># nslookup els1-elasticsearch-client.default.svc</span></span><br><span class="line">Server:    10.96.0.10</span><br><span class="line">Address 1: 10.96.0.10 kube-dns.kube-system.svc.cluster.local</span><br><span class="line"></span><br><span class="line">Name:      els1-elasticsearch-client.default.svc</span><br><span class="line">Address 1: 10.98.197.185 els1-elasticsearch-client.default.svc.cluster.local</span><br><span class="line">/ <span class="comment"># curl els1-elasticsearch-client.default.svc.cluster.local:9200/_cat/nodes</span></span><br><span class="line">10.244.2.28  7 96 2 0.85 0.26 0.16 di - els1-elasticsearch-data-0</span><br><span class="line">10.244.1.37  7 83 1 0.04 0.06 0.11 di - els1-elasticsearch-data-1</span><br><span class="line">10.244.2.25 19 96 2 0.85 0.26 0.16 i  - els1-elasticsearch-client-55696f5bdd-tdwdc</span><br><span class="line">10.244.2.27 28 96 2 0.85 0.26 0.16 mi * els1-elasticsearch-master-2</span><br><span class="line">10.244.1.39 19 83 1 0.04 0.06 0.11 i  - els1-elasticsearch-client-55696f5bdd-qczbf</span><br><span class="line">10.244.2.29 21 96 2 0.85 0.26 0.16 mi - els1-elasticsearch-master-1</span><br><span class="line">10.244.1.38 23 83 1 0.04 0.06 0.11 mi - els1-elasticsearch-master-0</span><br></pre></td></tr></table></figure>
-<h2 id="Helm-fluentd-elasticsearch"><a href="#Helm-fluentd-elasticsearch" class="headerlink" title="Helm fluentd-elasticsearch"></a>Helm fluentd-elasticsearch</h2><ul>
-<li>安装 kiwigrid 源</li>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">yum install rpcbind</span><br></pre></td></tr></table></figure>
+<h2 id="部署NFS-Client"><a href="#部署NFS-Client" class="headerlink" title="部署NFS-Client"></a>部署NFS-Client</h2><ul>
+<li>部署 <a href="https://github.com/kubernetes-incubator/external-storage/blob/master/nfs-client/deploy/rbac.yaml" target="_blank" rel="noopener">rbac.yaml</a> 安装 NFS-Client 所需的 Service Account</li>
 </ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">helm repo add kiwigrid https://kiwigrid.github.io</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">kubectl apply -f rbac.yaml</span><br></pre></td></tr></table></figure>
 <ul>
-<li>下载 fluentd-elasticsearch</li>
+<li>部署 <a href="https://github.com/kubernetes-incubator/external-storage/blob/master/nfs-client/deploy/deployment.yaml" target="_blank" rel="noopener">deployment.yaml</a> 到 K8S 集群，修改 yaml 文件中的NFS服务器所在的IP地址以及NFS服务器共享的路径，指定 PROVISIONER_NAME 为自己需要的 StorageClass 名字</li>
 </ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">helm fetch kiwigrid/fluentd-elasticsearch</span><br></pre></td></tr></table></figure>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">ServiceAccount</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line"><span class="attr">  name:</span> <span class="string">nfs-client-provisioner</span></span><br><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Deployment</span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">extensions/v1beta1</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line"><span class="attr">  name:</span> <span class="string">nfs-client-provisioner</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line"><span class="attr">  replicas:</span> <span class="number">1</span></span><br><span class="line"><span class="attr">  strategy:</span></span><br><span class="line"><span class="attr">    type:</span> <span class="string">Recreate</span></span><br><span class="line"><span class="attr">  template:</span></span><br><span class="line"><span class="attr">    metadata:</span></span><br><span class="line"><span class="attr">      labels:</span></span><br><span class="line"><span class="attr">        app:</span> <span class="string">nfs-client-provisioner</span></span><br><span class="line"><span class="attr">    spec:</span></span><br><span class="line"><span class="attr">      serviceAccountName:</span> <span class="string">nfs-client-provisioner</span></span><br><span class="line"><span class="attr">      containers:</span></span><br><span class="line"><span class="attr">        - name:</span> <span class="string">nfs-client-provisioner</span></span><br><span class="line"><span class="attr">          image:</span> <span class="string">quay.io/external_storage/nfs-client-provisioner:latest</span></span><br><span class="line"><span class="attr">          volumeMounts:</span></span><br><span class="line"><span class="attr">            - name:</span> <span class="string">nfs-client-root</span></span><br><span class="line"><span class="attr">              mountPath:</span> <span class="string">/persistentvolumes</span></span><br><span class="line"><span class="attr">          env:</span></span><br><span class="line"><span class="attr">            - name:</span> <span class="string">PROVISIONER_NAME</span></span><br><span class="line"><span class="attr">              value:</span> <span class="string">nfs-server</span></span><br><span class="line"><span class="attr">            - name:</span> <span class="string">NFS_SERVER</span></span><br><span class="line"><span class="attr">              value:</span> <span class="number">172.16</span><span class="number">.100</span><span class="number">.101</span></span><br><span class="line"><span class="attr">            - name:</span> <span class="string">NFS_PATH</span></span><br><span class="line"><span class="attr">              value:</span> <span class="string">/data/nfs</span></span><br><span class="line"><span class="attr">      volumes:</span></span><br><span class="line"><span class="attr">        - name:</span> <span class="string">nfs-client-root</span></span><br><span class="line"><span class="attr">          nfs:</span></span><br><span class="line"><span class="attr">            server:</span> <span class="number">172.16</span><span class="number">.100</span><span class="number">.101</span></span><br><span class="line"><span class="attr">            path:</span> <span class="string">/data/nfs</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">kubectl apply -f deployment.yaml</span><br></pre></td></tr></table></figure>
 <ul>
-<li>获取集群地址</li>
+<li>创建 StorageClass，注意修改 StorageClass 的名字与 nfs-client-provisioner 中的 PROVISIONER_NAME 一致</li>
 </ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">els1-elasticsearch-client.default.svc.cluster.local:9200</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl apply -f class.yaml</span><br></pre></td></tr></table></figure>
+<h2 id="使用-StorageClass"><a href="#使用-StorageClass" class="headerlink" title="使用 StorageClass"></a>使用 StorageClass</h2><ul>
+<li>创建 PVC</li>
+</ul>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="string">kubectl</span> <span class="string">apply</span> <span class="bullet">-f</span> <span class="string">test-claim.yaml</span></span><br></pre></td></tr></table></figure>
 <ul>
-<li>编辑修改 values.yaml，指定 elasticsearch 集群的位置</li>
+<li>使用 PVC ，原镜像需要翻墙，所以修改里面的镜像地址为 busybox</li>
 </ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">elasticsearch:</span><br><span class="line">  host: <span class="string">'els1-elasticsearch-client.default.svc.cluster.local'</span></span><br><span class="line">  port: 9200</span><br></pre></td></tr></table></figure>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="string">kubectl</span> <span class="string">apply</span> <span class="bullet">-f</span> <span class="string">test-pod.yaml</span></span><br></pre></td></tr></table></figure>
 <ul>
-<li>修改对污点的容忍程度，使其容忍 Master 节点的污点，也运行在 Master 节点上收集信息</li>
+<li>查看测试结果</li>
 </ul>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">tolerations:</span> </span><br><span class="line"><span class="attr">  - key:</span> <span class="string">node-role.kubernetes.io/master</span></span><br><span class="line"><span class="attr">    operator:</span> <span class="string">Exists</span></span><br><span class="line"><span class="attr">    effect:</span> <span class="string">NoSchedule</span></span><br></pre></td></tr></table></figure>
-<ul>
-<li>如果使用 prometheus 监控应该打开 prometheusRole 规则</li>
-</ul>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">podAnnotations:</span></span><br><span class="line">  <span class="string">prometheus.io/scrape:</span> <span class="string">"true"</span></span><br><span class="line">  <span class="string">prometheus.io/port:</span> <span class="string">"24231"</span></span><br><span class="line">  </span><br><span class="line"><span class="attr">service:</span></span><br><span class="line"><span class="attr">  type:</span> <span class="string">ClusterIP</span></span><br><span class="line"><span class="attr">  ports:</span></span><br><span class="line"><span class="attr">    - name:</span> <span class="string">"monitor-agent"</span></span><br><span class="line"><span class="attr">      port:</span> <span class="number">24231</span></span><br></pre></td></tr></table></figure>
-<ul>
-<li>使用 helm 指定 values.yaml 部署 fluentd-elasticsearch</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">helm install --name flu1 -f values.yaml kiwigrid/fluentd-elasticsearch</span><br></pre></td></tr></table></figure>
-<ul>
-<li>查看状态 flu1 这个 helm 服务的运行状态</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[root@master fluentd-elasticsearch]<span class="comment"># helm status flu1</span></span><br><span class="line">LAST DEPLOYED: Sun May 12 18:13:12 2019</span><br><span class="line">NAMESPACE: default</span><br><span class="line">STATUS: DEPLOYED</span><br><span class="line"></span><br><span class="line">RESOURCES:</span><br><span class="line">==&gt; v1/ClusterRole</span><br><span class="line">NAME                        AGE</span><br><span class="line">flu1-fluentd-elasticsearch  17m</span><br><span class="line"></span><br><span class="line">==&gt; v1/ClusterRoleBinding</span><br><span class="line">NAME                        AGE</span><br><span class="line">flu1-fluentd-elasticsearch  17m</span><br><span class="line"></span><br><span class="line">==&gt; v1/ConfigMap</span><br><span class="line">NAME                        DATA  AGE</span><br><span class="line">flu1-fluentd-elasticsearch  6     17m</span><br><span class="line"></span><br><span class="line">==&gt; v1/DaemonSet</span><br><span class="line">NAME                        DESIRED  CURRENT  READY  UP-TO-DATE  AVAILABLE  NODE SELECTOR  AGE</span><br><span class="line">flu1-fluentd-elasticsearch  3        3        3      3           3          &lt;none&gt;         17m</span><br><span class="line"></span><br><span class="line">==&gt; v1/Pod(related)</span><br><span class="line">NAME                              READY  STATUS   RESTARTS  AGE</span><br><span class="line">flu1-fluentd-elasticsearch-p49fc  1/1    Running  1         17m</span><br><span class="line">flu1-fluentd-elasticsearch-q5b9k  1/1    Running  0         17m</span><br><span class="line">flu1-fluentd-elasticsearch-swfvt  1/1    Running  0         17m</span><br><span class="line"></span><br><span class="line">==&gt; v1/Service</span><br><span class="line">NAME                        TYPE       CLUSTER-IP      EXTERNAL-IP  PORT(S)    AGE</span><br><span class="line">flu1-fluentd-elasticsearch  ClusterIP  10.106.106.209  &lt;none&gt;       24231/TCP  17m</span><br><span class="line"></span><br><span class="line">==&gt; v1/ServiceAccount</span><br><span class="line">NAME                        SECRETS  AGE</span><br><span class="line">flu1-fluentd-elasticsearch  1        17m</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">NOTES:</span><br><span class="line">1. To verify that Fluentd has started, run:</span><br><span class="line"></span><br><span class="line">  kubectl --namespace=default get pods -l <span class="string">"app.kubernetes.io/name=fluentd-elasticsearch,app.kubernetes.io/instance=flu1"</span></span><br><span class="line"></span><br><span class="line">THIS APPLICATION CAPTURES ALL CONSOLE OUTPUT AND FORWARDS IT TO elasticsearch . Anything that might be identifying,</span><br><span class="line">including things like IP addresses, container images, and object names will NOT be anonymized.</span><br><span class="line">2. Get the application URL by running these commands:</span><br><span class="line">  <span class="built_in">export</span> POD_NAME=$(kubectl get pods --namespace default -l <span class="string">"app.kubernetes.io/name=fluentd-elasticsearch,app.kubernetes.io/instance=flu1"</span> -o jsonpath=<span class="string">"&#123;.items[0].metadata.name&#125;"</span>)</span><br><span class="line">  <span class="built_in">echo</span> <span class="string">"Visit http://127.0.0.1:8080 to use your application"</span></span><br><span class="line">  kubectl port-forward <span class="variable">$POD_NAME</span> 8080:80</span><br></pre></td></tr></table></figure>
-<ul>
-<li>是否生成了索引，直接使用访问 elasticsearch 的 RESTfull API 接口。</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ kubectl run cirros1 --rm -it --image=cirros -- /bin/sh</span><br><span class="line">/ <span class="comment"># curl els1-elasticsearch-client.default.svc.cluster.local:9200/_cat/indices</span></span><br><span class="line">green open logstash-2019.05.10 a2b-GyKsSLOZPqGKbCpyJw 5 1   158 0 84.2kb   460b</span><br><span class="line">green open logstash-2019.05.09 CwYylNhdRf-A5UELhrzHow 5 1 71418 0 34.3mb 17.4mb</span><br><span class="line">green open logstash-2019.05.12 5qRFpV46RGG_bWC4xbsyVA 5 1 34496 0 26.1mb 13.2mb</span><br></pre></td></tr></table></figure>
-<h2 id="Helm-kibana"><a href="#Helm-kibana" class="headerlink" title="Helm kibana"></a>Helm kibana</h2><ul>
-<li>下载 stable/kibana</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">helm fetch stable/kibana</span><br></pre></td></tr></table></figure>
-<ul>
-<li>编辑 values.yaml，修改 elasticsearch 指向 elasticsearch 集群的地址</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">elasticsearch.hosts: http://els1-elasticsearch-client.default.svc.cluster.local:920</span><br></pre></td></tr></table></figure>
-<ul>
-<li>修改 service 的工作模式，使得可以从集群外部访问</li>
-</ul>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">service:</span></span><br><span class="line"><span class="attr">  type:</span> <span class="string">NodePort</span></span><br></pre></td></tr></table></figure>
-<ul>
-<li>使用 helm 指定 values.yaml 部署 kibana</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">helm install --name kib1 -f values.yaml stable/kibana</span><br></pre></td></tr></table></figure>
-<ul>
-<li>获取 service 端口</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ kubectl get svc</span><br><span class="line">NAME                           TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)         AGE</span><br><span class="line">els1-elasticsearch-client      ClusterIP   10.98.197.185   &lt;none&gt;        9200/TCP        4h51m</span><br><span class="line">els1-elasticsearch-discovery   ClusterIP   None            &lt;none&gt;        9300/TCP        4h51m</span><br><span class="line">flu1-fluentd-elasticsearch     ClusterIP   10.101.97.11    &lt;none&gt;        24231/TCP       157m</span><br><span class="line">kib1-kibana                    NodePort    10.103.7.215    &lt;none&gt;        443:31537/TCP   6m50s</span><br><span class="line">kubernetes                     ClusterIP   10.96.0.1       &lt;none&gt;        443/TCP         3d4h</span><br></pre></td></tr></table></figure>
-<ul>
-<li>由于 service 工作在 NodePort 模式下，所以可以在集群外部访问了</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">172.16.100.6:31537</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ kubectl get pods</span><br><span class="line">NAME                                      READY     STATUS      RESTARTS   AGE</span><br><span class="line">nfs-client-provisioner-75bd696897-p9l2k   1/1       Running     0          17m</span><br><span class="line"><span class="built_in">test</span>-pod                                  0/1       Completed   0          2m18s</span><br><span class="line">$ ll /data/nfs/default-test-claim-pvc-f80ce15c-8c69-11e9-96e9-000c296bb91f/</span><br><span class="line">total 0</span><br><span class="line">-rw-r--r-- 1 root root 0 Jun 12 00:59 SUCCESS</span><br></pre></td></tr></table></figure>
+
           
         
       
@@ -581,7 +482,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://yangjinheng.github.io/2019/05/12/Linux/使用Ceph-RBD-实现动态卷/">
+    <link itemprop="mainEntityOfPage" href="https://yangjinheng.github.io/2019/05/12/kubernetes/使用Ceph-RBD-实现动态卷/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Jin Heng">
@@ -600,7 +501,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2019/05/12/Linux/使用Ceph-RBD-实现动态卷/" itemprop="url">使用Ceph-RBD-实现动态卷</a></h1>
+                <a class="post-title-link" href="/2019/05/12/kubernetes/使用Ceph-RBD-实现动态卷/" itemprop="url">使用Ceph-RBD-实现动态卷</a></h1>
         
 
         <div class="post-meta">
@@ -635,8 +536,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/运维笔记/" itemprop="url" rel="index">
-                    <span itemprop="name">运维笔记</span>
+                  <a href="/categories/Kubernetes/" itemprop="url" rel="index">
+                    <span itemprop="name">Kubernetes</span>
                   </a>
                 </span>
 
@@ -750,7 +651,7 @@
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/34/">34</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/35/">35</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -798,7 +699,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">67</span>
+                  <span class="site-state-item-count">70</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -809,7 +710,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-count">5</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>

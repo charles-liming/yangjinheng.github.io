@@ -86,7 +86,7 @@
 <meta property="og:site_name" content="默默">
 <meta property="og:description" content="Python简介Python 的设计具有很强的可读性，相比其他语言经常使用英文关键字，其他语言的一些标点符号，它具有比其他语言更有特色语法结构。  Python 是一种解释型语言：这意味着开发过程中没有了编译这个环节。类似于PHP和Perl语言。 Python 是交互式语言：这意味着，您可以在一个Python提示符，直接互动执行写你的程序。 Python 是面向对象语言: 这意味着Python支持">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-02-28T13:16:12.275Z">
+<meta property="og:updated_time" content="2019-06-27T10:40:09.495Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Python介绍和环境">
 <meta name="twitter:description" content="Python简介Python 的设计具有很强的可读性，相比其他语言经常使用英文关键字，其他语言的一些标点符号，它具有比其他语言更有特色语法结构。  Python 是一种解释型语言：这意味着开发过程中没有了编译这个环节。类似于PHP和Perl语言。 Python 是交互式语言：这意味着，您可以在一个Python提示符，直接互动执行写你的程序。 Python 是面向对象语言: 这意味着Python支持">
@@ -210,18 +210,18 @@
         </li>
       
         
-        <li class="menu-item menu-item-个人日志">
-          <a href="/categories/个人日志/" rel="section">
+        <li class="menu-item menu-item-前端知识">
+          <a href="/categories/web/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-github-alt"></i> <br>
+              <i class="menu-item-icon fa fa-fw fa-asterisk"></i> <br>
             
-            个人日志
+            前端知识
           </a>
         </li>
       
         
         <li class="menu-item menu-item-kubernetes">
-          <a href="/2019/03/29/Linux/kubernetes/" rel="section">
+          <a href="/categories/Kubernetes/" rel="section">
             
               <i class="menu-item-icon fa fa-fw fa-cog"></i> <br>
             
@@ -230,32 +230,12 @@
         </li>
       
         
-        <li class="menu-item menu-item-docker">
-          <a href="/2018/07/10/Linux/Docker/" rel="section">
+        <li class="menu-item menu-item-运维笔记">
+          <a href="/categories/运维笔记/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-fighter-jet"></i> <br>
+              <i class="menu-item-icon fa fa-fw fa-sitemap"></i> <br>
             
-            Docker
-          </a>
-        </li>
-      
-        
-        <li class="menu-item menu-item-react">
-          <a href="/2019/01/21/web/react/" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-asterisk"></i> <br>
-            
-            React
-          </a>
-        </li>
-      
-        
-        <li class="menu-item menu-item-css">
-          <a href="/2019/01/02/web/CSS/" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-dashboard"></i> <br>
-            
-            CSS
+            运维笔记
           </a>
         </li>
       
@@ -270,52 +250,12 @@
         </li>
       
         
-        <li class="menu-item menu-item-django">
-          <a href="/2017/10/06/python/27.Django笔记/" rel="section">
+        <li class="menu-item menu-item-个人日志">
+          <a href="/categories/个人日志/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-globe"></i> <br>
+              <i class="menu-item-icon fa fa-fw fa-github-alt"></i> <br>
             
-            Django
-          </a>
-        </li>
-      
-        
-        <li class="menu-item menu-item-git">
-          <a href="/2017/06/21/Linux/git/" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-github"></i> <br>
-            
-            Git
-          </a>
-        </li>
-      
-        
-        <li class="menu-item menu-item-mysql">
-          <a href="/2017/01/20/Linux/MYSQL/" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-table"></i> <br>
-            
-            MySQL
-          </a>
-        </li>
-      
-        
-        <li class="menu-item menu-item-ansible">
-          <a href="/2017/03/20/Linux/Ansible/" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-download"></i> <br>
-            
-            Ansible
-          </a>
-        </li>
-      
-        
-        <li class="menu-item menu-item-saltstack">
-          <a href="/2018/01/10/Linux/SaltStack/" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-sitemap"></i> <br>
-            
-            SaltStack
+            个人日志
           </a>
         </li>
       
@@ -520,11 +460,11 @@
 <h2 id="virtualenv"><a href="#virtualenv" class="headerlink" title="virtualenv"></a>virtualenv</h2><ul>
 <li>安装 Python</li>
 </ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ ./configure --prefix=/usr/<span class="built_in">local</span>/python3.7 --<span class="built_in">enable</span>-optimizations --<span class="built_in">enable</span>-shared LDFLAGS=-Wl,-rpath=/usr/<span class="built_in">local</span>/python3.7/lib</span><br><span class="line"></span><br><span class="line">$ make &amp;&amp; make altinstall</span><br><span class="line"></span><br><span class="line">$ ln -svf /usr/<span class="built_in">local</span>/python3.7/bin/python3.7 /usr/<span class="built_in">local</span>/bin/</span><br><span class="line">$ ln -svf /usr/<span class="built_in">local</span>/python3.7/bin/pip3.7 /usr/<span class="built_in">local</span>/bin/</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ ./configure --prefix=/usr/<span class="built_in">local</span>/python3.7 --<span class="built_in">enable</span>-optimizations --<span class="built_in">enable</span>-shared LDFLAGS=-Wl,-rpath=/usr/<span class="built_in">local</span>/python3.7/lib</span><br><span class="line"></span><br><span class="line">$ make &amp;&amp; make altinstall</span><br><span class="line"></span><br><span class="line">$ ln -svf /usr/<span class="built_in">local</span>/python3.7/bin/python3.7 /usr/<span class="built_in">local</span>/bin/</span><br><span class="line">$ ln -svf /usr/<span class="built_in">local</span>/python3.7/bin/python3.7 /usr/<span class="built_in">local</span>/bin/python3</span><br><span class="line">$ ln -svf /usr/<span class="built_in">local</span>/python3.7/bin/pip3.7 /usr/<span class="built_in">local</span>/bin/</span><br></pre></td></tr></table></figure>
 <ul>
-<li>安装虚拟环境并进入</li>
+<li>使用虚拟环境并进入</li>
 </ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ pip3 install virtualenv</span><br><span class="line">$ ln -svf /usr/<span class="built_in">local</span>/python3.7/bin/virtualenv /usr/<span class="built_in">local</span>/bin/</span><br><span class="line"></span><br><span class="line">$ virtualenv --no-site-packages .venv   <span class="comment"># 创建没有任何包的 env</span></span><br><span class="line">$ <span class="built_in">source</span> .venv/bin/activate             <span class="comment"># 激活虚拟环境，使用 deactivate 退出</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ python3 -m venv tutorial-env                <span class="comment"># 创建虚拟环境</span></span><br><span class="line">$ <span class="built_in">source</span> tutorial-env/bin/activate            <span class="comment"># 激活虚拟环境，使用 deactivate 退出</span></span><br><span class="line">$ pip install novas                           <span class="comment"># 在虚拟环境中安装包</span></span><br><span class="line">$ pip freeze &gt; requirements.txt               <span class="comment"># 生成依赖文件</span></span><br></pre></td></tr></table></figure>
 <h2 id="Jupyter"><a href="#Jupyter" class="headerlink" title="Jupyter"></a>Jupyter</h2><ul>
 <li>安装 Jupyter，Ipython 作为依赖组件也会被安装</li>
 </ul>
@@ -657,7 +597,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">67</span>
+                  <span class="site-state-item-count">70</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -668,7 +608,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-count">5</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
