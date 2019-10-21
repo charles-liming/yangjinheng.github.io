@@ -86,7 +86,7 @@
 <meta property="og:site_name" content="默默">
 <meta property="og:description" content="Kubernetes简介 学习资料来源  马哥教育：https://blog.51cto.com/mageedu 马哥Github：https://github.com/iKubernetes 阳明的博客（K8S讲师）：https://www.qikqiak.com/page/archive/ 宋净超（云原生架构手册）：https://jimmysong.io/kubernetes-handboo">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-07-20T10:09:16.409Z">
+<meta property="og:updated_time" content="2019-10-12T08:33:11.482Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Kubernetes入门">
 <meta name="twitter:description" content="Kubernetes简介 学习资料来源  马哥教育：https://blog.51cto.com/mageedu 马哥Github：https://github.com/iKubernetes 阳明的博客（K8S讲师）：https://www.qikqiak.com/page/archive/ 宋净超（云原生架构手册）：https://jimmysong.io/kubernetes-handboo">
@@ -490,333 +490,6 @@
 <p>node 网络：各节点之间进行通信</p>
 <p>POD 网络：所有 node上的 POD 彼此之间通过叠加，或者直接路由方式通信</p>
 <p>service 网络：由 kube-proxy 负责管控和生成</p>
-<h1 id="Kubeadm-部署集群"><a href="#Kubeadm-部署集群" class="headerlink" title="Kubeadm 部署集群"></a>Kubeadm 部署集群</h1><p>Kubeadm 是 K8S 官方提供的快速部署工具，它提供了 kubeadm init 以及 kubeadm join 这两个命令作为快速创建 kubernetes 集群的最佳实践，本章节说明了使用 kubeadm 来部署 K8S 集群的过程。</p>
-<ul>
-<li>几种部署方案</li>
-</ul>
-<table>
-<thead>
-<tr>
-<th>部署方案</th>
-<th>资料</th>
-<th>备注</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>kubeadm</td>
-<td>无</td>
-<td>官方的部署工具，目前不适合部署生产环境</td>
-</tr>
-<tr>
-<td>kubespray</td>
-<td><a href="https://github.com/kubernetes-sigs/kubespray" target="_blank" rel="noopener">https://github.com/kubernetes-sigs/kubespray</a></td>
-<td>部署生产级别的 K8S 集群，Playbook 方式</td>
-</tr>
-<tr>
-<td>RKE</td>
-<td><a href="https://github.com/rancher/rke" target="_blank" rel="noopener">https://github.com/rancher/rke</a></td>
-<td>Rencher 提供的部署工具，Go 编写的一个部署程序</td>
-</tr>
-</tbody>
-</table>
-<ul>
-<li>集群组织结构</li>
-</ul>
-<table>
-<thead>
-<tr>
-<th>项目</th>
-<th>说明</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>集群规模</td>
-<td>Master、node1、node2</td>
-</tr>
-<tr>
-<td>网络规划</td>
-<td>POD：10.244.0.0/16、Service：10.96.0.0/12</td>
-</tr>
-</tbody>
-</table>
-<h2 id="部署前准备"><a href="#部署前准备" class="headerlink" title="部署前准备"></a>部署前准备</h2><blockquote>
-<p>  本小节的所有的操作，在所有的节点上进行</p>
-</blockquote>
-<h3 id="关闭-firewalld-和-selinux"><a href="#关闭-firewalld-和-selinux" class="headerlink" title="关闭 firewalld 和 selinux"></a>关闭 firewalld 和 selinux</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">setenforce 0</span><br><span class="line">sed -i <span class="string">'/^SELINUX=/cSELINUX=disabled'</span> /etc/selinux/config</span><br><span class="line"></span><br><span class="line">systemctl stopfirewalld</span><br><span class="line">systemctl <span class="built_in">disable</span> firewalld</span><br></pre></td></tr></table></figure>
-<h3 id="加载-ipvs-内核模块"><a href="#加载-ipvs-内核模块" class="headerlink" title="加载 ipvs 内核模块"></a>加载 ipvs 内核模块</h3><ul>
-<li>安装 IPVS 模块</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">yum install ipvsadm ipset sysstat conntrack libseccomp</span><br></pre></td></tr></table></figure>
-<ul>
-<li>设置开机加载配置文件</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">cat &gt;&gt;/etc/modules-load.d/ipvs.conf&lt;&lt;EOF</span><br><span class="line">ip_vs_dh</span><br><span class="line">ip_vs_ftp</span><br><span class="line">ip_vs</span><br><span class="line">ip_vs_lblc</span><br><span class="line">ip_vs_lblcr</span><br><span class="line">ip_vs_lc</span><br><span class="line">ip_vs_nq</span><br><span class="line">ip_vs_pe_sip</span><br><span class="line">ip_vs_rr</span><br><span class="line">ip_vs_sed</span><br><span class="line">ip_vs_sh</span><br><span class="line">ip_vs_wlc</span><br><span class="line">ip_vs_wrr</span><br><span class="line">nf_conntrack_ipv4</span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
-<ul>
-<li>设置开机加载 IPVS 模块</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">systemctl <span class="built_in">enable</span> systemd-modules-load.service   <span class="comment"># 设置开机加载内核模块</span></span><br></pre></td></tr></table></figure>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">lsmod | grep -e ip_vs -e nf_conntrack_ipv4      <span class="comment"># 重启后检查 ipvs 模块是否加载</span></span><br></pre></td></tr></table></figure>
-<ul>
-<li>如果集群已经部署在了 iptables 模式下，可以通过下面命令修改，修改 mode 为 ipvs 重启集群即可。</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl edit -n kube-system configmap kube-proxy</span><br></pre></td></tr></table></figure>
-<h3 id="下载-Docker-和-K8S"><a href="#下载-Docker-和-K8S" class="headerlink" title="下载 Docker 和 K8S"></a>下载 Docker 和 K8S</h3><ul>
-<li>设置 docker 源</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">curl -o /etc/yum.repos.d/docker-ce.repo https://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo</span><br></pre></td></tr></table></figure>
-<ul>
-<li>设置 k8s 源</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">cat &gt;&gt;/etc/yum.repos.d/kuberetes.repo&lt;&lt;EOF</span><br><span class="line">[kuberneres]</span><br><span class="line">name=Kubernetes</span><br><span class="line">baseurl=https://mirrors.aliyun.com/kubernetes/yum/repos/kubernetes-el7-x86_64/</span><br><span class="line">gpgcheck=0</span><br><span class="line">gpgkey=https://mirrors.aliyun.com/kubernetes/yum/doc/yum-key.gpg</span><br><span class="line">enabled=1</span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
-<ul>
-<li>安装 docker-ce 和 kubernetes</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">yum install docker-ce kubelet kubectl kubeadm</span><br></pre></td></tr></table></figure>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">systemctl start docker</span><br><span class="line"></span><br><span class="line">systemctl <span class="built_in">enable</span> docker</span><br><span class="line">systemctl <span class="built_in">enable</span> kubelet</span><br></pre></td></tr></table></figure>
-<h3 id="设置内核及-K8S-参数"><a href="#设置内核及-K8S-参数" class="headerlink" title="设置内核及 K8S 参数"></a>设置内核及 K8S 参数</h3><ul>
-<li>设置内核参数</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">cat &gt;&gt;/etc/sysctl.conf&lt;&lt;EOF</span><br><span class="line">net.bridge.bridge-nf-call-ip6tables = 1</span><br><span class="line">net.bridge.bridge-nf-call-iptables = 1</span><br><span class="line">net.ipv4.ip_forward = 1</span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
-<ul>
-<li>设置 kubelet 忽略 swap，使用 ipvs</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">cat &gt;/etc/sysconfig/kubelet&lt;&lt;EOF</span><br><span class="line">KUBELET_EXTRA_ARGS=<span class="string">"--fail-swap-on=false"</span></span><br><span class="line">KUBE_PROXY_MODE=ipvs</span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
-<h2 id="部署-Master"><a href="#部署-Master" class="headerlink" title="部署 Master"></a>部署 Master</h2><blockquote>
-<p>  本小节的所有的操作，只在 Master 节点上进行</p>
-</blockquote>
-<h3 id="提前拉取镜像"><a href="#提前拉取镜像" class="headerlink" title="提前拉取镜像"></a>提前拉取镜像</h3><p>kubeadm init 在初始化的时候会到谷歌的 docker hub 拉取镜像，所以我们要提前做好翻墙的准备，需要在本机 9666 端口启动翻墙的软件。</p>
-<ul>
-<li>配置 Docker 拉取镜像时候的代理地址，vim /usr/lib/systemd/system/docker.service。</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[Service]</span><br><span class="line">Environment=<span class="string">"HTTPS_PROXY=127.0.0.1:9666"</span></span><br><span class="line">Environment=<span class="string">"NO_PROXY=127.0.0.0/8,172.16.0.0/16"</span></span><br></pre></td></tr></table></figure>
-<ul>
-<li>提前拉取初始化需要的镜像</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubeadm config images pull</span><br></pre></td></tr></table></figure>
-<h3 id="初始化Master"><a href="#初始化Master" class="headerlink" title="初始化Master"></a>初始化Master</h3><ul>
-<li>使用 kubeadm 初始化 k8s 集群</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubeadm init --kubernetes-version=v1.14.0 --pod-network-cidr=10.244.0.0/16 --service-cidr=10.96.0.0/12 --ignore-preflight-errors=Swap</span><br></pre></td></tr></table></figure>
-<ul>
-<li>如果有报错使用下面命令查看</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">journalctl -xeu kubelet</span><br></pre></td></tr></table></figure>
-<ul>
-<li>如果初始化过程被中断可以使用下面命令来恢复</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubeadm reset</span><br></pre></td></tr></table></figure>
-<ul>
-<li>下面是最后执行成功显示的结果，需要保存这个执行结果，以让 node 节点加入集群</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">Your Kubernetes control-plane has initialized successfully!</span><br><span class="line"></span><br><span class="line">To start using your cluster, you need to run the following as a regular user:</span><br><span class="line"></span><br><span class="line">  mkdir -p <span class="variable">$HOME</span>/.kube</span><br><span class="line">  sudo cp -i /etc/kubernetes/admin.conf <span class="variable">$HOME</span>/.kube/config</span><br><span class="line">  sudo chown $(id -u):$(id -g) <span class="variable">$HOME</span>/.kube/config</span><br><span class="line"></span><br><span class="line">You should now deploy a pod network to the cluster.</span><br><span class="line">Run <span class="string">"kubectl apply -f [podnetwork].yaml"</span> with one of the options listed at:</span><br><span class="line">  https://kubernetes.io/docs/concepts/cluster-administration/addons/</span><br><span class="line"></span><br><span class="line">Then you can join any number of worker nodes by running the following on each as root:</span><br><span class="line"></span><br><span class="line">kubeadm join 172.16.100.9:6443 --token 2dyd69.hrfsjkkxs4stim7n \</span><br><span class="line">    --discovery-token-ca-cert-hash sha256:4e30c1f41aefb177b708a404ccb7e818e31647c7dbdd2d42f6c5c9894b6f41e7</span><br></pre></td></tr></table></figure>
-<ul>
-<li>最好以普通用户的身份运行下面的命令</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">mkdir -p <span class="variable">$HOME</span>/.kube</span><br><span class="line">sudo cp -i /etc/kubernetes/admin.conf <span class="variable">$HOME</span>/.kube/config</span><br><span class="line">sudo chown $(id -u):$(id -g) <span class="variable">$HOME</span>/.kube/config</span><br></pre></td></tr></table></figure>
-<ul>
-<li>部署 flannel 网络插件</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml</span><br></pre></td></tr></table></figure>
-<ul>
-<li>查看 kube-system 命名空间中运行的 pods</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl get pods -n kube-system</span><br></pre></td></tr></table></figure>
-<ul>
-<li>查看 k8s 集群组件的状态</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl get ComponentStatus</span><br></pre></td></tr></table></figure>
-<h2 id="部署-Node"><a href="#部署-Node" class="headerlink" title="部署 Node"></a>部署 Node</h2><blockquote>
-<p>  本小节的所有的操作，只在 Node 节点上进行。</p>
-</blockquote>
-<h3 id="加入集群"><a href="#加入集群" class="headerlink" title="加入集群"></a>加入集群</h3><ul>
-<li>加入集群，注意在命令尾部加上 –ignore-preflight-errors=Swap ，以忽略 k8s 对主机 swap 的检查（k8s为了性能所以要求进制 swap ）</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubeadm join 172.16.100.9:6443 --token 2dyd69.hrfsjkkxs4stim7n \</span><br><span class="line">    --discovery-token-ca-cert-hash sha256:4e30c1f41aefb177b708a404ccb7e818e31647c7dbdd2d42f6c5c9894b6f41e7 --ignore-preflight-errors=Swap</span><br></pre></td></tr></table></figure>
-<ul>
-<li>返回结果，表示加入集群成功</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">This node has joined the cluster:</span><br><span class="line">* Certificate signing request was sent to apiserver and a response was received.</span><br><span class="line">* The Kubelet was informed of the new secure connection details.</span><br><span class="line"></span><br><span class="line">Run <span class="string">'kubectl get nodes'</span> on the control-plane to see this node join the cluster.</span><br></pre></td></tr></table></figure>
-<h3 id="查看进度"><a href="#查看进度" class="headerlink" title="查看进度"></a>查看进度</h3><p>当 node 节点加入 K8S 集群中后，Master 会调度到 Node 节点上一些组件，用于处理集群事务，这些组件没有下载完成之前 Node 节点在集群中还是未就绪状态</p>
-<ul>
-<li>在 node 执行下面命令，可以查看镜像的下载进度，下面是最终结果显示</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ docker image ls</span><br><span class="line">REPOSITORY               TAG                 IMAGE ID            CREATED             SIZE</span><br><span class="line">k8s.gcr.io/kube-proxy    v1.14.0             5cd54e388aba        6 weeks ago         82.1MB</span><br><span class="line">quay.io/coreos/flannel   v0.11.0-amd64       ff281650a721        3 months ago        52.6MB</span><br><span class="line">k8s.gcr.io/pause         3.1                 da86e6ba6ca1        16 months ago       742kB</span><br></pre></td></tr></table></figure>
-<ul>
-<li>可以在 Master 上使用下面命令来查看新加入的节点状态</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ kubectl get nodes</span><br><span class="line">NAME     STATUS   ROLES    AGE     VERSION</span><br><span class="line">master   Ready    master   3d21h   v1.14.1</span><br><span class="line">node1    Ready    &lt;none&gt;   3d21h   v1.14.1</span><br><span class="line">node2    Ready    &lt;none&gt;   3d21h   v1.14.1</span><br></pre></td></tr></table></figure>
-<ul>
-<li>查看 kube-system 这个 k8s 命名空间中有哪些组件，分别运行在哪个节点，-o wide 是以详细方式显示。</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ kubectl get pods -n kube-system -o wide</span><br><span class="line"></span><br><span class="line">NAME                                 READY   STATUS    RESTARTS   AGE     IP              NODE         NOMINATED NODE   READINESS GATES</span><br><span class="line">coredns-fb8b8dccf-cp24r              1/1     Running   0          26m     10.244.0.2      i-xeahpl98   &lt;none&gt;           &lt;none&gt;</span><br><span class="line">coredns-fb8b8dccf-ljswp              1/1     Running   0          26m     10.244.0.3      i-xeahpl98   &lt;none&gt;           &lt;none&gt;</span><br><span class="line">etcd-i-xeahpl98                      1/1     Running   0          25m     172.16.100.9    i-xeahpl98   &lt;none&gt;           &lt;none&gt;</span><br><span class="line">kube-apiserver-i-xeahpl98            1/1     Running   0          25m     172.16.100.9    i-xeahpl98   &lt;none&gt;           &lt;none&gt;</span><br><span class="line">kube-controller-manager-i-xeahpl98   1/1     Running   0          25m     172.16.100.9    i-xeahpl98   &lt;none&gt;           &lt;none&gt;</span><br><span class="line">kube-flannel-ds-amd64-crft8          1/1     Running   3          16m     172.16.100.6    i-me87b6gw   &lt;none&gt;           &lt;none&gt;</span><br><span class="line">kube-flannel-ds-amd64-nckw4          1/1     Running   0          6m41s   172.16.100.10   i-qhcc2owe   &lt;none&gt;           &lt;none&gt;</span><br><span class="line">kube-flannel-ds-amd64-zb7sg          1/1     Running   0          23m     172.16.100.9    i-xeahpl98   &lt;none&gt;           &lt;none&gt;</span><br><span class="line">kube-proxy-7kjkf                     1/1     Running   0          6m41s   172.16.100.10   i-qhcc2owe   &lt;none&gt;           &lt;none&gt;</span><br><span class="line">kube-proxy-c5xs2                     1/1     Running   2          16m     172.16.100.6    i-me87b6gw   &lt;none&gt;           &lt;none&gt;</span><br><span class="line">kube-proxy-rdzq2                     1/1     Running   0          26m     172.16.100.9    i-xeahpl98   &lt;none&gt;           &lt;none&gt;</span><br><span class="line">kube-scheduler-i-xeahpl98            1/1     Running   0          25m     172.16.100.9    i-xeahpl98   &lt;none&gt;           &lt;none&gt;</span><br></pre></td></tr></table></figure>
-<h3 id="下载太慢"><a href="#下载太慢" class="headerlink" title="下载太慢"></a>下载太慢</h3><p>node 节点需要翻墙下载镜像太慢，建议使用 docker 镜像的导入导出功能</p>
-<ul>
-<li>导出</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker image save -o /tmp/kube-proxy.tar k8s.gcr.io/kube-proxy</span><br><span class="line">docker image save -o /tmp/flannel.tar quay.io/coreos/flannel</span><br><span class="line">docker image save -o /tmp/pause.tar k8s.gcr.io/pause</span><br></pre></td></tr></table></figure>
-<ul>
-<li>导入</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker image load -i /tmp/kube-proxy.tar</span><br><span class="line">docker image load -i /tmp/pause.tar</span><br><span class="line">docker image load -i /tmp/flannel.tar</span><br></pre></td></tr></table></figure>
-<h1 id="RKE部署集群"><a href="#RKE部署集群" class="headerlink" title="RKE部署集群"></a>RKE部署集群</h1><p>RKE是一种快速，通用的 Kubernetes 安装程序，可用于在 Linux 主机上安装 Kubernetes。</p>
-<ul>
-<li>资源最低需求，是 kubernetes 官方要求的最低配置</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">最低资源需求：1C、2G</span><br></pre></td></tr></table></figure>
-<ul>
-<li>部署架构，可以自行调整 master 和 node 节点的数量，例如：1 个 master 2 个 worker。</li>
-</ul>
-<table>
-<thead>
-<tr>
-<th>角色</th>
-<th>IP地址</th>
-<th>准备工作</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>KRE</td>
-<td>172.16.100.10</td>
-<td>安装 Docker、RKE、能够免密访问到 master、worker 节点的 docker 用户</td>
-</tr>
-<tr>
-<td>master</td>
-<td>172.16.100.11</td>
-<td>安装 Docker、ipvs</td>
-</tr>
-<tr>
-<td>master</td>
-<td>172.16.100.12</td>
-<td>安装 Docker、ipvs</td>
-</tr>
-<tr>
-<td>worker</td>
-<td>172.16.100.13</td>
-<td>安装 Docker、ipvs</td>
-</tr>
-<tr>
-<td>worker</td>
-<td>172.16.100.14</td>
-<td>安装 Docker、ipvs</td>
-</tr>
-<tr>
-<td>worker</td>
-<td>172.16.100.15</td>
-<td>安装 Docker、ipvs</td>
-</tr>
-</tbody>
-</table>
-<h2 id="集群准备工作"><a href="#集群准备工作" class="headerlink" title="集群准备工作"></a>集群准备工作</h2><ol>
-<li>在所有节点安装 docker 并启动</li>
-<li>在 master、worker 节点创建 docker 用户</li>
-<li>在 master、worker 节点安装启用 ipvs 支持</li>
-<li>配置 rke 节点免密连接其他所有节点的 docker 用户</li>
-</ol>
-<h3 id="安装Docker"><a href="#安装Docker" class="headerlink" title="安装Docker"></a>安装Docker</h3><ul>
-<li>安装 docker 源</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">curl -o /etc/yum.repos.d/docker-ce.repo https://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo</span><br></pre></td></tr></table></figure>
-<ul>
-<li>安装 docker-ce</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">yum install -y docker-ce</span><br></pre></td></tr></table></figure>
-<ul>
-<li>设置镜像加速</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">systemctl start docker</span><br><span class="line"><span class="built_in">echo</span> -e <span class="string">'&#123;\n    "registry-mirrors": ["http://f1361db2.m.daocloud.io"]\n&#125;'</span> &gt; /etc/docker/daemon.json</span><br></pre></td></tr></table></figure>
-<ul>
-<li>启动 docker 并设置开机启动</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">systemctl restart docker</span><br><span class="line">systemctl enable docker</span><br></pre></td></tr></table></figure>
-<h3 id="创建docker用户"><a href="#创建docker用户" class="headerlink" title="创建docker用户"></a>创建docker用户</h3><ul>
-<li>在每台主机上创建 docker 用户，并修改 docker 用户密码</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">useradd -g docker docker</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">echo 123456 | passwd --stdin docker</span><br></pre></td></tr></table></figure>
-<h3 id="启动ipvs支持"><a href="#启动ipvs支持" class="headerlink" title="启动ipvs支持"></a>启动ipvs支持</h3><ul>
-<li>安装 IPVS 模块</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">yum install -y ipvsadm ipset sysstat conntrack libseccomp</span><br></pre></td></tr></table></figure>
-<ul>
-<li>设置开机加载配置文件</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">cat &gt;&gt;/etc/modules-load.d/ipvs.conf&lt;&lt;EOF</span><br><span class="line">ip_vs_dhs</span><br><span class="line">ip_vs_ftp</span><br><span class="line">ip_vs</span><br><span class="line">ip_vs_lblc</span><br><span class="line">ip_vs_lblcr</span><br><span class="line">ip_vs_lc</span><br><span class="line">ip_vs_nq</span><br><span class="line">ip_vs_pe_sip</span><br><span class="line">ip_vs_rr</span><br><span class="line">ip_vs_sed</span><br><span class="line">ip_vs_sh</span><br><span class="line">ip_vs_wlc</span><br><span class="line">ip_vs_wrr</span><br><span class="line">nf_conntrack_ipv4</span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
-<ul>
-<li>设置开机加载 IPVS 模块，重启所有节点</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">systemctl <span class="built_in">enable</span> systemd-modules-load.service   <span class="comment"># 设置开机加载内核模块</span></span><br></pre></td></tr></table></figure>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">reboot                                          <span class="comment"># 重启所有节点</span></span><br></pre></td></tr></table></figure>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">lsmod | grep -e ip_vs -e nf_conntrack_ipv4      <span class="comment"># 重启后检查 ipvs 模块是否加载</span></span><br></pre></td></tr></table></figure>
-<h3 id="设置密钥连接"><a href="#设置密钥连接" class="headerlink" title="设置密钥连接"></a>设置密钥连接</h3><ul>
-<li>在 RKE 主机上生成密钥，并发送到各个节点的 authorized_keys 文件，保证 RKE 主机可以免密连接到每个主机的 docker 用户</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ssh-keygen -q -P <span class="string">''</span> -f ~/.ssh/id_rsa</span><br><span class="line"></span><br><span class="line">node=(</span><br><span class="line">    172.16.100.11</span><br><span class="line">    172.16.100.12</span><br><span class="line">    172.16.100.13</span><br><span class="line">    172.16.100.14</span><br><span class="line">    172.16.100.15</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="variable">$&#123;node[*]&#125;</span>; <span class="keyword">do</span></span><br><span class="line">    ssh-copy-id docker@<span class="variable">$i</span></span><br><span class="line"><span class="keyword">done</span></span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>  必须保证能够 ssh docker@&lt;IP地址&gt; 能够连接</p>
-</blockquote>
-<h2 id="RKE部署集群-1"><a href="#RKE部署集群-1" class="headerlink" title="RKE部署集群"></a>RKE部署集群</h2><blockquote>
-<p>  在 rke 节点进行</p>
-</blockquote>
-<h3 id="下载安装RKE"><a href="#下载安装RKE" class="headerlink" title="下载安装RKE"></a>下载安装RKE</h3><ul>
-<li>官方发行版地址，根据自己的架构下载</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">https://github.com/rancher/rke/releases/latest</span><br></pre></td></tr></table></figure>
-<ul>
-<li>官方帮助文件</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">https://rancher.com/docs/rke/latest/en/</span><br></pre></td></tr></table></figure>
-<ul>
-<li>下载安装 RKE 到本机</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">wget https://github.com/rancher/rke/releases/download/v0.2.4/rke_linux-amd64 -O /usr/<span class="built_in">local</span>/bin/rke</span><br><span class="line">chmod +x /usr/<span class="built_in">local</span>/bin/rke</span><br></pre></td></tr></table></figure>
-<h3 id="创建集群配置"><a href="#创建集群配置" class="headerlink" title="创建集群配置"></a>创建集群配置</h3><ul>
-<li>可以直接使用下面的 RKE 配置文件 (cluster.yaml) 来部署集群</li>
-</ul>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">nodes:</span></span><br><span class="line"><span class="attr">- address:</span> <span class="number">172.16</span><span class="number">.100</span><span class="number">.11</span></span><br><span class="line"><span class="attr">  role:</span> <span class="string">[controlplane,</span> <span class="string">etcd]</span></span><br><span class="line"><span class="attr">  user:</span> <span class="string">docker</span></span><br><span class="line"><span class="attr">- address:</span> <span class="number">172.16</span><span class="number">.100</span><span class="number">.12</span></span><br><span class="line"><span class="attr">  role:</span> <span class="string">[controlplane,</span> <span class="string">etcd]</span></span><br><span class="line"><span class="attr">  user:</span> <span class="string">docker</span></span><br><span class="line"><span class="attr">- address:</span> <span class="number">172.16</span><span class="number">.100</span><span class="number">.13</span></span><br><span class="line"><span class="attr">  role:</span> <span class="string">[worker]</span></span><br><span class="line"><span class="attr">  user:</span> <span class="string">docker</span></span><br><span class="line"><span class="attr">- address:</span> <span class="number">172.16</span><span class="number">.100</span><span class="number">.14</span></span><br><span class="line"><span class="attr">  role:</span> <span class="string">[worker]</span></span><br><span class="line"><span class="attr">  user:</span> <span class="string">docker</span></span><br><span class="line"><span class="attr">- address:</span> <span class="number">172.16</span><span class="number">.100</span><span class="number">.15</span></span><br><span class="line"><span class="attr">  role:</span> <span class="string">[worker]</span></span><br><span class="line"><span class="attr">  user:</span> <span class="string">docker</span></span><br><span class="line"></span><br><span class="line"><span class="attr">network:</span></span><br><span class="line"><span class="attr">  plugin:</span> <span class="string">calico</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 设置私有仓库</span></span><br><span class="line"><span class="comment"># private_registries:</span></span><br><span class="line"><span class="comment"># - url: registry.com</span></span><br><span class="line"><span class="comment">#   user: Username</span></span><br><span class="line"><span class="comment">#   password: password</span></span><br><span class="line"></span><br><span class="line"><span class="attr">system_images:</span></span><br><span class="line"><span class="attr">  kubernetes:</span> <span class="string">rancher/hyperkube:v1.14.3-rancher1</span></span><br><span class="line"><span class="attr">  etcd:</span> <span class="string">rancher/coreos-etcd:v3.2.24-rancher1</span></span><br><span class="line"><span class="attr">  alpine:</span> <span class="string">rancher/rke-tools:v0.1.28</span></span><br><span class="line"><span class="attr">  nginx_proxy:</span> <span class="string">rancher/rke-tools:v0.1.28</span></span><br><span class="line"><span class="attr">  cert_downloader:</span> <span class="string">rancher/rke-tools:v0.1.28</span></span><br><span class="line"><span class="attr">  kubernetes_services_sidecar:</span> <span class="string">rancher/rke-tools:v0.1.28</span></span><br><span class="line"><span class="attr">  kubedns:</span> <span class="string">rancher/k8s-dns-kube-dns:1.15.0</span></span><br><span class="line"><span class="attr">  dnsmasq:</span> <span class="string">rancher/k8s-dns-dnsmasq-nanny:1.15.0</span></span><br><span class="line"><span class="attr">  kubedns_sidecar:</span> <span class="string">rancher/k8s-dns-sidecar:1.15.0</span></span><br><span class="line"><span class="attr">  kubedns_autoscaler:</span> <span class="string">rancher/cluster-proportional-autoscaler:1.0.0</span></span><br><span class="line"><span class="attr">  coredns:</span> <span class="string">rancher/coredns-coredns:1.2.6</span></span><br><span class="line"><span class="attr">  coredns_autoscaler:</span> <span class="string">rancher/cluster-proportional-autoscaler:1.0.0</span></span><br><span class="line"><span class="attr">  flannel:</span> <span class="string">rancher/coreos-flannel:v0.10.0-rancher1</span></span><br><span class="line"><span class="attr">  flannel_cni:</span> <span class="string">rancher/flannel-cni:v0.3.0-rancher1</span></span><br><span class="line"><span class="attr">  calico_node:</span> <span class="string">rancher/calico-node:v3.4.0</span></span><br><span class="line"><span class="attr">  calico_cni:</span> <span class="string">rancher/calico-cni:v3.4.0</span></span><br><span class="line"><span class="attr">  calico_controllers:</span> <span class="string">""</span></span><br><span class="line"><span class="attr">  calico_ctl:</span> <span class="string">rancher/calico-ctl:v2.0.0</span></span><br><span class="line"><span class="attr">  canal_node:</span> <span class="string">rancher/calico-node:v3.4.0</span></span><br><span class="line"><span class="attr">  canal_cni:</span> <span class="string">rancher/calico-cni:v3.4.0</span></span><br><span class="line"><span class="attr">  canal_flannel:</span> <span class="string">rancher/coreos-flannel:v0.10.0</span></span><br><span class="line"><span class="attr">  weave_node:</span> <span class="string">weaveworks/weave-kube:2.5.0</span></span><br><span class="line"><span class="attr">  weave_cni:</span> <span class="string">weaveworks/weave-npc:2.5.0</span></span><br><span class="line"><span class="attr">  pod_infra_container:</span> <span class="string">rancher/pause:3.1</span></span><br><span class="line"><span class="attr">  ingress:</span> <span class="string">rancher/nginx-ingress-controller:0.21.0-rancher3</span></span><br><span class="line"><span class="attr">  ingress_backend:</span> <span class="string">rancher/nginx-ingress-controller-defaultbackend:1.4-rancher1</span></span><br><span class="line"><span class="attr">  metrics_server:</span> <span class="string">rancher/metrics-server:v0.3.1</span></span><br></pre></td></tr></table></figure>
-<ul>
-<li>也可以通过 rke config 命令生成配置文件 ，下面的网址可选部署的版本</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">https://hub.docker.com/r/rancher/hyperkube/tags    <span class="comment"># 例如：rancher/hyperkube:v1.15.0-rancher1</span></span><br></pre></td></tr></table></figure>
-<h3 id="拉取所需镜像"><a href="#拉取所需镜像" class="headerlink" title="拉取所需镜像"></a>拉取所需镜像</h3><p>由于镜像体积很大，我们可以提前在 rke 节点拉取，并在每台节点上导入</p>
-<ul>
-<li>在 cluster.yaml 内声明了 K8S 集群所需要的镜像，拉取这些镜像</li>
-</ul>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="string">awk</span> <span class="string">'$0~/.+:.+:/&#123;system("docker pull "$2"")&#125;'</span> <span class="string">cluster.yml</span></span><br></pre></td></tr></table></figure>
-<ul>
-<li>将本机下载好的所有 docker 镜像导出到一个文件中</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker image ls | awk <span class="string">'NR&gt;1&amp;&amp;$1!~"none"&#123;print $1":"$2&#125;'</span> | xargs docker image save -o all-image.tar.gz</span><br></pre></td></tr></table></figure>
-<ul>
-<li>将导出的镜像拷贝到每个节点，并导入</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">nodes=(</span><br><span class="line">    172.16.100.11</span><br><span class="line">    172.16.100.12</span><br><span class="line">    172.16.100.13</span><br><span class="line">    172.16.100.14</span><br><span class="line">    172.16.100.15</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> node <span class="keyword">in</span> <span class="variable">$&#123;nodes[*]&#125;</span> ;<span class="keyword">do</span></span><br><span class="line">    scp all-image.tar.gz <span class="variable">$&#123;node&#125;</span>:/tmp/</span><br><span class="line">    ssh root@<span class="variable">$&#123;node&#125;</span> <span class="string">'docker image load -i /tmp/all-image.tar.gz ; rm -rf /tmp/all-image.tar.gz'</span></span><br><span class="line"><span class="keyword">done</span></span><br></pre></td></tr></table></figure>
-<h3 id="RKE部署集群-2"><a href="#RKE部署集群-2" class="headerlink" title="RKE部署集群"></a>RKE部署集群</h3><ul>
-<li>部署集群</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">rke up --config cluster.yaml</span><br></pre></td></tr></table></figure>
-<ul>
-<li>部署过程遇到问题，可以删除已经做的改动</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">rke remove --config cluster.yaml</span><br></pre></td></tr></table></figure>
-<ul>
-<li>保存重要凭证</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">cluster.yml                # RKE集群配置文件。</span><br><span class="line">kube_config_cluster.yml    # 群集的Kubeconfig文件，此文件包含完全访问群集的凭据。</span><br><span class="line">cluster.rkestate           # Kubernetes 群集状态文件，此文件包含完全访问群集的凭据。</span><br></pre></td></tr></table></figure>
-<h3 id="访问K8S集群"><a href="#访问K8S集群" class="headerlink" title="访问K8S集群"></a>访问K8S集群</h3><ul>
-<li>下载安装 kubectl（翻墙）</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl</span><br></pre></td></tr></table></figure>
-<ul>
-<li>配置集群访问凭证</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">mkdir -p ~/.kube</span><br><span class="line">cp kube_config_cluster.yaml  ~/.kube/config</span><br></pre></td></tr></table></figure>
-<ul>
-<li>查看集群配置</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ kubectl get nodes</span><br><span class="line">NAME             STATUS    ROLES               AGE       VERSION</span><br><span class="line">172.16.100.101   Ready     controlplane,etcd   99m       v1.13.5</span><br><span class="line">172.16.100.102   Ready     controlplane,etcd   99m       v1.13.5</span><br><span class="line">172.16.100.103   Ready     worker              99m       v1.13.5</span><br><span class="line">172.16.100.104   Ready     worker              99m       v1.13.5</span><br><span class="line">172.16.100.105   Ready     worker              99m       v1.13.5</span><br></pre></td></tr></table></figure>
 <h1 id="入门命令"><a href="#入门命令" class="headerlink" title="入门命令"></a>入门命令</h1><h2 id="kubectl"><a href="#kubectl" class="headerlink" title="kubectl"></a>kubectl</h2><p>kubectl 是 apiserver 的客户端程序，这个客户端程序是通过连接 master 节点上的 apiserver ，实现各种 k8s 对象的增删改查等基本操作，在 k8s 可被管理的对象有很多个</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">基本命令 (初级):</span><br><span class="line">  create         从文件或标准输入创建资源</span><br><span class="line">  expose         获取一个复制控制器，服务，部署或者暴露一个 POD 将其作为新的 Kubernetes 服务公开</span><br><span class="line">  run            创建并运行特定的镜像，创建使用 deployment 或 job 管理的容器</span><br><span class="line">  <span class="built_in">set</span>            设置对象的特定功能</span><br><span class="line"></span><br><span class="line">基本命令 (中级):</span><br><span class="line">  explain        文档或者资源</span><br><span class="line">  get            显示一个或多个资源</span><br><span class="line">  edit           编辑服务器上的资源</span><br><span class="line">  delete         按文件名，标准输入，资源和名称或资源和标签选择器删除资源</span><br><span class="line"></span><br><span class="line">部署命令:</span><br><span class="line">  rollout        管理资源的部署</span><br><span class="line">  scale          为部署设置新大小，ReplicaSet, Replication Controller, Job</span><br><span class="line">  autoscale      自动扩展一个部署, ReplicaSet, 或者 ReplicationController</span><br><span class="line"></span><br><span class="line">群集管理命令:</span><br><span class="line">  certificate    修改证书资源.</span><br><span class="line">  cluster-info   显示群集信息</span><br><span class="line">  top            显示资源（CPU /内存/存储）使用情况。</span><br><span class="line">  cordon         将节点标记为不可调度</span><br><span class="line">  uncordon       将节点标记为可调度</span><br><span class="line">  drain          设定 node 进入维护模式</span><br><span class="line">  taint          更新一个或多个节点上的污点</span><br><span class="line"></span><br><span class="line">故障排除和调试命令:</span><br><span class="line">  describe       显示特定资源或资源组的详细信息</span><br><span class="line">  logs           在容器中打印容器的日志</span><br><span class="line">  attach         附加到正在运行的容器</span><br><span class="line">  <span class="built_in">exec</span>           在容器中执行命令</span><br><span class="line">  port-forward   将一个或多个本地端口转发到 pod</span><br><span class="line">  proxy          运行代理到 Kubernetes API 服务器</span><br><span class="line">  cp             将文件和目录复制到容器，和从容器复制，跨容器复制文件</span><br><span class="line">  auth           检查授权</span><br><span class="line"></span><br><span class="line">高级命令:</span><br><span class="line">  diff           针对将要应用的版本的 Diff 实时版本</span><br><span class="line">  apply          通过文件名或标准输入将配置应用于资源</span><br><span class="line">  patch          使用策略合并补丁更新资源的字段</span><br><span class="line">  replace        用文件名或标准输入替换资源</span><br><span class="line">  <span class="built_in">wait</span>           实验阶段命令：在一个或多个资源上等待特定条件，定义一个触发器</span><br><span class="line">  convert        在不同的API版本之间转换配置文件</span><br><span class="line">  kustomize      从目录或远程 URL 构建 kustomization 目标</span><br><span class="line"></span><br><span class="line">设置命令:</span><br><span class="line">  label          更新资源上的标签</span><br><span class="line">  annotate       更新资源上的注释</span><br><span class="line">  completion     命令补全相关功能</span><br><span class="line"></span><br><span class="line">其他命令:</span><br><span class="line">  api-resources  在服务器上打印支持的API资源</span><br><span class="line">  api-versions   以 <span class="string">"group/version"</span> 的形式在服务器上打印支持的API版本</span><br><span class="line">  config         修改 kubeconfig 文件</span><br><span class="line">  plugin         提供与插件交互的实用程序</span><br><span class="line">  version        打印客户端和服务器版本信息</span><br></pre></td></tr></table></figure>
 <h2 id="run"><a href="#run" class="headerlink" title="run"></a>run</h2><ul>
@@ -910,7 +583,7 @@
 <h3 id="模拟-service-被删除"><a href="#模拟-service-被删除" class="headerlink" title="模拟 service 被删除"></a>模拟 service 被删除</h3><ul>
 <li>当我们删除 service 并且重新建立一个 service 再次查看 service 的地址已经发生变化了</li>
 </ul>
-<p>​<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl delete service nginx</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl delete service nginx</span><br></pre></td></tr></table></figure>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl expose deployment nginx-deploy --name=nginx --port=80 --target-port=80 --protocol=TCP</span><br></pre></td></tr></table></figure>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl get service</span><br></pre></td></tr></table></figure>
 <ul>
@@ -944,7 +617,7 @@
 <ul>
 <li>显示指定的标签的值，下面显示了两个标签</li>
 </ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl get pods --show-labels -L run,pod-template-hash</span><br></pre></td></tr></table></figure>
+<p>​<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl get pods --show-labels -L run,pod-template-hash</span><br></pre></td></tr></table></figure></p>
 <ul>
 <li>为指定的 POD 打标签，为 client 这个 POD 打上一个 release 标签，其值为 canary</li>
 </ul>
@@ -1005,7 +678,11 @@
 </ul>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl logs pod-demo busybox</span><br></pre></td></tr></table></figure>
 <h2 id="连入-POD-容器"><a href="#连入-POD-容器" class="headerlink" title="连入 POD 容器"></a>连入 POD 容器</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl <span class="built_in">exec</span> -it pod-demo -c myapp -- /bin/sh</span><br></pre></td></tr></table></figure>
-<h2 id="在容器内执行命令"><a href="#在容器内执行命令" class="headerlink" title="在容器内执行命令"></a>在容器内执行命令</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl <span class="built_in">exec</span> -it myapp-deploy-5fdb5f69f-mg9b6 top</span><br><span class="line">kubectl <span class="built_in">exec</span> -it myapp-deploy-5fdb5f69f-mg9b6 -- sh -c <span class="string">'TEST="this is a test" ; echo $TEST'</span></span><br></pre></td></tr></table></figure>
+<h2 id="在容器内执行命令"><a href="#在容器内执行命令" class="headerlink" title="在容器内执行命令"></a>在容器内执行命令</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl <span class="built_in">exec</span> myapp-deploy-5fdb5f69f-mg9b6 top</span><br><span class="line">kubectl <span class="built_in">exec</span> myapp-deploy-5fdb5f69f-mg9b6 -- sh -c <span class="string">'TEST="this is a test" ; echo $TEST'</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>执行复杂命令</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">commands=<span class="string">'</span></span><br><span class="line"><span class="string">export CORE_PEER_LOCALMSPID=Org1MSP</span></span><br><span class="line"><span class="string">export CORE_PEER_ADDRESS=peer0-org1:7051</span></span><br><span class="line"><span class="string">export CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/fabric/msp</span></span><br><span class="line"><span class="string">export CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/msp/tlscacerts/tlsca.org1.qloudchain.com-cert.pem</span></span><br><span class="line"><span class="string">peer channel join --blockpath resources/channel-artifacts/channel.block</span></span><br><span class="line"><span class="string">'</span></span><br><span class="line"></span><br><span class="line">kubectl -n baas <span class="built_in">exec</span> cli-org1-6c5fdf6d97-nh4r4 -- bash -c <span class="string">"<span class="variable">$commands</span>"</span></span><br></pre></td></tr></table></figure>
 <h2 id="查看一个POD的镜像"><a href="#查看一个POD的镜像" class="headerlink" title="查看一个POD的镜像"></a>查看一个POD的镜像</h2><ul>
 <li>参考</li>
 </ul>
@@ -1019,7 +696,11 @@
 </ul>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl get pods nfs-client-provisioner-75bd696897-hm7xf -o jsonpath=<span class="string">'&#123;range .spec.containers[*]&#125;&#123;.image&#125;&#123;"\n"&#125;&#123;end&#125;'</span></span><br></pre></td></tr></table></figure>
 <h2 id="查看一个节点污点"><a href="#查看一个节点污点" class="headerlink" title="查看一个节点污点"></a>查看一个节点污点</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl get nodes 172.16.100.101 -o jsonpath=<span class="string">'&#123;.spec.taints&#125;'</span></span><br></pre></td></tr></table></figure>
-
+<h2 id="过滤显示结果"><a href="#过滤显示结果" class="headerlink" title="过滤显示结果"></a>过滤显示结果</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl get pods --field-selector status.phase=Running --show-labels --selector app=myapp</span><br></pre></td></tr></table></figure>
+<h2 id="并非所有资源都在命名空间"><a href="#并非所有资源都在命名空间" class="headerlink" title="并非所有资源都在命名空间"></a>并非所有资源都在命名空间</h2><p>大多数 kubernetes 资源（例如 Pod、服务、副本控制器等）都位于某些命名空间中。 但是命名空间资源本身并不在命名空间中。</p>
+<p>而且底层资源，例如<a href="https://v1-12.docs.kubernetes.io/docs/admin/node" target="_blank" rel="noopener">节点</a>和持久化卷不属于任何命名空间。</p>
+<p>查看哪些 Kubernetes 资源在命名空间中，哪些不在命名空间中：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> In a namespace</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> kubectl api-resources --namespaced=<span class="literal">true</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> Not <span class="keyword">in</span> a namespace</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> kubectl api-resources --namespaced=<span class="literal">false</span></span></span><br></pre></td></tr></table></figure>
       
     </div>
     
@@ -1043,8 +724,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/03/20/personal/Hexo/" rel="next" title="Hexo 博客优化">
-                <i class="fa fa-chevron-left"></i> Hexo 博客优化
+              <a href="/2019/03/29/kubernetes/kubernetes对象介绍/" rel="next" title="Kubernetes对象介绍">
+                <i class="fa fa-chevron-left"></i> Kubernetes对象介绍
               </a>
             
           </div>
@@ -1053,8 +734,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2019/03/29/kubernetes/kubernetes对象介绍/" rel="prev" title="Kubernetes对象介绍">
-                Kubernetes对象介绍 <i class="fa fa-chevron-right"></i>
+              <a href="/2019/04/11/Linux/etcd/" rel="prev" title="etcd 集群搭建">
+                etcd 集群搭建 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -1139,7 +820,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">70</span>
+                  <span class="site-state-item-count">69</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -1200,7 +881,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Kubernetes简介"><span class="nav-number">1.</span> <span class="nav-text">Kubernetes简介</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#简介"><span class="nav-number">1.1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Master包含组件"><span class="nav-number">1.2.</span> <span class="nav-text">Master包含组件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Nodes包含组件"><span class="nav-number">1.3.</span> <span class="nav-text">Nodes包含组件</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#组件和附件"><span class="nav-number">2.</span> <span class="nav-text">组件和附件</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Controller"><span class="nav-number">2.1.</span> <span class="nav-text">Controller</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Service"><span class="nav-number">2.2.</span> <span class="nav-text">Service</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#网络模型"><span class="nav-number">2.3.</span> <span class="nav-text">网络模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#kube-proxy"><span class="nav-number">2.4.</span> <span class="nav-text">kube-proxy</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#etcd"><span class="nav-number">2.5.</span> <span class="nav-text">etcd</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#flanel"><span class="nav-number">2.6.</span> <span class="nav-text">flanel</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Kubeadm-部署集群"><span class="nav-number">3.</span> <span class="nav-text">Kubeadm 部署集群</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#部署前准备"><span class="nav-number">3.1.</span> <span class="nav-text">部署前准备</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#关闭-firewalld-和-selinux"><span class="nav-number">3.1.1.</span> <span class="nav-text">关闭 firewalld 和 selinux</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#加载-ipvs-内核模块"><span class="nav-number">3.1.2.</span> <span class="nav-text">加载 ipvs 内核模块</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#下载-Docker-和-K8S"><span class="nav-number">3.1.3.</span> <span class="nav-text">下载 Docker 和 K8S</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#设置内核及-K8S-参数"><span class="nav-number">3.1.4.</span> <span class="nav-text">设置内核及 K8S 参数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#部署-Master"><span class="nav-number">3.2.</span> <span class="nav-text">部署 Master</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#提前拉取镜像"><span class="nav-number">3.2.1.</span> <span class="nav-text">提前拉取镜像</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#初始化Master"><span class="nav-number">3.2.2.</span> <span class="nav-text">初始化Master</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#部署-Node"><span class="nav-number">3.3.</span> <span class="nav-text">部署 Node</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#加入集群"><span class="nav-number">3.3.1.</span> <span class="nav-text">加入集群</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查看进度"><span class="nav-number">3.3.2.</span> <span class="nav-text">查看进度</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#下载太慢"><span class="nav-number">3.3.3.</span> <span class="nav-text">下载太慢</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#RKE部署集群"><span class="nav-number">4.</span> <span class="nav-text">RKE部署集群</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#集群准备工作"><span class="nav-number">4.1.</span> <span class="nav-text">集群准备工作</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#安装Docker"><span class="nav-number">4.1.1.</span> <span class="nav-text">安装Docker</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#创建docker用户"><span class="nav-number">4.1.2.</span> <span class="nav-text">创建docker用户</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#启动ipvs支持"><span class="nav-number">4.1.3.</span> <span class="nav-text">启动ipvs支持</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#设置密钥连接"><span class="nav-number">4.1.4.</span> <span class="nav-text">设置密钥连接</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RKE部署集群-1"><span class="nav-number">4.2.</span> <span class="nav-text">RKE部署集群</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#下载安装RKE"><span class="nav-number">4.2.1.</span> <span class="nav-text">下载安装RKE</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#创建集群配置"><span class="nav-number">4.2.2.</span> <span class="nav-text">创建集群配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#拉取所需镜像"><span class="nav-number">4.2.3.</span> <span class="nav-text">拉取所需镜像</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#RKE部署集群-2"><span class="nav-number">4.2.4.</span> <span class="nav-text">RKE部署集群</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#访问K8S集群"><span class="nav-number">4.2.5.</span> <span class="nav-text">访问K8S集群</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#入门命令"><span class="nav-number">5.</span> <span class="nav-text">入门命令</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#kubectl"><span class="nav-number">5.1.</span> <span class="nav-text">kubectl</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#run"><span class="nav-number">5.2.</span> <span class="nav-text">run</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#run示例"><span class="nav-number">5.3.</span> <span class="nav-text">run示例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#expose"><span class="nav-number">5.4.</span> <span class="nav-text">expose</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#coredns"><span class="nav-number">5.5.</span> <span class="nav-text">coredns</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#模拟-POD-被删除"><span class="nav-number">5.5.1.</span> <span class="nav-text">模拟 POD 被删除</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#模拟-service-被删除"><span class="nav-number">5.5.2.</span> <span class="nav-text">模拟 service 被删除</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#labels"><span class="nav-number">5.6.</span> <span class="nav-text">labels</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#动态扩容"><span class="nav-number">5.7.</span> <span class="nav-text">动态扩容</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#滚动升级"><span class="nav-number">5.8.</span> <span class="nav-text">滚动升级</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#集群外访问"><span class="nav-number">5.9.</span> <span class="nav-text">集群外访问</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#排查日志"><span class="nav-number">5.10.</span> <span class="nav-text">排查日志</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#连入-POD-容器"><span class="nav-number">5.11.</span> <span class="nav-text">连入 POD 容器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#在容器内执行命令"><span class="nav-number">5.12.</span> <span class="nav-text">在容器内执行命令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查看一个POD的镜像"><span class="nav-number">5.13.</span> <span class="nav-text">查看一个POD的镜像</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查看一个节点污点"><span class="nav-number">5.14.</span> <span class="nav-text">查看一个节点污点</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Kubernetes简介"><span class="nav-number">1.</span> <span class="nav-text">Kubernetes简介</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#简介"><span class="nav-number">1.1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Master包含组件"><span class="nav-number">1.2.</span> <span class="nav-text">Master包含组件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Nodes包含组件"><span class="nav-number">1.3.</span> <span class="nav-text">Nodes包含组件</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#组件和附件"><span class="nav-number">2.</span> <span class="nav-text">组件和附件</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Controller"><span class="nav-number">2.1.</span> <span class="nav-text">Controller</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Service"><span class="nav-number">2.2.</span> <span class="nav-text">Service</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#网络模型"><span class="nav-number">2.3.</span> <span class="nav-text">网络模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#kube-proxy"><span class="nav-number">2.4.</span> <span class="nav-text">kube-proxy</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#etcd"><span class="nav-number">2.5.</span> <span class="nav-text">etcd</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#flanel"><span class="nav-number">2.6.</span> <span class="nav-text">flanel</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#入门命令"><span class="nav-number">3.</span> <span class="nav-text">入门命令</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#kubectl"><span class="nav-number">3.1.</span> <span class="nav-text">kubectl</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#run"><span class="nav-number">3.2.</span> <span class="nav-text">run</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#run示例"><span class="nav-number">3.3.</span> <span class="nav-text">run示例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#expose"><span class="nav-number">3.4.</span> <span class="nav-text">expose</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#coredns"><span class="nav-number">3.5.</span> <span class="nav-text">coredns</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#模拟-POD-被删除"><span class="nav-number">3.5.1.</span> <span class="nav-text">模拟 POD 被删除</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#模拟-service-被删除"><span class="nav-number">3.5.2.</span> <span class="nav-text">模拟 service 被删除</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#labels"><span class="nav-number">3.6.</span> <span class="nav-text">labels</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#动态扩容"><span class="nav-number">3.7.</span> <span class="nav-text">动态扩容</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#滚动升级"><span class="nav-number">3.8.</span> <span class="nav-text">滚动升级</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#集群外访问"><span class="nav-number">3.9.</span> <span class="nav-text">集群外访问</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#排查日志"><span class="nav-number">3.10.</span> <span class="nav-text">排查日志</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#连入-POD-容器"><span class="nav-number">3.11.</span> <span class="nav-text">连入 POD 容器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#在容器内执行命令"><span class="nav-number">3.12.</span> <span class="nav-text">在容器内执行命令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查看一个POD的镜像"><span class="nav-number">3.13.</span> <span class="nav-text">查看一个POD的镜像</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查看一个节点污点"><span class="nav-number">3.14.</span> <span class="nav-text">查看一个节点污点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#过滤显示结果"><span class="nav-number">3.15.</span> <span class="nav-text">过滤显示结果</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#并非所有资源都在命名空间"><span class="nav-number">3.16.</span> <span class="nav-text">并非所有资源都在命名空间</span></a></li></ol></li></ol></div>
             
 
           </div>
