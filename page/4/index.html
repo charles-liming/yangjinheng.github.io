@@ -250,6 +250,16 @@
         </li>
       
         
+        <li class="menu-item menu-item-golang">
+          <a href="/categories/golang/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br>
+            
+            Golang
+          </a>
+        </li>
+      
+        
         <li class="menu-item menu-item-个人日志">
           <a href="/categories/个人日志/" rel="section">
             
@@ -291,7 +301,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://yangjinheng.github.io/2019/05/02/python/webshell和paramiko/">
+    <link itemprop="mainEntityOfPage" href="https://yangjinheng.github.io/2019/06/10/go/math/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Jin Heng">
@@ -310,7 +320,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2019/05/02/python/webshell和paramiko/" itemprop="url">webshell和paramiko</a></h1>
+                <a class="post-title-link" href="/2019/06/10/go/math/" itemprop="url">go 标准库之 math</a></h1>
         
 
         <div class="post-meta">
@@ -322,8 +332,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-05-02T00:00:00+08:00">
-                2019-05-02
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-06-10T00:00:00+08:00">
+                2019-06-10
               </time>
             
 
@@ -345,8 +355,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Python/" itemprop="url" rel="index">
-                    <span itemprop="name">Python</span>
+                  <a href="/categories/golang/" itemprop="url" rel="index">
+                    <span itemprop="name">golang</span>
                   </a>
                 </span>
 
@@ -384,108 +394,39 @@
       
         
           
-            <h1 id="SSHClient"><a href="#SSHClient" class="headerlink" title="SSHClient"></a>SSHClient</h1><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SSHClient</span> <span class="params">(ClosingContextManager)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span></span><br><span class="line">        self._system_host_keys = HostKeys()</span><br><span class="line">        self._host_keys = HostKeys()</span><br><span class="line">        self._host_keys_filename = <span class="keyword">None</span></span><br><span class="line">        self._log_channel = <span class="keyword">None</span></span><br><span class="line">        self._policy = RejectPolicy()</span><br><span class="line">        self._transport = <span class="keyword">None</span></span><br><span class="line">        self._agent = <span class="keyword">None</span></span><br></pre></td></tr></table></figure>
-<p>SSH 服务器会话的一种高级表示形式。这个类封装了 <code>.Transport</code>, <code>.Channel</code> 和 <code>.SFTPClient</code>，以处理验证和打开通道的大部分方面。一个典型的用例是：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">client = SSHClient()</span><br><span class="line">client.load_system_host_keys()</span><br><span class="line">client.connect(&apos;ssh.example.com&apos;)</span><br><span class="line">stdin, stdout, stderr = client.exec_command(&apos;ls -l&apos;)</span><br></pre></td></tr></table></figure>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">您可以传递用于身份验证和服务器主机密钥检查的显式重写。默认机制是尝试使用本地密钥文件或 SSH 代理(如果正在运行)。此类的实例可用作上下文管理器。</span><br></pre></td></tr></table></figure>
-<h2 id="load-system-host-keys"><a href="#load-system-host-keys" class="headerlink" title="load_system_host_keys"></a>load_system_host_keys</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">load_system_host_keys</span><span class="params">(self, filename=None)</span>:</span></span><br></pre></td></tr></table></figure>
-<p>从系统(只读)文件加载主机密钥。使用此方法读取的主机密钥不会被 Save_host_keys 保存。此方法可多次调用。</p>
-<p>每个新的主机密钥集将与现有集合并(如果有冲突，则新的替换旧的)。</p>
-<p>如果将 filename 保留为 None，将尝试从 OpenSSH 使用的用户的本地 known hosts 文件中读取密钥，如果无法读取该文件，则不会引发任何例外。这可能只适用于POSIX。</p>
-<p>参数：filename 要读取的文件名，或 None</p>
-<p>异常引发：IOError，如果提供了文件名，但无法读取该文件</p>
-<h2 id="load-host-keys"><a href="#load-host-keys" class="headerlink" title="load_host_keys"></a>load_host_keys</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">load_host_keys</span><span class="params">(self, filename)</span>:</span></span><br></pre></td></tr></table></figure>
-<p>从本地主机密钥文件加载主机密钥。</p>
-<p>使用此方法读取的主机密钥将在通过 load_system_host_keys 加载的键之后进行检查，但将由 Save_host_keys 保存(这样就可以修改它们)。</p>
-<p>缺少的主机密钥策略 .AutoAddPolicy 在连接到先前未知的服务器时将密钥添加到此集合并保存它们。此方法可多次调用。</p>
-<p>每个新的主机密钥集将与现有集合并(如果有冲突，则新的替换旧的)。自动保存时，使用最后一个主机名。</p>
-<p>参数：filename 要读取的文件名</p>
-<p>异常引发：IOError，如果提供了文件名，但无法读取该文件</p>
-<h2 id="save-host-keys"><a href="#save-host-keys" class="headerlink" title="save_host_keys"></a>save_host_keys</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">save_host_keys</span><span class="params">(self, filename)</span>:</span></span><br></pre></td></tr></table></figure>
-<p>将主机密钥保存回文件。</p>
-<p>只有加载了 load_host_keys (加上任何直接添加的) 的主机密钥才会被保存-而不是加载了 load_system_host_keys 的任何主机密钥。</p>
-<p>参数：filename 保存到</p>
-<p>异常引发：IOError 如果无法写入文件</p>
-<h2 id="get-host-keys"><a href="#get-host-keys" class="headerlink" title="get_host_keys"></a>get_host_keys</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_host_keys</span><span class="params">(self)</span>:</span></span><br></pre></td></tr></table></figure>
-<p>获取本地的 .hostkeys 对象。这可用于检查本地主机密钥或更改它们。</p>
-<p>返回值：作为 .host keys 对象的本地主机密钥。</p>
-<h2 id="set-log-channel"><a href="#set-log-channel" class="headerlink" title="set_log_channel"></a>set_log_channel</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">set_log_channel</span><span class="params">(self, name)</span>:</span></span><br></pre></td></tr></table></figure>
-<p>设置日志记录通道。</p>
-<p>默认的是 Paramiko.transport，但是它可以设置为您想要的任何东西。</p>
-<p>参数：name 用于日志记录的新通道名称</p>
-<h2 id="set-missing-host-key-policy"><a href="#set-missing-host-key-policy" class="headerlink" title="set_missing_host_key_policy"></a>set_missing_host_key_policy</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">set_missing_host_key_policy</span><span class="params">(self, policy)</span>:</span></span><br></pre></td></tr></table></figure>
-<p>将策略设置为在没有已知主机密钥的情况下连接到服务器时使用。</p>
-<p>详细的说:</p>
-<p>Policy 是一个 policy class (或其实例)，即 .MissingHostKeyPolicy 的一些子类，如 .RejectPolicy (默认值)、.AutoAddPolicy .WarningPolicy 或用户创建的子类。</p>
-<p>当 host key 出现在客户端对象缓存的主机密钥结构中(由 load_system_host_keys 和 / 或 load_host_keys 操纵的主机密钥)时，主机密钥是已知的。</p>
-<p>参数：.MissingHostKeyPolicy policy 从先前未知的服务器接收主机密钥时要使用的策略</p>
-<h2 id="families-and-addresses"><a href="#families-and-addresses" class="headerlink" title="_families_and_addresses"></a>_families_and_addresses</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">_families_and_addresses</span><span class="params">(self, hostname, port)</span>:</span></span><br></pre></td></tr></table></figure>
-<p>生成准备连接的：地址家族 + IP + 端口</p>
-<p>参数：hostname 要连接到的服务器</p>
-<p>参数：port 要连接到的服务器端口</p>
-<p>返回值：yield 可迭代的 (家族，地址) 的元组</p>
-<h2 id="connect"><a href="#connect" class="headerlink" title="connect"></a>connect</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">connect</span><span class="params">(self, hostname, port=SSH_PORT, username=None, password=None, pkey=None, </span></span></span><br><span class="line"><span class="function"><span class="params">            key_filename=None, timeout=None, allow_agent=True, look_for_keys=True, compress=False, </span></span></span><br><span class="line"><span class="function"><span class="params">            sock=None, gss_auth=False, gss_kex=False, gss_deleg_creds=True, gss_host=None,</span></span></span><br><span class="line"><span class="function"><span class="params">            banner_timeout=None, auth_timeout=None, gss_trust_dns=True, passphrase=None,)</span>:</span></span><br></pre></td></tr></table></figure>
-<p>连接到SSH服务器并对其进行身份验证。服务器的主机密钥将根据系统主机密钥(参见 load_system_host_keys)和任何本地主机密钥(load_host_keys)进行检查。<br>如果在这两组主机密钥中都没有找到服务器的主机名，则使用丢失的主机密钥策略(请参阅set_missing_host_key_policy)。<br>默认策略是拒绝密钥并引发一个 .sshexception。</p>
-<p>身份验证按以下优先顺序进行:</p>
-<ol>
-<li><p>传入的 pkey 或 key_filename (如果有的话)<br> key_filename 可以包含 OpenSSH 公共证书路径和常规私有密钥路径;<br> 当找到以 cert.pub 结尾的文件时，假定它们与私钥匹配，并且将加载这两个组件。(私钥本身不需要在 key_filename 中列出，只需要证书即可。)</p>
-</li>
-<li><p>任何我们可以通过SSH代理找到的密钥</p>
-</li>
-<li><p>可在 ~/.ssh/ 中发现的任何 id_rsa、id_dsa 或 id_ecdsa 密钥<br> 当 OpenSSH-style 的公共证书与现有的此类私钥匹配时(例如，一个拥有 id_rsa 和 id_rsa-cert.pub)，证书将与私钥一起加载，并用于身份验证。</p>
-</li>
-<li><p>如果给定密码，则使用普通用户名/密码验证</p>
-</li>
-</ol>
-<p>如果私钥需要密码来解锁，并且传入了密码，则该密码将用于尝试解锁密钥。</p>
-<p>参数  hostname:        字符串   要连接到的服务器<br>参数  port:            整形     要连接到的服务器端口<br>参数  username:        字符串   进行身份验证的用户名(默认为当前本地用户名)<br>参数  password:        字符串   用于密码认证; 如果没有提供 passphrase ，也可用于私钥解密。<br>参数  passphrase:      字符串   用于解密私钥。<br>参数  pkey:            .PKey   用于身份验证的可选私钥<br>参数  key_filename:    字符串   要尝试验证的可选私钥和/或证书的文件名或文件名列表<br>参数  timeout:         浮点数   TCP连接的可选超时(以秒为单位)<br>参数  allow_agent:     布尔值   设置为 False 以禁用到 SSH 代理的连接<br>参数  look_for_keys:   布尔值   设置为 False 以禁用在 ~/.ssh/ 中搜索可发现的私钥文件<br>参数  compress:        布尔值   设置为 True 打开压缩<br>参数  sock:            socket  一个打开的套接字或类似套接字的对象(如 .Channel)，用于与目标主机通信<br>参数  gss_auth:        布尔值  如果您想使用 GSS-API 身份验证，请使用 True<br>参数  gss_kex:         布尔值  执行 GSS-API 密钥交换和用户身份验证<br>参数  gss_deleg_creds: 布尔值  是否委托 GSS-API 客户端凭据<br>参数  gss_host:        字符串  kerberos 数据库中的目标名称。默认值:主机名<br>参数  gss_trust_dns:   布尔值  指示是否信任 DNS 将连接到的主机的名称安全地规范化(默认为 True)。<br>参数  banner_timeout:  浮点数  可选超时(以秒为单位)，以等待出现 SSH banner。<br>参数  auth_timeout:    浮点数  等待身份验证响应的可选超时(以秒为单位)。</p>
-<h2 id="close"><a href="#close" class="headerlink" title="close"></a>close</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">close</span><span class="params">(self)</span>:</span></span><br></pre></td></tr></table></figure>
-<p>关闭这个 SSHClient 及其底层 . transport。</p>
-<p>警告::</p>
-<p>在某些情况下，如果不这样做，可能会导致 Python 解释器在关闭时挂起(通常是由于竞态条件)。</p>
-<p>当您使用完客户端对象时，最好是 close 它们，而不是依赖于垃圾收集。</p>
-<h2 id="exec-command"><a href="#exec-command" class="headerlink" title="exec_command"></a>exec_command</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">exec_command</span><span class="params">(self, command, bufsize=<span class="number">-1</span>, timeout=None, get_pty=False, environment=None,)</span>:</span></span><br></pre></td></tr></table></figure>
-<p>在 SSH 服务器上执行命令。打开一个新的 .Channel，并执行请求的命令。命令的输入和输出流作为 Python file-like 对象返回，这些对象表示 stdin、stdout 和 stderr。</p>
-<p>参数 command     字符串: 要执行的命令</p>
-<p>参数 bufsize     整形:   解释方式与 Python 中内置的 file() 函数相同。</p>
-<p>参数 timeout     整形:   设置命令的通道超时。见 .Channel.settimeout</p>
-<p>参数 environment 字典:   shell 环境变量的 dict，将合并到远程命令在其中执行的默认环境中。</p>
-<p>​                         警告：服务器可能静默地拒绝某些环境变量；有关详细信息，请参阅 .channel.set_Environment_variable 的警告。</p>
-<p>返回值：执行命令结果的三元组 stdin、stdout 和 stderr</p>
-<p>异常引发 .SSHException – 如果服务器无法执行该命令</p>
-<h2 id="invoke-shell"><a href="#invoke-shell" class="headerlink" title="invoke_shell"></a>invoke_shell</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">invoke_shell</span><span class="params">(self, term=<span class="string">'vt100'</span>, width=<span class="number">80</span>, height=<span class="number">24</span>, width_pixels=<span class="number">0</span>, height_pixels=<span class="number">0</span>, environment=None)</span>:</span></span><br></pre></td></tr></table></figure>
-<p>在 SSH 服务器上启动交互式shell会话。打开一个新的 .Channel 并使用请求的终端类型和大小连接到伪终端。</p>
-<p>参数：term 要模拟的终端类型（例如，vt100）</p>
-<p>参数：width 终端窗口的宽度（以字符为单位）</p>
-<p>参数：height 终端窗口的高度（以字符为单位）</p>
-<p>参数：width_pixels 终端窗口的宽度（以像素为单位）</p>
-<p>参数：height_pixels 终端窗口的高度（以像素为单位）</p>
-<p>参数：environment 命令的环境</p>
-<p>返回值：连接到远程 shell 的新 .Channel</p>
-<p>异常引发：.SSHException  - 如果服务器无法调用shell</p>
-<h2 id="open-sftp"><a href="#open-sftp" class="headerlink" title="open_sftp"></a>open_sftp</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">open_sftp</span><span class="params">(self)</span>:</span></span><br></pre></td></tr></table></figure>
-<p>在SSH服务器上打开一个SFTP会话。</p>
-<p>返回值：一个新的 .SFTPClient 会话对象</p>
-<h2 id="get-transport"><a href="#get-transport" class="headerlink" title="get_transport"></a>get_transport</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_transport</span><span class="params">(self)</span>:</span></span><br></pre></td></tr></table></figure>
-<p>返回此 SSH 连接的基础 <code>.Transport</code> 对象。</p>
-<p>这可以用于执行低级任务，例如打开特定类型的通道。</p>
-<h2 id="key-from-filepath"><a href="#key-from-filepath" class="headerlink" title="_key_from_filepath"></a>_key_from_filepath</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">_key_from_filepath</span><span class="params">(self, filename, klass, password)</span>:</span></span><br></pre></td></tr></table></figure>
-<p>尝试从给定的字符串路径 filename ：</p>
-<p>尝试从给定的字符串路径文件名推导出 .pkey</p>
-<ol>
-<li><p>如果 filename 看来是证书，则加载匹配的私钥。</p>
-</li>
-<li><p>否则，文件名将被假定为私钥，如果存在匹配的公共证书，则将加载它。</p>
-</li>
-</ol>
-<h2 id="auth"><a href="#auth" class="headerlink" title="_auth"></a>_auth</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">_auth</span><span class="params">(self, username, password, pkey, key_filenames, allow_agent, </span></span></span><br><span class="line"><span class="function"><span class="params">        look_for_keys, gss_auth, gss_kex, gss_deleg_creds, gss_host, passphrase,)</span>:</span></span><br></pre></td></tr></table></figure>
-<p>按以下顺序尝试：</p>
-<ul>
-<li>密钥传入，如果有传入。</li>
-<li>可以通过SSH代理找到任何密钥(如果允许的话)。</li>
-<li>在 ~/.ssh/（如果允许）中可发现的任何 id_rsa、id_dsa 或 id_ecdsa 密钥。</li>
-<li>如果提供了密码，请使用普通用户名/密码。<br>(可能需要密码来解锁私钥(如果 passphrase 也没有给出]，或者用于双因素身份验证(这是必需的)。</li>
+            <h2 id="常量"><a href="#常量" class="headerlink" title="常量"></a>常量</h2><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> (</span><br><span class="line">	E   = <span class="number">2.71828182845904523536028747135266249775724709369995957496696763</span></span><br><span class="line">	Pi  = <span class="number">3.14159265358979323846264338327950288419716939937510582097494459</span></span><br><span class="line">	Phi = <span class="number">1.61803398874989484820458683436563811772030917980576286213544862</span></span><br><span class="line"></span><br><span class="line">	Sqrt2   = <span class="number">1.41421356237309504880168872420969807856967187537694807317667974</span></span><br><span class="line">	SqrtE   = <span class="number">1.64872127070012814684865078781416357165377610071014801157507931</span></span><br><span class="line">	SqrtPi  = <span class="number">1.77245385090551602729816748334114518279754945612238712821380779</span></span><br><span class="line">	SqrtPhi = <span class="number">1.27201964951406896425242246173749149171560804184009624861664038</span></span><br><span class="line"></span><br><span class="line">	Ln2    = <span class="number">0.693147180559945309417232121458176568075500134360255254120680009</span></span><br><span class="line">	Log2E  = <span class="number">1</span> / Ln2</span><br><span class="line">	Ln10   = <span class="number">2.30258509299404568401799145468436420760110148862877297603332790</span></span><br><span class="line">	Log10E = <span class="number">1</span> / Ln10</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> (</span><br><span class="line">	MaxFloat32             = <span class="number">3.40282346638528859811704183484516925440e+38</span></span><br><span class="line">	SmallestNonzeroFloat32 = <span class="number">1.401298464324817070923729583289916131280e-45</span></span><br><span class="line"></span><br><span class="line">	MaxFloat64             = <span class="number">1.797693134862315708145274237317043567981e+308</span></span><br><span class="line">	SmallestNonzeroFloat64 = <span class="number">4.940656458412465441765687928682213723651e-324</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> (</span><br><span class="line">	MaxInt8   = <span class="number">127</span></span><br><span class="line">	MinInt8   = <span class="number">-128</span></span><br><span class="line">	MaxInt16  = <span class="number">32767</span></span><br><span class="line">	MinInt16  = <span class="number">-32768</span></span><br><span class="line">	MaxInt32  = <span class="number">2147483647</span></span><br><span class="line">	MinInt32  = <span class="number">-2147483648</span></span><br><span class="line">	MaxInt64  = <span class="number">9223372036854775807</span></span><br><span class="line">	MinInt64  = <span class="number">-9223372036854775808</span></span><br><span class="line">	MaxUint8  = <span class="number">255</span></span><br><span class="line">	MaxUint16 = <span class="number">65535</span></span><br><span class="line">	MaxUint32 = <span class="number">4294967295</span></span><br><span class="line">	MaxUint64 = <span class="number">9223372036854775808</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<h2 id="Floor向下取整舍掉小数"><a href="#Floor向下取整舍掉小数" class="headerlink" title="Floor向下取整舍掉小数"></a>Floor向下取整舍掉小数</h2><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(math.Floor(<span class="number">-3.141592</span>))</span><br><span class="line">	fmt.Println(math.Floor(<span class="number">-3.500000</span>))</span><br><span class="line">	fmt.Println(math.Floor(<span class="number">3.141592</span>))</span><br><span class="line">	fmt.Println(math.Floor(<span class="number">3.141592</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">-4</span><br><span class="line">-4</span><br><span class="line">3</span><br><span class="line">3</span><br></pre></td></tr></table></figure>
+<h2 id="Ceil向上取整"><a href="#Ceil向上取整" class="headerlink" title="Ceil向上取整"></a>Ceil向上取整</h2><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(math.Ceil(<span class="number">-3.141592</span>))</span><br><span class="line">	fmt.Println(math.Ceil(<span class="number">-3.500000</span>))</span><br><span class="line">	fmt.Println(math.Ceil(<span class="number">3.141592</span>))</span><br><span class="line">	fmt.Println(math.Ceil(<span class="number">3.141592</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">-3</span><br><span class="line">-3</span><br><span class="line">4</span><br><span class="line">4</span><br></pre></td></tr></table></figure>
+<h2 id="Abs绝对值"><a href="#Abs绝对值" class="headerlink" title="Abs绝对值"></a>Abs绝对值</h2><p>正数的绝对值是它本身，负数的绝对值是其相反数，零的绝对值是零，绝对值具有非负性，绝对值总是大于或等于零。</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(math.Abs(<span class="number">-3.141592</span>))</span><br><span class="line">	fmt.Println(math.Abs(<span class="number">3.141592</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">3.141592</span><br><span class="line">3.141592</span><br></pre></td></tr></table></figure>
+<h2 id="Modf分解浮点数为整数和小数"><a href="#Modf分解浮点数为整数和小数" class="headerlink" title="Modf分解浮点数为整数和小数"></a>Modf分解浮点数为整数和小数</h2><p>注意：分解浮点数时候，可能会出现精度问题。</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(math.Modf(<span class="number">-12.4</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">-12 -0.40000000000000036</span><br></pre></td></tr></table></figure>
+<h2 id="Max、min、取大值、取小值"><a href="#Max、min、取大值、取小值" class="headerlink" title="Max、min、取大值、取小值"></a>Max、min、取大值、取小值</h2><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(math.Max(<span class="number">331232</span>, <span class="number">334324</span>))</span><br><span class="line">	fmt.Println(math.Min(<span class="number">331232</span>, <span class="number">334324</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">334324</span><br><span class="line">331232</span><br></pre></td></tr></table></figure>
+<h2 id="Pow次方、三次方根"><a href="#Pow次方、三次方根" class="headerlink" title="Pow次方、三次方根"></a>Pow次方、三次方根</h2><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(math.Pow(<span class="number">8</span>, <span class="number">3</span>))</span><br><span class="line">	fmt.Println(math.Cbrt(<span class="number">512</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">8</span><br></pre></td></tr></table></figure>
+<h2 id="Sqrt平方、平方根（开方）"><a href="#Sqrt平方、平方根（开方）" class="headerlink" title="Sqrt平方、平方根（开方）"></a>Sqrt平方、平方根（开方）</h2><ul>
+<li>开方为平方的逆运算，也可以通过 0.5 幂算出</li>
 </ul>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(math.Pow(<span class="number">93</span>, <span class="number">2</span>))</span><br><span class="line">	fmt.Println(math.Pow(<span class="number">8649</span>, <span class="number">0.5</span>))</span><br><span class="line">	fmt.Println(math.Sqrt(<span class="number">8649</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">8649</span><br><span class="line">93</span><br><span class="line">93</span><br></pre></td></tr></table></figure>
+<h2 id="Log2、Log10对数"><a href="#Log2、Log10对数" class="headerlink" title="Log2、Log10对数"></a>Log2、Log10对数</h2><p>对数是求幂的逆运算，</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(math.Pow(<span class="number">2</span>, <span class="number">7</span>))</span><br><span class="line">	fmt.Println(math.Pow(<span class="number">10</span>, <span class="number">2</span>))</span><br><span class="line">	fmt.Println(math.Log2(<span class="number">128</span>))</span><br><span class="line">	fmt.Println(math.Log10(<span class="number">100</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="Round四舍五入"><a href="#Round四舍五入" class="headerlink" title="Round四舍五入"></a>Round四舍五入</h2><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(math.Round(<span class="number">3.1415926</span>))</span><br><span class="line">	fmt.Println(math.Round(<span class="number">3.5415926</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">3</span><br><span class="line">4</span><br></pre></td></tr></table></figure>
+<h2 id="rand随机数包"><a href="#rand随机数包" class="headerlink" title="rand随机数包"></a>rand随机数包</h2><p>math/rand 实现了伪随机数生成器，在 Go 语言中随机数需要设置种子，如果不设置种子，每次运行结果都相同，默认种子为：1，且相同种子产生的随机数是相同的。</p>
+<ul>
+<li>设置种子并生成随机数字</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	rand.Seed(time.Now().UnixNano())</span><br><span class="line">	fmt.Println(rand.Int63n(<span class="number">19</span>))</span><br><span class="line">	fmt.Println(rand.Intn(<span class="number">29</span>))</span><br><span class="line">	fmt.Println(rand.Float64())</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>随机字母</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> r *rand.Rand</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">init</span><span class="params">()</span></span> &#123;</span><br><span class="line">	r = rand.New(rand.NewSource(time.Now().Unix()))</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">RandString</span><span class="params">(<span class="built_in">len</span> <span class="keyword">int</span>)</span> <span class="title">string</span></span> &#123;</span><br><span class="line">	bytes := <span class="built_in">make</span>([]<span class="keyword">byte</span>, <span class="built_in">len</span>)</span><br><span class="line">	<span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="built_in">len</span>; i++ &#123;</span><br><span class="line">		b := r.Intn(<span class="number">26</span>) + <span class="number">65</span></span><br><span class="line">		bytes[i] = <span class="keyword">byte</span>(b)</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> <span class="keyword">string</span>(bytes)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(RandString(<span class="number">20</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
           
         
@@ -534,7 +475,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://yangjinheng.github.io/2019/04/28/python/Tornado/">
+    <link itemprop="mainEntityOfPage" href="https://yangjinheng.github.io/2019/06/09/go/strings/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Jin Heng">
@@ -553,7 +494,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2019/04/28/python/Tornado/" itemprop="url">Tornado 笔记</a></h1>
+                <a class="post-title-link" href="/2019/06/09/go/strings/" itemprop="url">go 标准库之 strings</a></h1>
         
 
         <div class="post-meta">
@@ -565,8 +506,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-04-28T00:00:00+08:00">
-                2019-04-28
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-06-09T00:00:00+08:00">
+                2019-06-09
               </time>
             
 
@@ -588,8 +529,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Python/" itemprop="url" rel="index">
-                    <span itemprop="name">Python</span>
+                  <a href="/categories/golang/" itemprop="url" rel="index">
+                    <span itemprop="name">golang</span>
                   </a>
                 </span>
 
@@ -627,239 +568,284 @@
       
         
           
-            <p>最近想实现一个 webshell 需要用到 WebSocket 技术，所以学学 Tornado</p>
-<h2 id="Hello-World"><a href="#Hello-World" class="headerlink" title="Hello World"></a>Hello World</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> tornado.ioloop</span><br><span class="line"><span class="keyword">import</span> tornado.web</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MainHandler</span><span class="params">(tornado.web.RequestHandler)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get</span><span class="params">(self)</span>:</span></span><br><span class="line">        self.write(<span class="string">"Hello, world"</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">make_app</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">return</span> tornado.web.Application([</span><br><span class="line">        (<span class="string">r"/"</span>, MainHandler),</span><br><span class="line">    ])</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line">    app = make_app()</span><br><span class="line">    app.listen(<span class="number">8888</span>)</span><br><span class="line">    tornado.ioloop.IOLoop.current().start()</span><br></pre></td></tr></table></figure>
-<h2 id="tornado-httpserver"><a href="#tornado-httpserver" class="headerlink" title="tornado.httpserver"></a>tornado.httpserver</h2><ul>
-<li>一个非阻塞的单线程HTTP服务器，它可以启动多个进程。</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> tornado.ioloop</span><br><span class="line"><span class="keyword">import</span> tornado.web</span><br><span class="line"><span class="keyword">import</span> tornado.httpserver</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MainHandler</span><span class="params">(tornado.web.RequestHandler)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get</span><span class="params">(self)</span>:</span></span><br><span class="line">        self.write(<span class="string">"Hello, world"</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">make_app</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">return</span> tornado.web.Application([</span><br><span class="line">        (<span class="string">r"/"</span>, MainHandler),</span><br><span class="line">    ],debug=<span class="keyword">True</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line">    app = make_app()</span><br><span class="line">    server = tornado.httpserver.HTTPServer(app)               <span class="comment"># 创建 HTTPServer</span></span><br><span class="line">    server.bind(<span class="number">5000</span>)                                         <span class="comment"># 绑定监听端口</span></span><br><span class="line">    server.start(<span class="number">5</span>)                                           <span class="comment"># 创建 5 个子进程来处理用户请求，如果为 0 则会开启 CPU 个数的进程来处理用户请求</span></span><br><span class="line">    tornado.ioloop.IOLoop.current().start()</span><br></pre></td></tr></table></figure>
-<ul>
-<li>debug = True 参数有以下作用</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">- 监视代码的改动，自动重启服务器，此项可以单独使用 autoreload = <span class="keyword">True</span> 设置</span><br><span class="line">- 取消缓存编译的模板，此项可以单独使用 compiled_template_cache = <span class="keyword">False</span> 设置</span><br><span class="line">- 取消缓存静态文件的 HASH 值，此项可以单独使用 static_hash_cache = <span class="keyword">False</span> 设置</span><br><span class="line">- 提供追踪信息，此项可以单独使用 service_traceback = <span class="keyword">True</span> 设置</span><br></pre></td></tr></table></figure>
-<h2 id="tornado-options"><a href="#tornado-options" class="headerlink" title="tornado.options"></a>tornado.options</h2><p>tornado 的命令行参数解析器，它的 define 方法负责定义接收的参数，options 则是接收并且解析完成后的参数，可以使用 options.parse_command_line 解析命令行参数，或者使用 options.parse_config_file 解析配置文件中的参数</p>
-<ul>
-<li>从命令行读取配置</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> tornado.ioloop</span><br><span class="line"><span class="keyword">import</span> tornado.web</span><br><span class="line"><span class="keyword">from</span> tornado.options <span class="keyword">import</span> define, options                         <span class="comment"># 导入 options 包</span></span><br><span class="line"></span><br><span class="line">define(<span class="string">"port"</span>, default=<span class="number">5000</span>, type=int, help=<span class="string">"Listen Port"</span>)          <span class="comment"># 定义参数1 port 是一个整形</span></span><br><span class="line">define(<span class="string">"list"</span>, default=[], multiple=<span class="keyword">True</span>, help=<span class="string">"A List"</span>)            <span class="comment"># 定义参数2 list 是一个列表</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MainHandler</span><span class="params">(tornado.web.RequestHandler)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get</span><span class="params">(self)</span>:</span></span><br><span class="line">        self.write(<span class="string">"Hello, world"</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">make_app</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">return</span> tornado.web.Application([</span><br><span class="line">        (<span class="string">r"/"</span>, MainHandler),</span><br><span class="line">    ])</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line">    app = make_app()</span><br><span class="line">    options.parse_command_line()                                    <span class="comment"># 转换命令行参数保存到 tornado.options.options 中</span></span><br><span class="line">    app.listen(options.port)</span><br><span class="line">    print(options.port)</span><br><span class="line">    print(options.list)</span><br><span class="line">    tornado.ioloop.IOLoop.current().start()</span><br></pre></td></tr></table></figure>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ python hahah.py --port=8080 --list=1,2,3,4</span><br><span class="line"></span><br><span class="line">8080</span><br><span class="line">[<span class="string">'1'</span>, <span class="string">'2'</span>, <span class="string">'3'</span>, <span class="string">'4'</span>]</span><br></pre></td></tr></table></figure>
-<ul>
-<li>从配置文件读取变量</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">port = <span class="number">8000</span>,                                                         <span class="comment"># D:\config.py 文件定义</span></span><br><span class="line">list = [<span class="string">"a"</span>, <span class="string">"b"</span>, <span class="string">"c"</span>]</span><br></pre></td></tr></table></figure>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> tornado.ioloop</span><br><span class="line"><span class="keyword">import</span> tornado.web</span><br><span class="line"><span class="keyword">from</span> tornado.options <span class="keyword">import</span> define, options</span><br><span class="line"></span><br><span class="line">define(<span class="string">"port"</span>, default=<span class="number">5000</span>, help=<span class="string">"Listen Port"</span>)</span><br><span class="line">define(<span class="string">"list"</span>, default=[], multiple=<span class="keyword">True</span>, help=<span class="string">"A List"</span>)</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MainHandler</span><span class="params">(tornado.web.RequestHandler)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get</span><span class="params">(self)</span>:</span></span><br><span class="line">        self.write(<span class="string">"Hello, world"</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">make_app</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">return</span> tornado.web.Application([</span><br><span class="line">        (<span class="string">r"/"</span>, MainHandler),</span><br><span class="line">    ])</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line">    app = make_app()</span><br><span class="line">    options.parse_config_file(<span class="string">'D:\config.py'</span>)                        <span class="comment"># 读取文件中的参数保存到 tornado.options.options 中</span></span><br><span class="line">    app.listen(options.port)</span><br><span class="line">    print(options.port)</span><br><span class="line">    print(options.list)</span><br><span class="line">    tornado.ioloop.IOLoop.current().start()</span><br></pre></td></tr></table></figure>
-<ul>
-<li>直接使用 python 模块来当作配置</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">options = &#123;                                                         <span class="comment"># config.py 文件定义</span></span><br><span class="line">    <span class="string">'port'</span>: <span class="number">8000</span>,</span><br><span class="line">    <span class="string">'list'</span>: [<span class="string">"a"</span>, <span class="string">"b"</span>, <span class="string">"c"</span>]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> tornado.ioloop</span><br><span class="line"><span class="keyword">import</span> tornado.web</span><br><span class="line"><span class="keyword">from</span> config <span class="keyword">import</span> options                                          <span class="comment"># 引入 config.py 模块中的定义</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MainHandler</span><span class="params">(tornado.web.RequestHandler)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get</span><span class="params">(self)</span>:</span></span><br><span class="line">        self.write(<span class="string">"Hello, world"</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">make_app</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">return</span> tornado.web.Application([</span><br><span class="line">        (<span class="string">r"/"</span>, MainHandler),</span><br><span class="line">    ])</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line">    app = make_app()</span><br><span class="line">    app.listen(options[<span class="string">'port'</span>])                                    <span class="comment"># 直接使用 options 定义的 port</span></span><br><span class="line">    print(options[<span class="string">'port'</span>])</span><br><span class="line">    print(options[<span class="string">'list'</span>])</span><br><span class="line">    tornado.ioloop.IOLoop.current().start()</span><br></pre></td></tr></table></figure>
-<h2 id="tornado-模块化"><a href="#tornado-模块化" class="headerlink" title="tornado 模块化"></a>tornado 模块化</h2><ul>
-<li>单应用项目文件组织</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">.</span><br><span class="line">├── models          <span class="comment"># 模型目录</span></span><br><span class="line">├── static          <span class="comment"># 静态目录</span></span><br><span class="line">├── templates       <span class="comment"># 模板目录</span></span><br><span class="line">├── views           <span class="comment"># 视图目录</span></span><br><span class="line">│   └── index.py    <span class="comment"># index 视图</span></span><br><span class="line">├── app.py          <span class="comment"># 应用对象</span></span><br><span class="line">├── config.py       <span class="comment"># 项目配置文件</span></span><br><span class="line">└── server.py       <span class="comment"># 服务器启动文件</span></span><br></pre></td></tr></table></figure>
-<ul>
-<li>index.py 视图文件</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> tornado.web</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MainHandler</span><span class="params">(tornado.web.RequestHandler)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get</span><span class="params">(self)</span>:</span></span><br><span class="line">        self.write(<span class="string">'Hello, world'</span>)</span><br></pre></td></tr></table></figure>
-<ul>
-<li>config.py 配置文件</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> os</span><br><span class="line">BASE_DIR = os.path.dirname(__file__)</span><br><span class="line"></span><br><span class="line">options = &#123;</span><br><span class="line">    <span class="string">'port'</span>: <span class="number">8000</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">settings = &#123;</span><br><span class="line">    <span class="string">'template_path'</span>: os.path.join(BASE_DIR, <span class="string">'templates'</span>),</span><br><span class="line">    <span class="string">'static_path'</span>: os.path.join(BASE_DIR, <span class="string">'static'</span>),</span><br><span class="line">    <span class="string">'debug'</span>: <span class="keyword">True</span>,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">databases = &#123;</span><br><span class="line">    <span class="string">'mongodb'</span>: &#123;</span><br><span class="line">        <span class="string">'host'</span>: <span class="string">'mongodb://root:MAsU5bKysMfdiiqvJF6mzfXVIbQnoMfB@10.10.145.7'</span>,</span><br><span class="line">        <span class="string">'port'</span>: <span class="number">27017</span></span><br><span class="line">    &#125;,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<ul>
-<li>app.py 应用对象，视图和路由在这里配置</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> tornado.web</span><br><span class="line"><span class="keyword">from</span> views <span class="keyword">import</span> index</span><br><span class="line"><span class="keyword">from</span> config <span class="keyword">import</span> settings</span><br><span class="line"></span><br><span class="line">urlpatterns = [</span><br><span class="line">    (<span class="string">r"/"</span>, index.MainHandler),</span><br><span class="line">]</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Application</span><span class="params">(tornado.web.Application)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span></span><br><span class="line">        super().__init__(urlpatterns,**settings)</span><br></pre></td></tr></table></figure>
-<ul>
-<li>server.py 服务器程序文件</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> tornado.ioloop</span><br><span class="line"><span class="keyword">import</span> tornado.httpserver</span><br><span class="line"><span class="keyword">from</span> app <span class="keyword">import</span> Application</span><br><span class="line"><span class="keyword">from</span> config <span class="keyword">import</span> options</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line">    app = Application()</span><br><span class="line">    server = tornado.httpserver.HTTPServer(app)</span><br><span class="line">    server.bind(options[<span class="string">'port'</span>])</span><br><span class="line">    server.start(<span class="number">1</span>)</span><br><span class="line">    tornado.ioloop.IOLoop.current().start()</span><br></pre></td></tr></table></figure>
-<h2 id="tornado-路由"><a href="#tornado-路由" class="headerlink" title="tornado 路由"></a>tornado 路由</h2><table>
+            <h1 id="字符串方法"><a href="#字符串方法" class="headerlink" title="字符串方法"></a>字符串方法</h1><h2 id="方法概览"><a href="#方法概览" class="headerlink" title="方法概览"></a>方法概览</h2><table>
 <thead>
 <tr>
-<th>路由</th>
-<th>模式</th>
+<th>函数</th>
+<th>作用</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>(r”/“, index.MainHandler)</td>
-<td>绝对路径匹配</td>
+<td>func Contains(s, substr string) bool</td>
+<td>检测 substr 是否在 s 中存在</td>
 </tr>
 <tr>
-<td>(r”/“, index.MainHandler,{“key”: “value”})</td>
-<td>向视图传递参数，在视图函数的 initialize 方法中可以接收 key 这个参数，然后赋值 self.key = key</td>
+<td>func Compare(a, b string) int</td>
+<td>将字符串按照字母表相比较返回整数，a&lt;b则为-1，a&gt;b则为+1，a==b则为0</td>
 </tr>
 <tr>
-<td>(r”/\d+”, index.MainHandler)</td>
-<td>正则表达式匹配</td>
+<td>func Count(s, substr string) int</td>
+<td>返回 substr 在 s 中存在的次数</td>
 </tr>
 <tr>
-<td>tornado.web.url(r”/url”, index.Url, {“key1”: “value1”, “key2”: “value2”}, name=”urlfor”)</td>
-<td>定义命名的路由条目，可以在视图中使用 self.reverse_url(name=urlfor)，获得匹配正则为 urlfor 的 url 地址</td>
+<td>func EqualFold(s, t string) bool</td>
+<td>不区分大小写的完全匹配</td>
 </tr>
 <tr>
-<td>(r”/index/(?P\&lt;page>\d*)”, index.MainHandler)</td>
-<td>正则表达式分组匹配</td>
+<td>func Fields(s string) []string</td>
+<td>以连续的空白字符为分隔符（\t, \n, \v, \f, \r, ‘ ‘, U+0085 (NEL), U+00A0 (NBSP)），将 s 分割成多个字串，结果中不包含空白本身</td>
 </tr>
 <tr>
-<td>(r”/request/(\w+)/(\d+)”, request.MainHandler),</td>
+<td>func HasPrefix(s, prefix string) bool</td>
+<td>测试 s 是否以 prefix 开头</td>
+</tr>
+<tr>
+<td>func HasSuffix(s, suffix string) bool</td>
+<td>测试 s 是否以 suffix 结尾</td>
+</tr>
+<tr>
+<td>func Index(s, substr string) int</td>
+<td>返回 s 中第一个匹配 substr 的索引，如果不存在则返回 -1</td>
+</tr>
+<tr>
+<td>func LastIndex(s, substr string) int</td>
+<td>返回 s 中最后一个匹配 substr 的索引，如果不存在返回 -1</td>
+</tr>
+<tr>
+<td>func Join(a []string, sep string) string</td>
+<td>指定分隔符连接一个数组中的元素以创建成一个字符串</td>
+</tr>
+<tr>
+<td>func Replace(s, old, new string, n int) string</td>
+<td>在 s 这个字符串中查找替换字符串，并且指定替换次数，0 不替换，-1 全部替换</td>
+</tr>
+<tr>
+<td>func Split(s, sep string) []string</td>
+<td>使用分隔符对字符串进行切分，返回一个切片</td>
+</tr>
+<tr>
+<td>func SplitN(s, sep string, n int) []string</td>
+<td>使用分隔符对字符串进行指定次数的切分，返回一个切片</td>
+</tr>
+<tr>
+<td>func SplitAfter(s, sep string) []string</td>
+<td>使用分隔符对字符串进行切分，返回一个切片，但保留每个切片的分隔符结尾</td>
+</tr>
+<tr>
+<td>func SplitAfterN(s, sep string, n int) []string</td>
+<td>使用分隔符对字符串，按指定次数进行切分，返回一个切片，但保留每个切片的分隔符结尾</td>
+</tr>
+<tr>
+<td>func Title(s string) string</td>
+<td>返回首字母大写的字符串</td>
+</tr>
+<tr>
+<td>func ToLower(s string) string</td>
+<td>将字符串转换为小写</td>
+</tr>
+<tr>
+<td>func ToUpper(s string) string</td>
+<td>将字符串全部转换为大写</td>
+</tr>
+<tr>
+<td>func TrimSpace(s string) string</td>
+<td>从开头和结尾删除空白</td>
+</tr>
+<tr>
+<td>func TrimSuffix(s, suffix string) string</td>
+<td>从结尾删除匹配的字符串</td>
+</tr>
+<tr>
+<td>func TrimPrefix(s, prefix string) string</td>
+<td>删除开头的指定字符串</td>
 </tr>
 </tbody>
 </table>
-<h2 id="RequestHandler-钩子"><a href="#RequestHandler-钩子" class="headerlink" title="RequestHandler 钩子"></a>RequestHandler 钩子</h2><p>继承 RequestHandler 并重写下面的方法，可以在 HTTP 请求到达时，分别用不同的方法来处理 HTTP 的请求</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">head、get、post、delete、patch、put、optionse</span><br></pre></td></tr></table></figure>
-<h3 id="initialize"><a href="#initialize" class="headerlink" title="initialize"></a>initialize</h3><p>重写这个方法，可以接收路由向视图传递的参数，</p>
-<ul>
-<li>首先在定义路由时候传递参数给视图</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">(<span class="string">r"/viewargs"</span>, index.ViewArgs, &#123;<span class="string">"key"</span>: <span class="string">"value"</span>&#125;)</span><br></pre></td></tr></table></figure>
-<ul>
-<li>在视图类的 initialize 方法中接收并赋值</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ViewArgs</span><span class="params">(tornado.web.RequestHandler)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">initialize</span><span class="params">(self, key)</span>:</span></span><br><span class="line">        self.key = key</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get</span><span class="params">(self, *args, **kwargs)</span>:</span></span><br><span class="line">        self.write(<span class="string">'View Args is '</span> + self.key)</span><br></pre></td></tr></table></figure>
-<h3 id="prepare"><a href="#prepare" class="headerlink" title="prepare"></a>prepare</h3><p>prepare 钩子方法是一个预处理方法，在执行对应的请求之前调用</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Prepare</span><span class="params">(tornado.web.RequestHandler)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">prepare</span><span class="params">(self, *args, **kwargs)</span>:</span></span><br><span class="line">        self.data = <span class="string">"hello world"</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get</span><span class="params">(self, *args, **kwargs)</span>:</span></span><br><span class="line">        self.write(self.data)</span><br></pre></td></tr></table></figure>
-<h3 id="set-default-headers"><a href="#set-default-headers" class="headerlink" title="set_default_headers"></a>set_default_headers</h3><p>set_default_headers 它在进入 HTTP 响应处理方法之前被调用，可以重写该方法预先设置默认的 headers。</p>
-<p>如果在 get、post 方法内又调用了 self.set_header 那么 get 、post 方法内设置的会覆盖 set_default_headers 设置的头部信息</p>
-<ul>
-<li>例如下面，无论通过那个方法响应客户端，都会带有 set_default_headers 设置的头部</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">HeaderHandler</span><span class="params">(tornado.web.RequestHandler)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">set_default_headers</span><span class="params">(self)</span>:</span></span><br><span class="line">        self.set_header(<span class="string">"Server"</span>, <span class="string">"127.0.0.1"</span>)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get</span><span class="params">(self, *args, **kwargs)</span>:</span></span><br><span class="line">        self.write(<span class="string">"get_set_default_headers"</span>)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">post</span><span class="params">(self, *args, **kwargs)</span>:</span></span><br><span class="line">        self.write(<span class="string">"post_set_default_headers"</span>)</span><br></pre></td></tr></table></figure>
-<h3 id="write-error"><a href="#write-error" class="headerlink" title="write_error"></a>write_error</h3><p>它接收 self.send_error 抛出的错误状态码，和一些信息，处理并返回页面</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Send_Error</span><span class="params">(tornado.web.RequestHandler)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">write_error</span><span class="params">(self, status_code, **kwargs)</span>:</span></span><br><span class="line">        <span class="keyword">if</span> status_code == <span class="number">500</span>:</span><br><span class="line">            self.write(<span class="string">"ERROR 500"</span>)</span><br><span class="line">            self.write(kwargs)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get</span><span class="params">(self, *args, **kwargs)</span>:</span></span><br><span class="line">        self.send_error(<span class="number">500</span>, key=<span class="string">"value"</span>)</span><br></pre></td></tr></table></figure>
-<h3 id="on-finish"><a href="#on-finish" class="headerlink" title="on_finish"></a>on_finish</h3><p>在请求结束之后进行调用。</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Onfinish</span><span class="params">(tornado.web.RequestHandler)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">on_finish</span><span class="params">(self, *args, **kwargs)</span>:</span></span><br><span class="line">        print(<span class="string">"done"</span>)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get</span><span class="params">(self, *args, **kwargs)</span>:</span></span><br><span class="line">        self.write(<span class="string">"on_finish"</span>)</span><br></pre></td></tr></table></figure>
-<h2 id="RequestHandler-方法"><a href="#RequestHandler-方法" class="headerlink" title="RequestHandler 方法"></a>RequestHandler 方法</h2><p>继承 RequestHandler 后可以直接使用一些已经存在的方法</p>
-<h3 id="self-set-header"><a href="#self-set-header" class="headerlink" title="self.set_header"></a>self.set_header</h3><ul>
-<li>向响应报文设置一个头部</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">JsonHandler</span><span class="params">(tornado.web.RequestHandler)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get</span><span class="params">(self, *args, **kwargs)</span>:</span></span><br><span class="line">        data = &#123;</span><br><span class="line">            <span class="string">"key1"</span>: <span class="string">"value"</span>,</span><br><span class="line">            <span class="string">"key2"</span>: <span class="number">100</span>,</span><br><span class="line">            <span class="string">"key3"</span>: <span class="keyword">True</span>,</span><br><span class="line">            <span class="string">"key4"</span>: [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>],</span><br><span class="line">            <span class="string">"key5"</span>: &#123;<span class="string">"key"</span>: <span class="string">"value"</span>&#125;</span><br><span class="line">        &#125;</span><br><span class="line">        self.set_header(<span class="string">"key"</span>,<span class="string">"value"</span>)</span><br><span class="line">        self.write(data)</span><br></pre></td></tr></table></figure>
-<h3 id="self-set-status"><a href="#self-set-status" class="headerlink" title="self.set_status"></a>self.set_status</h3><ul>
-<li>设置响应报文的响应码和响应短语</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Set_Status</span><span class="params">(tornado.web.RequestHandler)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get</span><span class="params">(self, *args, **kwargs)</span>:</span></span><br><span class="line">        self.set_status(<span class="number">499</span>,<span class="string">"Nginx long connection error"</span>)</span><br><span class="line">        self.write(<span class="string">"status code is 499"</span>)</span><br></pre></td></tr></table></figure>
-<h3 id="self-redirect"><a href="#self-redirect" class="headerlink" title="self.redirect"></a>self.redirect</h3><ul>
-<li>将请求重新向到新页面，permanent 表示是否永久重定向</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Redirect</span><span class="params">(tornado.web.RequestHandler)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get</span><span class="params">(self, *args, **kwargs)</span>:</span></span><br><span class="line">        self.redirect(url=<span class="string">'/'</span>, permanent=<span class="keyword">False</span>)</span><br></pre></td></tr></table></figure>
-<h3 id="self-send-error"><a href="#self-send-error" class="headerlink" title="self.send_error"></a>self.send_error</h3><ul>
-<li>抛出一个错误状态码，tornado 会调用 write_error 方法进行处理并响应这个错误</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Send_Error</span><span class="params">(tornado.web.RequestHandler)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">write_error</span><span class="params">(self, status_code, **kwargs)</span>:</span></span><br><span class="line">        <span class="keyword">if</span> status_code == <span class="number">500</span>:</span><br><span class="line">            self.write(<span class="string">"ERROR 500"</span>)</span><br><span class="line">            self.write(kwargs)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get</span><span class="params">(self, *args, **kwargs)</span>:</span></span><br><span class="line">        self.send_error(<span class="number">500</span>, key=<span class="string">"value"</span>)</span><br></pre></td></tr></table></figure>
-<h3 id="self-reverse-url"><a href="#self-reverse-url" class="headerlink" title="self.reverse_url"></a>self.reverse_url</h3><ul>
-<li>命名路由使用 tornado.web.url 来定义</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">tornado.web.url(<span class="string">r"/url"</span>, index.Url, &#123;<span class="string">"key1"</span>: <span class="string">"value1"</span>, <span class="string">"key2"</span>: <span class="string">"value2"</span>&#125;, name=<span class="string">"urlfor"</span>)</span><br></pre></td></tr></table></figure>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Url</span><span class="params">(tornado.web.RequestHandler)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">initialize</span><span class="params">(self, key1, key2)</span>:</span></span><br><span class="line">        self.key1 = key1</span><br><span class="line">        self.key2 = key2</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get</span><span class="params">(self, *args, **kwargs)</span>:</span></span><br><span class="line">        self.write(<span class="string">'View Args is '</span> + self.key1 + self.key2)</span><br></pre></td></tr></table></figure>
-<ul>
-<li>在视图中使用 self.reverse_url 反向解析一个已经命名的路由条目</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">GetUrl</span><span class="params">(tornado.web.RequestHandler)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get</span><span class="params">(self, *args, **kwargs)</span>:</span></span><br><span class="line">        url = self.reverse_url(name=<span class="string">'urlfor'</span>)</span><br><span class="line">        self.write(<span class="string">'&lt;a href="&#123;&#125;"&gt;Go To Url&lt;/a&gt;'</span>.format(url))</span><br></pre></td></tr></table></figure>
-<h3 id="self-get-query-argument"><a href="#self-get-query-argument" class="headerlink" title="self.get_query_argument"></a>self.get_query_argument</h3><p>self.get_query_argument，可以取得通过 get 方法请求的查询参数，name 指明需要接收的参数名，default 指明没有接收到这个参数时候的默认值，strip 指明是否过滤参数前后的空格。</p>
-<ul>
-<li>self.get_query_arguments 接收来自 get 请求传递的参数，如果存在同名参数，则取得全部。</li>
-</ul>
-<figure class="highlight"><table><tr><td class="code"><pre><span class="line">http://127.0.0.1:8000/get-args/?args=1024&amp;args=2048</span><br></pre></td></tr></table></figure>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">GetArgs</span><span class="params">(tornado.web.RequestHandler)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get</span><span class="params">(self, *args, **kwargs)</span>:</span></span><br><span class="line">        getargs = self.get_query_arguments(name=<span class="string">"args"</span>,strip=<span class="keyword">True</span>)</span><br><span class="line">        data = &#123;<span class="string">"getargs"</span>: getargs&#125;</span><br><span class="line">        self.write(data)</span><br></pre></td></tr></table></figure>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">&#123;<span class="string">"getargs"</span>: [<span class="string">"1024"</span>, <span class="string">"2048"</span>]&#125;</span><br></pre></td></tr></table></figure>
-<ul>
-<li>self.get_query_argument 接收来自 get 请求传递的参数，如果存在同名参数，则取最后一个。</li>
-</ul>
-<figure class="highlight"><table><tr><td class="code"><pre><span class="line">http://127.0.0.1:8000/get-args/?args=1024&amp;args=2048</span><br></pre></td></tr></table></figure>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">GetArgs</span><span class="params">(tornado.web.RequestHandler)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get</span><span class="params">(self, *args, **kwargs)</span>:</span></span><br><span class="line">        getarg = self.get_query_argument(name=<span class="string">"args"</span>,default=<span class="string">"value"</span>,strip=<span class="keyword">True</span>)</span><br><span class="line">        data = &#123;<span class="string">"getarg"</span>: getarg&#125;</span><br><span class="line">        self.write(data)</span><br></pre></td></tr></table></figure>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">&#123;<span class="string">"getarg"</span>: <span class="string">"2048"</span>&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="self-get-argument"><a href="#self-get-argument" class="headerlink" title="self.get_argument"></a>self.get_argument</h3><p>self.get_argument 可以取得通过 get、post 方法请求提交的数据，name 指明需要接收的参数名，default 指明没有接收到这个参数时候的默认值，strip 指明是否过滤参数前后的空格。</p>
-<ul>
-<li>self.get_argument 接收来自 get、post 请求传递的参数，如果存在同名参数，则取最后一个。</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">curl  -X POST -H <span class="string">"Content-Type: multipart/form-data"</span> -F key=<span class="number">1024</span> -F key=<span class="number">2048</span> <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>:<span class="number">8000</span>/post-args</span><br></pre></td></tr></table></figure>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">PostArgs</span><span class="params">(tornado.web.RequestHandler)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">post</span><span class="params">(self, *args, **kwargs)</span>:</span></span><br><span class="line">        postarg = self.get_argument(name=<span class="string">"key"</span>, default=<span class="string">"value"</span>, strip=<span class="keyword">True</span>)</span><br><span class="line">        data = &#123;<span class="string">"postarg"</span>: postarg&#125;</span><br><span class="line">        self.write(data)</span><br></pre></td></tr></table></figure>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">&#123;<span class="string">'postarg'</span>: <span class="string">'2048'</span>&#125;</span><br></pre></td></tr></table></figure>
-<ul>
-<li>self.get_arguments 接收来自 get、post 请求传递的参数，如果存在同名参数，则取得全部。</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">curl  -X POST -H <span class="string">"Content-Type: multipart/form-data"</span> -F key=<span class="number">1024</span> -F key=<span class="number">2048</span> <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>:<span class="number">8000</span>/post-args</span><br></pre></td></tr></table></figure>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">PostArgs</span><span class="params">(tornado.web.RequestHandler)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">post</span><span class="params">(self, *args, **kwargs)</span>:</span></span><br><span class="line">        postargs = self.get_arguments(name=<span class="string">"key"</span>, strip=<span class="keyword">True</span>)</span><br><span class="line">        data = &#123;<span class="string">"postargs"</span>: postargs&#125;</span><br><span class="line">        self.write(data)</span><br></pre></td></tr></table></figure>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">&#123;<span class="string">'postargs'</span>: [<span class="string">'1024'</span>, <span class="string">'2048'</span>]&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="self-request"><a href="#self-request" class="headerlink" title="self.request"></a>self.request</h3><p>self.request 包含本次请求的所有信息</p>
-<ul>
-<li>通过 POST 提交参数和文件，查看 self.request 信息</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">curl  -X POST -H <span class="string">"Content-Type: multipart/form-data"</span> -F key=<span class="number">1024</span> -F key=<span class="number">2048</span> -F file=@C:\Windows\WindowsUpdate.log <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>:<span class="number">8000</span>/request</span><br></pre></td></tr></table></figure>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Request</span><span class="params">(tornado.web.RequestHandler)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">post</span><span class="params">(self, *args, **kwargs)</span>:</span></span><br><span class="line">        print(self.request.protocol)</span><br><span class="line">        print(self.request.host)</span><br><span class="line">        print(self.request.host_name)</span><br><span class="line">        print(self.request.method)</span><br><span class="line">        print(self.request.uri)</span><br><span class="line">        print(self.request.version)</span><br><span class="line">        print(self.request.remote_ip)</span><br><span class="line">        print(self.request.arguments)</span><br><span class="line">        print(self.request.body)</span><br><span class="line">        print(self.request.body_arguments)</span><br><span class="line">        print(self.request.connection)</span><br><span class="line">        print(self.request.headers)</span><br><span class="line">        print(self.request.files)</span><br><span class="line">        self.write(<span class="string">"data"</span>)</span><br></pre></td></tr></table></figure>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">http</span><br><span class="line"><span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>:<span class="number">8000</span></span><br><span class="line"><span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span></span><br><span class="line">POST</span><br><span class="line">/request</span><br><span class="line">HTTP/<span class="number">1.1</span></span><br><span class="line"><span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span></span><br><span class="line">&#123;<span class="string">'key'</span>: [<span class="string">b'1024'</span>, <span class="string">b'2048'</span>]&#125;</span><br><span class="line"><span class="string">b'--------------------------eb7a408517348b28\r\nContent-Disposition: form-data; name="key"\r\n\r\n1024\r\n--------------------------eb7a408517348b28\r\nContent-Disposition: form-data; name="key"\r\n\r\n2048\r\n--------------------------eb7a408517348b28\r\nContent-Disposition: form-data; name="file"; filename="WindowsUpdate.log"\r\nContent-Type: application/octet-stream\r\n\r\nWindows Update logs are now generated using ETW (Event Tracing for Windows).\r\nPlease run the Get-WindowsUpdateLog PowerShell command to convert ETW traces into a readable WindowsUpdate.log.\r\n\r\n\r\nFor more information, please visit https://go.microsoft.com/fwlink/?LinkId=518345\r\n--------------------------eb7a408517348b28--\r\n'</span></span><br><span class="line">&#123;<span class="string">'key'</span>: [<span class="string">b'1024'</span>, <span class="string">b'2048'</span>]&#125;</span><br><span class="line">&lt;tornado.http1connection.HTTP1Connection object at <span class="number">0x000001B995949FD0</span>&gt;</span><br><span class="line">Host: <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>:<span class="number">8000</span></span><br><span class="line">User-Agent: curl/<span class="number">7.55</span><span class="number">.1</span></span><br><span class="line">Accept: */*</span><br><span class="line">Content-Length: <span class="number">677</span></span><br><span class="line">Expect: <span class="number">100</span>-<span class="keyword">continue</span></span><br><span class="line">Content-Type: multipart/form-data; boundary=------------------------eb7a408517348b28</span><br><span class="line"></span><br><span class="line">&#123;<span class="string">'file'</span>: [&#123;<span class="string">'filename'</span>: <span class="string">'WindowsUpdate.log'</span>, <span class="string">'body'</span>: <span class="string">b'Windows Update logs are now generated using ETW (Event Tracing for Windows).\r\nPlease run the Get-WindowsUpdateLog PowerShell command to convert ETW traces into a readable WindowsUpdate.log.\r\n\r\n\r\nFor more information, please visit https://go.microsoft.com/fwlink/?LinkId=518345'</span>, <span class="string">'content_type'</span>: <span class="string">'application/octet-stream'</span>&#125;]&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="self-request-files"><a href="#self-request-files" class="headerlink" title="self.request.files"></a>self.request.files</h3><p>self.request.files</p>
-<ul>
-<li>下面命令提交了 2 个表单，分别是 key 和 files，key 有两个值，files 有两个文件</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">curl  -X POST -H <span class="string">"Content-Type: multipart/form-data"</span> -F key=<span class="number">1024</span> -F key=<span class="number">2048</span> -F files=@C:\Windows\WindowsUpdate.log -F files=@C:\Windows\setupact.log <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>:<span class="number">8000</span>/uploads</span><br></pre></td></tr></table></figure>
-<ul>
-<li>self.request.files 对象中保存了本次请求所提交的文件，下面将上传的文件保存在本地</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Upload</span><span class="params">(tornado.web.RequestHandler)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">post</span><span class="params">(self, *args, **kwargs)</span>:</span></span><br><span class="line">        data = &#123;<span class="string">"data"</span>: self.get_arguments(<span class="string">'key'</span>)&#125;</span><br><span class="line">        self.write(data)</span><br><span class="line"></span><br><span class="line">        uploads = os.path.join(config.BASE_DIR,<span class="string">'uploads'</span>)</span><br><span class="line">        <span class="keyword">for</span> files <span class="keyword">in</span> self.request.files.values():</span><br><span class="line">            <span class="keyword">for</span> file <span class="keyword">in</span> files:</span><br><span class="line">                filename = os.path.join(uploads,file.filename)</span><br><span class="line">                <span class="comment"># print(filename)</span></span><br><span class="line">                <span class="keyword">with</span> open(filename,<span class="string">'wb'</span>) <span class="keyword">as</span> f:</span><br><span class="line">                    f.write(file.body)</span><br></pre></td></tr></table></figure>
-<h3 id="self-set-cookie"><a href="#self-set-cookie" class="headerlink" title="self.set_cookie()"></a>self.set_cookie()</h3><ul>
-<li>设置一个明文 Cookie 并设定过期时间为 3 小时后</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Cookie</span><span class="params">(tornado.web.RequestHandler)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get</span><span class="params">(self, *args, **kwargs)</span>:</span></span><br><span class="line">        cookie = self.get_secure_cookie(<span class="string">"key"</span>)</span><br><span class="line">        <span class="keyword">if</span> cookie:</span><br><span class="line">            cookie = cookie.decode(<span class="string">'utf-8'</span>)</span><br><span class="line">            self.write(cookie)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            self.write(<span class="string">"no login"</span>)</span><br><span class="line">            self.set_secure_cookie(<span class="string">"key"</span>,<span class="string">"value"</span>, expires=datetime.datetime.now() + datetime.timedelta(hours=<span class="number">3</span>))</span><br></pre></td></tr></table></figure>
-<h3 id="self-set-secure-cookie"><a href="#self-set-secure-cookie" class="headerlink" title="self.set_secure_cookie()"></a>self.set_secure_cookie()</h3><ul>
-<li>设置一个加密的 Cookie 并设定过期时间为 3 小时后</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Cookie</span><span class="params">(tornado.web.RequestHandler)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get</span><span class="params">(self, *args, **kwargs)</span>:</span></span><br><span class="line">        <span class="comment"># </span></span><br><span class="line">        cookie = self.get_cookie(<span class="string">"key"</span>)</span><br><span class="line">        <span class="keyword">if</span> cookie:</span><br><span class="line">            self.write(cookie)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            self.write(<span class="string">"no login"</span>)</span><br><span class="line">            self.set_cookie(<span class="string">"key"</span>,<span class="string">"value"</span>, expires=datetime.datetime.now() + datetime.timedelta(hours=<span class="number">3</span>))</span><br></pre></td></tr></table></figure>
-<h3 id="self-clear-cookie"><a href="#self-clear-cookie" class="headerlink" title="self.clear_cookie"></a>self.clear_cookie</h3><ul>
-<li>self.clear_cookie 清除指定 Cookie，self.clear_all_cookies 清除所有的 Cookie</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">CleanCookie</span><span class="params">(tornado.web.RequestHandler)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get</span><span class="params">(self, *args, **kwargs)</span>:</span></span><br><span class="line">        cookie = self.get_secure_cookie(<span class="string">"key"</span>)</span><br><span class="line">        <span class="keyword">if</span> cookie:</span><br><span class="line">            cookie = cookie.decode(<span class="string">'utf-8'</span>)</span><br><span class="line">            self.write(<span class="string">"Clean Cookie: "</span> + cookie)</span><br><span class="line">            self.clear_cookie(<span class="string">"key"</span>, path=<span class="string">"/"</span>)</span><br><span class="line">            <span class="comment"># self.clear_all_cookies(path="/")</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            self.write(<span class="string">"No Cookie"</span>)</span><br></pre></td></tr></table></figure>
-<h2 id="基于协程的异步"><a href="#基于协程的异步" class="headerlink" title="基于协程的异步"></a>基于协程的异步</h2><h3 id="tornado-httpclient-AsyncHTTPClient"><a href="#tornado-httpclient-AsyncHTTPClient" class="headerlink" title="tornado.httpclient.AsyncHTTPClient"></a>tornado.httpclient.AsyncHTTPClient</h3><p>tornado 提供的异步 web 请求客户端，可以用来进行异步 web 请求</p>
-<ul>
-<li>fetch</li>
-</ul>
-<p>fetch(request) 用于执行一个 web 请求，并异步返回一个 tornado.httpclient.HTTPResponse，request 可以时一个 url，也可以是一个 tornado.httpclient.HTTPRequest 对象。</p>
-<ul>
-<li>HTTPRequest</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">- url       # 字符串类型，要访问的网址</span><br><span class="line">- method    # 字符串类型，HTTP 请求方法</span><br><span class="line">- headers   # 字典或者 HTTPHeaders 附加协议头</span><br><span class="line">- body      # 请求体</span><br></pre></td></tr></table></figure>
-<ul>
-<li>HTTPResponse</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">- code      # 响应状态码</span><br><span class="line">- rason     # 状态短语</span><br><span class="line">- body      # 返回的响应数据</span><br><span class="line">- error     # 异常</span><br></pre></td></tr></table></figure>
-<p>从 Tornado 3.1 版本开始，无需 @asynchronous，即仅需要使用 @gen.coroutine 就可以了，而且 @gen.coroutine 装饰的代码段执行完成后会自动调用finish。</p>
-<p>gen 模块的某些较旧部分已弃用，将在 6.0 中删除。 这包括 engine, YieldPoint, Callback, Wait, WaitAll, MultiYieldPoint, Task。</p>
-<blockquote>
-<p>   @asynchronous 装饰器已经过时，在 6.0 中删除。</p>
-</blockquote>
-<ul>
-<li>协程实现的异步处理请求</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Coroutine_Asyncio</span><span class="params">(tornado.web.RequestHandler)</span>:</span></span><br><span class="line"><span class="meta">    @gen.coroutine</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get</span><span class="params">(self, *args, **kwargs)</span>:</span></span><br><span class="line">        client = AsyncHTTPClient()</span><br><span class="line">        <span class="comment"># response = yield gen.sleep(20)</span></span><br><span class="line">        <span class="comment"># self.write("Coroutine_Asyncio Sleep 20 s")</span></span><br><span class="line">        response = <span class="keyword">yield</span> client.fetch(<span class="string">'https://api.douban.com/v2/movie/top250'</span>)</span><br><span class="line">        <span class="keyword">if</span> response.code == <span class="number">200</span>:</span><br><span class="line">            data = escape.json_decode(response)</span><br><span class="line">            self.write(data)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            data = &#123;<span class="string">"message"</span>: <span class="string">"Remote computer is not responding"</span>&#125;</span><br><span class="line">            self.write(data)</span><br></pre></td></tr></table></figure>
-<h2 id="WebSocketHandler"><a href="#WebSocketHandler" class="headerlink" title="WebSocketHandler"></a>WebSocketHandler</h2><ul>
-<li>self.write_message(message, binary=False)</li>
-</ul>
-<p>主动向客户端发送 message 消息，message 可以是字符串或者字典（自动转为 JSON 字符串），如果 binary 为 False ，则 message 会以 UTF-8 编码发送，如果 binary 为 False 则发送二进制模式，字节码。</p>
-<ul>
-<li>self.close</li>
-</ul>
-<p>关闭 websocket 连接</p>
-<ul>
-<li>self.open</li>
-</ul>
-<p>当 websocket 连接被建立时调用</p>
-<ul>
-<li>self.on_message</li>
-</ul>
-<p>当客户端发来消息时调用</p>
-<ul>
-<li>self.on_close</li>
-</ul>
-<p>当 websocket 连接关闭后调用</p>
-<ul>
-<li>self.check_origin</li>
-</ul>
-<p>判断源客户端，对于符合条件的请求允许连接，相当于是同源策略，返回布尔值决定是否允许连接</p>
-<h2 id="疑难问题"><a href="#疑难问题" class="headerlink" title="疑难问题"></a>疑难问题</h2><ul>
-<li>There is no current event loop in thread ‘Thread-4’</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">https://github.com/tornadoweb/tornado/issues/<span class="number">2308</span></span><br><span class="line">https://blog.csdn.net/jusang486/article/details/<span class="number">82382358</span></span><br></pre></td></tr></table></figure>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> asyncio</span><br><span class="line"><span class="keyword">import</span> tornado.web</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">TestHandler</span><span class="params">(tornado.web.RequestHandler)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get</span><span class="params">(self)</span>:</span></span><br><span class="line">        self.write(<span class="string">"test success"</span>)</span><br><span class="line"></span><br><span class="line">urlpatterns = [</span><br><span class="line">    (<span class="string">r"/test"</span>, TestHandler),</span><br><span class="line">]</span><br><span class="line"></span><br><span class="line">settings = &#123;</span><br><span class="line">    <span class="string">'debug'</span>: <span class="keyword">True</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Application</span><span class="params">(tornado.web.Application)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span></span><br><span class="line">        super().__init__(urlpatterns, **settings)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">run</span><span class="params">(self, port=<span class="number">8886</span>)</span>:</span></span><br><span class="line">        self.listen(port)</span><br><span class="line">        tornado.ioloop.IOLoop.instance().start()</span><br><span class="line"></span><br><span class="line">app = Application()</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">start_server</span><span class="params">()</span>:</span></span><br><span class="line">    asyncio.set_event_loop(asyncio.new_event_loop())</span><br><span class="line">    app.run(port=<span class="number">5000</span>)    </span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> threading <span class="keyword">import</span> Thread</span><br><span class="line">t = Thread(target=start_server, args=())</span><br><span class="line">t.daemon = <span class="keyword">True</span></span><br><span class="line">t.start()</span><br><span class="line">t.join()</span><br></pre></td></tr></table></figure>
+<h2 id="字符串检测"><a href="#字符串检测" class="headerlink" title="字符串检测"></a>字符串检测</h2><hr>
+<h3 id="Contains-是否包含字符串"><a href="#Contains-是否包含字符串" class="headerlink" title="Contains 是否包含字符串"></a>Contains 是否包含字符串</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(strings.Contains(<span class="string">"seafood"</span>, <span class="string">"foo"</span>))</span><br><span class="line">	fmt.Println(strings.Contains(<span class="string">"seafood"</span>, <span class="string">"bar"</span>))</span><br><span class="line">	fmt.Println(strings.Contains(<span class="string">"seafood"</span>, <span class="string">""</span>))</span><br><span class="line">	fmt.Println(strings.Contains(<span class="string">""</span>, <span class="string">""</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="literal">true</span></span><br><span class="line"><span class="literal">false</span></span><br><span class="line"><span class="literal">true</span></span><br><span class="line"><span class="literal">true</span></span><br></pre></td></tr></table></figure>
+<h3 id="Compare-按字母表比大小"><a href="#Compare-按字母表比大小" class="headerlink" title="Compare 按字母表比大小"></a>Compare 按字母表比大小</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(strings.Compare(<span class="string">"a"</span>, <span class="string">"b"</span>))</span><br><span class="line">	fmt.Println(strings.Compare(<span class="string">"a"</span>, <span class="string">"a"</span>))</span><br><span class="line">	fmt.Println(strings.Compare(<span class="string">"b"</span>, <span class="string">"a"</span>))</span><br><span class="line">	fmt.Println(strings.Compare(<span class="string">"ac"</span>, <span class="string">"ab"</span>))</span><br><span class="line">	fmt.Println(strings.Compare(<span class="string">"ab"</span>, <span class="string">"ac"</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="number">-1</span></span><br><span class="line"><span class="number">0</span></span><br><span class="line"><span class="number">1</span></span><br><span class="line"><span class="number">1</span></span><br><span class="line"><span class="number">-1</span></span><br></pre></td></tr></table></figure>
+<h3 id="Count返回指定字符串存在的次数"><a href="#Count返回指定字符串存在的次数" class="headerlink" title="Count返回指定字符串存在的次数"></a>Count返回指定字符串存在的次数</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(strings.Count(<span class="string">"yangjinheng,yangzhongxiao"</span>, <span class="string">"ng"</span>))</span><br><span class="line">	fmt.Println(strings.Count(<span class="string">"yangjinheng,yangzhongxiao"</span>, <span class="string">"yang"</span>))</span><br><span class="line">	fmt.Println(strings.Count(<span class="string">"five"</span>, <span class="string">""</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="number">4</span></span><br><span class="line"><span class="number">2</span></span><br><span class="line"><span class="number">5</span></span><br></pre></td></tr></table></figure>
+<h3 id="EqualFold不区分大小写是否匹配"><a href="#EqualFold不区分大小写是否匹配" class="headerlink" title="EqualFold不区分大小写是否匹配"></a>EqualFold不区分大小写是否匹配</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(strings.EqualFold(<span class="string">"YANGJINHENG"</span>, <span class="string">"YangJinHeng"</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="literal">true</span></span><br></pre></td></tr></table></figure>
+<h3 id="HasPrefix测试是否以指定字符串开头"><a href="#HasPrefix测试是否以指定字符串开头" class="headerlink" title="HasPrefix测试是否以指定字符串开头"></a>HasPrefix测试是否以指定字符串开头</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(strings.HasPrefix(<span class="string">"Gopher"</span>, <span class="string">"Gop"</span>))</span><br><span class="line">	fmt.Println(strings.HasPrefix(<span class="string">"Gopher"</span>, <span class="string">"C"</span>))</span><br><span class="line">	fmt.Println(strings.HasPrefix(<span class="string">"Gopher"</span>, <span class="string">""</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">true</span><br><span class="line">false</span><br><span class="line">true</span><br></pre></td></tr></table></figure>
+<h3 id="HasSuffix测试是否以指定字符串结尾"><a href="#HasSuffix测试是否以指定字符串结尾" class="headerlink" title="HasSuffix测试是否以指定字符串结尾"></a>HasSuffix测试是否以指定字符串结尾</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(strings.HasSuffix(<span class="string">"Amigo"</span>, <span class="string">"go"</span>))</span><br><span class="line">	fmt.Println(strings.HasSuffix(<span class="string">"Amigo"</span>, <span class="string">"O"</span>))</span><br><span class="line">	fmt.Println(strings.HasSuffix(<span class="string">"Amigo"</span>, <span class="string">"Ami"</span>))</span><br><span class="line">	fmt.Println(strings.HasSuffix(<span class="string">"Amigo"</span>, <span class="string">""</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">true</span><br><span class="line">false</span><br><span class="line">false</span><br><span class="line">true</span><br></pre></td></tr></table></figure>
+<h2 id="字符串索引位置"><a href="#字符串索引位置" class="headerlink" title="字符串索引位置"></a>字符串索引位置</h2><hr>
+<h3 id="Index返回第一个匹配字串的索引"><a href="#Index返回第一个匹配字串的索引" class="headerlink" title="Index返回第一个匹配字串的索引"></a>Index返回第一个匹配字串的索引</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(strings.Index(<span class="string">"chicken"</span>, <span class="string">"ken"</span>))</span><br><span class="line">	fmt.Println(strings.Index(<span class="string">"chicken"</span>, <span class="string">"dmr"</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">4</span><br><span class="line">-1</span><br></pre></td></tr></table></figure>
+<h3 id="LastIndex返回最后一个匹配字串的索引"><a href="#LastIndex返回最后一个匹配字串的索引" class="headerlink" title="LastIndex返回最后一个匹配字串的索引"></a>LastIndex返回最后一个匹配字串的索引</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(strings.Index(<span class="string">"go gopher"</span>, <span class="string">"go"</span>))</span><br><span class="line">	fmt.Println(strings.LastIndex(<span class="string">"go gopher"</span>, <span class="string">"go"</span>))</span><br><span class="line">	fmt.Println(strings.LastIndex(<span class="string">"go gopher"</span>, <span class="string">"rodent"</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">0</span><br><span class="line">3</span><br><span class="line">-1</span><br></pre></td></tr></table></figure>
+<h2 id="切片和连接"><a href="#切片和连接" class="headerlink" title="切片和连接"></a>切片和连接</h2><hr>
+<h3 id="Join将切片连接为字符串"><a href="#Join将切片连接为字符串" class="headerlink" title="Join将切片连接为字符串"></a>Join将切片连接为字符串</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	s := []<span class="keyword">string</span>&#123;<span class="string">"foo"</span>, <span class="string">"bar"</span>, <span class="string">"baz"</span>&#125;</span><br><span class="line">	fmt.Println(strings.Join(s, <span class="string">"-"</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">foo-bar-baz</span><br></pre></td></tr></table></figure>
+<h3 id="Fields用空格字符分隔返回切片"><a href="#Fields用空格字符分隔返回切片" class="headerlink" title="Fields用空格字符分隔返回切片"></a>Fields用空格字符分隔返回切片</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	s1 := <span class="string">"java python php go"</span></span><br><span class="line">	s2 := strings.Fields(s1)</span><br><span class="line">	fmt.Printf(<span class="string">"%T\n%q"</span>, s2, s2)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[]string</span><br><span class="line">[&quot;java&quot; &quot;python&quot; &quot;php&quot; &quot;go&quot;]</span><br></pre></td></tr></table></figure>
+<h3 id="Split指定分隔字串对字符串进行切片"><a href="#Split指定分隔字串对字符串进行切片" class="headerlink" title="Split指定分隔字串对字符串进行切片"></a>Split指定分隔字串对字符串进行切片</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	s1 := strings.Split(<span class="string">"a,,b,,c"</span>, <span class="string">",,"</span>)</span><br><span class="line">	fmt.Printf(<span class="string">"%T %q"</span>, s1, s1)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[]string [&quot;a&quot; &quot;b&quot; &quot;c&quot;]</span><br></pre></td></tr></table></figure>
+<h3 id="SplitN指定分隔字串对字符串进行指定次数切片"><a href="#SplitN指定分隔字串对字符串进行指定次数切片" class="headerlink" title="SplitN指定分隔字串对字符串进行指定次数切片"></a>SplitN指定分隔字串对字符串进行指定次数切片</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Printf(<span class="string">"%q\n"</span>, strings.SplitN(<span class="string">"a--b--c--d"</span>, <span class="string">"--"</span>, <span class="number">2</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[&quot;a&quot; &quot;b--c--d&quot;]</span><br></pre></td></tr></table></figure>
+<h3 id="SplitAfter指定分隔符字串进行切片，保留分隔符"><a href="#SplitAfter指定分隔符字串进行切片，保留分隔符" class="headerlink" title="SplitAfter指定分隔符字串进行切片，保留分隔符"></a>SplitAfter指定分隔符字串进行切片，保留分隔符</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Printf(<span class="string">"%q\n"</span>, strings.SplitAfter(<span class="string">",,a,,b,,c"</span>, <span class="string">",,"</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[&quot;,,&quot; &quot;a,,&quot; &quot;b,,&quot; &quot;c&quot;]</span><br></pre></td></tr></table></figure>
+<h3 id="SplitAfterN指定分隔符字串指定指定次数进行切片，保留分隔符"><a href="#SplitAfterN指定分隔符字串指定指定次数进行切片，保留分隔符" class="headerlink" title="SplitAfterN指定分隔符字串指定指定次数进行切片，保留分隔符"></a>SplitAfterN指定分隔符字串指定指定次数进行切片，保留分隔符</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Printf(<span class="string">"%q\n"</span>, strings.SplitAfterN(<span class="string">"a--b--c--d"</span>, <span class="string">"--"</span>, <span class="number">2</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[&quot;a--&quot; &quot;b--c--d&quot;]</span><br></pre></td></tr></table></figure>
+<h2 id="大小写转换"><a href="#大小写转换" class="headerlink" title="大小写转换"></a>大小写转换</h2><h3 id="Title字符串首字母大写"><a href="#Title字符串首字母大写" class="headerlink" title="Title字符串首字母大写"></a>Title字符串首字母大写</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(strings.Title(<span class="string">"her royal highness"</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Her Royal Highness</span><br></pre></td></tr></table></figure>
+<h3 id="ToLower全部转为小写"><a href="#ToLower全部转为小写" class="headerlink" title="ToLower全部转为小写"></a>ToLower全部转为小写</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(strings.ToLower(<span class="string">"YANGJINHENG"</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line">yangjinheng</span><br></pre></td></tr></table></figure>
+<h3 id="ToUpper全部转为大写"><a href="#ToUpper全部转为大写" class="headerlink" title="ToUpper全部转为大写"></a>ToUpper全部转为大写</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(strings.ToUpper(<span class="string">"Gopher"</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">GOPHER</span><br></pre></td></tr></table></figure>
+<h2 id="删除开头结尾查找替换"><a href="#删除开头结尾查找替换" class="headerlink" title="删除开头结尾查找替换"></a>删除开头结尾查找替换</h2><h3 id="Replace查找替换字符串"><a href="#Replace查找替换字符串" class="headerlink" title="Replace查找替换字符串"></a>Replace查找替换字符串</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(strings.Replace(<span class="string">"hello, world world"</span>, <span class="string">"world"</span>, <span class="string">"golang"</span>, <span class="number">1</span>))</span><br><span class="line">	fmt.Println(strings.Replace(<span class="string">"oink oink oink"</span>, <span class="string">"oink"</span>, <span class="string">"moo"</span>, <span class="number">-1</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">hello, golang golang</span><br><span class="line">moo moo moo</span><br></pre></td></tr></table></figure>
+<h3 id="TrimSpace从开头和结尾删除空白"><a href="#TrimSpace从开头和结尾删除空白" class="headerlink" title="TrimSpace从开头和结尾删除空白"></a>TrimSpace从开头和结尾删除空白</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(strings.TrimSpace(<span class="string">" \t\n Hello, Gophers \n\t\r\n"</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Hello, Gophers</span><br></pre></td></tr></table></figure>
+<h3 id="TrimPrefix从字符串开头删除匹配的任意单个字符"><a href="#TrimPrefix从字符串开头删除匹配的任意单个字符" class="headerlink" title="TrimPrefix从字符串开头删除匹配的任意单个字符"></a>TrimPrefix从字符串开头删除匹配的任意单个字符</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Print(strings.TrimPrefix(<span class="string">"----Hello,Gophers----"</span>, <span class="string">"--"</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">--Hello,Gophers----</span><br></pre></td></tr></table></figure>
+<h3 id="TrimSuffix从结尾删除匹配到的字符串"><a href="#TrimSuffix从结尾删除匹配到的字符串" class="headerlink" title="TrimSuffix从结尾删除匹配到的字符串"></a>TrimSuffix从结尾删除匹配到的字符串</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(strings.TrimSuffix(<span class="string">"¡¡¡Hello, Gophers!!!"</span>, <span class="string">", Gophers!!!"</span>))</span><br><span class="line">	fmt.Println(strings.TrimSuffix(<span class="string">"¡¡¡Hello, Gophers!!!"</span>, <span class="string">", Marmots!!!"</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line">¡¡¡Hello</span><br><span class="line">¡¡¡Hello, Gophers!!!</span><br></pre></td></tr></table></figure>
+<h1 id="字符方法"><a href="#字符方法" class="headerlink" title="字符方法"></a>字符方法</h1><h2 id="方法概览-1"><a href="#方法概览-1" class="headerlink" title="方法概览"></a>方法概览</h2><table>
+<thead>
+<tr>
+<th>函数</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>func ContainsAny(s, chars string) bool</td>
+<td>检测 chars 中的任意 Unicode码位值是否在 s 内</td>
+</tr>
+<tr>
+<td>func ContainsRune(s string, r rune) bool</td>
+<td>检测一个 rune 这个 Unicode码位值是否在 s 内存在</td>
+</tr>
+<tr>
+<td>func FieldsFunc(s string, f func(rune) bool) []string</td>
+<td>将 s 中每个字符传入 f 这个函数，f 函数返回 true 则不保留，最后返回一个切片</td>
+</tr>
+<tr>
+<td>func IndexAny(s, chars string) int</td>
+<td>返回 s 中第一个匹配 chars 中任意字符的索引位置</td>
+</tr>
+<tr>
+<td>func IndexByte(s string, c byte) int</td>
+<td>返回 s 中第一个匹配 byte （英文字符）的索引位置</td>
+</tr>
+<tr>
+<td>func IndexFunc(s string, f func(rune) bool) int</td>
+<td>返回 s 中第一个符合 f 这个函数的字符位置</td>
+</tr>
+<tr>
+<td>func IndexRune(s string, r rune) int</td>
+<td>返回 s 中第一个匹配 rune （中英文）字符的索引位置</td>
+</tr>
+<tr>
+<td>func LastIndexAny(s, chars string) int</td>
+<td>返回 s 中最后一个匹配 chars 中任意字符的索引位置</td>
+</tr>
+<tr>
+<td>func LastIndexByte(s string, c byte) int</td>
+<td>返回 s 中最后一个匹配 byte （英文字符）的索引位置</td>
+</tr>
+<tr>
+<td>func LastIndexFunc(s string, f func(rune) bool) int</td>
+<td>返回 s 中最后一个符合 f 这个函数的字符位置</td>
+</tr>
+<tr>
+<td>func Map(mapping func(rune) rune, s string) string</td>
+<td>函数决定返回 s 中每个字符的映射，产生新的字符串</td>
+</tr>
+<tr>
+<td>func ToTitle(s string) string</td>
+<td>将字符串全部转换为大写</td>
+</tr>
+<tr>
+<td>func ToTitleSpecial(c unicode.SpecialCase, s string) string</td>
+<td>按照指定的字符集映射为大写</td>
+</tr>
+<tr>
+<td>func ToLowerSpecial(c unicode.SpecialCase, s string) string</td>
+<td>按照指定的字符集映射为小写</td>
+</tr>
+<tr>
+<td>func ToUpperSpecial(c unicode.SpecialCase, s string) string</td>
+<td>将字符串按照指定的字符集转换为大写</td>
+</tr>
+<tr>
+<td>func Trim(s string, cutset string) string</td>
+<td>从字符串开头和结尾删除 cutset 这个字符集合中的任意单个字符</td>
+</tr>
+<tr>
+<td>func TrimFunc(s string, f func(rune) bool) string</td>
+<td>函数决定如何删除字符串开头和结尾的字符</td>
+</tr>
+<tr>
+<td>func TrimRight(s string, cutset string) string</td>
+<td>删除结尾的指定字符集合中的任意字符</td>
+</tr>
+<tr>
+<td>func TrimRightFunc(s string, f func(rune) bool) string</td>
+<td>函数决定如何从结尾删除字符</td>
+</tr>
+<tr>
+<td>func TrimLeft(s string, cutset string) string</td>
+<td>删除开头的指定字符集合中的任意字符</td>
+</tr>
+<tr>
+<td>func TTrimLeftFunc(s string, f func(rune) bool) string</td>
+<td>函数决定如何从开头删除字符</td>
+</tr>
+</tbody>
+</table>
+<h2 id="ContainsAny检测是否包含任意字符"><a href="#ContainsAny检测是否包含任意字符" class="headerlink" title="ContainsAny检测是否包含任意字符"></a>ContainsAny检测是否包含任意字符</h2><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(strings.ContainsAny(<span class="string">"team"</span>, <span class="string">"a"</span>))</span><br><span class="line">	fmt.Println(strings.ContainsAny(<span class="string">"failure"</span>, <span class="string">"fe99"</span>))</span><br><span class="line">	fmt.Println(strings.ContainsAny(<span class="string">"failure"</span>, <span class="string">"u &amp; i"</span>))</span><br><span class="line">	fmt.Println(strings.ContainsAny(<span class="string">"foo"</span>, <span class="string">""</span>))</span><br><span class="line">	fmt.Println(strings.ContainsAny(<span class="string">""</span>, <span class="string">""</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">true</span><br><span class="line">true</span><br><span class="line">true</span><br><span class="line">false</span><br><span class="line">false</span><br></pre></td></tr></table></figure>
+<h2 id="ContainsRune检测是否包含指定Unicode码位值"><a href="#ContainsRune检测是否包含指定Unicode码位值" class="headerlink" title="ContainsRune检测是否包含指定Unicode码位值"></a>ContainsRune检测是否包含指定Unicode码位值</h2><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(strings.ContainsRune(<span class="string">"aardvark"</span>, <span class="number">97</span>))</span><br><span class="line">	fmt.Println(strings.ContainsRune(<span class="string">"timeout"</span>, <span class="number">97</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">true</span><br><span class="line">false</span><br></pre></td></tr></table></figure>
+<h2 id="FieldsFunc使用字符由外置函数决定切片"><a href="#FieldsFunc使用字符由外置函数决定切片" class="headerlink" title="FieldsFunc使用字符由外置函数决定切片"></a>FieldsFunc使用字符由外置函数决定切片</h2><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	s := <span class="string">"http://example.jinheng.com/home?a=4&amp;b=5"</span></span><br><span class="line">	func1 := <span class="function"><span class="keyword">func</span><span class="params">(c <span class="keyword">rune</span>)</span> <span class="title">bool</span></span> &#123;</span><br><span class="line">		<span class="keyword">switch</span> c &#123;</span><br><span class="line">		<span class="keyword">case</span> <span class="string">':'</span>:</span><br><span class="line">			<span class="keyword">return</span> <span class="literal">true</span></span><br><span class="line">		<span class="keyword">case</span> <span class="string">'/'</span>:</span><br><span class="line">			<span class="keyword">return</span> <span class="literal">true</span></span><br><span class="line">		<span class="keyword">case</span> <span class="string">'?'</span>:</span><br><span class="line">			<span class="keyword">return</span> <span class="literal">true</span></span><br><span class="line">		<span class="keyword">case</span> <span class="string">'&amp;'</span>:</span><br><span class="line">			<span class="keyword">return</span> <span class="literal">true</span></span><br><span class="line">		<span class="keyword">default</span>:</span><br><span class="line">			<span class="keyword">return</span> <span class="literal">false</span></span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	result := strings.FieldsFunc(s, func1)</span><br><span class="line">	fmt.Printf(<span class="string">"%q"</span>, result)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[&quot;http&quot; &quot;example.jinheng.com&quot; &quot;home&quot; &quot;a=4&quot; &quot;b=5&quot;]</span><br></pre></td></tr></table></figure>
+<h2 id="字符索引位置"><a href="#字符索引位置" class="headerlink" title="字符索引位置"></a>字符索引位置</h2><hr>
+<h3 id="IndexAny返回第一个匹配任意字符的索引"><a href="#IndexAny返回第一个匹配任意字符的索引" class="headerlink" title="IndexAny返回第一个匹配任意字符的索引"></a>IndexAny返回第一个匹配任意字符的索引</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(strings.IndexAny(<span class="string">"chicken"</span>, <span class="string">"aeiouy"</span>))</span><br><span class="line">	fmt.Println(strings.IndexAny(<span class="string">"chicken"</span>, <span class="string">"ahiouy"</span>))</span><br><span class="line">	fmt.Println(strings.IndexAny(<span class="string">"crwth"</span>, <span class="string">"aeiouy"</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">2</span><br><span class="line">1</span><br><span class="line">-1</span><br></pre></td></tr></table></figure>
+<h3 id="IndexByte返回第一个匹配byte字符的索引"><a href="#IndexByte返回第一个匹配byte字符的索引" class="headerlink" title="IndexByte返回第一个匹配byte字符的索引"></a>IndexByte返回第一个匹配byte字符的索引</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(strings.IndexByte(<span class="string">"golang"</span>, <span class="string">'g'</span>))</span><br><span class="line">	<span class="comment">// fmt.Println(strings.IndexByte("golang你好", '你'))  // 会抛出异常因为 byte 不能承载一个汉字</span></span><br><span class="line">	fmt.Println(strings.IndexByte(<span class="string">"gophers"</span>, <span class="string">'h'</span>))</span><br><span class="line">	fmt.Println(strings.IndexByte(<span class="string">"golang"</span>, <span class="string">'x'</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">0</span><br><span class="line">3</span><br><span class="line">-1</span><br></pre></td></tr></table></figure>
+<h3 id="IndexFunc返回第一个函数判定为true的索引"><a href="#IndexFunc返回第一个函数判定为true的索引" class="headerlink" title="IndexFunc返回第一个函数判定为true的索引"></a>IndexFunc返回第一个函数判定为true的索引</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	f := <span class="function"><span class="keyword">func</span><span class="params">(c <span class="keyword">rune</span>)</span> <span class="title">bool</span></span> &#123;</span><br><span class="line">		<span class="comment">// fmt.Println(unicode.Is(unicode.Han, c))</span></span><br><span class="line">		<span class="keyword">return</span> unicode.Is(unicode.Han, c)</span><br><span class="line">	&#125;</span><br><span class="line">	fmt.Println(strings.IndexFunc(<span class="string">"Hello, 世界"</span>, f))</span><br><span class="line">	fmt.Println(strings.IndexFunc(<span class="string">"Hello, world"</span>, f))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">7</span><br><span class="line">-1</span><br></pre></td></tr></table></figure>
+<h3 id="IndexRune返回第一个匹配rune字符的索引"><a href="#IndexRune返回第一个匹配rune字符的索引" class="headerlink" title="IndexRune返回第一个匹配rune字符的索引"></a>IndexRune返回第一个匹配rune字符的索引</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(strings.IndexRune(<span class="string">"chicken"</span>, <span class="string">'k'</span>))</span><br><span class="line">	fmt.Println(strings.IndexRune(<span class="string">"chicken"</span>, <span class="string">'d'</span>))</span><br><span class="line">	fmt.Println(strings.IndexRune(<span class="string">"你好世界"</span>, <span class="string">'界'</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">4</span><br><span class="line">-1</span><br><span class="line">9</span><br></pre></td></tr></table></figure>
+<h3 id="LastIndexAny返回最后一个匹配任意字符的索引"><a href="#LastIndexAny返回最后一个匹配任意字符的索引" class="headerlink" title="LastIndexAny返回最后一个匹配任意字符的索引"></a>LastIndexAny返回最后一个匹配任意字符的索引</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(strings.LastIndexAny(<span class="string">"go gopher"</span>, <span class="string">"go"</span>))</span><br><span class="line">	fmt.Println(strings.LastIndexAny(<span class="string">"go gopher"</span>, <span class="string">"rodent"</span>))</span><br><span class="line">	fmt.Println(strings.LastIndexAny(<span class="string">"go gopher"</span>, <span class="string">"fail"</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">0</span><br><span class="line">3</span><br><span class="line">-1</span><br></pre></td></tr></table></figure>
+<h3 id="LastIndexByte返回最后一个匹配byte字符的索引"><a href="#LastIndexByte返回最后一个匹配byte字符的索引" class="headerlink" title="LastIndexByte返回最后一个匹配byte字符的索引"></a>LastIndexByte返回最后一个匹配byte字符的索引</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(strings.LastIndexByte(<span class="string">"Hello, world"</span>, <span class="string">'l'</span>))</span><br><span class="line">	<span class="comment">// fmt.Println(strings.LastIndexByte("Hello, 世界", '世'))</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">10</span><br></pre></td></tr></table></figure>
+<h3 id="LastIndexFunc返回最后一个函数片顶为true的索引"><a href="#LastIndexFunc返回最后一个函数片顶为true的索引" class="headerlink" title="LastIndexFunc返回最后一个函数片顶为true的索引"></a>LastIndexFunc返回最后一个函数片顶为true的索引</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	f := <span class="function"><span class="keyword">func</span><span class="params">(c <span class="keyword">rune</span>)</span> <span class="title">bool</span></span> &#123;</span><br><span class="line">		<span class="comment">// fmt.Println(unicode.Is(unicode.Han, c))</span></span><br><span class="line">		<span class="keyword">return</span> unicode.Is(unicode.Han, c)</span><br><span class="line">	&#125;</span><br><span class="line">	fmt.Println(strings.LastIndexFunc(<span class="string">"Hello, 世sss"</span>, f))  <span class="comment">// 倒叙遍历字符串，返回函数返回 true 的字符索引</span></span><br><span class="line">	fmt.Println(strings.LastIndexFunc(<span class="string">"Hello, world"</span>, f))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">7</span><br><span class="line">-1</span><br></pre></td></tr></table></figure>
+<h2 id="映射字符大小写"><a href="#映射字符大小写" class="headerlink" title="映射字符大小写"></a>映射字符大小写</h2><hr>
+<h3 id="Map函数决定映射字符串"><a href="#Map函数决定映射字符串" class="headerlink" title="Map函数决定映射字符串"></a>Map函数决定映射字符串</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	rot13 := <span class="function"><span class="keyword">func</span><span class="params">(r <span class="keyword">rune</span>)</span> <span class="title">rune</span></span> &#123;</span><br><span class="line">		<span class="keyword">switch</span> &#123;</span><br><span class="line">		<span class="keyword">case</span> r == <span class="string">'i'</span>:</span><br><span class="line">			<span class="keyword">return</span> <span class="string">'u'</span></span><br><span class="line">		<span class="keyword">case</span> r == <span class="string">'u'</span>:</span><br><span class="line">			<span class="keyword">return</span> <span class="string">'i'</span></span><br><span class="line">		<span class="keyword">case</span> r == <span class="string">'我'</span>:</span><br><span class="line">			<span class="keyword">return</span> <span class="string">'你'</span></span><br><span class="line">		<span class="keyword">case</span> r == <span class="string">'你'</span>:</span><br><span class="line">			<span class="keyword">return</span> <span class="string">'我'</span></span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span> r</span><br><span class="line">	&#125;</span><br><span class="line">	fmt.Println(strings.Map(rot13, <span class="string">"i love u 我 爱 你"</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">u love i 你 爱 我</span><br></pre></td></tr></table></figure>
+<h3 id="ToTitle全部转为大写"><a href="#ToTitle全部转为大写" class="headerlink" title="ToTitle全部转为大写"></a>ToTitle全部转为大写</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(strings.ToTitle(<span class="string">"loud noises"</span>))</span><br><span class="line">	fmt.Println(strings.ToTitle(<span class="string">"хлеб"</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">LOUD NOISES</span><br><span class="line">ХЛЕБ</span><br></pre></td></tr></table></figure>
+<h3 id="ToTitleSpecial按照指定的字符集映射为大写"><a href="#ToTitleSpecial按照指定的字符集映射为大写" class="headerlink" title="ToTitleSpecial按照指定的字符集映射为大写"></a>ToTitleSpecial按照指定的字符集映射为大写</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(strings.ToTitleSpecial(unicode.TurkishCase, <span class="string">"dünyanın ilk borsa yapısı Aizonai kabul edilir"</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">DÜNYANIN İLK BORSA YAPISI AİZONAİ KABUL EDİLİR</span><br></pre></td></tr></table></figure>
+<h3 id="ToLowerSpecial按照指定字符集全部映射为小写"><a href="#ToLowerSpecial按照指定字符集全部映射为小写" class="headerlink" title="ToLowerSpecial按照指定字符集全部映射为小写"></a>ToLowerSpecial按照指定字符集全部映射为小写</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(strings.ToLowerSpecial(unicode.TurkishCase, <span class="string">"Önnek İş"</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">önnek iş</span><br></pre></td></tr></table></figure>
+<h3 id="ToUpperSpecial按照指定字符集全部映射为大写"><a href="#ToUpperSpecial按照指定字符集全部映射为大写" class="headerlink" title="ToUpperSpecial按照指定字符集全部映射为大写"></a>ToUpperSpecial按照指定字符集全部映射为大写</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(strings.ToUpperSpecial(unicode.TurkishCase, <span class="string">"örnek iş"</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ÖRNEK İŞ</span><br></pre></td></tr></table></figure>
+<h2 id="删除开头结尾"><a href="#删除开头结尾" class="headerlink" title="删除开头结尾"></a>删除开头结尾</h2><hr>
+<h3 id="Trim从字符串开头和结尾删除匹配的任意单个字符"><a href="#Trim从字符串开头和结尾删除匹配的任意单个字符" class="headerlink" title="Trim从字符串开头和结尾删除匹配的任意单个字符"></a>Trim从字符串开头和结尾删除匹配的任意单个字符</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Print(strings.Trim(<span class="string">"¡¡¡¡¡Hello,¡¡¡!!! Gophers!!!"</span>, <span class="string">"!¡"</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Hello,¡¡¡!!! Gophers</span><br></pre></td></tr></table></figure>
+<h3 id="TrimFunc函数决定删除哪些开头和结尾的字符"><a href="#TrimFunc函数决定删除哪些开头和结尾的字符" class="headerlink" title="TrimFunc函数决定删除哪些开头和结尾的字符"></a>TrimFunc函数决定删除哪些开头和结尾的字符</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	func1 := <span class="function"><span class="keyword">func</span><span class="params">(r <span class="keyword">rune</span>)</span> <span class="title">bool</span></span> &#123;</span><br><span class="line">		flag := !unicode.IsLetter(r) &amp;&amp; !unicode.IsNumber(r)</span><br><span class="line">		<span class="keyword">return</span> flag</span><br><span class="line">	&#125;</span><br><span class="line">	fmt.Print(strings.TrimFunc(<span class="string">"#¡¡¡Hello, Gophers!!!@"</span>, func1))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Hello, Gophers</span><br></pre></td></tr></table></figure>
+<h3 id="TrimRight删除结尾的指定字符集合中的任意字符"><a href="#TrimRight删除结尾的指定字符集合中的任意字符" class="headerlink" title="TrimRight删除结尾的指定字符集合中的任意字符"></a>TrimRight删除结尾的指定字符集合中的任意字符</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Print(strings.TrimRight(<span class="string">"¡¡¡Hello, Gophers!!!"</span>, <span class="string">"!¡"</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">¡¡¡Hello, Gophers</span><br></pre></td></tr></table></figure>
+<h3 id="TrimRightFunc函数决定如何从结尾删除字符"><a href="#TrimRightFunc函数决定如何从结尾删除字符" class="headerlink" title="TrimRightFunc函数决定如何从结尾删除字符"></a>TrimRightFunc函数决定如何从结尾删除字符</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Print(strings.TrimRightFunc(<span class="string">"¡¡¡Hello, Gophers!!!"</span>, <span class="function"><span class="keyword">func</span><span class="params">(r <span class="keyword">rune</span>)</span> <span class="title">bool</span></span> &#123;</span><br><span class="line">		<span class="keyword">return</span> !unicode.IsLetter(r) &amp;&amp; !unicode.IsNumber(r)</span><br><span class="line">	&#125;))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">¡¡¡Hello, Gophers</span><br></pre></td></tr></table></figure>
+<h3 id="TrimLeft删除开头的指定字符集合中的任意字符"><a href="#TrimLeft删除开头的指定字符集合中的任意字符" class="headerlink" title="TrimLeft删除开头的指定字符集合中的任意字符"></a>TrimLeft删除开头的指定字符集合中的任意字符</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Print(strings.TrimRight(<span class="string">"¡¡¡Hello, Gophers!!!"</span>, <span class="string">"!¡"</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Hello, Gophers!!!</span><br></pre></td></tr></table></figure>
+<h3 id="TrimLeftFunc函数决定如何从开头删除字符"><a href="#TrimLeftFunc函数决定如何从开头删除字符" class="headerlink" title="TrimLeftFunc函数决定如何从开头删除字符"></a>TrimLeftFunc函数决定如何从开头删除字符</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Print(strings.TrimRightFunc(<span class="string">"¡¡¡Hello, Gophers!!!"</span>, <span class="function"><span class="keyword">func</span><span class="params">(r <span class="keyword">rune</span>)</span> <span class="title">bool</span></span> &#123;</span><br><span class="line">		<span class="keyword">return</span> !unicode.IsLetter(r) &amp;&amp; !unicode.IsNumber(r)</span><br><span class="line">	&#125;))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Hello, Gophers!!!</span><br></pre></td></tr></table></figure>
 
           
         
@@ -899,7 +885,7 @@
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/3/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/page/36/">36</a><a class="extend next" rel="next" href="/page/5/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/page/3/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/page/39/">39</a><a class="extend next" rel="next" href="/page/5/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -947,7 +933,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">72</span>
+                  <span class="site-state-item-count">77</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

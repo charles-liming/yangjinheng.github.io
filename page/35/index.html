@@ -250,6 +250,16 @@
         </li>
       
         
+        <li class="menu-item menu-item-golang">
+          <a href="/categories/golang/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br>
+            
+            Golang
+          </a>
+        </li>
+      
+        
         <li class="menu-item menu-item-个人日志">
           <a href="/categories/个人日志/" rel="section">
             
@@ -291,7 +301,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://yangjinheng.github.io/2017/06/21/Linux/git/">
+    <link itemprop="mainEntityOfPage" href="https://yangjinheng.github.io/2017/09/14/python/5.函数/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Jin Heng">
@@ -310,7 +320,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/06/21/Linux/git/" itemprop="url">GIT</a></h1>
+                <a class="post-title-link" href="/2017/09/14/python/5.函数/" itemprop="url">函数</a></h1>
         
 
         <div class="post-meta">
@@ -322,8 +332,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-21T00:00:00+08:00">
-                2017-06-21
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-14T00:00:00+08:00">
+                2017-09-14
               </time>
             
 
@@ -345,8 +355,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/运维笔记/" itemprop="url" rel="index">
-                    <span itemprop="name">运维笔记</span>
+                  <a href="/categories/Python/" itemprop="url" rel="index">
+                    <span itemprop="name">Python</span>
                   </a>
                 </span>
 
@@ -384,446 +394,753 @@
       
         
           
-            <h2 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h2><h3 id="文件状态"><a href="#文件状态" class="headerlink" title="文件状态"></a>文件状态</h3><p>文件在目录中的状态有两种：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">未跟踪：表示文件没有加入GIT版本控制</span><br><span class="line"></span><br><span class="line">已跟踪：表示文件已经加入GIT版本控制</span><br></pre></td></tr></table></figure>
-<h3 id="版本状态"><a href="#版本状态" class="headerlink" title="版本状态"></a>版本状态</h3><p>文件已经加入GIT版本控制时，一定有三种状态，文件一定处于其中一个：</p>
-<ul>
-<li>已提交</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">已提交表示数据已经安全的保存在本地数据库中。</span><br></pre></td></tr></table></figure>
-<ul>
-<li>已修改</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">已修改表示修改了文件，但还没保存到数据库中。</span><br></pre></td></tr></table></figure>
-<ul>
-<li>已暂存</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">已暂存表示对一个已修改文件的当前版本做了标记，使之包含在下次提交的快照中。</span><br></pre></td></tr></table></figure>
-<h3 id="三个区域"><a href="#三个区域" class="headerlink" title="三个区域"></a>三个区域</h3><ul>
-<li>Repository：仓库区（或本地仓库）</li>
-</ul>
-<p>Git 仓库目录是 Git 用来保存项目的元数据和对象数据库的地方。 这是 Git 中最重要的部分，从其它计算机克隆仓库时，拷贝的就是这里的数据。在工作区有个隐藏目录<code>.git</code>，这个不算工作区，而是 Git 的仓库。</p>
-<ul>
-<li>Workspace：工作区</li>
-</ul>
-<p>工作区域就是目前看到能操作的目录和文件，它们可以是从项目的某个版本独立提取出来的内容，这些从 Git 仓库的压缩数据库中提取出来的文件，放在磁盘上供你使用或修改的文件。</p>
-<ul>
-<li>Index / Stage：暂存区</li>
-</ul>
-<p>暂存区域是一个文件，保存了下次将提交的文件列表信息，一般在 Git 仓库目录中。 有时候也被称作 ’索引‘ ，不过一般说法还是叫暂存区域。 </p>
-<h3 id="工作流程"><a href="#工作流程" class="headerlink" title="工作流程"></a>工作流程</h3><ol>
-<li>在工作目录中修改文件。</li>
-<li>暂存文件，将文件的快照放入暂存区域。</li>
-<li>提交更新，找到暂存区域的文件，将快照永久性存储到 Git 仓库目录。</li>
+            <h1 id="Python-函数"><a href="#Python-函数" class="headerlink" title="Python 函数"></a>Python 函数</h1><h2 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h2><ol>
+<li>函数是Python为了代码最大程度的重用和最小化代码冗余而提供的基本程序的结构</li>
+<li>函数是将相关功能打包，并且参数化处理的可重复调用的代码段</li>
 </ol>
-<h2 id="基础配置"><a href="#基础配置" class="headerlink" title="基础配置"></a>基础配置</h2><h3 id="配置文件"><a href="#配置文件" class="headerlink" title="配置文件"></a>配置文件</h3><p>Git 自带一个 <code>git config</code> 的工具来帮助设置控制 Git 外观和行为的配置变量，这些变量存储在三个不同的位置：</p>
+<h2 id="函数分类"><a href="#函数分类" class="headerlink" title="函数分类"></a>函数分类</h2><ol>
+<li>全局函数：定义在模块中</li>
+<li>局部函数：嵌套于其他函数中</li>
+<li>lambda：匿名函数表达式</li>
+<li>方法：与特定数据类型关联的函数，并且只能与数据类型关联一起使用</li>
+</ol>
+<h2 id="定义与销毁"><a href="#定义与销毁" class="headerlink" title="定义与销毁"></a>定义与销毁</h2><h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h3><ol>
+<li>函数以 <code>def</code> 关键字开头，后面使用一个标识符作为函数的名称，以及一个括号来接收参数。</li>
+<li>任何需要接收的参数必须定义在小括号内。</li>
+<li>函数以 <code>:</code> 开始，为一个缩进的上下文。</li>
+<li>函数的一行语句可以选择性的使用 <code>&quot;&quot;&quot;README&quot;&quot;&quot;</code> 来存放一段函数的说明，将被显示在帮助内。</li>
+<li>函数内使用 <code>return [expression]</code> 结束函数，返回一个或多个值，当返回多个结果时候会组合为一个元组对象，<code>return</code> 缺省会返回None。</li>
+<li>函数使用 <code>function_Name()</code> 调用。</li>
+</ol>
+<ul>
+<li>示例</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">51</span>]: <span class="function"><span class="keyword">def</span> <span class="title">func1</span><span class="params">(x)</span>:</span></span><br><span class="line">    ...:     <span class="string">"""README"""</span></span><br><span class="line">    ...:     <span class="keyword">return</span> x ** <span class="number">2</span></span><br><span class="line">    ...: </span><br><span class="line"></span><br><span class="line">In [<span class="number">52</span>]: func1(<span class="number">5</span>)</span><br><span class="line">Out[<span class="number">52</span>]: <span class="number">25</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">53</span>]: help(func1)</span><br><span class="line"></span><br><span class="line">Help on function func1 <span class="keyword">in</span> module __main__:</span><br><span class="line"></span><br><span class="line">func1(x)</span><br><span class="line">    README</span><br><span class="line">(END)</span><br></pre></td></tr></table></figure>
+<h3 id="销毁"><a href="#销毁" class="headerlink" title="销毁"></a>销毁</h3><p>总体来说，函数在没有引用计数的情况下被销毁，影响引用计数的情况有：</p>
 <ol>
-<li><code>/etc/gitconfig</code></li>
+<li>新定义了重名的函数，原函数的引用计数会减1</li>
+<li>使用 <code>del</code> 语句删除函数对象的时候，引用计数会减1</li>
 </ol>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">决定系统上每一个用户及他们仓库的通用配置，git config --system 命令就是修改这个文件。</span><br></pre></td></tr></table></figure>
-<ol start="2">
-<li><code>~/.gitconfig</code> or <code>~/.config/git/config</code> </li>
+<p>另外，在线程退出的时候，整个程序内的函数将被销毁</p>
+<ul>
+<li>引用计数的增加与删除</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">61</span>]: <span class="function"><span class="keyword">def</span> <span class="title">func1</span><span class="params">(x)</span>:</span></span><br><span class="line">    ...:     <span class="string">"""README"""</span></span><br><span class="line">    ...:     <span class="keyword">return</span> x ** <span class="number">2</span></span><br><span class="line">    ...: </span><br><span class="line"></span><br><span class="line">In [<span class="number">62</span>]: yang = func1</span><br><span class="line"></span><br><span class="line">In [<span class="number">63</span>]: <span class="keyword">del</span> func1</span><br><span class="line"></span><br><span class="line">In [<span class="number">64</span>]: yang(<span class="number">2</span>)</span><br><span class="line">Out[<span class="number">64</span>]: <span class="number">4</span></span><br></pre></td></tr></table></figure>
+<h2 id="参数接收"><a href="#参数接收" class="headerlink" title="参数接收"></a>参数接收</h2><p>Python支持函数支持：位置参数、默认值参数、可变位置参数、可变关键字参数</p>
+<h3 id="定义参数"><a href="#定义参数" class="headerlink" title="定义参数"></a>定义参数</h3><p>默认情况下，函数对接受到的参数进行 <strong>从左向右</strong> 依此按照位置匹配得到参数。</p>
+<ul>
+<li>代码示例</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="function"><span class="keyword">def</span> <span class="title">f1</span><span class="params">(x,y,z)</span>:</span></span><br><span class="line"><span class="meta">... </span>    print(x,y,z)</span><br><span class="line">...</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a = <span class="number">1</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>b = <span class="number">2</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>c = <span class="number">3</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>f1(a,b,c)</span><br><span class="line"><span class="number">1</span> <span class="number">2</span> <span class="number">3</span></span><br></pre></td></tr></table></figure>
+<h3 id="有默认值的参数"><a href="#有默认值的参数" class="headerlink" title="有默认值的参数"></a>有默认值的参数</h3><p>在定义函数参数时候，为其设置一个默认值，那么当函数没有收到这个参数时，则使用其默认值。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="function"><span class="keyword">def</span> <span class="title">f1</span><span class="params">(x,y,z=<span class="number">4</span>)</span>:</span></span><br><span class="line"><span class="meta">... </span>    print(x,y,z)</span><br><span class="line">...</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>f1(a,b,c)</span><br><span class="line"><span class="number">1</span> <span class="number">2</span> <span class="number">3</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>f1(a,b)</span><br><span class="line"><span class="number">1</span> <span class="number">2</span> <span class="number">4</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>与位置参数混合使用时候</li>
+</ul>
+<p>如果<strong>定义函数时</strong>混用位置参数和有默认值的参数，则<strong>有默认值的参数必须在位置参数之后</strong>。</p>
+<h3 id="可变数量位置参数（收集为元组）"><a href="#可变数量位置参数（收集为元组）" class="headerlink" title="可变数量位置参数（收集为元组）"></a>可变数量位置参数（收集为元组）</h3><p>定义函数时使用 <code>*</code> 开头的参数，可收集任意多个基于位置参数，当收到多个参数时，解析为元组。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="function"><span class="keyword">def</span> <span class="title">f1</span><span class="params">(*x)</span>:</span>print(x)</span><br><span class="line">...</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>f1(<span class="number">1</span>,<span class="number">2</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>)</span><br><span class="line">(<span class="number">1</span>, <span class="number">2</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>)</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>与位置参数混合使用时候，位置参数必须在前。</p>
+</blockquote>
+<h3 id="可变数量关键字参数（收集为字典）"><a href="#可变数量关键字参数（收集为字典）" class="headerlink" title="可变数量关键字参数（收集为字典）"></a>可变数量关键字参数（收集为字典）</h3><p>定义函数时使用 <code>**</code> 开头的参数，可收集任意多个基于关键字形式的参数，当收到多个参数时，解析为字典</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="function"><span class="keyword">def</span> <span class="title">f1</span><span class="params">(**x)</span>:</span>print(x)</span><br><span class="line">...</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>f1(a=<span class="number">1</span>,b=<span class="number">2</span>,c=<span class="number">3</span>,d=<span class="number">4</span>)</span><br><span class="line">&#123;<span class="string">'a'</span>: <span class="number">1</span>, <span class="string">'b'</span>: <span class="number">2</span>, <span class="string">'c'</span>: <span class="number">3</span>, <span class="string">'d'</span>: <span class="number">4</span>&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>与位置参数混合使用时候，位置参数必须在前。</p>
+<p>与可变数量位置参数混合使用时候，可变数量位置参数必须在前。</p>
+</blockquote>
+<h2 id="参数传递"><a href="#参数传递" class="headerlink" title="参数传递"></a>参数传递</h2><h3 id="位置传参"><a href="#位置传参" class="headerlink" title="位置传参"></a>位置传参</h3><p>默认情况下，函数对接受到的参数进行 <strong>从左向右</strong> 依此按照位置匹配得到参数。</p>
+<ul>
+<li>代码示例</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="function"><span class="keyword">def</span> <span class="title">f1</span><span class="params">(x,y,z)</span>:</span></span><br><span class="line"><span class="meta">... </span>    print(x,y,z)</span><br><span class="line">...</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a = <span class="number">1</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>b = <span class="number">2</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>c = <span class="number">3</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>f1(a,b,c)</span><br><span class="line"><span class="number">1</span> <span class="number">2</span> <span class="number">3</span></span><br></pre></td></tr></table></figure>
+<h3 id="关键字传参"><a href="#关键字传参" class="headerlink" title="关键字传参"></a>关键字传参</h3><p>调用函数时，使用关键字参数， <code>args=value</code> ，明确指定传给函数的哪个参数，这种传递方式与顺序无关。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="function"><span class="keyword">def</span> <span class="title">f1</span><span class="params">(x,y,z)</span>:</span></span><br><span class="line"><span class="meta">... </span>    print(x,y,z)</span><br><span class="line">...</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>f1(z=c,y=c,x=a)</span><br><span class="line"><span class="number">1</span> <span class="number">3</span> <span class="number">3</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>f1(z=<span class="number">3</span>,y=<span class="number">2</span>,x=<span class="number">1</span>)</span><br><span class="line"><span class="number">1</span> <span class="number">2</span> <span class="number">3</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>注意：传递方式为 参数名=值</p>
+</blockquote>
+<ul>
+<li>与位置参数混合使用时候</li>
+</ul>
+<p>如果<strong>传参时</strong>混用位置参数和关键字参数，则<strong>关键字参数必须在位置参数之后</strong>。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="function"><span class="keyword">def</span> <span class="title">f1</span><span class="params">(x,y,z)</span>:</span></span><br><span class="line"><span class="meta">... </span>    print(x,y,z)</span><br><span class="line">...</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a = <span class="number">1</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>b = <span class="number">2</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>c = <span class="number">3</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>f1(a,z=c,y=b)</span><br><span class="line"><span class="number">1</span> <span class="number">2</span> <span class="number">3</span></span><br></pre></td></tr></table></figure>
+<h3 id="序列解包传参（传递序列）"><a href="#序列解包传参（传递序列）" class="headerlink" title="序列解包传参（传递序列）"></a>序列解包传参（传递序列）</h3><p>调用函数时候，向函数传递的参数为一个序列对象，并且在序列名称前加 <code>*</code> ，那么函数将分解序列，按位置分解得到参数。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>l1 = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="function"><span class="keyword">def</span> <span class="title">f1</span><span class="params">(x,y,z)</span>:</span></span><br><span class="line"><span class="meta">... </span>    print(x,y,z)</span><br><span class="line">...</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>f1(*l1)</span><br><span class="line"><span class="number">1</span> <span class="number">2</span> <span class="number">3</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>序列解包与位置参数混用</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="function"><span class="keyword">def</span> <span class="title">f1</span><span class="params">(x,y,z)</span>:</span></span><br><span class="line"><span class="meta">... </span>    print(x,y,z)</span><br><span class="line">...</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>l1 = [<span class="number">1</span>,<span class="number">2</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>f1(<span class="number">9</span>,*l1)</span><br><span class="line"><span class="number">9</span> <span class="number">1</span> <span class="number">2</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>定义时使用可变数量位置参数，调用时候使用序列解包</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="function"><span class="keyword">def</span> <span class="title">f1</span><span class="params">(x,*y)</span>:</span></span><br><span class="line"><span class="meta">... </span>    print(x,y)</span><br><span class="line">...</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>l1 = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>f1(<span class="number">9</span>,*l1)</span><br><span class="line"><span class="number">9</span> (<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>)</span><br></pre></td></tr></table></figure>
+<h3 id="关键字解包传参（传递字典）"><a href="#关键字解包传参（传递字典）" class="headerlink" title="关键字解包传参（传递字典）"></a>关键字解包传参（传递字典）</h3><p>调用函数时候，向函数传递的参数为一个字典对象，并且在序列名称前加 <code>**</code> ，那么函数将分解序列，按位置分解得到字典。</p>
+<ul>
+<li>定义参数时使用可变数量位置参数、可变关键字参数，调用时候使用序列解包</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>l1 = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>d1 = dict(a=<span class="number">1</span>,b=<span class="number">2</span>,c=<span class="number">3</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="function"><span class="keyword">def</span> <span class="title">f1</span><span class="params">(x,*y,**z)</span>:</span>print(x,y,z)</span><br><span class="line">...</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>f1(<span class="number">9</span>,*l1,**d1)</span><br><span class="line"><span class="number">9</span> (<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>) &#123;<span class="string">'a'</span>: <span class="number">1</span>, <span class="string">'b'</span>: <span class="number">2</span>, <span class="string">'c'</span>: <span class="number">3</span>&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="变量作用域"><a href="#变量作用域" class="headerlink" title="变量作用域"></a>变量作用域</h2><ol>
+<li><code>作用域</code> 即变量的作用范围。</li>
+<li><code>模块(module)</code>，<code>类(class)</code>，<code>函数(def、lambda)</code> 会产生新的作用域。</li>
+<li><code>条件判断(if……else……)</code>、<code>循环语句(for x in data)</code>、<code>异常捕捉(try……catch)</code> 等不会产生新的作用域。</li>
 </ol>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">只针对当前用户，git config --global 命令就是修改这个文件。</span><br></pre></td></tr></table></figure>
-<ol start="3">
-<li><code>.git/config</code></li>
+<h3 id="作用域划分"><a href="#作用域划分" class="headerlink" title="作用域划分"></a>作用域划分</h3><p>Python遵循LEGB原则：以 <code>L → E → G → B</code> 的规则查找，即从局部开始向上查找，找不到变量则报未定义错误。</p>
+<ul>
+<li>B：build-in 系统固定模块里面的变量，也叫系统变量，比如<code>int、open</code>，解释器退出消亡。</li>
+<li>G：global 全局变量，也就是模块级别定义的变量，模块导入时创建，线程退出消亡。</li>
+<li>E：enclosing 嵌套的父级函数的局部作用域，就是包含此函数的上层函数的局部作用域</li>
+<li>L：local 局部作用域，即为函数中定义的变量，函数调用时创建，调用结束消亡。</li>
+</ul>
+<p>函数的变量在函数返回时，就会被销毁。</p>
+<ul>
+<li>函数内部可以访问全局变量</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">159</span>]: x = <span class="number">40</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">160</span>]: <span class="function"><span class="keyword">def</span> <span class="title">func</span><span class="params">()</span>:</span></span><br><span class="line">     ...:     y = <span class="number">30</span></span><br><span class="line">     ...:     <span class="keyword">return</span> x,y</span><br><span class="line">     ...: </span><br><span class="line"></span><br><span class="line">In [<span class="number">161</span>]: func()</span><br><span class="line">Out[<span class="number">161</span>]: (<span class="number">40</span>, <span class="number">30</span>)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>在函数内部定义的变量，作用域在仅局部，即时与全局变量重名，由于作用域不同，全局也不会受到影响。</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">153</span>]: x = <span class="number">40</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">154</span>]: <span class="function"><span class="keyword">def</span> <span class="title">func</span><span class="params">()</span>:</span></span><br><span class="line">     ...:     x = <span class="number">30</span></span><br><span class="line">     ...:     <span class="keyword">return</span> x</span><br><span class="line">     ...: </span><br><span class="line"></span><br><span class="line">In [<span class="number">155</span>]: print(func(),x)</span><br><span class="line"><span class="number">30</span> <span class="number">40</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>在函数内部引用有重名的全局变量</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">169</span>]: x = <span class="number">40</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">170</span>]: <span class="function"><span class="keyword">def</span> <span class="title">func</span><span class="params">()</span>:</span></span><br><span class="line">     ...:     x = <span class="number">30</span></span><br><span class="line">     ...:     <span class="keyword">return</span> x,globals()[<span class="string">'x'</span>]</span><br><span class="line">     ...: </span><br><span class="line"></span><br><span class="line">In [<span class="number">171</span>]: func()</span><br><span class="line">Out[<span class="number">171</span>]: (<span class="number">30</span>, <span class="number">40</span>)</span><br></pre></td></tr></table></figure>
+<h3 id="改变作用域"><a href="#改变作用域" class="headerlink" title="改变作用域"></a>改变作用域</h3><ul>
+<li>修改全局变量</li>
+</ul>
+<p>若内部作用域想要修改外部作用域的变量，使用 <code>global</code> 关键字声明的变量，将作用于全局。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">11</span>]: name = <span class="string">'yangjinheng'</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">12</span>]: <span class="function"><span class="keyword">def</span> <span class="title">func</span><span class="params">()</span>:</span></span><br><span class="line">    ...:     <span class="keyword">global</span> name</span><br><span class="line">    ...:     name = <span class="string">'yangdada'</span></span><br><span class="line">    ...:     <span class="keyword">return</span> name</span><br><span class="line">    ...: </span><br><span class="line"></span><br><span class="line">In [<span class="number">13</span>]: print(func(),name)</span><br><span class="line">yangdada yangdada</span><br></pre></td></tr></table></figure>
+<ul>
+<li>修改嵌套作用域变量</li>
+</ul>
+<p>如果需要修改嵌套作用域的变量，使用 <code>nonlocal</code> 关键字声明变量，将作用于嵌套层。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">32</span>]: <span class="function"><span class="keyword">def</span> <span class="title">func1</span><span class="params">()</span>:</span></span><br><span class="line">    ...:     name = <span class="string">'yangjinheng'</span></span><br><span class="line">    ...:     <span class="function"><span class="keyword">def</span> <span class="title">func2</span><span class="params">()</span>:</span></span><br><span class="line">    ...:         <span class="keyword">nonlocal</span> name</span><br><span class="line">    ...:         name = <span class="string">'yangdada'</span></span><br><span class="line">    ...:         <span class="keyword">return</span> name</span><br><span class="line">    ...:     <span class="keyword">return</span> func2(),name</span><br><span class="line">    ...: </span><br><span class="line">    ...: </span><br><span class="line">    ...: </span><br><span class="line"></span><br><span class="line">In [<span class="number">33</span>]: func1()</span><br><span class="line">Out[<span class="number">33</span>]: (<span class="string">'yangdada'</span>, <span class="string">'yangdada'</span>)</span><br><span class="line">    </span><br><span class="line">In [<span class="number">29</span>]: <span class="function"><span class="keyword">def</span> <span class="title">func1</span><span class="params">()</span>:</span></span><br><span class="line">    ...:     name = <span class="string">'yangjinheng'</span></span><br><span class="line">    ...:     <span class="function"><span class="keyword">def</span> <span class="title">func2</span><span class="params">()</span>:</span></span><br><span class="line">    ...:         <span class="keyword">nonlocal</span> name</span><br><span class="line">    ...:         name = <span class="string">'yangdada'</span></span><br><span class="line">    ...:         <span class="keyword">return</span> name</span><br><span class="line">    ...:     <span class="keyword">return</span> id(func2()),id(name)</span><br><span class="line">    ...: </span><br><span class="line">    ...: </span><br><span class="line">    ...: </span><br><span class="line"></span><br><span class="line">In [<span class="number">30</span>]: func1()</span><br><span class="line">Out[<span class="number">30</span>]: (<span class="number">139764464624944</span>, <span class="number">139764464624944</span>)</span><br></pre></td></tr></table></figure>
+<h3 id="函数闭包"><a href="#函数闭包" class="headerlink" title="函数闭包"></a>函数闭包</h3><p>当调用一个函数时，默认情况下调用的函数一旦返回，则在其局部作用域的变量将被销毁，如果被调用的函数返回的是将内部子函数，而字函数又引用了外层函数的变量，那么此时子函数会自动记忆外层函数的变量，这种机制叫“函数闭包”</p>
+<ul>
+<li>代码示例</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">91</span>]: <span class="function"><span class="keyword">def</span> <span class="title">func1</span><span class="params">(x)</span>:</span></span><br><span class="line">    ...:     <span class="function"><span class="keyword">def</span> <span class="title">func2</span><span class="params">(y)</span>:</span></span><br><span class="line">    ...:         <span class="keyword">return</span> y ** x</span><br><span class="line">    ...:     <span class="keyword">return</span> func2    <span class="comment">#func1的返回结果为func2，变量x未使用</span></span><br><span class="line">    ...: </span><br><span class="line"></span><br><span class="line">In [<span class="number">92</span>]: func1(<span class="number">4</span>)    <span class="comment">#调用func1时变量x为4，调用结果为func2函数，func1此时返回了，x变量应该销毁。</span></span><br><span class="line">Out[<span class="number">92</span>]: &lt;function __main__.func1.&lt;locals&gt;.func2&gt;</span><br><span class="line"></span><br><span class="line">In [<span class="number">93</span>]: func3 = func1(<span class="number">4</span>)    <span class="comment">#给func1返回的返回结果定义一个标识符。</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">95</span>]: func3(<span class="number">3</span>)    <span class="comment">#调用func3传递参数，发现func1中x变量不仅没有销毁，还参与了运算。</span></span><br><span class="line">Out[<span class="number">95</span>]: <span class="number">81</span></span><br></pre></td></tr></table></figure>
+<h3 id="默认值参数作用域"><a href="#默认值参数作用域" class="headerlink" title="默认值参数作用域"></a>默认值参数作用域</h3><p>函数的所有类型参数都是函数变量，属于局部变量，函数返回后就被销毁。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">116</span>]: <span class="function"><span class="keyword">def</span> <span class="title">func</span><span class="params">(x=<span class="number">1024</span>)</span>:</span></span><br><span class="line">     ...:     <span class="keyword">return</span> x</span><br><span class="line">     ...: </span><br><span class="line"></span><br><span class="line">In [<span class="number">117</span>]: x</span><br><span class="line">---------------------------------------------------------------------------</span><br><span class="line">NameError                                 Traceback (most recent call last)</span><br><span class="line">&lt;ipython-input<span class="number">-117</span><span class="number">-6</span>fcf9dfbd479&gt; <span class="keyword">in</span> &lt;module&gt;()</span><br><span class="line">----&gt; 1 x</span><br><span class="line"></span><br><span class="line">NameError: name <span class="string">'x'</span> <span class="keyword">is</span> <span class="keyword">not</span> defined</span><br></pre></td></tr></table></figure>
+<p>因为函数也是对象，Python把函数的默认值存放在属性中，而属性会伴随着函数的整个生命周期，不会因为调用结束而销毁，如果函数的默认值是一个可变的对象（如：列表），那么对这个列表的操作将被保留。</p>
+<p>调用函数对象的 <code>__defaults__</code> 能够显示属性，它保存了函数的所有参数默认值。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">178</span>]: <span class="function"><span class="keyword">def</span> <span class="title">func</span><span class="params">(x=[])</span>:</span></span><br><span class="line">     ...:     x.append(<span class="number">0</span>)</span><br><span class="line">     ...:     <span class="keyword">return</span> x</span><br><span class="line">     ...: </span><br><span class="line"></span><br><span class="line">In [<span class="number">179</span>]: func()</span><br><span class="line">Out[<span class="number">179</span>]: [<span class="number">0</span>]</span><br><span class="line"></span><br><span class="line">In [<span class="number">180</span>]: func()</span><br><span class="line">Out[<span class="number">180</span>]: [<span class="number">0</span>, <span class="number">0</span>]</span><br><span class="line"></span><br><span class="line">In [<span class="number">181</span>]: func()</span><br><span class="line">Out[<span class="number">181</span>]: [<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>]</span><br><span class="line"></span><br><span class="line">In [<span class="number">182</span>]: func.__defaults__</span><br><span class="line">Out[<span class="number">182</span>]: ([<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>],)</span><br><span class="line"></span><br><span class="line">In [<span class="number">183</span>]: func()</span><br><span class="line">Out[<span class="number">183</span>]: [<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>]</span><br><span class="line"></span><br><span class="line">In [<span class="number">184</span>]: func.__defaults__</span><br><span class="line">Out[<span class="number">184</span>]: ([<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>],)</span><br></pre></td></tr></table></figure>
+<h2 id="函数类型注解"><a href="#函数类型注解" class="headerlink" title="函数类型注解"></a>函数类型注解</h2><p>类型注解是对函数参数的注释，但不会对变量进行强制性约束</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func</span><span class="params">(x:int=<span class="number">1</span>,y:int=<span class="number">2</span>,*args,**kwargs)</span> -&gt; int:</span></span><br><span class="line">    <span class="keyword">return</span> x + y</span><br></pre></td></tr></table></figure>
+<p><code>:</code> 后的内容是对变量的注释</p>
+<p><code>-&gt;</code> 是对返回值的注释</p>
+<h3 id="inspect"><a href="#inspect" class="headerlink" title="inspect"></a>inspect</h3><p>inspect模块主要提供了四种用处：</p>
+<ol>
+<li>对是否是模块，框架，函数等进行类型检查。</li>
+<li>获取源码</li>
+<li>获取类或函数的参数的信息</li>
+<li>解析堆栈</li>
 </ol>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">针对该仓库的配置。</span><br></pre></td></tr></table></figure>
-<p>每一个级别覆盖上一级别的配置，所以 <code>.git/config</code> 的配置变量会覆盖 <code>/etc/gitconfig</code> 中的配置变量，在 Windows 系统中，Git 会查找 <code>$HOME</code> 目录下（一般情况下是 <code>C:\Users\$USER</code>）的 <code>.gitconfig</code> 文件。 Git 同样也会寻找 <code>/etc/gitconfig</code> 文件，但只限于 MSys 的根目录下，即安装 Git 时所选的目标位置。 </p>
-<h3 id="设置用户"><a href="#设置用户" class="headerlink" title="设置用户"></a>设置用户</h3><p>当安装完 Git 应该做的第一件事就是设置你的用户名称与邮件地址。 这样做很重要，因为每一个 Git 的提交都会使用这些信息，并且它会写入到你的每一次提交中，不可更改： </p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git config --global user.name <span class="string">"Your Name"</span></span><br><span class="line">git config --global user.email email@example.com</span><br></pre></td></tr></table></figure>
-<p>再次强调，如果使用了 <code>--global</code> 选项，那么该命令只需要运行一次，因为之后无论你在该系统上做任何事情， Git 都会使用那些信息。 当你想针对特定项目使用不同的用户名称与邮件地址时，可以在那个项目目录下运行没有 <code>--global</code> 选项的命令来配置。 </p>
-<h3 id="检查配置"><a href="#检查配置" class="headerlink" title="检查配置"></a>检查配置</h3><p>如果想要检查你的配置，可以使用 <code>git config --list</code> 命令来列出所有 Git 当时能找到的配置，重复出现的配置则以最后一次的值为准。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]<span class="comment"># git config --list</span></span><br><span class="line">user.name=Yangjinheng</span><br><span class="line">user.email=420123641@qq.com</span><br><span class="line"></span><br><span class="line">[root@localhost ~]<span class="comment"># git config user.name</span></span><br><span class="line">Yangjinheng</span><br></pre></td></tr></table></figure>
-<h2 id="基础使用"><a href="#基础使用" class="headerlink" title="基础使用"></a>基础使用</h2><h3 id="初始化仓库"><a href="#初始化仓库" class="headerlink" title="初始化仓库"></a>初始化仓库</h3><table>
-<thead>
-<tr>
-<th>指令</th>
-<th>作用</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>git init</code></td>
-<td>创建一个空的 Git 版本库或重新初始化一个已存在的版本库</td>
-</tr>
-</tbody>
-</table>
-<h3 id="克隆现有仓库"><a href="#克隆现有仓库" class="headerlink" title="克隆现有仓库"></a>克隆现有仓库</h3><p>如果你想获得一份已经存在了的 Git 仓库的拷贝，克隆仓库的命令格式是 <code>git clone [url]</code>，当你执行 git clone 命令的时候，默认配置下远程 Git 仓库中的每一个文件的每一个版本都将被拉取下来。 </p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">git clone https://github.com/libgit2/libgit2 mylibgit</span><br></pre></td></tr></table></figure>
-<p>Git 支持多种数据传输协议。 上面的例子使用的是 <code>https://</code> 协议，不过你也可以使用 <code>git://</code> 协议或者使用 SSH 传输协议，比如 <code>user@server:path/to/repo.git</code> 。 </p>
-<h3 id="忽略文件"><a href="#忽略文件" class="headerlink" title="忽略文件"></a>忽略文件</h3><p>在工作区创建一个名为 <code>.gitignore</code> 的文件，记录不需要版本控制的文件名，GIT将忽略这些文件，规范如下：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">- 忽略空行和以#开头的注释信息</span><br><span class="line">- 可以使用标准通配符，例如：*、?、[a-z]、[0-9]</span><br><span class="line">- 以 / 开头可以防止递归</span><br><span class="line">- 目录需要以 / 结尾</span><br><span class="line">- ! 取反，表示忽略指定模式以外的文件或目录</span><br></pre></td></tr></table></figure>
-<p>例如：Python的版本库忽略文件</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Windows:</span></span><br><span class="line">Thumbs.db</span><br><span class="line">ehthumbs.db</span><br><span class="line">Desktop.ini</span><br><span class="line"></span><br><span class="line"><span class="comment"># Python:</span></span><br><span class="line">*.py[cod]</span><br><span class="line">*.so</span><br><span class="line">*.egg</span><br><span class="line">*.egg-info</span><br><span class="line">dist</span><br><span class="line">build</span><br><span class="line"></span><br><span class="line"><span class="comment"># My configurations:</span></span><br><span class="line">db.ini</span><br><span class="line">deploy_key_rsa</span><br></pre></td></tr></table></figure>
-<h3 id="添加变更"><a href="#添加变更" class="headerlink" title="添加变更"></a>添加变更</h3><table>
-<thead>
-<tr>
-<th>指令</th>
-<th>作用</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>git add file</code></td>
-<td>添加文件的变更到暂存区</td>
-</tr>
-<tr>
-<td><code>git add directory</code></td>
-<td>递归添加目录下文件的变更到暂存区</td>
-</tr>
-</tbody>
-</table>
-<h3 id="状态查看"><a href="#状态查看" class="headerlink" title="状态查看"></a>状态查看</h3><table>
-<thead>
-<tr>
-<th>指令</th>
-<th>作用</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>git status</code></td>
-<td>显示工作区状态</td>
-</tr>
-<tr>
-<td>`git stats [-s</td>
-<td>–short]`</td>
-<td>以简洁的格式显示状态</td>
-</tr>
-<tr>
-<td>`git stats [-b</td>
-<td>–branch]`</td>
-<td>显示分支信息</td>
-</tr>
-</tbody>
-</table>
-<h3 id="提交变更"><a href="#提交变更" class="headerlink" title="提交变更"></a>提交变更</h3><table>
-<thead>
-<tr>
-<th>指令</th>
-<th>作用</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>git commit -m &#39;msg&#39;</code></td>
-<td>仅提交暂存区的文件到版本库，<code>-m</code> 为提交添加说明信息</td>
-</tr>
-<tr>
-<td><code>git commit -a -m &#39;msg&#39;</code></td>
-<td>直接提交已跟踪的全部文件到版本库，包含：已修改，已暂存</td>
-</tr>
-<tr>
-<td><code>git commit &lt;file&gt; -m &#39;msg&#39;</code></td>
-<td>直接提交文件到版本库，包含：已修改，已暂存</td>
-</tr>
-<tr>
-<td><code>git commit --amend -m &#39;msg&#39;</code></td>
-<td>修订上一次的提交</td>
-</tr>
-</tbody>
-</table>
-<h3 id="状态转换"><a href="#状态转换" class="headerlink" title="状态转换"></a>状态转换</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">%% Example of sequence diagram</span><br><span class="line">  sequenceDiagram</span><br><span class="line">未跟踪(Untracked)-&gt;&gt;已暂存(Staged): add命令</span><br><span class="line">已暂存(Staged)-&gt;&gt;未修改(Unmodify): commit命令</span><br><span class="line">未修改(Unmodify)-&gt;&gt;已修改(Modified): 修改文件</span><br><span class="line">未修改(Unmodify)-&gt;&gt;未跟踪(Untracked): remove命令</span><br><span class="line">已修改(Modified)-&gt;&gt;已暂存(Staged): add命令</span><br></pre></td></tr></table></figure>
-<h3 id="差异分析"><a href="#差异分析" class="headerlink" title="差异分析"></a>差异分析</h3><ul>
-<li>工作区<strong>比</strong>暂存区</li>
+<h3 id="检查对象类型"><a href="#检查对象类型" class="headerlink" title="检查对象类型"></a>检查对象类型</h3><ul>
+<li>is</li>
 </ul>
-<table>
-<thead>
-<tr>
-<th>指令</th>
-<th>作用</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>git diff</code></td>
-<td>工作区 <strong>比</strong> 暂存区</td>
-</tr>
-<tr>
-<td><code>git diff &lt;filename&gt;</code></td>
-<td>工作区文件 <strong>比</strong> 暂存区</td>
-</tr>
-</tbody>
-</table>
+<p>用法：<code>is{module|class|function|method|builtin}(object)</code></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">2</span>]: inspect.isclass(int)</span><br><span class="line">Out[<span class="number">2</span>]: <span class="keyword">True</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">3</span>]: inspect.isclass(inspect)</span><br><span class="line">Out[<span class="number">3</span>]: <span class="keyword">False</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">4</span>]: inspect.ismodule(inspect)</span><br><span class="line">Out[<span class="number">4</span>]: <span class="keyword">True</span></span><br></pre></td></tr></table></figure>
 <ul>
-<li>工作区<strong>比</strong>版本库</li>
+<li>isroutine(obj)</li>
 </ul>
-<table>
-<thead>
-<tr>
-<th>指令</th>
-<th>作用</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>git diff HEAD</code></td>
-<td>工作区 <strong>比</strong> 最新的提交</td>
-</tr>
-<tr>
-<td><code>git diff HEAD~1</code></td>
-<td>工作区 <strong>比</strong> 上一次提交</td>
-</tr>
-<tr>
-<td><code>git diff HEAD~1 test</code></td>
-<td>工作区文件 <strong>比</strong> 上一次提交</td>
-</tr>
-</tbody>
-</table>
+<p>用于检查对象是否为函数、方法、内建函数或方法等等可调用类型。用这个方法会比多个<code>is()</code>更方便，不过它的实现仍然是用了多个<code>is()</code>。如果目的是只要可以直接调用就需要是True的话，不妨使用<code>isinstance(obj, collections.Callable)</code>这种形式。 </p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">8</span>]: <span class="function"><span class="keyword">def</span> <span class="title">func</span><span class="params">(x:int,y:int)</span>:</span></span><br><span class="line">   ...:     <span class="keyword">return</span> x + y</span><br><span class="line">   ...: </span><br><span class="line"></span><br><span class="line">In [<span class="number">9</span>]: inspect.isroutine(func)</span><br><span class="line">Out[<span class="number">9</span>]: <span class="keyword">True</span></span><br><span class="line">    </span><br><span class="line">In [<span class="number">11</span>]: inspect.isroutine([].append)</span><br><span class="line">Out[<span class="number">11</span>]: <span class="keyword">True</span></span><br></pre></td></tr></table></figure>
+<h3 id="获取对象信息"><a href="#获取对象信息" class="headerlink" title="获取对象信息"></a>获取对象信息</h3><ul>
+<li><strong>getmembers(object[, predicate]):</strong><br>这个方法是dir()的扩展版，它会将dir()找到的名字对应的属性一并返回，形如[(name, value), …]。另外，predicate是一个方法的引用，如果指定，则应当接受value作为参数并返回一个布尔值，如果为False，相应的属性将不会返回。使用is*作为第二个参数可以过滤出指定类型的属性。</li>
+<li><strong>getmodule(object):</strong><br>还在为第2节中的<strong>module</strong>属性只返回字符串而遗憾吗？这个方法一定可以满足你，它返回object的定义所在的模块对象。</li>
+<li><strong>get{file|sourcefile}(object):</strong><br>获取object的定义所在的模块的文件名|源代码文件名（如果没有则返回None）。用于内建的对象（内建模块、类、函数、方法）上时会抛出TypeError异常。</li>
+<li><strong>get{source|sourcelines}(object):</strong><br>获取object的定义的源代码，以字符串|字符串列表返回。代码无法访问时会抛出IOError异常。只能用于module/class/function/method/code/frame/traceack对象。</li>
+<li><strong>getargspec(func):</strong> 仅用于方法，获取方法声明的参数，返回元组，分别是(普通参数名的列表, *参数名, **参数名, 默认值元组)。如果没有值，将是空列表和3个None。如果是2.6以上版本，将返回一个命名元组(Named Tuple)，即除了索引外还可以使用属性名访问元组中的元素。  </li>
+<li><strong>getargvalues(frame):</strong> 仅用于栈帧，获取栈帧中保存的该次函数调用的参数值，返回元组，分别是(普通参数名的列表, *参数名, **参数名, 帧的locals())。如果是2.6以上版本，将返回一个命名元组(Named Tuple)，即除了索引外还可以使用属性名访问元组中的元素。 </li>
+<li><strong>getcallargs(func[, *args][, </strong>kwds]):** 返回使用args和kwds调用该方法时各参数对应的值的字典。这个方法仅在2.7版本中才有。</li>
+<li><strong>getmro(cls):</strong> 返回一个类型元组，查找类属性时按照这个元组中的顺序。如果是新式类，与cls.<strong>mro</strong>结果一样。但旧式类没有<strong>mro</strong>这个属性，直接使用这个属性会报异常，所以这个方法还是有它的价值的。 返回当前的栈帧对象。</li>
+</ul>
+<h3 id="函数签名"><a href="#函数签名" class="headerlink" title="函数签名"></a>函数签名</h3><ul>
+<li>signature(func)</li>
+</ul>
+<p>可以得到函数的签名，是一个有序的字典</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">8</span>]: <span class="function"><span class="keyword">def</span> <span class="title">func</span><span class="params">(x:int,y:int)</span>:</span>    <span class="comment">#定义了一个带类型注解的函数</span></span><br><span class="line">   ...:     <span class="keyword">return</span> x + y</span><br><span class="line">   ...: </span><br><span class="line"></span><br><span class="line">In [<span class="number">16</span>]: inspect.signature(func)</span><br><span class="line">Out[<span class="number">16</span>]: &lt;Signature (x:int, y:int)&gt;    <span class="comment">#得到的是一个有序的字典</span></span><br></pre></td></tr></table></figure>
 <ul>
-<li>暂存区<strong>比</strong>版本库</li>
+<li>得到函数返回值的类型注解</li>
 </ul>
-<table>
-<thead>
-<tr>
-<th>指令</th>
-<th>作用</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>git diff --cached</code></td>
-<td>暂存区 <strong>比</strong> 最新的提交</td>
-</tr>
-<tr>
-<td><code>git diff HEAD~1 --cached</code></td>
-<td>暂存区 <strong>比</strong> 上一次提交</td>
-</tr>
-</tbody>
-</table>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">62</span>]: <span class="function"><span class="keyword">def</span> <span class="title">func</span><span class="params">(x:int=<span class="number">1</span>,y:int=<span class="number">2</span>,*args,**kwargs)</span> -&gt; int:</span></span><br><span class="line">    ...:         <span class="keyword">return</span> x + y</span><br><span class="line">    ...: </span><br><span class="line"></span><br><span class="line">In [<span class="number">63</span>]: inspect.signature(func).return_annotation</span><br><span class="line">Out[<span class="number">63</span>]: int</span><br></pre></td></tr></table></figure>
 <ul>
-<li>版本库<strong>比</strong>版本库</li>
+<li>得到函数签名中的参数</li>
 </ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">In [36]: a = inspect.signature(func)</span><br><span class="line"></span><br><span class="line">In [34]: a.parameters</span><br><span class="line">Out[34]: mappingproxy(&#123;&apos;x&apos;: &lt;Parameter &quot;x:int&quot;&gt;, &apos;y&apos;: &lt;Parameter &quot;y:int&quot;&gt;&#125;)</span><br><span class="line"></span><br><span class="line">In [35]: a.parameters[&apos;x&apos;]</span><br><span class="line">Out[35]: &lt;Parameter &quot;x:int&quot;&gt;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>得到参数的类型注解</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">36</span>]: a.parameters[<span class="string">'x'</span>].annotation</span><br><span class="line">Out[<span class="number">36</span>]: int</span><br><span class="line">    </span><br><span class="line">In [<span class="number">42</span>]: <span class="function"><span class="keyword">def</span> <span class="title">func</span><span class="params">(x:int,y:int,*args,**kwargs)</span>:</span></span><br><span class="line">    ...:     <span class="keyword">return</span> x + y</span><br><span class="line">    ...: </span><br><span class="line"></span><br><span class="line">In [<span class="number">44</span>]: a = inspect.signature(func)</span><br><span class="line"></span><br><span class="line">In [<span class="number">45</span>]: a.parameters[<span class="string">'args'</span>]</span><br><span class="line">Out[<span class="number">45</span>]: &lt;Parameter <span class="string">"*args"</span>&gt;</span><br><span class="line"></span><br><span class="line">In [<span class="number">46</span>]: a.parameters[<span class="string">'kwargs'</span>]</span><br><span class="line">Out[<span class="number">46</span>]: &lt;Parameter <span class="string">"**kwargs"</span>&gt;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>得到参数的默认值</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">55</span>]: a.parameters[<span class="string">'x'</span>]</span><br><span class="line">Out[<span class="number">55</span>]: &lt;Parameter <span class="string">"x:int=1"</span>&gt;</span><br><span class="line"></span><br><span class="line">In [<span class="number">56</span>]: a.parameters[<span class="string">'x'</span>].default</span><br><span class="line">Out[<span class="number">56</span>]: <span class="number">1</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>得到参数名称</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">57</span>]: a.parameters[<span class="string">'x'</span>].name</span><br><span class="line">Out[<span class="number">57</span>]: <span class="string">'x'</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>参数的传参方式</li>
+</ul>
+<p><code>POSITIONAL_ONLY</code>：值必须是位置参数提供<br><code>POSITIONAL_OR_KEYWORD</code>：位置或关键字参数<br><code>VAR_POSITIONAL</code>：可变数量位置参数，对应*args<br><code>KEYWORD_ONLY</code>：关键字参数，对应或者<code>args</code>之后的出现的非可变关键字参数<br><code>VAR_KEYWORD</code>：可变数量关键字参数，对应**kwargs</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">83</span>]: sig.parameters[<span class="string">'x'</span>].kind</span><br><span class="line">Out[<span class="number">83</span>]: &lt;_ParameterKind.POSITIONAL_OR_KEYWORD: <span class="number">1</span>&gt;    <span class="comment">#位置或关键字参数</span></span><br><span class="line">        </span><br><span class="line">In [<span class="number">84</span>]: sig.parameters[<span class="string">'args'</span>].kind</span><br><span class="line">Out[<span class="number">84</span>]: &lt;_ParameterKind.VAR_POSITIONAL: <span class="number">2</span>&gt;    <span class="comment">#可变数量位置参数</span></span><br></pre></td></tr></table></figure>
+<h1 id="lambda-函数"><a href="#lambda-函数" class="headerlink" title="lambda 函数"></a>lambda 函数</h1><p>lambda 是匿名函数：通俗地说就是没有名字的函数，lambda 函数没有名字，可以使用标识符来连接 lambda 函数。</p>
+<p>lambda 函数有输入和输出：输入是传入到参数列表 args 的值，输出是根据表达式 expression 计算得到的值。</p>
+<p>lambda 的首要用途是指定短小的回调函数。</p>
+<p>lambda 是一个表达式而非语句，它不产生代码块。</p>
+<h2 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">lambda</span> args: expression</span><br></pre></td></tr></table></figure>
+<p>args: 以逗号分隔的参数列表<br>expression: 用到 args 的表达式(不能是语句)，不能是多条件的 if，可以是三元表达式，可以使用 for while 等。</p>
+<ul>
+<li>示例</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">x = lambda x: x + x</span><br><span class="line">x(2)</span><br><span class="line">4</span><br></pre></td></tr></table></figure>
+<h1 id="内置函数"><a href="#内置函数" class="headerlink" title="内置函数"></a>内置函数</h1><p>查看所有的内置函数：<code>dir(__builtins__)</code></p>
+<p>查看单个函数的帮助：<code>dir(函数名称)</code></p>
 <table>
 <thead>
 <tr>
-<th>指令</th>
+<th>函数名</th>
+<th>用法</th>
 <th>作用</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><code>git diff HEAD~1 HEAD</code></td>
-<td>最新提交 <strong>比</strong> 上一次提交</td>
-</tr>
-</tbody>
-</table>
-<h3 id="查看历史"><a href="#查看历史" class="headerlink" title="查看历史"></a>查看历史</h3><table>
-<thead>
-<tr>
-<th>指令</th>
-<th>作用</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>git log</code></td>
-<td>显示提交日志</td>
+<td>abs</td>
+<td>abs(num)</td>
+<td>返回给定数字的绝对值。如果这个数字是一个复数，则返回它的大小。</td>
 </tr>
 <tr>
-<td><code>git log -n</code></td>
-<td>显示最近指定次数提交日志</td>
+<td>all</td>
+<td>all(iterable)</td>
+<td>当给定迭代中的所有元素都为真时，返回True，否则返回False。</td>
 </tr>
 <tr>
-<td><code>git log --graph</code></td>
-<td>图形表示的分支合并历史</td>
+<td>any</td>
+<td>any(iterable)</td>
+<td>当给定迭代中有一个元素为真时，返回True，否则返回False。</td>
 </tr>
 <tr>
-<td><code>git log --relative-date</code></td>
-<td>使用口语化的形式显示提交时间</td>
+<td>ascii</td>
+<td>ascii(object)</td>
+<td>使用\ x，\ u或\ U转义符转义字符串中的非ASCII字符。</td>
 </tr>
 <tr>
-<td><code>git log --abbrev-commit</code></td>
-<td>仅显示 SHA-1 的前几个字符，而非所有的 40 个字符。</td>
+<td>bin</td>
+<td>bin(num)</td>
+<td>转换并返回给定整数的二进制等效字符串。</td>
 </tr>
 <tr>
-<td><code>git log -S [keyword]</code></td>
-<td>搜索提交历史，根据关键词</td>
-</tr>
-</tbody>
-</table>
-<h3 id="移动文件"><a href="#移动文件" class="headerlink" title="移动文件"></a>移动文件</h3><table>
-<thead>
-<tr>
-<th>命令</th>
-<th>作用</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>git mv file_from file_to</code></td>
-<td>从暂存区和工作区重命名或移动文件</td>
-</tr>
-</tbody>
-</table>
-<h3 id="删除文件"><a href="#删除文件" class="headerlink" title="删除文件"></a>删除文件</h3><table>
-<thead>
-<tr>
-<th>命令</th>
-<th>作用</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>git rm &lt;filename&gt;</code></td>
-<td>从暂存区和工作区删除文件</td>
+<td>bool</td>
+<td>bool(object)</td>
+<td>使用标准真值测试程序将值转换为布尔值（True或False）。</td>
 </tr>
 <tr>
-<td><code>git rm --cached &lt;filename&gt;</code></td>
-<td>仅从暂存区删除文件</td>
-</tr>
-</tbody>
-</table>
-<h3 id="撤销操作"><a href="#撤销操作" class="headerlink" title="撤销操作"></a>撤销操作</h3><table>
-<thead>
-<tr>
-<th>命令</th>
-<th>作用</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>git reset [file]</code></td>
-<td>重置暂存区的指定文件，与上一次commit保持一致，但工作区文件不变</td>
+<td>bytearray</td>
+<td>bytearray(source,code,error)</td>
+<td>将对象处理为字节，返回一个字节数组。</td>
 </tr>
 <tr>
-<td><code>git reset --hard</code></td>
-<td>重置暂存区与工作区，与上一次commit保持一致</td>
+<td>bytes</td>
+<td>bytes(source,code,error)</td>
+<td>返回一个用给定大小和数据初始化的不可变字节对象。</td>
 </tr>
 <tr>
-<td><code>git reset [commit]</code></td>
-<td>重置当前分支的指针为指定commit，同时重置暂存区，但工作区不变</td>
+<td>callable</td>
+<td>callable(object)</td>
+<td>函数用于检查一个对象是否是可调用的。</td>
 </tr>
 <tr>
-<td><code>git reset --hard [commit]</code></td>
-<td>重置当前分支的HEAD为指定commit，同时重置暂存区和工作区，与指定commit一致</td>
+<td>chr</td>
+<td>chr(i)</td>
+<td>查找 unicode表，将给定的数字转换为 unicode字符。</td>
 </tr>
 <tr>
-<td><code>git reset --keep [commit]</code></td>
-<td>重置当前HEAD为指定commit，但保持暂存区和工作区不变</td>
-</tr>
-</tbody>
-</table>
-<h3 id="丢弃工作区"><a href="#丢弃工作区" class="headerlink" title="丢弃工作区"></a>丢弃工作区</h3><table>
-<thead>
-<tr>
-<th>命令</th>
-<th>作用</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>git checkout -- &lt;filename&gt;</code></td>
-<td>恢复暂存区的指定文件到工作区</td>
+<td>classmethod</td>
+<td>classmethod(function)</td>
+<td>返回给定函数的类方法。</td>
 </tr>
 <tr>
-<td><code>git checkout .</code></td>
-<td>恢复暂存区的所有文件到工作区</td>
+<td>compile</td>
+<td>compile(source, filename, mode,…）</td>
+<td>将一个字符串编译为字节代码。</td>
 </tr>
 <tr>
-<td><code>git checkout [commit] [file]</code></td>
-<td>恢复某个commit的指定文件到暂存区和工作区</td>
-</tr>
-</tbody>
-</table>
-<h2 id="远程仓库"><a href="#远程仓库" class="headerlink" title="远程仓库"></a>远程仓库</h2><h3 id="添加远程仓库"><a href="#添加远程仓库" class="headerlink" title="添加远程仓库"></a>添加远程仓库</h3><p>为了便于管理，Git要求每个远程主机都必须指定一个主机名。<code>git remote</code>命令就用于管理主机名。 </p>
-<table>
-<thead>
-<tr>
-<th>命令</th>
-<th>作用</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>git remote -v</code></td>
-<td>显示所有远程仓库和URL地址</td>
+<td>complex</td>
+<td>complex([real[, imag]])</td>
+<td>提供实部和虚部时返回复数，或者将字符串转换为复数。</td>
 </tr>
 <tr>
-<td><code>git remote add &lt;name&gt; &lt;url&gt;</code></td>
-<td>增加一个新的远程仓库，并命名</td>
+<td>dir</td>
+<td>dir([object])</td>
+<td>返回对象的有效属性列表。</td>
 </tr>
 <tr>
-<td><code>git remote rename &lt;old&gt; &lt;new&gt;</code></td>
-<td>修改远程仓库名称</td>
+<td>divmod</td>
+<td>divmod(number1,number2)</td>
+<td>返回两个数字的商和余数的二元组。</td>
 </tr>
 <tr>
-<td><code>git remote remove &lt;name&gt;</code></td>
-<td>移除一个远程仓库</td>
+<td>enumerate</td>
+<td>enumerate(sequence, [start=0])</td>
+<td>枚举可迭代对象，返回可迭代对象的<code>索引</code>和<code>元素</code>组成的二元组，一般用在<code>for</code>循环中。</td>
 </tr>
 <tr>
+<td>eval</td>
+<td>eval(expression[, globals[, locals]])</td>
+<td>用来执行一个字符串表达式，并返回表达式的值。</td>
+</tr>
+<tr>
+<td>exec</td>
+<td>exec(expression[, globals[, locals]])</td>
+<td>执行储存在字符串或文件中的Python语句，相比于 eval，exec可以执行更复杂的 Python 代码。</td>
+</tr>
+<tr>
+<td>float</td>
+<td>float(object)</td>
+<td>从数字或字符串中返回一个浮点数。</td>
+</tr>
+<tr>
+<td>int</td>
+<td>int(object)</td>
+<td>从数字或字符串中返回一个整数。</td>
+</tr>
+<tr>
+<td>str</td>
+<td>str(object=’’)</td>
+<td>将对象转化为适于人阅读的形式。</td>
+</tr>
+<tr>
+<td>list</td>
+<td>list([iterable])</td>
+<td>在Python中创建一个列表。</td>
+</tr>
+<tr>
+<td>tuple</td>
+<td>tuple(iterable)</td>
+<td>在Python中创建一个元组。</td>
+</tr>
+<tr>
+<td>set</td>
+<td>set([iterable])</td>
+<td>根据给定的迭代构造Python集合并返回它。</td>
+</tr>
+<tr>
+<td>dict</td>
+<td>dict(a,b)</td>
+<td>构造函数在Python中创建一个字典。</td>
+</tr>
+<tr>
+<td>format</td>
+<td>format(value[, format_spec])</td>
+<td>format（）方法类似于String格式的方法。在内部，两种方法都调用对象的<code>__format __()</code>方法。</td>
+</tr>
+<tr>
+<td>frozenset</td>
+<td>frozenset([iterable])</td>
+<td>返回一个不可变集合，冻结后集合不能再添加或删除任何元素。</td>
+</tr>
+<tr>
+<td>hasattr</td>
+<td>hasattr(object, name)</td>
+<td>如果对象具有给定的命名属性，则hasattr（）方法返回true，否则返回false。</td>
+</tr>
+<tr>
+<td>getattr</td>
+<td>getattr(object, name[, default])</td>
+<td>返回对象的指定属性的值。如果找不到，它将返回提供给函数的默认值。</td>
+</tr>
+<tr>
+<td>setattr</td>
+<td>setattr(object, name, value)</td>
+<td>设置对象的给定属性的值。</td>
+</tr>
+<tr>
+<td>delattr</td>
+<td>delattr(object, name)</td>
+<td>从对象中删除属性（如果对象允许的话）。</td>
+</tr>
+<tr>
+<td>globals</td>
+<td>globals()</td>
+<td>会以字典类型返回当前位置的全部全局变量。</td>
+</tr>
+<tr>
+<td>locals</td>
+<td>locals()</td>
+<td>会以字典类型返回当前位置的全部局部变量。</td>
+</tr>
+<tr>
+<td>hash</td>
+<td>hash(object)</td>
+<td>获取取一个对象（字符串或者数值等）的哈希值。</td>
+</tr>
+<tr>
+<td>help</td>
+<td>help(object)</td>
+<td>调用内置的Python帮助系统。</td>
+</tr>
+<tr>
+<td>hex</td>
+<td>hex(number)</td>
+<td>用于将10进制整数转换成16进制，以字符串形式表示。</td>
+</tr>
+<tr>
+<td>id</td>
+<td>id(object)</td>
+<td>返回对象在Python的内存标识（唯一整数）。</td>
+</tr>
+<tr>
+<td>input</td>
+<td>input([prompt])</td>
+<td>接受一个标准输入数据，返回为 string 类型。</td>
+</tr>
+<tr>
+<td>isinstance</td>
+<td>isinstance(object, classinfo)</td>
+<td>判断一个对象是否是一个已知的类型，类似 type()。</td>
+</tr>
+<tr>
+<td>issubclass</td>
+<td>issubclass(class, classinfo)</td>
+<td>用于判断参数 class 是否是类型参数 classinfo 的子类。</td>
+</tr>
+<tr>
+<td>iter</td>
+<td>iter(object[, sentinel])</td>
+<td>生成迭代器。</td>
+</tr>
+<tr>
+<td>len</td>
+<td>len(object)</td>
+<td>返回对象的项目数量（长度）。</td>
+</tr>
+<tr>
+<td>max</td>
+<td>max(object)</td>
+<td>返回对象中最大的元素</td>
+</tr>
+<tr>
+<td>min</td>
+<td>min(object)</td>
+<td>返回对象中最小的元素</td>
+</tr>
+<tr>
+<td>memoryview</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>next</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>object</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>oct</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>open</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>ord</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>pow</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>print</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>property</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>range</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>repr</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>reversed</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>round</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>slice</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>staticmethod</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>sum</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>super</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>type</td>
+<td>class type(name, bases, dict)</td>
+<td>函数如果你只有第一个参数则返回对象的类型，三个参数返回新的类型对象。</td>
+</tr>
+<tr>
+<td>vars</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>zip</td>
+<td>zip([iterable, …])</td>
+<td>接收多个可迭代对象，将可迭代对象按位置一一对应，返回元组或者字典。</td>
+</tr>
+<tr>
+<td>map</td>
+<td>map(function, iterable, …)</td>
+<td>根据提供的函数对指定序列做映射。</td>
+</tr>
+<tr>
+<td>filter</td>
+<td>filter(function, iterable)</td>
+<td>函数用于过滤序列，过滤掉不符合条件的元素，返回由符合条件元素组成的新列表。</td>
+</tr>
+<tr>
+<td>sorted</td>
 <td></td>
 </tr>
 </tbody>
 </table>
-<h3 id="推送到远程"><a href="#推送到远程" class="headerlink" title="推送到远程"></a>推送到远程</h3><table>
-<thead>
-<tr>
-<th>命令</th>
-<th>作用</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>git push</code></td>
-<td>推送本地版本库到远程</td>
-</tr>
-<tr>
-<td><code>git push -u git-test master</code></td>
-<td>关联远程版本库的master到本地的分支</td>
-</tr>
-<tr>
-<td></td>
-</tr>
-</tbody>
-</table>
-<h3 id="SSH免密连接"><a href="#SSH免密连接" class="headerlink" title="SSH免密连接"></a>SSH免密连接</h3><ul>
-<li>生成SSH密钥对</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[root@localhost .ssh]<span class="comment"># ssh-keygen -t rsa</span></span><br><span class="line">Generating public/private rsa key pair.</span><br><span class="line">Enter file <span class="keyword">in</span> <span class="built_in">which</span> to save the key (/root/.ssh/id_rsa):     <span class="comment">#回车</span></span><br><span class="line">Enter passphrase (empty <span class="keyword">for</span> no passphrase):                  <span class="comment">#输入私钥密码，可以直接回车不填</span></span><br><span class="line">Enter same passphrase again:                                 <span class="comment">#再此输入密码，回车</span></span><br><span class="line">Your identification has been saved <span class="keyword">in</span> /root/.ssh/id_rsa.</span><br><span class="line">Your public key has been saved <span class="keyword">in</span> /root/.ssh/id_rsa.pub.</span><br><span class="line">The key fingerprint is:</span><br><span class="line">SHA256:2Z9vpRL3FQUbqDkGvVU1CPnk9ptEAkctIFM2RYI7BOY root@localhost.localdomain</span><br><span class="line">The key<span class="string">'s randomart image is:</span></span><br><span class="line"><span class="string">+---[RSA 2048]----+</span></span><br><span class="line"><span class="string">|       o.+oBB**+.|</span></span><br><span class="line"><span class="string">|      o .o=o== +o|</span></span><br><span class="line"><span class="string">|       E...=* o .|</span></span><br><span class="line"><span class="string">|         =*  = o |</span></span><br><span class="line"><span class="string">|        S.o.. + .|</span></span><br><span class="line"><span class="string">|           ....oo|</span></span><br><span class="line"><span class="string">|            oo.++|</span></span><br><span class="line"><span class="string">|            ..oo.|</span></span><br><span class="line"><span class="string">|             o.  |</span></span><br><span class="line"><span class="string">+----[SHA256]-----+</span></span><br><span class="line"><span class="string">[root@localhost .ssh]# ll ~/.ssh/</span></span><br><span class="line"><span class="string">总用量 8</span></span><br><span class="line"><span class="string">-rw------- 1 root root 1675 5月  22 20:06 id_rsa</span></span><br><span class="line"><span class="string">-rw-r--r-- 1 root root  408 5月  22 20:06 id_rsa.pub</span></span><br></pre></td></tr></table></figure>
+<h2 id="abs"><a href="#abs" class="headerlink" title="abs"></a>abs</h2><p>返回给定数字的绝对值。如果这个数字是一个复数，则返回它的大小。</p>
+<p>用法：abs(num)</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">360</span>]: abs(<span class="number">-5</span>)</span><br><span class="line">Out[<span class="number">360</span>]: <span class="number">5</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>  <strong>绝对值</strong>用来表示<strong>一个数至原点的距离之大小</strong>。</p>
+</blockquote>
+<h2 id="all"><a href="#all" class="headerlink" title="all"></a>all</h2><p>当给定迭代中的所有元素都为真时，返回True，否则返回False。</p>
+<p>用法：<code>all(iterable)</code></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">362</span>]: list1 = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>,<span class="number">8</span>,<span class="number">9</span>,<span class="number">0</span>]</span><br><span class="line"></span><br><span class="line">In [<span class="number">363</span>]: all(list1)</span><br><span class="line">Out[<span class="number">363</span>]: <span class="keyword">False</span></span><br><span class="line">    </span><br><span class="line">In [<span class="number">367</span>]: list1 = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>,<span class="number">8</span>,<span class="number">9</span>,[]]</span><br><span class="line"></span><br><span class="line">In [<span class="number">368</span>]: all(list1)</span><br><span class="line">Out[<span class="number">368</span>]: <span class="keyword">False</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">364</span>]: list1 = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>,<span class="number">8</span>,<span class="number">9</span>]</span><br><span class="line"></span><br><span class="line">In [<span class="number">365</span>]: all(list1)</span><br><span class="line">Out[<span class="number">365</span>]: <span class="keyword">True</span></span><br></pre></td></tr></table></figure>
+<h2 id="any"><a href="#any" class="headerlink" title="any"></a>any</h2><p>当给定迭代中有一个元素为真时，返回True，否则返回False。</p>
+<p>用法：<code>any(iterable)</code></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">5</span>]: str1 = [[],<span class="number">0</span>,<span class="keyword">False</span>]</span><br><span class="line"></span><br><span class="line">In [<span class="number">6</span>]: any(str1)</span><br><span class="line">Out[<span class="number">6</span>]: <span class="keyword">False</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">7</span>]: str1 = [[],<span class="number">1</span>,<span class="keyword">False</span>]</span><br><span class="line"></span><br><span class="line">In [<span class="number">8</span>]: any(str1)</span><br><span class="line">Out[<span class="number">8</span>]: <span class="keyword">True</span></span><br></pre></td></tr></table></figure>
+<h2 id="ascii"><a href="#ascii" class="headerlink" title="ascii"></a>ascii</h2><p>ascii() 函数类似 repr() 函数, 返回一个表示对象的字符串, 但是对于字符串中的非 ASCII 字符则返回通过 repr() 函数使用 \x, \u 或 \U 编码的字符。 生成字符串类似 Python2 版本中 repr() 函数的返回值。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">9</span>]: ascii([<span class="string">'Python'</span>, <span class="string">'Pythön'</span>, <span class="number">5</span>])</span><br><span class="line">Out[<span class="number">9</span>]: <span class="string">"['Python', 'Pyth\\xf6n', 5]"</span></span><br></pre></td></tr></table></figure>
+<h2 id="bin"><a href="#bin" class="headerlink" title="bin"></a>bin</h2><p>转换并返回给定整数的二进制等效字符串。</p>
+<p>用法：<code>bin(num)</code></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">13</span>]: bin(<span class="number">255</span>)</span><br><span class="line">Out[<span class="number">13</span>]: <span class="string">'0b11111111'</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">14</span>]: bin(<span class="number">256</span>)</span><br><span class="line">Out[<span class="number">14</span>]: <span class="string">'0b100000000'</span></span><br></pre></td></tr></table></figure>
+<h2 id="bool"><a href="#bool" class="headerlink" title="bool"></a>bool</h2><p>使用标准真值测试程序将值转换为布尔值（True或False）</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">15</span>]: bool(<span class="number">1</span>)</span><br><span class="line">Out[<span class="number">15</span>]: <span class="keyword">True</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">16</span>]: bool(<span class="number">0</span>)</span><br><span class="line">Out[<span class="number">16</span>]: <span class="keyword">False</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">17</span>]: bool([])</span><br><span class="line">Out[<span class="number">17</span>]: <span class="keyword">False</span></span><br></pre></td></tr></table></figure>
+<h2 id="bytearray"><a href="#bytearray" class="headerlink" title="bytearray"></a>bytearray</h2><p>返回一个新字节数组。这个数组里的元素是可变的，并且每个元素的值范围: 0 &lt;= x &lt; 256。</p>
 <ul>
-<li>复制公钥</li>
+<li>如果 source 为整数，则返回一个长度为 source 的初始化数组；</li>
+<li>如果 source 为字符串，则按照指定的 encoding 将字符串转换为字节序列；</li>
+<li>如果 source 为可迭代类型，则元素必须为[0 ,255] 中的整数；</li>
+<li>如果 source 为与 buffer 接口一致的对象，则此对象也可以被用于初始化 bytearray。</li>
+<li>如果没有输入任何参数，默认就是初始化数组为0个元素。</li>
 </ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[root@localhost .ssh]<span class="comment"># cat ~/.ssh/id_rsa.pub</span></span><br><span class="line">ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDHiZVCW6zVG6gDEhrOXeXjwNqrxj+OQNSRFJn5ekxjlI2+J12qR0ElWzhmeafxDWjQbSU8jkA5p/uD4H2B2IrDwG94MttmI26W+bFHmN/ZDtsAQy/cfDJP04maT1oyBVajomZYKv08wbtpJIMPt0Y8RhofWVJ7A+r1g9Z1z1jfZb88QmTr4tRNG1sGT4lLoUp7qtZ/GJXV4bJy6X8QiyQ/88v8uiY3FC7Ucjw4ZX50lXAJ9BbYdxYxzzZNaw6DZz9xb4F6RsnvRupNlx1w2EIXYE3FlDMTW1q538EOASJQEe8zrc6m7q9tr17DE0jvFwWTEybgVMcOZaW1lt4Ex7XL root@localhost.localdomain</span><br></pre></td></tr></table></figure>
+<p>用法：<code>bytearray([source[, encoding[, errors]]])</code></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">38</span>]: bytearray(<span class="number">5</span>)</span><br><span class="line">Out[<span class="number">38</span>]: bytearray(<span class="string">b'\x00\x00\x00\x00\x00'</span>)</span><br><span class="line">    </span><br><span class="line">In [<span class="number">42</span>]: bytearray(<span class="string">'yangjinheng'</span>,<span class="string">'UTF-8'</span>)</span><br><span class="line">Out[<span class="number">42</span>]: bytearray(<span class="string">b'yangjinheng'</span>)</span><br><span class="line">    </span><br><span class="line">In [<span class="number">43</span>]: list1 = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>,<span class="number">8</span>,<span class="number">9</span>]</span><br><span class="line">In [<span class="number">44</span>]: bytearray(list1)</span><br><span class="line">Out[<span class="number">44</span>]: bytearray(<span class="string">b'\x01\x02\x03\x04\x05\x06\x07\x08\t'</span>)</span><br></pre></td></tr></table></figure>
+<h2 id="bytes"><a href="#bytes" class="headerlink" title="bytes"></a>bytes</h2><p>返回一个用给定大小和数据初始化的不可变字节对象。</p>
+<p>用法：<code>bytes([source[, encoding[, errors]]])</code></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">54</span>]: bytes(<span class="number">2</span>)</span><br><span class="line">Out[<span class="number">54</span>]: <span class="string">b'\x00\x00'</span></span><br><span class="line">In [<span class="number">55</span>]: bytes(<span class="string">'yang'</span>,<span class="string">'utf-8'</span>)</span><br><span class="line">Out[<span class="number">55</span>]: <span class="string">b'yang'</span></span><br></pre></td></tr></table></figure>
+<h2 id="callable"><a href="#callable" class="headerlink" title="callable"></a>callable</h2><p>函数用于检查一个对象是否是可调用的。</p>
+<p>用法：callable(object)</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">51</span>]: callable(<span class="string">'yang'</span>)</span><br><span class="line">Out[<span class="number">51</span>]: <span class="keyword">False</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">52</span>]: callable(dir)</span><br><span class="line">Out[<span class="number">52</span>]: <span class="keyword">True</span></span><br></pre></td></tr></table></figure>
+<h2 id="chr"><a href="#chr" class="headerlink" title="chr"></a>chr</h2><p>查找 unicode表，将给定的数字转换为 unicode字符。</p>
+<p>用法：chr(i)</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">56</span>]: chr(<span class="number">97</span>)</span><br><span class="line">Out[<span class="number">56</span>]: <span class="string">'a'</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">57</span>]: chr(<span class="number">98</span>)</span><br><span class="line">Out[<span class="number">57</span>]: <span class="string">'b'</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">58</span>]: chr(<span class="number">99</span>)</span><br><span class="line">Out[<span class="number">58</span>]: <span class="string">'c'</span></span><br></pre></td></tr></table></figure>
+<h2 id="classmethod"><a href="#classmethod" class="headerlink" title="classmethod"></a>classmethod</h2><p>返回给定函数的类方法。</p>
+<p>用法：<code>classmethod(function)</code></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">76</span>]: <span class="class"><span class="keyword">class</span> <span class="title">Person</span>:</span></span><br><span class="line">    ...:     age = <span class="number">25</span></span><br><span class="line">    ...:     <span class="function"><span class="keyword">def</span> <span class="title">printAge</span><span class="params">(cls)</span>:</span></span><br><span class="line">    ...:         print(<span class="string">'The age is:'</span>, cls.age)</span><br><span class="line">    ...:         </span><br><span class="line"></span><br><span class="line">In [<span class="number">77</span>]: Person.printAge = classmethod(Person.printAge)</span><br><span class="line"></span><br><span class="line">In [<span class="number">78</span>]: Person.printAge()</span><br><span class="line">The age <span class="keyword">is</span>: <span class="number">25</span></span><br></pre></td></tr></table></figure>
+<h2 id="staticmethod"><a href="#staticmethod" class="headerlink" title="staticmethod"></a>staticmethod</h2><h2 id="compile"><a href="#compile" class="headerlink" title="compile"></a>compile</h2><p>将一个字符串编译为字节代码。</p>
+<p>语法：<code>compile(source, filename, mode, flags=0, dont_inherit=False, optimize=-1)</code></p>
+<p>参数：</p>
 <ul>
-<li>在GitHub上添加公钥</li>
+<li><code>source</code> - 普通字符串，字节字符串或AST对象</li>
+<li><code>filename</code> - 从中读取代码的文件。如果它不是从文件中读取的，你可以自己给一个名字</li>
+<li><code>mode</code> - 指定编译代码的种类。可以<code>exec</code>或者<code>eval</code>或者<code>single</code>。</li>
+<li><code>flags</code>（可选）和 <code>dont_inherit</code>（可选）变量作用域，局部命名空间，控制哪些未来声明会影响源代码的编译。默认值：0</li>
+<li><code>optimize</code>（可选） - 编译器的优化级别。默认值-1。</li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">点击头像 --&gt; Setting --&gt; SSH and GPG keys --&gt; New SSH Key --&gt; 粘贴公钥 --&gt; Add SSH key --&gt; 完成</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>str1 = <span class="string">'for i in range(10):print(i)'</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>com = compile(str1,<span class="string">''</span>,<span class="string">'exec'</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>c</span><br><span class="line">&lt;code object &lt;module&gt; at <span class="number">0x0000023378A410C0</span>, file <span class="string">""</span>, line <span class="number">1</span>&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>exec(str1)</span><br><span class="line"><span class="number">0</span></span><br><span class="line"><span class="number">1</span></span><br><span class="line"><span class="number">2</span></span><br><span class="line"><span class="number">3</span></span><br><span class="line"><span class="number">4</span></span><br><span class="line"><span class="number">5</span></span><br><span class="line"><span class="number">6</span></span><br><span class="line"><span class="number">7</span></span><br><span class="line"><span class="number">8</span></span><br><span class="line"><span class="number">9</span></span><br></pre></td></tr></table></figure>
+<h2 id="complex"><a href="#complex" class="headerlink" title="complex"></a>complex</h2><p>提供实部和虚部时返回复数，或者将字符串转换为复数。</p>
+<p>用法：<code>complex([real[, imag]])</code></p>
+<p>参数：</p>
 <ul>
-<li>增加远程仓库</li>
+<li><code>real</code> - 实部，如果<code>real</code>被省略，则默认为0。</li>
+<li><code>imag</code> - 虚部，如果<code>imag</code>省略，则默认为0。</li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@localhost git-test]# git remote add git-test git@github.com:yangjinheng/git-test.git</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>z = complex(<span class="number">2</span>,<span class="number">-3</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>print(z)</span><br><span class="line">(<span class="number">2</span><span class="number">-3j</span>)</span><br></pre></td></tr></table></figure>
+<h2 id="dir"><a href="#dir" class="headerlink" title="dir"></a>dir</h2><p>返回对象的有效属性列表。</p>
+<p>语法：<code>dir([object])</code></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>dir(str)</span><br><span class="line">[<span class="string">'__add__'</span>, <span class="string">'__class__'</span>, <span class="string">'__contains__'</span>, <span class="string">'__delattr__'</span>, <span class="string">'__dir__'</span>, <span class="string">'__doc__'</span>, <span class="string">'__eq__'</span>, <span class="string">'__format__'</span>, <span class="string">'__ge__'</span>, <span class="string">'__getattribute__'</span>, <span class="string">'__getitem__'</span>, <span class="string">'__getnewargs__'</span>, <span class="string">'__gt__'</span>, <span class="string">'__hash__'</span>, <span class="string">'__init__'</span>, <span class="string">'__init_subclass__'</span>, <span class="string">'__iter__'</span>, <span class="string">'__le__'</span>, <span class="string">'__len__'</span>, <span class="string">'__lt__'</span>, <span class="string">'__mod__'</span>, <span class="string">'__mul__'</span>, <span class="string">'__ne__'</span>, <span class="string">'__new__'</span>, <span class="string">'__reduce__'</span>, <span class="string">'__reduce_ex__'</span>, <span class="string">'__repr__'</span>, <span class="string">'__rmod__'</span>, <span class="string">'__rmul__'</span>, <span class="string">'__setattr__'</span>, <span class="string">'__sizeof__'</span>, <span class="string">'__str__'</span>, <span class="string">'__subclasshook__'</span>, <span class="string">'capitalize'</span>, <span class="string">'casefold'</span>, <span class="string">'center'</span>, <span class="string">'count'</span>, <span class="string">'encode'</span>, <span class="string">'endswith'</span>, <span class="string">'expandtabs'</span>, <span class="string">'find'</span>, <span class="string">'format'</span>, <span class="string">'format_map'</span>, <span class="string">'index'</span>, <span class="string">'isalnum'</span>, <span class="string">'isalpha'</span>, <span class="string">'isdecimal'</span>, <span class="string">'isdigit'</span>, <span class="string">'isidentifier'</span>, <span class="string">'islower'</span>, <span class="string">'isnumeric'</span>, <span class="string">'isprintable'</span>, <span class="string">'isspace'</span>, <span class="string">'istitle'</span>, <span class="string">'isupper'</span>, <span class="string">'join'</span>, <span class="string">'ljust'</span>, <span class="string">'lower'</span>, <span class="string">'lstrip'</span>, <span class="string">'maketrans'</span>, <span class="string">'partition'</span>, <span class="string">'replace'</span>, <span class="string">'rfind'</span>, <span class="string">'rindex'</span>, <span class="string">'rjust'</span>, <span class="string">'rpartition'</span>, <span class="string">'rsplit'</span>, <span class="string">'rstrip'</span>, <span class="string">'split'</span>, <span class="string">'splitlines'</span>, <span class="string">'startswith'</span>, <span class="string">'strip'</span>, <span class="string">'swapcase'</span>, <span class="string">'title'</span>, <span class="string">'translate'</span>, <span class="string">'upper'</span>, <span class="string">'zfill'</span>]</span><br></pre></td></tr></table></figure>
+<h2 id="divmod"><a href="#divmod" class="headerlink" title="divmod"></a>divmod</h2><p>返回两个数字的商和余数的二元组。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>divmod(<span class="number">20</span>,<span class="number">2</span>)</span><br><span class="line">(<span class="number">10</span>, <span class="number">0</span>)</span><br></pre></td></tr></table></figure>
+<h2 id="enumerate"><a href="#enumerate" class="headerlink" title="enumerate"></a>enumerate</h2><p>枚举可迭代对象，返回可迭代对象的<code>索引</code>和<code>元素</code>组成的二元组，一般用在<code>for</code>循环中。</p>
+<p>语法：<code>enumerate(sequence, [start=0])</code></p>
+<p>参数：</p>
 <ul>
-<li>关联远程仓库和本地分支，并且推送</li>
+<li>sequence - 一个序列、迭代器或其他支持迭代对象。</li>
+<li>start - 下标起始位置。</li>
 </ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[root@localhost git-test]<span class="comment"># git push -u git-test master</span></span><br><span class="line">The authenticity of host <span class="string">'github.com (13.250.177.223)'</span> can<span class="string">'t be established.</span></span><br><span class="line"><span class="string">RSA key fingerprint is SHA256:nThbg6kXUpJWGl7E1IGOCspRomTxdCARLviKw6E5SY8.</span></span><br><span class="line"><span class="string">RSA key fingerprint is MD5:16:27:ac:a5:76:28:2d:36:63:1b:56:4d:eb:df:a6:48.</span></span><br><span class="line"><span class="string">Are you sure you want to continue connecting (yes/no)? yes</span></span><br><span class="line"><span class="string">Warning: Permanently added '</span>github.com,13.250.177.223<span class="string">' (RSA) to the list of known hosts.</span></span><br><span class="line"><span class="string">Counting objects: 3, done.</span></span><br><span class="line"><span class="string">Delta compression using up to 8 threads.</span></span><br><span class="line"><span class="string">Compressing objects: 100% (2/2), done.</span></span><br><span class="line"><span class="string">Writing objects: 100% (3/3), 358 bytes | 0 bytes/s, done.</span></span><br><span class="line"><span class="string">Total 3 (delta 0), reused 0 (delta 0)</span></span><br><span class="line"><span class="string">To git@github.com:yangjinheng/git-test.git</span></span><br><span class="line"><span class="string"> * [new branch]      master -&gt; master</span></span><br><span class="line"><span class="string">分支 master 设置为跟踪来自 git-test 的远程分支 master。</span></span><br></pre></td></tr></table></figure>
-<h3 id="TAG操作"><a href="#TAG操作" class="headerlink" title="TAG操作"></a>TAG操作</h3><ul>
-<li>创建 TAG</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git tag -a 1.0.1 -m <span class="string">'这是第一个版本'</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">for</span> i,j <span class="keyword">in</span> enumerate(range(<span class="number">9</span>,<span class="number">-1</span>,<span class="number">-1</span>)):print(i,j)</span><br><span class="line">...</span><br><span class="line"><span class="number">0</span> <span class="number">9</span></span><br><span class="line"><span class="number">1</span> <span class="number">8</span></span><br><span class="line"><span class="number">2</span> <span class="number">7</span></span><br><span class="line"><span class="number">3</span> <span class="number">6</span></span><br><span class="line"><span class="number">4</span> <span class="number">5</span></span><br><span class="line"><span class="number">5</span> <span class="number">4</span></span><br><span class="line"><span class="number">6</span> <span class="number">3</span></span><br><span class="line"><span class="number">7</span> <span class="number">2</span></span><br><span class="line"><span class="number">8</span> <span class="number">1</span></span><br><span class="line"><span class="number">9</span> <span class="number">0</span></span><br></pre></td></tr></table></figure>
+<h2 id="eval"><a href="#eval" class="headerlink" title="eval"></a>eval</h2><p>用来执行一个字符串表达式，并返回表达式的值。</p>
+<p>语法：<code>eval(expression[, globals[, locals]])</code></p>
+<p>参数：</p>
 <ul>
-<li>把 TAG 推送到远程</li>
+<li>expression - 表达式。</li>
+<li>globals -  变量作用域，全局命名空间，如果被提供，则必须是一个字典对象。</li>
+<li>locals - 变量作用域，局部命名空间，如果被提供，可以是任何映射对象。</li>
 </ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git push origin 1.0.1</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>x = <span class="number">7</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>eval(<span class="string">'3 * x'</span>)</span><br><span class="line"><span class="number">21</span></span><br></pre></td></tr></table></figure>
+<h2 id="exec"><a href="#exec" class="headerlink" title="exec"></a>exec</h2><p>执行储存在字符串或文件中的Python语句，相比于 eval，exec可以执行更复杂的 Python 代码。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>exec(<span class="string">'print("""hello world""")'</span>)</span><br><span class="line">hello world</span><br></pre></td></tr></table></figure>
+<h2 id="int"><a href="#int" class="headerlink" title="int"></a>int</h2><p>从数字或字符串中返回一个浮点数。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>a = <span class="number">3.14</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>int(a)</span><br><span class="line"><span class="number">3</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a = <span class="string">'10086'</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>int(a)</span><br><span class="line"><span class="number">10086</span></span><br></pre></td></tr></table></figure>
+<h2 id="float"><a href="#float" class="headerlink" title="float"></a>float</h2><p>从数字或字符串中返回一个浮点数。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>a = <span class="string">'3'</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>float(a)</span><br><span class="line"><span class="number">3.0</span></span><br></pre></td></tr></table></figure>
+<h2 id="str"><a href="#str" class="headerlink" title="str"></a>str</h2><p>将对象转化为适于人阅读的形式。</p>
+<p>语法：<br><code>str(object=&#39;&#39;)</code><br><code>str(object=b&#39;&#39;, encoding=&#39;utf-8&#39;, errors=&#39;strict&#39;)</code></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>a = str(<span class="string">'1024'</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a</span><br><span class="line"><span class="string">'1024'</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>type(a)</span><br><span class="line">&lt;<span class="class"><span class="keyword">class</span> '<span class="title">str</span>'&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="repr"><a href="#repr" class="headerlink" title="repr"></a>repr</h3><h2 id="list"><a href="#list" class="headerlink" title="list"></a>list</h2><p>在Python中创建一个列表。</p>
+<p>语法：<code>list([iterable])</code></p>
+<p>参数：<code>iterable（可选）</code> - 可以是序列、字符串、元组、或集合、字典或迭代器对象的对象</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>a = <span class="string">'yangjinheng'</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>list(a)</span><br><span class="line">[<span class="string">'y'</span>, <span class="string">'a'</span>, <span class="string">'n'</span>, <span class="string">'g'</span>, <span class="string">'j'</span>, <span class="string">'i'</span>, <span class="string">'n'</span>, <span class="string">'h'</span>, <span class="string">'e'</span>, <span class="string">'n'</span>, <span class="string">'g'</span>]</span><br></pre></td></tr></table></figure>
+<h2 id="tuple"><a href="#tuple" class="headerlink" title="tuple"></a>tuple</h2><p>在Python中创建一个元组。</p>
+<p>语法：<code>tuple(iterable)</code></p>
+<p>参数：<code>iterable</code>（可选） - 一个可迭代（列表，范围等）或一个迭代器对象</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>a = <span class="string">'yangjinheng'</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>tuple(a)</span><br><span class="line">(<span class="string">'y'</span>, <span class="string">'a'</span>, <span class="string">'n'</span>, <span class="string">'g'</span>, <span class="string">'j'</span>, <span class="string">'i'</span>, <span class="string">'n'</span>, <span class="string">'h'</span>, <span class="string">'e'</span>, <span class="string">'n'</span>, <span class="string">'g'</span>)</span><br></pre></td></tr></table></figure>
+<h2 id="set"><a href="#set" class="headerlink" title="set"></a>set</h2><p>根据给定的迭代构造Python集合并返回它。</p>
+<p>语法：<code>set([iterable])</code></p>
+<p>参数：<code>iterable（可选）</code> - 一个序列、字符串、元组、集合、字典、或迭代器对象被转换为集合</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>print(set(&#123;<span class="string">'a'</span>:<span class="number">1</span>, <span class="string">'e'</span>: <span class="number">2</span>, <span class="string">'i'</span>:<span class="number">3</span>, <span class="string">'o'</span>:<span class="number">4</span>, <span class="string">'u'</span>:<span class="number">5</span>&#125;))</span><br><span class="line">&#123;<span class="string">'o'</span>, <span class="string">'i'</span>, <span class="string">'u'</span>, <span class="string">'e'</span>, <span class="string">'a'</span>&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="dict"><a href="#dict" class="headerlink" title="dict"></a>dict</h2><p>构造函数在Python中创建一个字典。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>numbers = dict(x=<span class="number">5</span>,y=<span class="number">0</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>print(numbers)</span><br><span class="line">&#123;<span class="string">'x'</span>: <span class="number">5</span>, <span class="string">'y'</span>: <span class="number">0</span>&#125;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>type(numbers)</span><br><span class="line">&lt;<span class="class"><span class="keyword">class</span> '<span class="title">dict</span>'&gt;</span></span><br></pre></td></tr></table></figure>
+<h2 id="format"><a href="#format" class="headerlink" title="format"></a>format</h2><p>format（）方法类似于String格式的方法。在内部，两种方法都调用对象的<code>__format __()</code>方法。</p>
+<p>语法：<code>format(value[, format_spec])</code></p>
+<p>参数：</p>
 <ul>
-<li>删除本地 TAG</li>
+<li><code>value</code>，需要格式化的值</li>
+<li><code>format_spec</code> ，值如何格式化的规范</li>
 </ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git tag -d 1.0.1</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>print(format(<span class="number">1024</span>,<span class="string">'&gt;+50.3f'</span>))</span><br><span class="line">                                         +<span class="number">1024.000</span></span><br></pre></td></tr></table></figure>
+<h2 id="frozenset"><a href="#frozenset" class="headerlink" title="frozenset"></a>frozenset</h2><p>返回一个不可变集合，冻结后集合不能再添加或删除任何元素。因为frozenset的不变性，其可以作为dictionary的键值及其他set的元素。其运行效率也高于set。</p>
+<p>语法：<code>frozenset([iterable])</code></p>
+<p>参数：<code>iterable</code> - 包含用于初始化frozenset的元素的迭代器，可以设置Iterable，字典，元组等。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>list1 = &#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>,<span class="number">8</span>,<span class="number">9</span>&#125;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>set1 = &#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>,<span class="number">8</span>,<span class="number">9</span>&#125;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>set2 = frozenset(set1)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>set2</span><br><span class="line">frozenset(&#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>, <span class="number">8</span>, <span class="number">9</span>&#125;)</span><br></pre></td></tr></table></figure>
+<h2 id="super"><a href="#super" class="headerlink" title="super"></a>super</h2><h2 id="property"><a href="#property" class="headerlink" title="property"></a>property</h2><h2 id="hasattr"><a href="#hasattr" class="headerlink" title="hasattr"></a>hasattr</h2><p>如果对象具有给定的命名属性，则hasattr（）方法返回true，否则返回false。</p>
+<p>语法：<code>hasattr(object, name)</code></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="class"><span class="keyword">class</span> <span class="title">coo</span>:</span></span><br><span class="line"><span class="meta">... </span>    x = <span class="number">10</span></span><br><span class="line"><span class="meta">... </span>    y = <span class="number">-5</span></span><br><span class="line"><span class="meta">... </span>    z = <span class="number">0</span></span><br><span class="line">...</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>hasattr(coo,<span class="string">'z'</span>)</span><br><span class="line"><span class="keyword">True</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>hasattr(coo,<span class="string">'o'</span>)</span><br><span class="line"><span class="keyword">False</span></span><br></pre></td></tr></table></figure>
+<h2 id="getattr"><a href="#getattr" class="headerlink" title="getattr"></a>getattr</h2><p>返回对象的指定属性的值。如果找不到，它将返回提供给函数的默认值。</p>
+<p>语法：<code>getattr(object, name[, default])</code></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="class"><span class="keyword">class</span> <span class="title">person</span>:</span></span><br><span class="line"><span class="meta">... </span>    age = <span class="number">23</span></span><br><span class="line"><span class="meta">... </span>    name = <span class="string">"yangjinheng"</span></span><br><span class="line">...</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>person = person()</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>getattr(person,<span class="string">'sex'</span>,<span class="string">'man'</span>)</span><br><span class="line"><span class="string">'man'</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>getattr(person,<span class="string">'age'</span>,<span class="string">'man'</span>)</span><br><span class="line"><span class="number">23</span></span><br></pre></td></tr></table></figure>
+<h2 id="setattr"><a href="#setattr" class="headerlink" title="setattr"></a>setattr</h2><p>设置对象的给定属性的值。</p>
+<p>语法：<code>setattr(object, name, value)</code></p>
+<p>参数：</p>
 <ul>
-<li>删除远程 TAG</li>
+<li><strong>object</strong> - 需要设置属性的对象</li>
+<li><strong>name</strong> - 要设置的属性名称</li>
+<li><strong>value</strong> - 要设置的属性的值</li>
 </ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git push origin :refs/tags/1.0.1</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="class"><span class="keyword">class</span> <span class="title">coo</span>:</span></span><br><span class="line"><span class="meta">... </span>    x = <span class="number">10</span></span><br><span class="line"><span class="meta">... </span>    y = <span class="number">-5</span></span><br><span class="line"><span class="meta">... </span>    z = <span class="number">0</span></span><br><span class="line">...</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>print(coo.x)</span><br><span class="line"><span class="number">10</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>print(coo.y)</span><br><span class="line"><span class="number">-5</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>print(coo.z)</span><br><span class="line"><span class="number">0</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>setattr(coo,<span class="string">'z'</span>,<span class="number">20</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>print(coo.z)</span><br><span class="line"><span class="number">20</span></span><br></pre></td></tr></table></figure>
+<h2 id="delattr"><a href="#delattr" class="headerlink" title="delattr"></a>delattr</h2><p>从对象中删除属性（如果对象允许的话）。</p>
+<p>语法：<code>delattr(object, name)</code></p>
+<p>参数：</p>
 <ul>
-<li>克隆指定的 TAG</li>
+<li><strong>object</strong> - 要从中删除name属性的对象</li>
+<li><strong>name</strong> - 一个字符串，它必须是要从对象中删除的属性的名称</li>
 </ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git <span class="built_in">clone</span> -b 1.0.1 https://172.16.100.99/root/<span class="built_in">test</span>-repo.git</span><br></pre></td></tr></table></figure>
-<h3 id="HEAD"><a href="#HEAD" class="headerlink" title="HEAD"></a>HEAD</h3><p>HEAD 是当前分支引用的指针，它总是指向该分支上的最后一次提交。 这表示 HEAD 将是下一次提交的父结点。 通常，理解 HEAD 的最简方式，就是将它看做 <strong>你的上一次提交</strong> 的快照。 </p>
-<hr>
-<p>当存在多个分支时，<code>^与~</code>之间的区别，例如：下面的图来具体感受一下：<code>^</code>与<code>~</code>的区别。</p>
-<p><code>~</code>只选择主分支，如：<code>HEAD~2</code>表示第 <code>2</code> 级父节点的第<code>1</code>个分支。</p>
-<p><code>^</code>可以选择分支，如：<code>HEAD~2^3</code>表示第 <code>2</code> 级父节点的第<code>3</code>个分支。</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">G   H   I   J</span><br><span class="line"> \ /     \ /</span><br><span class="line">  D   E   F</span><br><span class="line">   \  |  / \</span><br><span class="line">    \ | /   |</span><br><span class="line">     \|/    |</span><br><span class="line">      B     C</span><br><span class="line">       \   /</span><br><span class="line">        \ /</span><br><span class="line">         A</span><br><span class="line">A =      = A^0</span><br><span class="line">B = A^   = A^1     = A~1</span><br><span class="line">C = A^2  = A^2</span><br><span class="line">D = A^^  = A^1^1   = A~2</span><br><span class="line">E = B^2  = A^^2</span><br><span class="line">F = B^3  = A^^3</span><br><span class="line">G = A^^^ = A^1^1^1 = A~3</span><br><span class="line">H = D^2  = B^^2    = A^^^2  = A~2^2</span><br><span class="line">I = F^   = B^3^    = A^^3^</span><br><span class="line">J = F^2  = B^3^2   = A^^3^2</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="class"><span class="keyword">class</span> <span class="title">coo</span>:</span></span><br><span class="line"><span class="meta">... </span>    x = <span class="number">10</span></span><br><span class="line"><span class="meta">... </span>    y = <span class="number">-5</span></span><br><span class="line"><span class="meta">... </span>    z = <span class="number">0</span></span><br><span class="line">...</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>point1 = coo()</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>print(<span class="string">'x = '</span>,point1.x)</span><br><span class="line">x =  <span class="number">10</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>print(<span class="string">'y = '</span>,point1.y)</span><br><span class="line">y =  <span class="number">-5</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>print(<span class="string">'z = '</span>,point1.z)</span><br><span class="line">z =  <span class="number">0</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>delattr(coo,<span class="string">'z'</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>print(<span class="string">'x = '</span>,point1.x)</span><br><span class="line">x =  <span class="number">10</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>print(<span class="string">'y = '</span>,point1.y)</span><br><span class="line">y =  <span class="number">-5</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>print(<span class="string">'z = '</span>,point1.z)</span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">  File <span class="string">"&lt;stdin&gt;"</span>, line <span class="number">1</span>, <span class="keyword">in</span> &lt;module&gt;</span><br><span class="line">AttributeError: <span class="string">'coo'</span> object has no attribute <span class="string">'z'</span></span><br></pre></td></tr></table></figure>
+<h2 id="globals"><a href="#globals" class="headerlink" title="globals"></a>globals</h2><p>会以字典类型返回当前位置的全部全局变量。</p>
+<p>用法：<code>globals()</code></p>
+<figure class="highlight"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>globals()</span><br><span class="line">&#123;'__name__': '__main__', '__doc__': None, '__package__': None, '__loader__': &lt;class '_frozen_importlib.BuiltinImporter'&gt;, '__spec__': None, '__annotations__': &#123;&#125;, '__builtins__': &lt;module 'builtins' (built-in)&gt;, 'a': 'yangjinheng', 'coo': &lt;class '__main__.coo'&gt;&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="locals"><a href="#locals" class="headerlink" title="locals"></a>locals</h2><p>以字典类型返回当前位置的全部局部变量。</p>
+<p>用法：<code>locals()</code></p>
+<figure class="highlight"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>locals()</span><br><span class="line">&#123;'__name__': '__main__', '__doc__': None, '__package__': None, '__loader__': &lt;class '_frozen_importlib.BuiltinImporter'&gt;, '__spec__': None, '__annotations__': &#123;&#125;, '__builtins__': &lt;module 'builtins' (built-in)&gt;, 'a': 'yangjinheng', 'coo': &lt;class '__main__.coo'&gt;&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="hash"><a href="#hash" class="headerlink" title="hash"></a>hash</h2><p>获取取一个对象（字符串或者数值等）的哈希值。</p>
+<p>用法：<code>hash(object)</code></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>hash(<span class="string">'123'</span>)</span><br><span class="line"><span class="number">-4037766609805238219</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>hash(<span class="number">123</span>)</span><br><span class="line"><span class="number">123</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>hash([<span class="number">1234</span>])</span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">  File <span class="string">"&lt;stdin&gt;"</span>, line <span class="number">1</span>, <span class="keyword">in</span> &lt;module&gt;</span><br><span class="line">TypeError: unhashable type: <span class="string">'list'</span></span><br></pre></td></tr></table></figure>
+<h2 id="help"><a href="#help" class="headerlink" title="help"></a>help</h2><p>调用内置的Python帮助系统。</p>
+<p>用法：<code>help(object)</code></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>help(dir)</span><br><span class="line">Help on built-<span class="keyword">in</span> function dir <span class="keyword">in</span> module builtins:</span><br><span class="line"></span><br><span class="line">dir(...)</span><br><span class="line">    dir([object]) -&gt; list of strings</span><br><span class="line"></span><br><span class="line">    If called without an argument, <span class="keyword">return</span> the names <span class="keyword">in</span> the current scope.</span><br><span class="line">    Else, <span class="keyword">return</span> an alphabetized list of names comprising (some of) the attributes</span><br><span class="line">    of the given object, <span class="keyword">and</span> of attributes reachable <span class="keyword">from</span> it.</span><br><span class="line">    If the object supplies a method named __dir__, it will be used; otherwise</span><br><span class="line">    the default dir() logic <span class="keyword">is</span> used <span class="keyword">and</span> returns:</span><br><span class="line">      <span class="keyword">for</span> a module object: the module<span class="string">'s attributes.</span></span><br><span class="line"><span class="string">      for a class object:  its attributes, and recursively the attributes</span></span><br><span class="line"><span class="string">        of its bases.</span></span><br><span class="line"><span class="string">      for any other object: its attributes, its class'</span>s attributes, <span class="keyword">and</span></span><br><span class="line">        recursively the attributes of its <span class="class"><span class="keyword">class</span>'<span class="title">s</span> <span class="title">base</span> <span class="title">classes</span>.</span></span><br><span class="line"><span class="class">&gt;&gt;&gt; <span class="title">help</span><span class="params">(list)</span></span></span><br><span class="line"><span class="class">.......</span></span><br></pre></td></tr></table></figure>
+<h2 id="hex"><a href="#hex" class="headerlink" title="hex"></a>hex</h2><p>用于将10进制整数转换成16进制，以字符串形式表示。</p>
+<p>用法：<code>hex(number)</code></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>hex(<span class="number">1</span>)</span><br><span class="line"><span class="string">'0x1'</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>hex(<span class="number">2</span>)</span><br><span class="line"><span class="string">'0x2'</span></span><br></pre></td></tr></table></figure>
+<h2 id="id"><a href="#id" class="headerlink" title="id"></a>id</h2><p>返回对象在Python的内存标识（唯一整数）。</p>
+<p>语法：<code>id(object)</code></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>a</span><br><span class="line"><span class="string">'yangjinheng'</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>id(a)</span><br><span class="line"><span class="number">2501134988592</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>b = <span class="string">'yangjinheng'</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>id(b)</span><br><span class="line"><span class="number">2501134988592</span></span><br></pre></td></tr></table></figure>
+<h2 id="input"><a href="#input" class="headerlink" title="input"></a>input</h2><p>接受一个标准输入数据，返回为 string 类型。</p>
+<p>语法：<code>input([prompt])</code></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>a = input(<span class="string">'input &gt;&gt;&gt;'</span>)</span><br><span class="line">input &gt;&gt;&gt;<span class="number">1024</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a</span><br><span class="line"><span class="string">'1024'</span></span><br></pre></td></tr></table></figure>
+<h2 id="isinstance"><a href="#isinstance" class="headerlink" title="isinstance"></a>isinstance</h2><p>判断一个对象是否是一个已知的类型，类似 type()。</p>
+<p>语法：<code>isinstance(object, classinfo)</code></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>isinstance(<span class="number">1</span>,(int,float,list))</span><br><span class="line"><span class="keyword">True</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>isinstance((<span class="number">2</span>),(int,float,list))</span><br><span class="line"><span class="keyword">True</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>isinstance((<span class="number">2</span>,),(int,float,list))</span><br><span class="line"><span class="keyword">False</span></span><br></pre></td></tr></table></figure>
+<h2 id="issubclass"><a href="#issubclass" class="headerlink" title="issubclass"></a>issubclass</h2><p>用于判断参数 class 是否是类型参数 classinfo 的子类。</p>
+<p>语法：<code>issubclass(class, classinfo)</code></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="class"><span class="keyword">class</span> <span class="title">a</span>:</span></span><br><span class="line"><span class="meta">... </span>    <span class="keyword">pass</span></span><br><span class="line">...</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="class"><span class="keyword">class</span> <span class="title">b</span><span class="params">(a)</span>:</span></span><br><span class="line"><span class="meta">... </span>    <span class="keyword">pass</span></span><br><span class="line">...</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>issubclass(b,a)</span><br><span class="line"><span class="keyword">True</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>issubclass(b,int)</span><br><span class="line"><span class="keyword">False</span></span><br></pre></td></tr></table></figure>
+<h2 id="iter"><a href="#iter" class="headerlink" title="iter"></a>iter</h2><p>生成迭代器。</p>
+<p>语法：<code>iter(object[, sentinel])</code></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>list1 = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a = iter(list1)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>next(a)</span><br><span class="line"><span class="number">1</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>next(a)</span><br><span class="line"><span class="number">2</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>next(a)</span><br><span class="line"><span class="number">3</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>next(a)</span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">  File <span class="string">"&lt;stdin&gt;"</span>, line <span class="number">1</span>, <span class="keyword">in</span> &lt;module&gt;</span><br><span class="line">StopIteration</span><br></pre></td></tr></table></figure>
+<h2 id="len"><a href="#len" class="headerlink" title="len"></a>len</h2><p>返回对象的项目数量（长度）。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>list1</span><br><span class="line">[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>len(list1)</span><br><span class="line"><span class="number">3</span></span><br></pre></td></tr></table></figure>
+<h2 id="max"><a href="#max" class="headerlink" title="max"></a>max</h2><p>返回对象中最大的元素</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>list1</span><br><span class="line">[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>, <span class="number">8</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>max(list1)</span><br><span class="line"><span class="number">8</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>max(<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>)</span><br><span class="line"><span class="number">7</span></span><br></pre></td></tr></table></figure>
+<h2 id="min"><a href="#min" class="headerlink" title="min"></a>min</h2><p>返回对象中最小的元素</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>list1</span><br><span class="line">[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>, <span class="number">8</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>min(list1)</span><br><span class="line"><span class="number">1</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>min(<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>)</span><br><span class="line"><span class="number">1</span></span><br></pre></td></tr></table></figure>
+<h2 id="memoryview"><a href="#memoryview" class="headerlink" title="memoryview"></a>memoryview</h2><h2 id="next"><a href="#next" class="headerlink" title="next"></a>next</h2><h2 id="object"><a href="#object" class="headerlink" title="object"></a>object</h2><h2 id="oct"><a href="#oct" class="headerlink" title="oct"></a>oct</h2><h2 id="open"><a href="#open" class="headerlink" title="open"></a>open</h2><h2 id="ord"><a href="#ord" class="headerlink" title="ord"></a>ord</h2><h2 id="pow"><a href="#pow" class="headerlink" title="pow"></a>pow</h2><h2 id="print"><a href="#print" class="headerlink" title="print"></a>print</h2><h2 id="range"><a href="#range" class="headerlink" title="range"></a>range</h2><h2 id="reversed"><a href="#reversed" class="headerlink" title="reversed"></a>reversed</h2><h2 id="round"><a href="#round" class="headerlink" title="round"></a>round</h2><h2 id="slice"><a href="#slice" class="headerlink" title="slice"></a>slice</h2><h2 id="sum"><a href="#sum" class="headerlink" title="sum"></a>sum</h2><h2 id="type"><a href="#type" class="headerlink" title="type"></a>type</h2><p>如果只有第一个参数则返回对象的类型，三个参数返回新的类型对象。</p>
+<p>语法：<code>class type(name, bases, dict)</code></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>type(<span class="string">'a'</span>)</span><br><span class="line">&lt;type <span class="string">'str'</span>&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>type(<span class="number">1</span>)</span><br><span class="line">&lt;type <span class="string">'int'</span>&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="class"><span class="keyword">class</span> <span class="title">x</span><span class="params">(object)</span>:</span></span><br><span class="line"><span class="meta">... </span>    a = <span class="number">1</span></span><br><span class="line"><span class="meta">... </span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>x = type(<span class="string">'x'</span>,(object,),dict(a=<span class="number">1</span>))</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>x</span><br><span class="line">&lt;<span class="class"><span class="keyword">class</span> '<span class="title">__main__</span>.<span class="title">x</span>'&gt;</span></span><br></pre></td></tr></table></figure>
+<h2 id="vars"><a href="#vars" class="headerlink" title="vars"></a>vars</h2><h2 id="zip"><a href="#zip" class="headerlink" title="zip"></a>zip</h2><p>语法：<code>zip([iterable, ...])</code></p>
+<p>用于将可迭代的对象作为参数，将对象中对应的元素打包成一个个元组，然后返回由这些元组组成的列表。如果各个迭代器的元素个数不一致，则返回列表长度与最短的对象相同，利用 * 号操作符，可以将元组解压为列表。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>dict(zip([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>],[<span class="string">'a'</span>,<span class="string">'b'</span>,<span class="string">'c'</span>,<span class="string">'d'</span>,<span class="string">'e'</span>]))</span><br><span class="line">&#123;<span class="number">1</span>: <span class="string">'a'</span>, <span class="number">2</span>: <span class="string">'b'</span>, <span class="number">3</span>: <span class="string">'c'</span>, <span class="number">4</span>: <span class="string">'d'</span>, <span class="number">5</span>: <span class="string">'e'</span>&#125;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>zip([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>],[<span class="string">'a'</span>,<span class="string">'b'</span>,<span class="string">'c'</span>,<span class="string">'d'</span>,<span class="string">'e'</span>],[<span class="number">9</span>,<span class="number">8</span>,<span class="number">7</span>,<span class="number">6</span>,<span class="number">5</span>,<span class="number">2</span>])</span><br><span class="line">[(<span class="number">1</span>, <span class="string">'a'</span>, <span class="number">9</span>), (<span class="number">2</span>, <span class="string">'b'</span>, <span class="number">8</span>), (<span class="number">3</span>, <span class="string">'c'</span>, <span class="number">7</span>), (<span class="number">4</span>, <span class="string">'d'</span>, <span class="number">6</span>), (<span class="number">5</span>, <span class="string">'e'</span>, <span class="number">5</span>)]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>list(zip([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>],[<span class="string">'a'</span>,<span class="string">'b'</span>,<span class="string">'c'</span>,<span class="string">'d'</span>,<span class="string">'e'</span>]))</span><br><span class="line">[(<span class="number">1</span>, <span class="string">'a'</span>), (<span class="number">2</span>, <span class="string">'b'</span>), (<span class="number">3</span>, <span class="string">'c'</span>), (<span class="number">4</span>, <span class="string">'d'</span>), (<span class="number">5</span>, <span class="string">'e'</span>)]</span><br></pre></td></tr></table></figure>
+<h2 id="map"><a href="#map" class="headerlink" title="map"></a>map</h2><p>根据提供的函数对指定序列做映射。</p>
+<p>语法：<code>map(function, iterable, ...)</code></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="function"><span class="keyword">def</span> <span class="title">f</span><span class="params">(x)</span>:</span></span><br><span class="line"><span class="meta">... </span>    <span class="keyword">return</span> x * x</span><br><span class="line">...</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>map(f, [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>, <span class="number">8</span>, <span class="number">9</span>])</span><br><span class="line">[<span class="number">1</span>, <span class="number">4</span>, <span class="number">9</span>, <span class="number">16</span>, <span class="number">25</span>, <span class="number">36</span>, <span class="number">49</span>, <span class="number">64</span>, <span class="number">81</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>map(str, [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>, <span class="number">8</span>, <span class="number">9</span>])</span><br><span class="line">[<span class="string">'1'</span>, <span class="string">'2'</span>, <span class="string">'3'</span>, <span class="string">'4'</span>, <span class="string">'5'</span>, <span class="string">'6'</span>, <span class="string">'7'</span>, <span class="string">'8'</span>, <span class="string">'9'</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>map(<span class="keyword">lambda</span> x, y: x + y, [<span class="number">1</span>, <span class="number">3</span>, <span class="number">5</span>, <span class="number">7</span>, <span class="number">9</span>], [<span class="number">2</span>, <span class="number">4</span>, <span class="number">6</span>, <span class="number">8</span>, <span class="number">10</span>])</span><br><span class="line">[<span class="number">3</span>, <span class="number">7</span>, <span class="number">11</span>, <span class="number">15</span>, <span class="number">19</span>]</span><br></pre></td></tr></table></figure>
+<h2 id="filter"><a href="#filter" class="headerlink" title="filter"></a>filter</h2><p>函数用于过滤序列，过滤掉不符合条件的元素，返回由符合条件元素组成的新列表。</p>
+<p>语法：<code>filter(function, iterable)</code></p>
+<p>参数：</p>
+<ul>
+<li><code>function</code> 测试迭代元素是否返回true或false的函数</li>
+<li><code>iterable</code> 要被过滤的迭代可以是任何迭代器的集合、列表、元组、或容器</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>list1 = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>,<span class="number">8</span>,<span class="number">9</span>,<span class="number">10</span>,<span class="number">11</span>,<span class="number">12</span>,<span class="number">13</span>,<span class="number">14</span>,<span class="number">15</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="function"><span class="keyword">def</span> <span class="title">f1</span><span class="params">(i)</span>:</span></span><br><span class="line"><span class="meta">... </span>    <span class="keyword">if</span> i % <span class="number">2</span> == <span class="number">0</span>:</span><br><span class="line"><span class="meta">... </span>        <span class="keyword">return</span> <span class="keyword">True</span></span><br><span class="line"><span class="meta">... </span>    <span class="keyword">else</span>:</span><br><span class="line"><span class="meta">... </span>        <span class="keyword">return</span> <span class="keyword">False</span></span><br><span class="line">...</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a = filter(f1,list1)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a.__next__()</span><br><span class="line"><span class="number">2</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a.__next__()</span><br><span class="line"><span class="number">4</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a.__next__()</span><br><span class="line"><span class="number">6</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a.__next__()</span><br><span class="line"><span class="number">8</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a.__next__()</span><br><span class="line"><span class="number">10</span></span><br></pre></td></tr></table></figure>
+<h2 id="sorted"><a href="#sorted" class="headerlink" title="sorted"></a>sorted</h2><ul>
+<li>指定 key 排序</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">student_tuples = [</span><br><span class="line">        (<span class="string">'john'</span>, <span class="string">'A'</span>, <span class="number">15</span>),</span><br><span class="line">        (<span class="string">'jane'</span>, <span class="string">'B'</span>, <span class="number">12</span>),</span><br><span class="line">        (<span class="string">'dave'</span>, <span class="string">'B'</span>, <span class="number">10</span>),</span><br><span class="line">]</span><br><span class="line"></span><br><span class="line">data = sorted(student_tuples, key=<span class="keyword">lambda</span> student: student[<span class="number">2</span>])</span><br><span class="line"></span><br><span class="line">print(data)</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">data = sorted(student_tuples, key=<span class="keyword">lambda</span> student: student[<span class="number">2</span>])</span><br><span class="line"></span><br><span class="line">print(data)</span><br></pre></td></tr></table></figure>
+
           
         
       
@@ -871,7 +1188,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://yangjinheng.github.io/2017/03/29/Linux/keepalived/">
+    <link itemprop="mainEntityOfPage" href="https://yangjinheng.github.io/2017/09/13/python/4.表达推导式/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Jin Heng">
@@ -890,7 +1207,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/03/29/Linux/keepalived/" itemprop="url">Keepalived 随笔</a></h1>
+                <a class="post-title-link" href="/2017/09/13/python/4.表达推导式/" itemprop="url">表达推导式</a></h1>
         
 
         <div class="post-meta">
@@ -902,8 +1219,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-03-29T00:00:00+08:00">
-                2017-03-29
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-13T00:00:00+08:00">
+                2017-09-13
               </time>
             
 
@@ -925,8 +1242,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/运维笔记/" itemprop="url" rel="index">
-                    <span itemprop="name">运维笔记</span>
+                  <a href="/categories/Python/" itemprop="url" rel="index">
+                    <span itemprop="name">Python</span>
                   </a>
                 </span>
 
@@ -964,42 +1281,58 @@
       
         
           
-            <h2 id="VRRP"><a href="#VRRP" class="headerlink" title="VRRP"></a>VRRP</h2><p>VRRP 即：虚拟路由器，它由多个物理路由器组成，就好像这些路由器丢到一个池子里，整个池子在外部看起来像一台路由器，但其实内部由多台，虚拟路由器有自己的标志称为 VRID。</p>
-<h2 id="MASTER-BACKUP"><a href="#MASTER-BACKUP" class="headerlink" title="MASTER/BACKUP"></a>MASTER/BACKUP</h2><p>在一个 VRRP 虚拟路由中，这些物理路由器并不同时工作，而是由一台名称为 MASTER 负责路由工作，其他路由器都是 BACKUP，MASTER 并非是已成不变，VRRP 协议让每个物理路由器参加竞选，最终获胜的就是 MASTER。</p>
-<p>MASTER 有一些特权，比如拥有虚拟路由器的 IP 地址。</p>
-<h2 id="工作机制"><a href="#工作机制" class="headerlink" title="工作机制"></a>工作机制</h2><p>VRRP 通过精选协议来实现虚拟路由器的功能，所有协议报文都是通过 IP 多播包（多播地址：224.0.0.18）形式发送的。虚拟路由器由 VRID（范围0-255）和一组 IP 地址组成，对外表现为一个周知的 MAC 地址：00-00-5E-00-01-{VRID}。所以在一个虚拟路由器中，不管谁是 MASTER ，对外都是相同的 MAC 和 IP（即 VIP），客户端主机并不需要因为 MASTER 的改变而修改自己的路由表，对他们来说这种主从的切换是透明的。</p>
-<p>在一个虚拟路由器中，只有作为 MASTER 的路由器会一直放 VRRP 广告包，BACKUP 不会抢占 MASTER，除非它的优先级（priority）更高，当 MASTER 不可用时，BACKUP 就收不到广告包，那么多台 BACKUP 中优先级最高的就会抢占称为 MASTER，这种抢占是非常快速的（&lt;1s），以保证服务的连续性。</p>
-<p>处于安全考虑，VRRP 包都使用了加密协议进行加密。</p>
-<h2 id="基于VRRP的高可用"><a href="#基于VRRP的高可用" class="headerlink" title="基于VRRP的高可用"></a>基于VRRP的高可用</h2><ul>
-<li>MASTER，由于初始角色为 MASTER 且 priority 高于其他主机，所以成为 MASTER ，同时向 virtual_router_id 组内发送通告信息，证明活着</li>
+            <h2 id="列表解析式"><a href="#列表解析式" class="headerlink" title="列表解析式"></a>列表解析式</h2><p>列表解析是Python迭代机制的一种应用，它用于实现创建新的列表，因此列表解析的语句放在 <code>[]</code> 中，列表解析能够以比 <code>for</code> 快一倍的速度<strong>返回一个新的列表</strong>，同时语法简洁，在 Python 2.6 后加入。</p>
+<h3 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h3><ol>
+<li><code>[expression for iter_var in iterable]</code></li>
+<li><code>[expression for iter_var in iterable if cond_expression]</code></li>
+<li><code>[expression for iter_var in iterable iter_var in iterable]</code></li>
+</ol>
+<p>其中：</p>
+<ol>
+<li><code>for</code> 语句每次迭代的结果会被 <code>expression</code> 处理而产生一个新的元素 </li>
+<li><code>for</code> 语句中 <code>if</code> 子句，则表示只有符合条件的才会被 <code>expression</code> 处理成为新元素</li>
+<li><code>for</code> 语句可以嵌套执行，从而实现两个列表交叉</li>
+</ol>
+<h3 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h3><ul>
+<li>基于已有列表创建新列表，新列表的元素为已有列表元素的平方</li>
 </ul>
-<figure class="highlight nginx"><table><tr><td class="code"><pre><span class="line">! Configuration File for keepalived</span><br><span class="line"></span><br><span class="line"><span class="section">global_defs</span> &#123;</span><br><span class="line">   <span class="section">notification_email</span> &#123;                      <span class="comment"># 收件人邮箱列表</span></span><br><span class="line">       420123641@qq.com</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="attribute">notification_email_from</span> keepalived.com    <span class="comment"># 发件人邮箱</span></span><br><span class="line">   smtp_server <span class="number">127.0.0.1</span>                     <span class="comment"># SMTP 服务器</span></span><br><span class="line">   smtp_connect_timeout <span class="number">30</span>                   <span class="comment"># 连接 SMTP 服务器超时时长</span></span><br><span class="line">   router_id node1                           <span class="comment"># 标识当前物理设备的字符串，不必是主机名，默认值：本地主机名</span></span><br><span class="line">   vrrp_mcast_group4 <span class="number">224.0.0.18</span>              <span class="comment">#  IPV4 的组播地址，多个 vrrp_instance 示例时候应该取消此项</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">vrrp_instance VI_1 &#123;</span><br><span class="line">    <span class="attribute">virtual_router_id</span> <span class="number">51</span>                     <span class="comment"># 当前虚拟路由器的 id 号，也当作 VMAC 的最后一个地址</span></span><br><span class="line">    state MASTER                             <span class="comment"># 初始状态，MASTER|BACKUP 当其他机器出现时，将进行一次选举，拥有最高优先级的机器将成为 MASTER，所以这里的项不是很重要。</span></span><br><span class="line">    priority <span class="number">100</span>                             <span class="comment"># 如果是 MASTER 那么这个值应该为最高的，一般高出第二 50 个。</span></span><br><span class="line">    interface ens33                          <span class="comment"># VIP 要配置的网卡接口名称</span></span><br><span class="line">    advert_int <span class="number">1</span>                             <span class="comment"># 主节点需要周期性向其他备用节点通告自己的优先级和状态信息，即心跳</span></span><br><span class="line">    authentication &#123;                         <span class="comment"># 接收 VRRP 心跳时候的认证信息</span></span><br><span class="line">        <span class="attribute">auth_type</span> PASS</span><br><span class="line">        auth_pass <span class="number">1111</span></span><br><span class="line">    &#125;</span><br><span class="line">    virtual_ipaddress &#123;                      <span class="comment"># virtual_ipaddress 内的 IP 地址，当切换为 MASTER 时被添加, 切换到 BACKUP 时被删除。</span></span><br><span class="line">        172.16.100.10/24 label ens33:0</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>list1 = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>,<span class="number">8</span>,<span class="number">9</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>list2 = [i**<span class="number">2</span> <span class="keyword">for</span> i <span class="keyword">in</span> list1]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>list2</span><br><span class="line">[<span class="number">1</span>, <span class="number">4</span>, <span class="number">9</span>, <span class="number">16</span>, <span class="number">25</span>, <span class="number">36</span>, <span class="number">49</span>, <span class="number">64</span>, <span class="number">81</span>]</span><br></pre></td></tr></table></figure>
 <ul>
-<li>BACKUP，由于初始角色为 BACKUP，且 priority 低于 MASTER ，所以成为 BACKUP，接收 virtual_router_id 中 MASTER 发送的通告，当通告停止，则立刻选举。</li>
+<li>基于已有列表创建新列表，新列表的元素为前一个元素加后一个元素的和</li>
 </ul>
-<figure class="highlight nginx"><table><tr><td class="code"><pre><span class="line">! Configuration File for keepalived</span><br><span class="line"></span><br><span class="line"><span class="section">global_defs</span> &#123;</span><br><span class="line">   <span class="section">notification_email</span> &#123;                      <span class="comment"># 收件人邮箱列表</span></span><br><span class="line">       420123641@qq.com</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="attribute">notification_email_from</span> keepalived.com    <span class="comment"># 发件人邮箱</span></span><br><span class="line">   smtp_server <span class="number">127.0.0.1</span>                     <span class="comment"># SMTP 服务器</span></span><br><span class="line">   smtp_connect_timeout <span class="number">30</span>                   <span class="comment"># 连接 SMTP 服务器超时时长</span></span><br><span class="line">   router_id node2                           <span class="comment"># 标识当前物理设备的字符串，不必是主机名，默认值：本地主机名</span></span><br><span class="line">   vrrp_mcast_group4 <span class="number">224.0.0.18</span>              <span class="comment"># IPV4 的组播地址，多个 vrrp_instance 示例时候应该取消此项</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">vrrp_instance VI_1 &#123;</span><br><span class="line">    <span class="attribute">virtual_router_id</span> <span class="number">51</span>                     <span class="comment"># 当前虚拟路由器的 id 号，也当作 VMAC 的最后一个地址</span></span><br><span class="line">    state BACKUP                             <span class="comment"># 初始状态，MASTER|BACKUP 当其他机器出现时，将进行一次选举，拥有最高优先级的机器将成为 MASTER，所以这里的项不是很重要。</span></span><br><span class="line">    priority <span class="number">50</span>                             <span class="comment"># 如果是 MASTER 那么这个值应该为最高的，一般高出第二 50 个。</span></span><br><span class="line">    interface ens33                          <span class="comment"># VIP 要配置的网卡接口名称</span></span><br><span class="line">    advert_int <span class="number">1</span>                             <span class="comment"># 主节点需要周期性向其他备用节点通告自己的优先级和状态信息，即心跳</span></span><br><span class="line">    authentication &#123;                         <span class="comment"># 接收 VRRP 心跳时候的认证信息</span></span><br><span class="line">        <span class="attribute">auth_type</span> PASS</span><br><span class="line">        auth_pass <span class="number">1111</span></span><br><span class="line">    &#125;</span><br><span class="line">    virtual_ipaddress &#123;                      <span class="comment"># virtual_ipaddress 内的 IP 地址，当切换为 MASTER 时被添加, 切换到 BACKUP 时被删除。</span></span><br><span class="line">        172.16.100.10/24 label ens33:0</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>list1 = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>,<span class="number">8</span>,<span class="number">9</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>list2 = [list1[i] + list1[i+<span class="number">1</span>] <span class="keyword">for</span> i <span class="keyword">in</span> range(len(list1)<span class="number">-1</span>)]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>list2</span><br><span class="line">[<span class="number">3</span>, <span class="number">5</span>, <span class="number">7</span>, <span class="number">9</span>, <span class="number">11</span>, <span class="number">13</span>, <span class="number">15</span>, <span class="number">17</span>]</span><br></pre></td></tr></table></figure>
 <ul>
-<li>停止 Master 上的 Keepalived，查看 VIP 是否转移</li>
+<li>生成 <code>&#39;0001.ntumkbwdvj&#39;</code> - <code>&#39;0100.yerxcbgntw&#39;</code> 这种形式的新列表，其中后半部分为随机字母。</li>
 </ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">systemctl stop keepalived</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&gt;&gt;&gt; import random</span><br><span class="line">&gt;&gt;&gt; [str(i).zfill(4) + &apos;.&apos; + &apos;&apos;.join(random.sample(&apos;abcdefghijklmnopqrstuvwxyz&apos;,10)) for i in range(1,101)]</span><br><span class="line">[&apos;0001.fcbwxqmkvy&apos;, &apos;0002.wzajnctgqy&apos;, &apos;0003.woydkuipvl&apos;, &apos;0004.getnlvbfom&apos;, &apos;0005.vwueoydliq&apos;, .........</span><br><span class="line">&apos;0096.taedqoknsw&apos;, &apos;0097.opmalwrech&apos;, &apos;0098.gpbeyzslnt&apos;, &apos;0099.albsxrcmoi&apos;, &apos;0100.wrydxcabfz&apos;]</span><br></pre></td></tr></table></figure>
 <ul>
-<li>在 BACKUP 节点上查看 VIP 是否已经转移</li>
+<li><p>打印九九乘法表</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>[print(<span class="string">'&#123;&#125;*&#123;&#125;=&#123;:&lt;3&#125;&#123;&#125;'</span>.format(j,i,i*j, <span class="string">'\n'</span> <span class="keyword">if</span> i ==j <span class="keyword">else</span> <span class="string">''</span>),end=<span class="string">''</span>) <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>,<span class="number">10</span>) <span class="keyword">for</span> j <span class="keyword">in</span> range(<span class="number">1</span>,i+<span class="number">1</span>)]</span><br><span class="line"><span class="number">1</span>*<span class="number">1</span>=<span class="number">1</span></span><br><span class="line"><span class="number">1</span>*<span class="number">2</span>=<span class="number">2</span>  <span class="number">2</span>*<span class="number">2</span>=<span class="number">4</span></span><br><span class="line"><span class="number">1</span>*<span class="number">3</span>=<span class="number">3</span>  <span class="number">2</span>*<span class="number">3</span>=<span class="number">6</span>  <span class="number">3</span>*<span class="number">3</span>=<span class="number">9</span></span><br><span class="line"><span class="number">1</span>*<span class="number">4</span>=<span class="number">4</span>  <span class="number">2</span>*<span class="number">4</span>=<span class="number">8</span>  <span class="number">3</span>*<span class="number">4</span>=<span class="number">12</span> <span class="number">4</span>*<span class="number">4</span>=<span class="number">16</span></span><br><span class="line"><span class="number">1</span>*<span class="number">5</span>=<span class="number">5</span>  <span class="number">2</span>*<span class="number">5</span>=<span class="number">10</span> <span class="number">3</span>*<span class="number">5</span>=<span class="number">15</span> <span class="number">4</span>*<span class="number">5</span>=<span class="number">20</span> <span class="number">5</span>*<span class="number">5</span>=<span class="number">25</span></span><br><span class="line"><span class="number">1</span>*<span class="number">6</span>=<span class="number">6</span>  <span class="number">2</span>*<span class="number">6</span>=<span class="number">12</span> <span class="number">3</span>*<span class="number">6</span>=<span class="number">18</span> <span class="number">4</span>*<span class="number">6</span>=<span class="number">24</span> <span class="number">5</span>*<span class="number">6</span>=<span class="number">30</span> <span class="number">6</span>*<span class="number">6</span>=<span class="number">36</span></span><br><span class="line"><span class="number">1</span>*<span class="number">7</span>=<span class="number">7</span>  <span class="number">2</span>*<span class="number">7</span>=<span class="number">14</span> <span class="number">3</span>*<span class="number">7</span>=<span class="number">21</span> <span class="number">4</span>*<span class="number">7</span>=<span class="number">28</span> <span class="number">5</span>*<span class="number">7</span>=<span class="number">35</span> <span class="number">6</span>*<span class="number">7</span>=<span class="number">42</span> <span class="number">7</span>*<span class="number">7</span>=<span class="number">49</span></span><br><span class="line"><span class="number">1</span>*<span class="number">8</span>=<span class="number">8</span>  <span class="number">2</span>*<span class="number">8</span>=<span class="number">16</span> <span class="number">3</span>*<span class="number">8</span>=<span class="number">24</span> <span class="number">4</span>*<span class="number">8</span>=<span class="number">32</span> <span class="number">5</span>*<span class="number">8</span>=<span class="number">40</span> <span class="number">6</span>*<span class="number">8</span>=<span class="number">48</span> <span class="number">7</span>*<span class="number">8</span>=<span class="number">56</span> <span class="number">8</span>*<span class="number">8</span>=<span class="number">64</span></span><br><span class="line"><span class="number">1</span>*<span class="number">9</span>=<span class="number">9</span>  <span class="number">2</span>*<span class="number">9</span>=<span class="number">18</span> <span class="number">3</span>*<span class="number">9</span>=<span class="number">27</span> <span class="number">4</span>*<span class="number">9</span>=<span class="number">36</span> <span class="number">5</span>*<span class="number">9</span>=<span class="number">45</span> <span class="number">6</span>*<span class="number">9</span>=<span class="number">54</span> <span class="number">7</span>*<span class="number">9</span>=<span class="number">63</span> <span class="number">8</span>*<span class="number">9</span>=<span class="number">72</span> <span class="number">9</span>*<span class="number">9</span>=<span class="number">81</span></span><br><span class="line">[<span class="keyword">None</span>, <span class="keyword">None</span>, <span class="keyword">None</span>, <span class="keyword">None</span>, <span class="keyword">None</span>, <span class="keyword">None</span>, <span class="keyword">None</span>, <span class="keyword">None</span>, <span class="keyword">None</span>, <span class="keyword">None</span>, <span class="keyword">None</span>, <span class="keyword">None</span>, <span class="keyword">None</span>, <span class="keyword">None</span>, <span class="keyword">None</span>, <span class="keyword">None</span>, <span class="keyword">None</span>, <span class="keyword">None</span>, <span class="keyword">None</span>, <span class="keyword">None</span>, <span class="keyword">None</span>, <span class="keyword">None</span>, <span class="keyword">None</span>, <span class="keyword">None</span>, <span class="keyword">None</span>, <span class="keyword">None</span>, <span class="keyword">None</span>, <span class="keyword">None</span>, <span class="keyword">None</span>, <span class="keyword">None</span>, <span class="keyword">None</span>, <span class="keyword">None</span>, <span class="keyword">None</span>, <span class="keyword">None</span>, <span class="keyword">None</span>, <span class="keyword">None</span>, <span class="keyword">None</span>, <span class="keyword">None</span>,<span class="keyword">None</span>, <span class="keyword">None</span>, <span class="keyword">None</span>, <span class="keyword">None</span>, <span class="keyword">None</span>, <span class="keyword">None</span>, <span class="keyword">None</span>]</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>列出以 <code>.pdf</code> 结尾的所有文件</p>
+</li>
 </ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">1: lo: &lt;LOOPBACK,UP,LOWER_UP&gt; mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000</span><br><span class="line">    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00</span><br><span class="line">    inet 127.0.0.1/8 scope host lo</span><br><span class="line">       valid_lft forever preferred_lft forever</span><br><span class="line">    inet6 ::1/128 scope host </span><br><span class="line">       valid_lft forever preferred_lft forever</span><br><span class="line">2: ens33: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc pfifo_fast state UP group default qlen 1000</span><br><span class="line">    link/ether 00:0c:29:b7:c2:92 brd ff:ff:ff:ff:ff:ff</span><br><span class="line">    inet 172.16.100.102/24 brd 172.16.100.255 scope global noprefixroute ens33</span><br><span class="line">       valid_lft forever preferred_lft forever</span><br><span class="line">    inet 172.16.100.10/24 scope global secondary ens33:0</span><br><span class="line">       valid_lft forever preferred_lft forever</span><br></pre></td></tr></table></figure>
-<h2 id="vrrp-script-和-track-script"><a href="#vrrp-script-和-track-script" class="headerlink" title="vrrp_script 和 track_script"></a>vrrp_script 和 track_script</h2><p>vrrp_script 块是一个检测脚本，可以在 vrrp_instance 中的 track_script 中调用这个脚本，当这个脚本返回值为 1 的时候，那么将按照 vrrp_script 的 weight 进行权重调整。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">import</span> os</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>list1 = os.listdir(<span class="string">'D:\学习资料\林正刚企业运营框架课程'</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>[i <span class="keyword">for</span> i <span class="keyword">in</span> list1 <span class="keyword">if</span> i.endswith(<span class="string">'.pdf'</span>)]</span><br><span class="line">[<span class="string">'[PPT]十一掌：价值三需.pdf'</span>,<span class="string">'[PPT]第四掌：沟通基础.pdf'</span>]</span><br></pre></td></tr></table></figure>
 <ul>
-<li>MASTER</li>
+<li>生成类似多项式相乘的元组列表<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>l1 = [<span class="string">'x'</span>,<span class="string">'y'</span>,<span class="string">'z'</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>l2 = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>l3 = [(i,j) <span class="keyword">for</span> i <span class="keyword">in</span> l1 <span class="keyword">for</span> j <span class="keyword">in</span> l2]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>l3</span><br><span class="line">[(<span class="string">'x'</span>, <span class="number">1</span>), (<span class="string">'x'</span>, <span class="number">2</span>), (<span class="string">'x'</span>, <span class="number">3</span>), (<span class="string">'y'</span>, <span class="number">1</span>), (<span class="string">'y'</span>, <span class="number">2</span>), (<span class="string">'y'</span>, <span class="number">3</span>), (<span class="string">'z'</span>, <span class="number">1</span>), (<span class="string">'z'</span>, <span class="number">2</span>), (<span class="string">'z'</span>, <span class="number">3</span>)]</span><br></pre></td></tr></table></figure>
+</li>
 </ul>
-<figure class="highlight nginx"><table><tr><td class="code"><pre><span class="line">! Configuration File for keepalived</span><br><span class="line"></span><br><span class="line"><span class="section">global_defs</span> &#123;</span><br><span class="line">   <span class="section">notification_email</span> &#123;                      <span class="comment"># 收件人邮箱列表</span></span><br><span class="line">       420123641@qq.com</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="attribute">notification_email_from</span> keepalived.com    <span class="comment"># 发件人邮箱</span></span><br><span class="line">   smtp_server <span class="number">127.0.0.1</span>                     <span class="comment"># SMTP 服务器</span></span><br><span class="line">   smtp_connect_timeout <span class="number">30</span>                   <span class="comment"># 连接 SMTP 服务器超时时长</span></span><br><span class="line">   router_id node1                           <span class="comment"># 标识当前物理设备的字符串，不必是主机名，默认值：本地主机名</span></span><br><span class="line">   vrrp_mcast_group4 <span class="number">224.0.0.18</span>              <span class="comment">#  IPV4 的组播地址，多个 vrrp_instance 示例时候应该取消此项</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">vrrp_script chk_down &#123;</span><br><span class="line">    <span class="attribute">script</span> <span class="string">"/usr/bin/test ! -f /etc/keepalived/down"</span>    <span class="comment"># 可以是一个脚本，或者一个程序，直接由系统调用，不支持任何的 shell 特性</span></span><br><span class="line">    interval <span class="number">1</span>                                          <span class="comment"># 间隔 1 秒调用一次脚本</span></span><br><span class="line">    weight -<span class="number">60</span>                                          <span class="comment"># 脚本失败后本机将调整的权重</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">vrrp_instance VI_1 &#123;</span><br><span class="line">    <span class="attribute">virtual_router_id</span> <span class="number">51</span>                     <span class="comment"># 当前虚拟路由器的 id 号，也当作 VMAC 的最后一个地址</span></span><br><span class="line">    state MASTER                             <span class="comment"># 初始状态，MASTER|BACKUP 当其他机器出现时，将进行一次选举，拥有最高优先级的机器将成为 MASTER，所以这里的项不是很重要。</span></span><br><span class="line">    priority <span class="number">100</span>                             <span class="comment"># 如果是 MASTER 那么这个值应该为最高的，一般高出第二 50 个。</span></span><br><span class="line">    interface ens33                          <span class="comment"># VIP 要配置的网卡接口名称</span></span><br><span class="line">    advert_int <span class="number">1</span>                             <span class="comment"># 主节点需要周期性向其他备用节点通告自己的优先级和状态信息，即心跳</span></span><br><span class="line">    authentication &#123;                         <span class="comment"># 接收 VRRP 心跳时候的认证信息</span></span><br><span class="line">        <span class="attribute">auth_type</span> PASS</span><br><span class="line">        auth_pass <span class="number">1111</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    virtual_ipaddress &#123;                      <span class="comment"># virtual_ipaddress 内的 IP 地址，当切换为 MASTER 时被添加, 切换到 BACKUP 时被删除。</span></span><br><span class="line">        172.16.100.10/24 label ens33:0</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="section">track_script</span> &#123;                           <span class="comment"># 跟踪这个脚本的变化</span></span><br><span class="line">        chk_down</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<ul>
-<li>BACKUP</li>
+<h3 id="生成器写法"><a href="#生成器写法" class="headerlink" title="生成器写法"></a>生成器写法</h3><ul>
+<li>将 [ ] 改为 ()，可以实现惰性求值</li>
 </ul>
-<figure class="highlight nginx"><table><tr><td class="code"><pre><span class="line">! Configuration File for keepalived</span><br><span class="line"></span><br><span class="line"><span class="section">global_defs</span> &#123;</span><br><span class="line">   <span class="section">notification_email</span> &#123;                      <span class="comment"># 收件人邮箱列表</span></span><br><span class="line">       420123641@qq.com</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="attribute">notification_email_from</span> keepalived.com    <span class="comment"># 发件人邮箱</span></span><br><span class="line">   smtp_server <span class="number">127.0.0.1</span>                     <span class="comment"># SMTP 服务器</span></span><br><span class="line">   smtp_connect_timeout <span class="number">30</span>                   <span class="comment"># 连接 SMTP 服务器超时时长</span></span><br><span class="line">   router_id node2                           <span class="comment"># 标识当前物理设备的字符串，不必是主机名，默认值：本地主机名</span></span><br><span class="line">   vrrp_mcast_group4 <span class="number">224.0.0.18</span>              <span class="comment"># IPV4 的组播地址，多个 vrrp_instance 示例时候应该取消此项</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">vrrp_script chk_down &#123;</span><br><span class="line">    <span class="attribute">script</span> <span class="string">"/usr/bin/test ! -f /etc/keepalived/down"</span>    <span class="comment"># 可以是一个脚本，或者一个程序，直接由系统调用，不支持任何的 shell 特性</span></span><br><span class="line">    interval <span class="number">1</span>                                          <span class="comment"># 间隔 1 秒调用一次脚本</span></span><br><span class="line">    weight -<span class="number">60</span>                                          <span class="comment"># 脚本失败后本机将调整的权重</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">vrrp_instance VI_1 &#123;</span><br><span class="line">    <span class="attribute">virtual_router_id</span> <span class="number">51</span>                     <span class="comment"># 当前虚拟路由器的 id 号，也当作 VMAC 的最后一个地址</span></span><br><span class="line">    state MASTER                             <span class="comment"># 初始状态，MASTER|BACKUP 当其他机器出现时，将进行一次选举，拥有最高优先级的机器将成为 MASTER，所以这里的项不是很重要。</span></span><br><span class="line">    priority <span class="number">50</span>                              <span class="comment"># 如果是 MASTER 那么这个值应该为最高的，一般高出第二 50 个。</span></span><br><span class="line">    interface ens33                          <span class="comment"># VIP 要配置的网卡接口名称</span></span><br><span class="line">    advert_int <span class="number">1</span>                             <span class="comment"># 主节点需要周期性向其他备用节点通告自己的优先级和状态信息，即心跳</span></span><br><span class="line">    authentication &#123;                         <span class="comment"># 接收 VRRP 心跳时候的认证信息</span></span><br><span class="line">        <span class="attribute">auth_type</span> PASS</span><br><span class="line">        auth_pass <span class="number">1111</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    virtual_ipaddress &#123;                      <span class="comment"># virtual_ipaddress 内的 IP 地址，当切换为 MASTER 时被添加, 切换到 BACKUP 时被删除。</span></span><br><span class="line">        172.16.100.10/24 label ens33:0</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="section">track_script</span> &#123;                           <span class="comment"># 跟踪这个脚本的变化</span></span><br><span class="line">        chk_down</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="track-interface"><a href="#track-interface" class="headerlink" title="track_interface"></a>track_interface</h2><p>track_interface 可以让 vrrp_instance 监控这个网卡，如果这块网卡发生故障，那么改变权重从而引发切换 MASTER</p>
-<figure class="highlight nginx"><table><tr><td class="code"><pre><span class="line"><span class="attribute">vrrp_instance</span> VI_1 &#123;</span><br><span class="line">    ...</span><br><span class="line">    <span class="section">track_interface</span> &#123;</span><br><span class="line">        <span class="attribute">veth1</span> weight -<span class="number">60</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="notify-script"><a href="#notify-script" class="headerlink" title="notify_script"></a>notify_script</h2><p>当状态转换的时候使用下面的脚本发出通知。</p>
-<figure class="highlight nginx"><table><tr><td class="code"><pre><span class="line"><span class="attribute">vrrp_instance</span> VI_1 &#123;</span><br><span class="line">    ...</span><br><span class="line">    <span class="comment"># 当本机转换到 MASTER 时候执行的脚本</span></span><br><span class="line">    <span class="attribute">notify_master</span> &lt;STRING&gt;|&lt;QUOTED-STRING&gt; [username [groupname]]</span><br><span class="line">        </span><br><span class="line">    <span class="comment"># 当本机转换到 BACKUP 时候执行的脚本</span></span><br><span class="line">    notify_backup &lt;STRING&gt;|&lt;QUOTED-STRING&gt; [username [groupname]]</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 当本机有失败状态时候执行的脚本</span></span><br><span class="line">    notify_fault &lt;STRING&gt;|&lt;QUOTED-STRING&gt; [username [groupname]]</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 在停止 vrrp 时执行</span></span><br><span class="line">    notify_stop &lt;STRING&gt;|&lt;QUOTED-STRING&gt; [username [groupname]]</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 对于任何状态的转换，notify 脚本会在 notify_* 脚本之后调用，并使用 Keepalived 提供的 4 个参数执行（因此不要在这个 notify 脚本中包含参数）。</span></span><br><span class="line">    <span class="comment"># $1 "GROUP"|"INSTANCE"</span></span><br><span class="line">    <span class="comment"># $2 组或实例的名称</span></span><br><span class="line">    <span class="comment"># $3 目标转换状态（MASTER|BACKUP|FAULT）</span></span><br><span class="line">    <span class="comment"># $4 优先值</span></span><br><span class="line">    notify &lt;STRING&gt;|&lt;QUOTED-STRING&gt; [username [groupname]]</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 使用 global_defs 中的地址在状态转换期间发送电子邮件通知。</span></span><br><span class="line">    smtp_alert</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="IPVS-TODO"><a href="#IPVS-TODO" class="headerlink" title="IPVS TODO"></a>IPVS TODO</h2><p>TODO</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">L = [x * x <span class="keyword">for</span> x <span class="keyword">in</span> range(<span class="number">10</span>)]</span><br><span class="line">print(L)</span><br><span class="line"></span><br><span class="line">g = (x * x <span class="keyword">for</span> x <span class="keyword">in</span> range(<span class="number">10</span>))</span><br><span class="line"></span><br><span class="line">print(g)</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">[<span class="number">0</span>, <span class="number">1</span>, <span class="number">4</span>, <span class="number">9</span>, <span class="number">16</span>, <span class="number">25</span>, <span class="number">36</span>, <span class="number">49</span>, <span class="number">64</span>, <span class="number">81</span>]</span><br><span class="line">&lt;generator object &lt;genexpr&gt; at <span class="number">0x0000022AA9333A98</span>&gt;</span><br></pre></td></tr></table></figure>
+<h2 id="集合解析式"><a href="#集合解析式" class="headerlink" title="集合解析式"></a>集合解析式</h2><p>类似于列表解析式，返回一个集合</p>
+<h3 id="语法-1"><a href="#语法-1" class="headerlink" title="语法"></a>语法</h3><ol>
+<li><code>{expression for iter_var in iterable}</code></li>
+</ol>
+<h3 id="示例-1"><a href="#示例-1" class="headerlink" title="示例"></a>示例</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>a = &#123;i <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">10</span>)&#125;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a</span><br><span class="line">&#123;<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>, <span class="number">8</span>, <span class="number">9</span>&#125;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>type(a)</span><br><span class="line">&lt;<span class="class"><span class="keyword">class</span> '<span class="title">set</span>'&gt;</span></span><br><span class="line">&gt;&gt;&gt; a = &#123;(i,i+1) for i in range(10)&#125;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a</span><br><span class="line">&#123;(<span class="number">0</span>, <span class="number">1</span>), (<span class="number">1</span>, <span class="number">2</span>), (<span class="number">7</span>, <span class="number">8</span>), (<span class="number">6</span>, <span class="number">7</span>), (<span class="number">4</span>, <span class="number">5</span>), (<span class="number">5</span>, <span class="number">6</span>), (<span class="number">8</span>, <span class="number">9</span>), (<span class="number">9</span>, <span class="number">10</span>), (<span class="number">2</span>, <span class="number">3</span>), (<span class="number">3</span>, <span class="number">4</span>)&#125;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>type(a)</span><br><span class="line">&lt;<span class="class"><span class="keyword">class</span> '<span class="title">set</span>'&gt;</span></span><br></pre></td></tr></table></figure>
+<h2 id="字典解析式"><a href="#字典解析式" class="headerlink" title="字典解析式"></a>字典解析式</h2><p>类似于列表解析式，返回一个字典</p>
+<h3 id="语法-2"><a href="#语法-2" class="headerlink" title="语法"></a>语法</h3><ol>
+<li><code>{expression for iter_var in iterable}</code></li>
+</ol>
+<h3 id="示例-2"><a href="#示例-2" class="headerlink" title="示例"></a>示例</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>a = &#123;i:i+<span class="number">1</span> <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">10</span>)&#125;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a</span><br><span class="line">&#123;<span class="number">0</span>: <span class="number">1</span>, <span class="number">1</span>: <span class="number">2</span>, <span class="number">2</span>: <span class="number">3</span>, <span class="number">3</span>: <span class="number">4</span>, <span class="number">4</span>: <span class="number">5</span>, <span class="number">5</span>: <span class="number">6</span>, <span class="number">6</span>: <span class="number">7</span>, <span class="number">7</span>: <span class="number">8</span>, <span class="number">8</span>: <span class="number">9</span>, <span class="number">9</span>: <span class="number">10</span>&#125;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>type(a)</span><br><span class="line">&lt;<span class="class"><span class="keyword">class</span> '<span class="title">dict</span>'&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">select = &#123;k:v <span class="keyword">for</span> k,v <span class="keyword">in</span> kwargs.items() <span class="keyword">if</span> v&#125;</span><br><span class="line"></span><br><span class="line">如果字典的v值为真则将这个键值列入新字典，否则不列入</span><br></pre></td></tr></table></figure>
 
           
         
@@ -1039,7 +1372,7 @@
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/34/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/34/">34</a><span class="page-number current">35</span><a class="page-number" href="/page/36/">36</a><a class="extend next" rel="next" href="/page/36/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/page/34/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/34/">34</a><span class="page-number current">35</span><a class="page-number" href="/page/36/">36</a><span class="space">&hellip;</span><a class="page-number" href="/page/39/">39</a><a class="extend next" rel="next" href="/page/36/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1087,7 +1420,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">72</span>
+                  <span class="site-state-item-count">77</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

@@ -250,6 +250,16 @@
         </li>
       
         
+        <li class="menu-item menu-item-golang">
+          <a href="/categories/golang/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br>
+            
+            Golang
+          </a>
+        </li>
+      
+        
         <li class="menu-item menu-item-个人日志">
           <a href="/categories/个人日志/" rel="section">
             
@@ -291,7 +301,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://yangjinheng.github.io/2017/10/09/python/30.模块和打包/">
+    <link itemprop="mainEntityOfPage" href="https://yangjinheng.github.io/2018/03/01/web/DOM/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Jin Heng">
@@ -310,7 +320,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/10/09/python/30.模块和打包/" itemprop="url">Python模块和打包机制</a></h1>
+                <a class="post-title-link" href="/2018/03/01/web/DOM/" itemprop="url">BOM 和 DOM</a></h1>
         
 
         <div class="post-meta">
@@ -322,8 +332,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-09T00:00:00+08:00">
-                2017-10-09
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-01T00:00:00+08:00">
+                2018-03-01
               </time>
             
 
@@ -345,8 +355,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Python/" itemprop="url" rel="index">
-                    <span itemprop="name">Python</span>
+                  <a href="/categories/web/" itemprop="url" rel="index">
+                    <span itemprop="name">web</span>
                   </a>
                 </span>
 
@@ -384,261 +394,1150 @@
       
         
           
-            <h2 id="代码组织"><a href="#代码组织" class="headerlink" title="代码组织"></a>代码组织</h2><p>Python程序由以下内容组成：</p>
+            <h1 id="BOM浏览器对象"><a href="#BOM浏览器对象" class="headerlink" title="BOM浏览器对象"></a>BOM浏览器对象</h1><ul>
+<li>BOM（Browser Object Model）即浏览器对象模型，最初是 Netscape 浏览器标准的一部分，它从浏览器的发明就一直存在。</li>
+</ul>
 <ul>
-<li>包（Package）</li>
-<li>模块（Moduler）</li>
-<li>函数和类（Class &amp; Function）</li>
+<li>BOM 提供了独立于内容而与浏览器窗口进行交互的对象，使 JavaScript 有能力与浏览器 “对话”。</li>
+<li>BOM 的顶级对象是 window，当调用 window 下的属性和方法时，可以省略 window。</li>
+<li>BOM 尚无正式标准，也没有严格的定义, 所以浏览器厂商可以自由地实现BOM，网页超文本应用程序技术工作组（WHATWG），目前正在努力促进 BOM 的标准化）。</li>
 </ul>
-<p>在现实开发中，我们会编写大量代码，代码之间会有各种关系，比如：包含、外置、共享等等，如何合理有序的组织是个问题。</p>
-<p>Python使用如此三个层次组织代码：</p>
-<p>相同功能的代码放在一个目录里面，每个功能又被分成多个功能模块放在不同的文件中，每个文件定义多个不同的函数和类来具体封装你的代码，如此便形成了明了高效的组织形式。比如：</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">文件操作所有代码放在 files/ 这个文件，所有读文件的功能模块，放到 files/read.py 文件，所有写的代码都放到 files/write.py 文件。而读入所有内容和按行读入这两个代码分别被封装为 read_all(), readlines() 两个函数。</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>库：这是一个编程语言中的的泛概念，在Python中是由 模块和包 为表现形式</p>
-</blockquote>
-<h3 id="命名空间"><a href="#命名空间" class="headerlink" title="命名空间"></a>命名空间</h3><p>由于在 Python 中一切皆为对象，想要好好理解 Module 和 Package，一定要先理解 Namespace 的概念。 所谓 Namespace ，是指标示符的可见范围。对于 Python 而言，常见的 Namespace 主要有以下几种： </p>
-<ol>
-<li>Build-in Namespace (内建命名空间）</li>
-<li>Global Namespace (全局命名空间）</li>
-<li>Local Namespace (局部命名空间）</li>
-</ol>
-<p>有了命名空间的概念，可以有效的解决函数或者是变量重名的问题。不同的命名空间中允许出现相同的函数名或者 是变量名。它们彼此之间不会相互影响，例如在Namespace A和B中同时有一个名为var的变量，对A.var赋值并不 会改变B.var的值。 </p>
-<h2 id="模块"><a href="#模块" class="headerlink" title="模块"></a>模块</h2><p>一个包含<code>Python</code>代码并且以<code>.py</code>结尾的文本文件就是一个模块，其文件名部分就是模块名，其中定义的所有变量或者函数都属于这个Module，这个Module 对于所有函数而言就相当于一个全局的命名空间，而其中的每个函数又都有自己局部的命名空间。 </p>
-<h3 id="导入方式"><a href="#导入方式" class="headerlink" title="导入方式"></a>导入方式</h3><p>模块导入的方式有以下几种：</p>
+<h2 id="功能体系"><a href="#功能体系" class="headerlink" title="功能体系"></a>功能体系</h2><ul>
+<li>基本的 BOM 体系结构图</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">window ----+----- document -----+----- form -----+----- select ----------+----- option</span><br><span class="line">           |                    |                |</span><br><span class="line">           +----- frames[n]     +----- anchor    +----- text-area</span><br><span class="line">           |                    |                |</span><br><span class="line">           +----- history       +----- link      +----- text</span><br><span class="line">           |                    |                |</span><br><span class="line">           +----- location      +----- appllet   +----- pass-word</span><br><span class="line">           |                    |                |</span><br><span class="line">           +----- navigator     +----- image     +----- checkbox</span><br><span class="line">           |                    |                |</span><br><span class="line">           +----- screen        +----- embed     +----- radio</span><br><span class="line">                                |                |</span><br><span class="line">                                +----- layer     +----- button</span><br><span class="line">                                                 |</span><br><span class="line">                                                 +----- submit</span><br><span class="line">                                                 |</span><br><span class="line">                                                 +----- reset</span><br><span class="line">                                                 |</span><br><span class="line">                                                 +----- hidden</span><br><span class="line">                                                 |</span><br><span class="line">                                                 +----- fileupload</span><br><span class="line">                                                 |</span><br><span class="line">                                                 +----- button</span><br></pre></td></tr></table></figure>
+<p>图上可以看到，window 对象 DOM 的根本对象，它由 document（文档对象），history（URL历史对象），location（地址栏对象），navigator（浏览器信息对象），screen（屏幕信息对象），而 document 文档对象，下面的各种标签如：link（link元素对象），image（image元素对象），form（from元素对象）等具体的元素对象，而元素的属性又抽象出来一些对象，text，select，radio，等。</p>
+<h2 id="window对象"><a href="#window对象" class="headerlink" title="window对象"></a>window对象</h2><p>window 对象是 BOM 中所有对象的核心，window 对象表示整个浏览器窗口，包括关闭按钮和其他功能，但不表示其中包含的内容，此外，window 还可用于移动或调整它表示的浏览器的大小，或者对它产生其他影响。</p>
 <ul>
-<li>导入模块</li>
+<li>需要了解</li>
 </ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> mymodule  <span class="comment">#导入模块</span></span><br><span class="line"><span class="keyword">import</span> mymodule <span class="keyword">as</span> m1  <span class="comment">#导入模块，但重命名为m1</span></span><br></pre></td></tr></table></figure>
+<p>window 对象是 BOM 的顶层(核心)对象，所有对象都是通过它延伸出来的，也可以称为 window 的子对象。由于window 是顶层对象，因此调用它的子对象时可以不显示的指明 window 对象，例如下面两行代码是一样的：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">document.write(&quot;BOM&quot;);</span><br><span class="line">window.document.write(&quot;BOM&quot;);</span><br></pre></td></tr></table></figure>
+<p>在 <code>JavaScript</code> 中的任何一个全局函数或变量都是 window 对象的属性，可以直接调用。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="built_in">console</span>.log()</span><br><span class="line"><span class="built_in">window</span>.console.log()</span><br></pre></td></tr></table></figure>
 <ul>
-<li>导入模块的部分属性</li>
+<li>属性</li>
 </ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> mymodule <span class="keyword">import</span> cc  <span class="comment">#导入模块的一个内容属性</span></span><br><span class="line"><span class="keyword">from</span> mymodule <span class="keyword">import</span> cc <span class="keyword">as</span> c1  <span class="comment">#导入模块内容cc，重命名为c1</span></span><br><span class="line"><span class="keyword">from</span> module <span class="keyword">import</span> cc,bb,aa  <span class="comment">#同时导入多个模块内容</span></span><br><span class="line"><span class="keyword">from</span> module <span class="keyword">import</span> *  <span class="comment">#导入模块的所有属性</span></span><br></pre></td></tr></table></figure>
-<ul>
-<li>重新导入已经导入的模块</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">reload(sys)  <span class="comment">#重新导入已经导入的模块，在统一编码规范时常用</span></span><br></pre></td></tr></table></figure>
-<h3 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h3><p>现在我们手动创建一个简单的模块：</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">4</span>]: cat mymodule.py</span><br><span class="line">cc = <span class="number">1</span></span><br><span class="line">bb = <span class="number">2</span></span><br><span class="line">aa = <span class="number">3</span></span><br></pre></td></tr></table></figure>
-<ul>
-<li>导入模块，导入模块并重命名</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">1</span>]: <span class="keyword">import</span> mymodule</span><br><span class="line"></span><br><span class="line">In [<span class="number">2</span>]: mymodule.aa</span><br><span class="line">Out[<span class="number">2</span>]: <span class="number">3</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">3</span>]: mymodule.bb</span><br><span class="line">Out[<span class="number">3</span>]: <span class="number">2</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">4</span>]: mymodule.cc</span><br><span class="line">Out[<span class="number">4</span>]: <span class="number">1</span></span><br></pre></td></tr></table></figure>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">6</span>]: <span class="keyword">import</span> mymodule <span class="keyword">as</span> m1</span><br><span class="line"></span><br><span class="line">In [<span class="number">7</span>]: m1.aa</span><br><span class="line">Out[<span class="number">7</span>]: <span class="number">3</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">8</span>]: m1.cc</span><br><span class="line">Out[<span class="number">8</span>]: <span class="number">1</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">9</span>]: m1.bb</span><br><span class="line">Out[<span class="number">9</span>]: <span class="number">2</span></span><br></pre></td></tr></table></figure>
-<ul>
-<li>导入模块的部分内容，并且重新命名</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">1</span>]: <span class="keyword">from</span> mymodule <span class="keyword">import</span> aa</span><br><span class="line"></span><br><span class="line">In [<span class="number">2</span>]: aa</span><br><span class="line">Out[<span class="number">2</span>]: <span class="number">3</span></span><br><span class="line">    </span><br><span class="line">In [<span class="number">3</span>]: <span class="keyword">from</span> mymodule <span class="keyword">import</span> aa <span class="keyword">as</span> AA</span><br><span class="line"></span><br><span class="line">In [<span class="number">4</span>]: AA</span><br><span class="line">Out[<span class="number">4</span>]: <span class="number">3</span></span><br></pre></td></tr></table></figure>
-<ul>
-<li>导入模块中的多个内容</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">1</span>]: <span class="keyword">from</span> mymodule <span class="keyword">import</span> aa,bb</span><br><span class="line"></span><br><span class="line">In [<span class="number">2</span>]: aa</span><br><span class="line">Out[<span class="number">2</span>]: <span class="number">3</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">3</span>]: bb</span><br><span class="line">Out[<span class="number">3</span>]: <span class="number">2</span></span><br></pre></td></tr></table></figure>
-<h2 id="包"><a href="#包" class="headerlink" title="包"></a>包</h2><p>包是一个目录，并且必须有一个<code>__init__.py</code>文件，它是包的注册文件，文件内容可以为空，一个包内可以有多个 <code>模块</code> 或者 <code>子包</code> 组成，这样一个有层次的目录结构形成了Python的包，可以将包视作模块。</p>
-<p>导入包会执行包下的<code>__init__.py</code>注册文件。</p>
-<p>导入包下的子模块，一定会先导入<code>__init__.py</code>注册文件，然后再导入子模块的代码。</p>
-<p>导入包下的子包，则不会导入父包，只会导入子包的<code>__init__.py</code>。</p>
-<h3 id="导入方式-1"><a href="#导入方式-1" class="headerlink" title="导入方式"></a>导入方式</h3><p>包有以下几种导入方式：</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> pack  <span class="comment">#导入一个名叫pack的包</span></span><br><span class="line"><span class="keyword">from</span> pack <span class="keyword">import</span> system  <span class="comment">#从包中导入一个模块</span></span><br><span class="line"><span class="keyword">from</span> pack <span class="keyword">import</span> system,mymodule  <span class="comment">#从包中导入多个模块</span></span><br></pre></td></tr></table></figure>
-<h3 id="示例-1"><a href="#示例-1" class="headerlink" title="示例"></a>示例</h3><p>这就是一个叫 pack 的包，因为它包含一个 <code>__init__.py</code> 的文件。</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">19</span>]: !tree m</span><br><span class="line">m</span><br><span class="line">├── __init__.py</span><br><span class="line">├── m1.py</span><br><span class="line">└── m2</span><br><span class="line">    ├── __init__.py</span><br><span class="line">    └── m21</span><br><span class="line">        └── __init__.py</span><br><span class="line"></span><br><span class="line"><span class="number">2</span> directories, <span class="number">4</span> files</span><br><span class="line"></span><br><span class="line">每个py文件中都包含以下代码</span><br><span class="line">print(<span class="string">'m/__init__.py'</span>)    <span class="comment">#文件名称</span></span><br><span class="line">print(__name__)    <span class="comment">#文件名</span></span><br><span class="line">var = __file__   <span class="comment">#模块变量</span></span><br></pre></td></tr></table></figure>
-<ul>
-<li>导入一个包，会执行<code>__init__</code>注册文件</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">16</span>]: <span class="keyword">import</span> m</span><br><span class="line">m/__init__.py</span><br><span class="line">m</span><br><span class="line"></span><br><span class="line">In [<span class="number">2</span>]: m.var</span><br><span class="line">Out[<span class="number">2</span>]: <span class="string">'/home/python/magedu/projects/test/m/__init__.py'</span></span><br></pre></td></tr></table></figure>
-<ul>
-<li>导入子模块，一定会导入父模块</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">1</span>]: <span class="keyword">from</span> m <span class="keyword">import</span> m1</span><br><span class="line">m/__init__.py</span><br><span class="line">m</span><br><span class="line">m/m1.py</span><br><span class="line">m.m1</span><br><span class="line"></span><br><span class="line">In [<span class="number">11</span>]: m.m1.var</span><br><span class="line">Out[<span class="number">11</span>]: <span class="string">'/home/python/magedu/projects/test/m/m1.py'</span></span><br></pre></td></tr></table></figure>
-<ul>
-<li>导入子包时候，不会导入父包</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">1</span>]: <span class="keyword">from</span> m <span class="keyword">import</span> m2</span><br><span class="line">m/m2/__init__.py</span><br><span class="line">m.m2</span><br><span class="line">In [<span class="number">3</span>]: m2.var</span><br><span class="line">Out[<span class="number">3</span>]: <span class="string">'/home/python/magedu/projects/test/m/m2/__init__.py'</span></span><br><span class="line">    </span><br><span class="line">In [<span class="number">1</span>]: <span class="keyword">from</span> m.m2 <span class="keyword">import</span> m21</span><br><span class="line">m/m2/m21/__init__.py</span><br><span class="line">m.m2.m21</span><br><span class="line"></span><br><span class="line">In [<span class="number">2</span>]: m21.var</span><br><span class="line">Out[<span class="number">2</span>]: <span class="string">'/home/python/magedu/projects/test/m/m2/m21/__init__.py'</span></span><br></pre></td></tr></table></figure>
-<p>通常<code>__int__.py</code>文件为空，但是我们还可以为它增加其他的功能。我们在导入一个包时，实际上是导入了它的<code>__init__.py</code>文件。这样我们可以在<code>__init__.py</code>文件中批量导入我们所需要的模块，而不再需要一个一个的导入。 </p>
-<ul>
-<li>相对导入和绝对导入</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">Out[<span class="number">2</span>]: vim ./m/__init__.py</span><br><span class="line"><span class="keyword">from</span> . <span class="keyword">import</span> m1           <span class="comment">#在m模块的__init__.py文件中使用相对导入</span></span><br><span class="line">print(<span class="string">'m/__init__.py'</span>)</span><br><span class="line">print(__name__)</span><br><span class="line">var = __file__</span><br></pre></td></tr></table></figure>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">10</span>]: <span class="keyword">import</span> m</span><br><span class="line">m/m1.py</span><br><span class="line">m.m1</span><br><span class="line">m/__init__.py</span><br><span class="line">m</span><br><span class="line"></span><br><span class="line">In [<span class="number">11</span>]: m.m1.var</span><br><span class="line">Out[<span class="number">11</span>]: <span class="string">'/home/python/magedu/projects/test/m/m1.py'</span></span><br></pre></td></tr></table></figure>
-<p>相对导入时模块内部之间互相引用资源的，不是为了直接运行的。</p>
-<h2 id="importlib"><a href="#importlib" class="headerlink" title="importlib"></a>importlib</h2><p>importlib 可以将字符串视作模块导入，同时利用反射方法可以使用字符串在类中查找方法、属性</p>
-<ul>
-<li>text1.py</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Persion</span><span class="params">()</span>:</span></span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self,name)</span>:</span></span><br><span class="line">        self.name = name</span><br><span class="line">        </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">dream</span><span class="params">(self)</span>:</span></span><br><span class="line">        print(<span class="string">"&#123;&#125;在做梦"</span>.format(self.name))</span><br></pre></td></tr></table></figure>
-<ul>
-<li>test2.py</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> importlib</span><br><span class="line"></span><br><span class="line">modu = <span class="string">"test"</span></span><br><span class="line">cls = <span class="string">"Persion"</span></span><br><span class="line"></span><br><span class="line">test = importlib.import_module(modu)</span><br><span class="line"></span><br><span class="line">the_class = getattr(test,cls)</span><br><span class="line"></span><br><span class="line">the_class(<span class="string">"杨金恒"</span>).dream()</span><br></pre></td></tr></table></figure>
-<h2 id="示例应用"><a href="#示例应用" class="headerlink" title="示例应用"></a>示例应用</h2><p>例如，一个传递参数实现不同日志记录方式的装饰器模块，其他模块就可以直接导入，并使用它。</p>
-<h3 id="模块化装饰器"><a href="#模块化装饰器" class="headerlink" title="模块化装饰器"></a>模块化装饰器</h3><ul>
-<li>装饰器模块</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">(magedu353) [python@localhost test]$ cat logger.py </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">logger</span><span class="params">(mode_type)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">wrapper</span><span class="params">(func)</span>:</span></span><br><span class="line">        <span class="function"><span class="keyword">def</span> <span class="title">_wrapper</span><span class="params">(*args,**kwargs)</span>:</span></span><br><span class="line">            <span class="keyword">if</span> mode_type == <span class="string">'file'</span>:</span><br><span class="line">                print(<span class="string">'write file...'</span>)</span><br><span class="line">                <span class="keyword">return</span> func(*args,**kwargs)</span><br><span class="line">            <span class="keyword">elif</span> mode_type == <span class="string">'stdout'</span>:</span><br><span class="line">                print(<span class="string">'write stdout...'</span>)</span><br><span class="line">                <span class="keyword">return</span> func(*args,**kwargs)</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                print(<span class="string">'mode_type error...'</span>)</span><br><span class="line">        <span class="keyword">return</span> _wrapper</span><br><span class="line">    <span class="keyword">return</span> wrapper</span><br></pre></td></tr></table></figure>
-<ul>
-<li>调用装饰器模块的程序</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">(magedu353) [python@localhost test]$ cat func.py </span><br><span class="line"><span class="keyword">import</span> logger</span><br><span class="line"></span><br><span class="line"><span class="meta">@logger.logger('file')</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func1</span><span class="params">()</span>:</span></span><br><span class="line">    print(<span class="string">'this is func1'</span>)</span><br><span class="line"></span><br><span class="line"><span class="meta">@logger.logger('stdout')</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func2</span><span class="params">()</span>:</span></span><br><span class="line">    print(<span class="string">'this is func2'</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    func1()</span><br><span class="line">    func2()</span><br></pre></td></tr></table></figure>
-<ul>
-<li>运行结果</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">(magedu353) [python@localhost test]$ python func.py </span><br><span class="line">[<span class="string">'__builtins__'</span>, <span class="string">'__cached__'</span>, <span class="string">'__doc__'</span>, <span class="string">'__file__'</span>, <span class="string">'__loader__'</span>, <span class="string">'__name__'</span>, <span class="string">'__package__'</span>, <span class="string">'__spec__'</span>, <span class="string">'logger'</span>]</span><br><span class="line">write file...</span><br><span class="line">this <span class="keyword">is</span> func1</span><br><span class="line">write stdout...</span><br><span class="line">this <span class="keyword">is</span> func2</span><br></pre></td></tr></table></figure>
-<p>可以看到 <code>logger</code> 模块被导入到 <code>func</code> 的命名空间，<code>func</code> 就可以直接调用 <code>logger</code> 的功能了。</p>
-<h2 id="相关属性"><a href="#相关属性" class="headerlink" title="相关属性"></a>相关属性</h2><h3 id="搜索路径"><a href="#搜索路径" class="headerlink" title="搜索路径"></a>搜索路径</h3><p>即：导入模块时在哪些路径下搜索模块，搜索路径是编译 Python 时候指定的，它以一个列表的形式保存在<code>sys.path</code>变量里，其中每个元素表示一个路径，对这个列表 append ，可以增加搜索路径。</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">6</span>]: <span class="keyword">import</span> sys</span><br><span class="line"></span><br><span class="line">In [<span class="number">7</span>]: sys.path</span><br><span class="line">Out[<span class="number">7</span>]: </span><br><span class="line">[<span class="string">''</span>,</span><br><span class="line"> <span class="string">'/home/python/.pyenv/versions/3.5.3/envs/magedu353/bin'</span>,</span><br><span class="line"> <span class="string">'/home/python/.pyenv/versions/3.5.3/lib/python35.zip'</span>,</span><br><span class="line"> <span class="string">'/home/python/.pyenv/versions/3.5.3/lib/python3.5'</span>,</span><br><span class="line"> <span class="string">'/home/python/.pyenv/versions/3.5.3/lib/python3.5/plat-linux'</span>,</span><br><span class="line"> <span class="string">'/home/python/.pyenv/versions/3.5.3/lib/python3.5/lib-dynload'</span>,</span><br><span class="line"> <span class="string">'/home/python/.pyenv/versions/3.5.3/envs/magedu353/lib/python3.5/site-packages'</span>,</span><br><span class="line"> <span class="string">'/home/python/.pyenv/versions/3.5.3/envs/magedu353/lib/python3.5/site-packages/IPython/extensions'</span>,</span><br><span class="line"> <span class="string">'/home/python/.ipython'</span>]</span><br><span class="line">In [<span class="number">8</span>]: sys.path.append(<span class="string">'/app/python'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">9</span>]: sys.path</span><br><span class="line">Out[<span class="number">9</span>]: </span><br><span class="line">[<span class="string">''</span>,</span><br><span class="line"> <span class="string">'/home/python/.pyenv/versions/3.5.3/envs/magedu353/bin'</span>,</span><br><span class="line"> <span class="string">'/home/python/.pyenv/versions/3.5.3/lib/python35.zip'</span>,</span><br><span class="line"> <span class="string">'/home/python/.pyenv/versions/3.5.3/lib/python3.5'</span>,</span><br><span class="line"> <span class="string">'/home/python/.pyenv/versions/3.5.3/lib/python3.5/plat-linux'</span>,</span><br><span class="line"> <span class="string">'/home/python/.pyenv/versions/3.5.3/lib/python3.5/lib-dynload'</span>,</span><br><span class="line"> <span class="string">'/home/python/.pyenv/versions/3.5.3/envs/magedu353/lib/python3.5/site-packages'</span>,</span><br><span class="line"> <span class="string">'/home/python/.pyenv/versions/3.5.3/envs/magedu353/lib/python3.5/site-packages/IPython/extensions'</span>,</span><br><span class="line"> <span class="string">'/home/python/.ipython'</span>,</span><br><span class="line"> <span class="string">'/app/python'</span>]</span><br></pre></td></tr></table></figure>
-<h3 id="模块属性"><a href="#模块属性" class="headerlink" title="模块属性"></a>模块属性</h3><table>
-<thead>
-<tr>
-<th>属性</th>
-<th>含义</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>__file__</code></td>
-<td>被引用模块的路径</td>
-</tr>
-<tr>
-<td><code>__cached__</code></td>
-<td>编译后字节码文件路径</td>
-</tr>
-<tr>
-<td><code>__spec__</code></td>
-<td>模块的规范</td>
-</tr>
-<tr>
-<td><code>__name__</code></td>
-<td>是模块内置的一个属性，一般如果模块是被引用的时候, 它的值是模块名, 如果这个python文件被直接运行, 那么它的值是<code>&#39;__main__&#39;</code></td>
-</tr>
-<tr>
-<td><code>__package__</code></td>
-<td>如果文件是个包它的值和<code>__name__</code>是相同的，如果是子模块，则和父模块一致</td>
-</tr>
-<tr>
-<td><code>__all__</code></td>
-<td>在包的注册文件内，它的值是个模块名组成的列表，该属性表示当使用<code>import * from xxx</code>时候，哪些模块会被导入进来</td>
-</tr>
-<tr>
-<td><code>__doc__</code></td>
-<td>模块的注释文档</td>
-</tr>
-</tbody>
-</table>
-<h3 id="隐藏变量"><a href="#隐藏变量" class="headerlink" title="隐藏变量"></a>隐藏变量</h3><p>如果不想让某个属性被<code>from module import *</code>导入，那么你可以给不想导入的属性标识符前面加<code>_</code>，但这不能组织<code>import foo.__bar</code>这种形式的导入。</p>
-<h3 id="测试方法"><a href="#测试方法" class="headerlink" title="测试方法"></a>测试方法</h3><p><code>__name__</code> 模块的内置属性，它存放了模块的名字。</p>
-<p>当处于不同的命名空间，就为不同的值，即：作为模块被导入时它就为模块的名称，作为程序入口执行时候，它就为<code>__main__</code>表示当前处于顶层作用域。</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    ....</span><br><span class="line">    <span class="keyword">pass</span></span><br></pre></td></tr></table></figure>
-<p>在模块中填写这段代码，可以实现当直接执行时候测试该模块，作为模块导入时，则不会执行。</p>
-<h3 id="动态装载"><a href="#动态装载" class="headerlink" title="动态装载"></a>动态装载</h3><p>一般我们在程序中，直接使用<code>import module</code>方式导入，这种方法是静态的，Python提前扫描，并装载好模块在内存中，有时候我们需要动态装在一个模块。</p>
-<ul>
-<li>模块1，名称：<code>mymodule</code></li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Dog</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self,name,color)</span>:</span></span><br><span class="line">        self.name = name</span><br><span class="line">        self.color = color</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">bark</span><span class="params">(self)</span>:</span></span><br><span class="line">        print(self.name,<span class="string">'woof...'</span>)</span><br></pre></td></tr></table></figure>
-<ul>
-<li>需要使用动态装载的程序</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> importlib</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">plugin</span><span class="params">(name,sep=<span class="string">'.'</span>)</span>:</span>                  <span class="comment">#功能，动态导入一个以点分割的模块</span></span><br><span class="line">    mod,_,cls = name,partition(sep)        <span class="comment">#参数处理，就是以点分割</span></span><br><span class="line">    module = importlib.import_module(mod)  <span class="comment">#动态导入模块</span></span><br><span class="line">    attrib = getattr(module,cls)           <span class="comment">#通过反射获得模块的一个属性</span></span><br><span class="line">    <span class="keyword">return</span> attrib                          <span class="comment">#返回已经导入的模块供程序使用</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'main'</span>:</span><br><span class="line">    plugin(<span class="string">'mymodule.Dog'</span>)</span><br></pre></td></tr></table></figure>
-<h2 id="打包分发"><a href="#打包分发" class="headerlink" title="打包分发"></a>打包分发</h2><ul>
-<li>setuptools模块</li>
-</ul>
-<p>setuptools 可以说是 Python distutils 的增强版，它能帮助我们更好的创建和分发 Python 的包，尤其是具有复杂依赖关系的包。对于开发者来说，能够更好的组织自己项目的分发和发布；对于用户来说，不需要安装 setuptools 也可以使用由它创建的包，只需要一个启动模块即可。</p>
-<p>实现这样的的包管理机制主要由两部分构成：</p>
-<ul>
-<li>一个存储在 Python 官方网站的集中式仓库，名叫 Python Package Index（PyPI）</li>
-<li>另外就是基于 distutils 开发的 setuptools 包管理系统</li>
-</ul>
-<h3 id="打包方法"><a href="#打包方法" class="headerlink" title="打包方法"></a>打包方法</h3><ul>
-<li>创建一个目录，将需要打包的包放在里面</li>
-<li>在该目录中创建一个 <code>setup.py</code>，里面的内容为我们发布包的相关信息。</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> distutils.core <span class="keyword">import</span> setup</span><br><span class="line">setup(name=<span class="string">'mypackage'</span>,</span><br><span class="line">      version=<span class="string">'1.0.0'</span>,</span><br><span class="line">      description=<span class="string">'test package'</span>,</span><br><span class="line">      author=<span class="string">'yangjinheng'</span>,</span><br><span class="line">      author_email=<span class="string">'jinhengyang@foxmail.com'</span>,</span><br><span class="line">      url=<span class="string">'http://www.yangjinheng.com'</span>,</span><br><span class="line">      packages=[<span class="string">'m'</span>,<span class="string">'m.m1'</span>,<span class="string">'m.m2'</span>,<span class="string">'m.m2.m21'</span>],</span><br><span class="line">      )</span><br></pre></td></tr></table></figure>
 <table>
 <thead>
 <tr>
-<th>参数</th>
-<th>含义</th>
+<th>名称</th>
+<th>说明</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>version</td>
-<td>版本号</td>
+<td><code>self</code></td>
+<td>返回对当前窗口的引用。等价于 Window 属性</td>
 </tr>
 <tr>
-<td>description</td>
-<td>描述信息</td>
+<td><code>name</code></td>
+<td>设置或返回窗口的名称</td>
 </tr>
 <tr>
-<td>author</td>
-<td>作者信息</td>
+<td><code>parent</code></td>
+<td>返回父窗口</td>
 </tr>
 <tr>
-<td>author_email</td>
-<td>作者email</td>
+<td><code>top</code></td>
+<td>返回最顶层的先辈窗口</td>
 </tr>
 <tr>
-<td>url</td>
-<td>包的网站</td>
+<td><code>status</code></td>
+<td>指定浏览器状态栏中显示的临时消息</td>
 </tr>
 <tr>
-<td>packages</td>
-<td>需要处理的包目录</td>
+<td><code>defaultStatus</code></td>
+<td>设置或返回窗口状态栏中的默认文本</td>
+</tr>
+<tr>
+<td><code>opener</code></td>
+<td>返回对创建此窗口的窗口的引用</td>
+</tr>
+<tr>
+<td><code>closed</code></td>
+<td>返回窗口是否已经关闭</td>
+</tr>
+<tr>
+<td><code>length</code></td>
+<td>设置或返回窗口中的框架数量</td>
+</tr>
+<tr>
+<td><code>innerheight</code></td>
+<td>返回窗口的文档显示区的高度</td>
+</tr>
+<tr>
+<td><code>innerwidth</code></td>
+<td>返回窗口的文档显示区的宽度</td>
+</tr>
+<tr>
+<td><code>outerheight</code></td>
+<td>返回窗口的外部高度</td>
+</tr>
+<tr>
+<td><code>outerwidth</code></td>
+<td>返回窗口的外部宽度</td>
+</tr>
+<tr>
+<td><code>pageYOffset</code></td>
+<td>设置或返回当前页面相对于窗口显示区左上角的 Y 位置</td>
+</tr>
+<tr>
+<td><code>pageXOffset</code></td>
+<td>设置或返回当前页面相对于窗口显示区左上角的 X 位置</td>
 </tr>
 </tbody>
 </table>
-<blockquote>
-<p>详见：python setup.py –help</p>
-</blockquote>
-<h3 id="脚本参数"><a href="#脚本参数" class="headerlink" title="脚本参数"></a>脚本参数</h3><table>
+<ul>
+<li>常用方法</li>
+</ul>
+<table>
 <thead>
 <tr>
-<th>参数</th>
+<th>名称</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>alert()</code></td>
+<td>一个带有提示信息和确定按钮的对话框</td>
+</tr>
+<tr>
+<td><code>prompt()</code></td>
+<td>一个可提示用户输入的对话框</td>
+</tr>
+<tr>
+<td><code>confirm()</code></td>
+<td>一个带有提示信息，和确定、取消按钮的对话框，返回布尔值</td>
+</tr>
+<tr>
+<td><code>open(&quot;URL&quot;,&quot;窗口名&quot;,&quot;窗口特征&quot;)</code></td>
+<td>打开具有指定名称的新窗口，并加载给URL所指定的文档，弹窗可能被拦截</td>
+</tr>
+<tr>
+<td><code>close()</code></td>
+<td>关闭当前窗口</td>
+</tr>
+<tr>
+<td><code>print()</code></td>
+<td>打印当前窗口的内容</td>
+</tr>
+<tr>
+<td><code>setTimeout(&quot;函数&quot;,&quot;毫秒&quot;)</code></td>
+<td>设置定时器，经过指定毫秒值后执行某个函数</td>
+</tr>
+<tr>
+<td><code>clearTimeout()</code></td>
+<td>取消由 setTimeout() 方法设置的 timeout。</td>
+</tr>
+<tr>
+<td><code>setInterval(&quot;函数&quot;,&quot;毫秒&quot;)</code></td>
+<td>设置间隔执行，每经过指定的毫秒执行一次函数</td>
+</tr>
+<tr>
+<td><code>clearInterval()</code></td>
+<td>取消由 <code>setInterval()</code> 设置的 <code>timeout</code></td>
+</tr>
+<tr>
+<td><code>showModalDialog()</code></td>
+<td>在一个模式窗口中显示指定的HTML文档</td>
+</tr>
+<tr>
+<td><code>focus()</code></td>
+<td>把键盘焦点给与一个窗口</td>
+</tr>
+<tr>
+<td><code>blur()</code></td>
+<td>把键盘焦点从顶层焦点移开</td>
+</tr>
+<tr>
+<td><code>moveBy(xnum,ynum)</code></td>
+<td>相对窗口当前坐标，将对象移动指定的像素</td>
+</tr>
+<tr>
+<td><code>moveTo(x,y)</code></td>
+<td>把窗口的左上角移动到一个坐标</td>
+</tr>
+<tr>
+<td><code>resizeBy(w,h)</code></td>
+<td>按照指定的像素调整窗口的大小</td>
+</tr>
+<tr>
+<td><code>resizeTo(w,h)</code></td>
+<td>将窗口的大小调整到指定的宽度和高度</td>
+</tr>
+<tr>
+<td><code>scrollBy(xnum,ynum)</code></td>
+<td>按照指定的像素来滚动内容</td>
+</tr>
+<tr>
+<td><code>scrollTo(x,y)</code></td>
+<td>将内容滚动到指定的坐标</td>
+</tr>
+</tbody>
+</table>
+<h2 id="frames对象"><a href="#frames对象" class="headerlink" title="frames对象"></a>frames对象</h2><p>frames用于表现HTML页面当前窗体的中的框架集合，如果页面使用框架，将产生一个框架集合 frames，该集合是 Window 对象组成的数组 ，在集合中可用数字(从0开始，从左到右，逐行索引)或名字索引框架。</p>
+<ul>
+<li>属性</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>frames.length</code></td>
+<td>框架的数目</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>使用</li>
+</ul>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line">frames[1].document</span><br><span class="line">frames[1].location</span><br></pre></td></tr></table></figure>
+<h2 id="history对象"><a href="#history对象" class="headerlink" title="history对象"></a>history对象</h2><p>有关客户访问过的 URL 的信息</p>
+<ul>
+<li>方法</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>history.back()</code></td>
+<td>加载History列表中的上一个URL，相当于后退按钮</td>
+</tr>
+<tr>
+<td><code>history.forward()</code></td>
+<td>加载History列表中的下一个URL，相当于前进按钮</td>
+</tr>
+<tr>
+<td><code>history.go()</code></td>
+<td>加载History列表中的一个URL，指定正负数操作浏览器前进后退的页面数</td>
+</tr>
+</tbody>
+</table>
+<h2 id="Location对象"><a href="#Location对象" class="headerlink" title="Location对象"></a>Location对象</h2><p>浏览器的地址栏，有关当前 URL 的信息，它即是 window 对象的属性，又是 document 对象的属性。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">http://www.github.com:8080/index.html?user=li-xinyang&amp;lang=zh-CN#home</span><br><span class="line">  |          |          |       |                  |              |</span><br><span class="line">protocol     |          |       |                  |              |</span><br><span class="line">          hostname     port     |                  |              |</span><br><span class="line">              \        /    pathname             search          hash</span><br><span class="line">                 host</span><br></pre></td></tr></table></figure>
+<ul>
+<li>属性</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>location.href</code></td>
+<td>设置或检索完整的URL字符串</td>
+</tr>
+<tr>
+<td><code>location.host</code></td>
+<td>设置检索位置或URL的主机名和端口号</td>
+</tr>
+<tr>
+<td><code>location.hostname</code></td>
+<td>设置或检索位置或URL的主机部分</td>
+</tr>
+<tr>
+<td><code>location.port</code></td>
+<td>返回端口号</td>
+</tr>
+<tr>
+<td><code>location.pathname</code></td>
+<td>返回 URL 目录或文件名，也可以通过此属性设置 pathname</td>
+</tr>
+<tr>
+<td><code>location.search</code></td>
+<td>设置或返回查询字符串，即由 ? 向后的部分</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>方法</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>location.reload()</code></td>
+<td>重新加载当前页</td>
+</tr>
+<tr>
+<td><code>location.assign(&quot;URL&quot;)</code></td>
+<td>加载URL指定的新的HTM文档</td>
+</tr>
+<tr>
+<td><code>location.replace(&quot;URL&quot;)</code></td>
+<td>通过加载URL指定的文档来替换当前文档</td>
+</tr>
+</tbody>
+</table>
+<h2 id="navigator对象"><a href="#navigator对象" class="headerlink" title="navigator对象"></a>navigator对象</h2><table>
+<thead>
+<tr>
+<th>名称</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>navigator.appCodeName</code></td>
+<td>返回浏览器的代码名</td>
+</tr>
+<tr>
+<td><code>navigator.userAgent</code></td>
+<td>返回由客户机发送服务器的 user-agent 头部的值</td>
+</tr>
+<tr>
+<td><code>navigator.appName</code></td>
+<td>返回浏览器的名称</td>
+</tr>
+<tr>
+<td><code>navigator.appVersion</code></td>
+<td>返回浏览器的平台和版本信息</td>
+</tr>
+<tr>
+<td><code>navigator.browserLanguage</code></td>
+<td>返回浏览器的平台和版本信息</td>
+</tr>
+<tr>
+<td><code>navigator.cookieEnabled</code></td>
+<td>返回指明浏览器中是否启用 cookie 的布尔值</td>
+</tr>
+<tr>
+<td><code>navigator.cpuClass</code></td>
+<td>返回浏览器系统的 CPU 等级</td>
+</tr>
+<tr>
+<td><code>navigator.onLine</code></td>
+<td>返回指明系统是否处于脱机模式的布尔值</td>
+</tr>
+<tr>
+<td><code>navigator.platform</code></td>
+<td>返回运行浏览器的操作系统平台</td>
+</tr>
+<tr>
+<td><code>navigator.systemLanguage</code></td>
+<td>返回 OS 使用的默认语言</td>
+</tr>
+<tr>
+<td><code>navigator.userLanguage</code></td>
+<td>返回 OS 的自然语言设置</td>
+</tr>
+</tbody>
+</table>
+<h2 id="screen对象"><a href="#screen对象" class="headerlink" title="screen对象"></a>screen对象</h2><p> 有关客户端的屏幕和性能的信息</p>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>screen.availWidth</code></td>
+<td>返回窗口可用的屏幕宽度，单位：像素</td>
+</tr>
+<tr>
+<td><code>screen.availHeight</code></td>
+<td>返回窗口可用的屏幕高度，单位：像素</td>
+</tr>
+<tr>
+<td><code>screen.width</code></td>
+<td>返回屏幕宽度，单位：像素</td>
+</tr>
+<tr>
+<td><code>screen.height</code></td>
+<td>返回屏幕高度，单位：像素</td>
+</tr>
+<tr>
+<td><code>screen.colorDepth</code></td>
+<td>返回屏幕的颜色深度</td>
+</tr>
+</tbody>
+</table>
+<h2 id="JavaScript对象"><a href="#JavaScript对象" class="headerlink" title="JavaScript对象"></a>JavaScript对象</h2><ul>
+<li>url加密：encodeURI, encodeURIComponent方法</li>
+<li>url解密：decodeURI, decodeURIComponent方法</li>
+</ul>
+<h1 id="DOM文档对象"><a href="#DOM文档对象" class="headerlink" title="DOM文档对象"></a>DOM文档对象</h1><p>window 对象中最重要的就是 document 文档对象，它将 HTML 文档的内容映射为对象模型，以树形的结构定义了访问和操作 HTML 文档的标准方法，所以当网页被加载时，浏览器会创建页面的文档对象模，这就是 DOM。</p>
+<p>HTML DOM 独立于平台和编程语言，它属于浏览器，可以被任何编程语言诸如 <code>Java</code>、<code>JavaScript</code>、<code>VBScript</code> 使用，所以用 <code>javascript</code> 对网页进行的所有操作都是通过 DOM 进行的，当 <code>JavaScript</code> 修改了 DOM 时，浏览器会立即动态更新页面。 </p>
+<ul>
+<li>能做什么</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">- JavaScript 能够改变页面中所有的 HTML 元素</span><br><span class="line">- JavaScript 能够改变页面中所有的 HTML 属性</span><br><span class="line">- JavaScript 能够改变页面中的所有 CSS 样式</span><br><span class="line">- JavaScript 能够对页面中的所有事件做出反应</span><br></pre></td></tr></table></figure>
+<h2 id="DOM树的概念"><a href="#DOM树的概念" class="headerlink" title="DOM树的概念"></a>DOM树的概念</h2><p>DOM树，就是HTML文档的组织层次结构。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">元素节点：一个 HTML 标签，内部可能包含其他标签</span><br><span class="line"></span><br><span class="line">属性节点：元素节点的属性，它可以直接通过属性的方式操作</span><br><span class="line"></span><br><span class="line">文本节点：文本节点是元素节点的子节点</span><br></pre></td></tr></table></figure>
+<h2 id="属性"><a href="#属性" class="headerlink" title="属性"></a>属性</h2><table>
+<thead>
+<tr>
+<th>属性名</th>
 <th>含义</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>build</td>
-<td>构建安装所需的所有模块</td>
+<td>document.URL</td>
+<td>返回文档完整的URL</td>
 </tr>
 <tr>
-<td>sdist</td>
-<td>创建一个源代码发布（tar.gz，zip文件等）</td>
+<td>document.title</td>
+<td>返回当前文档的标题。</td>
 </tr>
 <tr>
-<td>bdist</td>
-<td>创建一个二进制分发包</td>
+<td>document.readyState</td>
+<td>返回文档状态 (载入中……)</td>
 </tr>
 <tr>
-<td>bdist_rpm</td>
-<td>创建一个RPM分发</td>
+<td>document.scripts</td>
+<td>返回页面中所有脚本的集合。</td>
 </tr>
 <tr>
-<td>bdist_wininst</td>
-<td>创建一个windows 下可执行的安装程序</td>
+<td>document.links</td>
+<td>返回对文档中所有 Area 和 Link 对象引用。</td>
 </tr>
 <tr>
-<td>install</td>
-<td>从构建中安装</td>
+<td>document.strictErrorChecking</td>
+<td>设置或返回是否强制进行错误检查。</td>
+</tr>
+<tr>
+<td>document.activeElement</td>
+<td>返回当前获取焦点元素</td>
+</tr>
+<tr>
+<td>document.anchors</td>
+<td>返回对文档中所有 Anchor 对象的引用。</td>
+</tr>
+<tr>
+<td>document.applets</td>
+<td>返回对文档中所有 Applet 对象的引用。</td>
+</tr>
+<tr>
+<td>document.documentURI</td>
+<td>设置或返回文档的位置</td>
+</tr>
+<tr>
+<td>document.baseURI</td>
+<td>返回文档的绝对基础 URI</td>
+</tr>
+<tr>
+<td>document.body</td>
+<td>返回文档的body元素</td>
+</tr>
+<tr>
+<td>document.cookie</td>
+<td>设置或返回与当前文档有关的所有 cookie。</td>
+</tr>
+<tr>
+<td>document.doctype</td>
+<td>返回与文档相关的文档类型声明 (DTD)。</td>
+</tr>
+<tr>
+<td>document.documentElement</td>
+<td>返回文档的根节点</td>
+</tr>
+<tr>
+<td>document.documentMode</td>
+<td>返回用于通过浏览器渲染文档的模式</td>
+</tr>
+<tr>
+<td>document.domain</td>
+<td>返回当前文档的域名。</td>
+</tr>
+<tr>
+<td>document.domConfig</td>
+<td>返回normalizeDocument()被调用时所使用的配置</td>
+</tr>
+<tr>
+<td>document.embeds</td>
+<td>返回文档中所有嵌入的内容（embed）集合</td>
+</tr>
+<tr>
+<td>document.forms</td>
+<td>返回对文档中所有 Form 对象引用。</td>
+</tr>
+<tr>
+<td>document.images</td>
+<td>返回对文档中所有 Image 对象引用。</td>
+</tr>
+<tr>
+<td>document.implementation</td>
+<td>返回处理该文档的 DOMImplementation 对象。</td>
+</tr>
+<tr>
+<td>document.lastModified</td>
+<td>返回文档被最后修改的日期和时间。</td>
+</tr>
+<tr>
+<td>document.inputEncoding</td>
+<td>返回用于文档的编码方式（在解析时）。</td>
+</tr>
+<tr>
+<td>document.referrer</td>
+<td>返回载入当前文档的文档的 URL。</td>
 </tr>
 </tbody>
 </table>
-<blockquote>
-<p>详见：python setup.py –help-commands</p>
-</blockquote>
-<h3 id="创建源码包"><a href="#创建源码包" class="headerlink" title="创建源码包"></a>创建源码包</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">(magedu353) [python@localhost package]$ ll</span><br><span class="line">总用量 <span class="number">4</span></span><br><span class="line">drwxrwxr-x <span class="number">3</span> python python  <span class="number">48</span> <span class="number">5</span>月  <span class="number">20</span> <span class="number">11</span>:<span class="number">33</span> m</span><br><span class="line">-rw-rw-r-- <span class="number">1</span> python python <span class="number">258</span> <span class="number">5</span>月  <span class="number">20</span> <span class="number">11</span>:<span class="number">34</span> setup.py</span><br><span class="line">(magedu353) [python@localhost package]$ python setup.py sdist</span><br><span class="line">running sdist</span><br><span class="line">running check</span><br><span class="line">warning: sdist: manifest template <span class="string">'MANIFEST.in'</span> does <span class="keyword">not</span> exist (using default file list)</span><br><span class="line"></span><br><span class="line">warning: sdist: standard file <span class="keyword">not</span> found: should have one of README, README.txt</span><br><span class="line"></span><br><span class="line">writing manifest file <span class="string">'MANIFEST'</span></span><br><span class="line">creating mypackage<span class="number">-1.0</span><span class="number">.0</span></span><br><span class="line">creating mypackage<span class="number">-1.0</span><span class="number">.0</span>/m</span><br><span class="line">making hard links <span class="keyword">in</span> mypackage<span class="number">-1.0</span><span class="number">.0</span>...</span><br><span class="line">hard linking setup.py -&gt; mypackage-1.0.0</span><br><span class="line">hard linking m/__init__.py -&gt; mypackage-1.0.0/m</span><br><span class="line">hard linking m/m1.py -&gt; mypackage-1.0.0/m</span><br><span class="line">creating dist</span><br><span class="line">Creating tar archive</span><br><span class="line">removing <span class="string">'mypackage-1.0.0'</span> (<span class="keyword">and</span> everything under it)</span><br><span class="line">(magedu353) [python@localhost package]$ ll</span><br><span class="line">总用量 <span class="number">8</span></span><br><span class="line">drwxrwxr-x <span class="number">2</span> python python  <span class="number">36</span> <span class="number">5</span>月  <span class="number">20</span> <span class="number">12</span>:<span class="number">08</span> dist</span><br><span class="line">drwxrwxr-x <span class="number">3</span> python python  <span class="number">48</span> <span class="number">5</span>月  <span class="number">20</span> <span class="number">11</span>:<span class="number">33</span> m</span><br><span class="line">-rw-rw-r-- <span class="number">1</span> python python  <span class="number">74</span> <span class="number">5</span>月  <span class="number">20</span> <span class="number">12</span>:<span class="number">08</span> MANIFEST</span><br><span class="line">-rw-rw-r-- <span class="number">1</span> python python <span class="number">258</span> <span class="number">5</span>月  <span class="number">20</span> <span class="number">11</span>:<span class="number">34</span> setup.py</span><br><span class="line">(magedu353) [python@localhost package]$ cd dist/</span><br><span class="line">(magedu353) [python@localhost dist]$ ll</span><br><span class="line">总用量 <span class="number">4</span></span><br><span class="line">-rw-rw-r-- <span class="number">1</span> python python <span class="number">571</span> <span class="number">5</span>月  <span class="number">20</span> <span class="number">12</span>:<span class="number">08</span> mypackage<span class="number">-1.0</span><span class="number">.0</span>.tar.gz    <span class="comment">#构建完成</span></span><br></pre></td></tr></table></figure>
-<h3 id="安装源码包"><a href="#安装源码包" class="headerlink" title="安装源码包"></a>安装源码包</h3><ul>
-<li>通过pip安装</li>
+<h2 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h2><table>
+<thead>
+<tr>
+<th style="text-align:left">方法名称</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">document.getElementById()</td>
+<td>返回对拥有指定 id 的第一个对象的引用。</td>
+</tr>
+<tr>
+<td style="text-align:left">document.getElementsByTagName()</td>
+<td>返回带有指定标签名的对象集合，此对象为动态集合，标签变化会自动更新集合</td>
+</tr>
+<tr>
+<td style="text-align:left">document.getElementsByName()</td>
+<td>根据标签的 name 属性，返回对象集合，集合不随着标签变化而变化</td>
+</tr>
+<tr>
+<td style="text-align:left">document.getElementsByClassName()</td>
+<td>返回文档中所有指定类名的元素集合，作为 NodeList 对象。</td>
+</tr>
+<tr>
+<td style="text-align:left">document.querySelector()</td>
+<td>返回文档中匹配指定的 CSS选择器 的第一元素</td>
+</tr>
+<tr>
+<td style="text-align:left">document.querySelectorAll()</td>
+<td>document.querySelectorAll() 是 HTML5中引入的新方法，返回文档中匹配的CSS选择器的所有元素节点列表</td>
+</tr>
+<tr>
+<td style="text-align:left">document.addEventListener()</td>
+<td>向文档添加句柄</td>
+</tr>
+<tr>
+<td style="text-align:left">document.removeEventListener()</td>
+<td>移除文档中的事件句柄(由 addEventListener() 方法添加)</td>
+</tr>
+<tr>
+<td style="text-align:left">document.adoptNode(node)</td>
+<td>从另外一个文档返回 adapded 节点到当前文档。</td>
+</tr>
+<tr>
+<td style="text-align:left">document.close()</td>
+<td>关闭用 document.open() 方法打开的输出流，并显示选定的数据。</td>
+</tr>
+<tr>
+<td style="text-align:left">document.createAttribute()</td>
+<td>创建一个属性节点</td>
+</tr>
+<tr>
+<td style="text-align:left">document.createComment()</td>
+<td>createComment() 方法可创建注释节点。</td>
+</tr>
+<tr>
+<td style="text-align:left">document.createDocumentFragment()</td>
+<td>创建空的 DocumentFragment 对象，并返回此对象。</td>
+</tr>
+<tr>
+<td style="text-align:left">document.createElement()</td>
+<td>创建元素节点。</td>
+</tr>
+<tr>
+<td style="text-align:left">document.createTextNode()</td>
+<td>创建文本节点。</td>
+</tr>
+<tr>
+<td style="text-align:left">document.importNode()</td>
+<td>把一个节点从另一个文档复制到该文档以便应用。</td>
+</tr>
+<tr>
+<td style="text-align:left">document.normalize()</td>
+<td>删除空文本节点，并连接相邻节点</td>
+</tr>
+<tr>
+<td style="text-align:left">document.normalizeDocument()</td>
+<td>删除空文本节点，并连接相邻节点的</td>
+</tr>
+<tr>
+<td style="text-align:left">document.open()</td>
+<td>打开一个流，以收集来自任何 document.write() 或 document.writeln() 方法的输出。</td>
+</tr>
+<tr>
+<td style="text-align:left">document.renameNode()</td>
+<td>重命名元素或者属性节点。</td>
+</tr>
+<tr>
+<td style="text-align:left">document.write()</td>
+<td>向文档写 HTML 表达式 或 JavaScript 代码。</td>
+</tr>
+<tr>
+<td style="text-align:left">document.writeln()</td>
+<td>等同于 write() 方法，不同的是在每个表达式之后写一个换行符。</td>
+</tr>
+</tbody>
+</table>
+<h2 id="元素对象"><a href="#元素对象" class="headerlink" title="元素对象"></a>元素对象</h2><table>
+<thead>
+<tr>
+<th>element.accessKey</th>
+<th>设置或返回accesskey一个元素</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>属性 / 方法</td>
+<td>描述</td>
+</tr>
+<tr>
+<td>element.addEventListener()</td>
+<td>向指定元素添加事件句柄</td>
+</tr>
+<tr>
+<td>element.appendChild()</td>
+<td>为元素添加一个新的子元素</td>
+</tr>
+<tr>
+<td>element.attributes</td>
+<td>返回一个元素的属性数组</td>
+</tr>
+<tr>
+<td>element.childNodes</td>
+<td>返回元素的一个子节点的数组</td>
+</tr>
+<tr>
+<td>element.classlist</td>
+<td>返回元素的类名，作为 DOMTokenList 对象。</td>
+</tr>
+<tr>
+<td>element.className</td>
+<td>设置或返回元素的class属性</td>
+</tr>
+<tr>
+<td>element.clientHeight</td>
+<td>在页面上返回内容的可视高度（不包括边框，边距或滚动条）</td>
+</tr>
+<tr>
+<td>element.clientWidth</td>
+<td>在页面上返回内容的可视宽度（不包括边框，边距或滚动条）</td>
+</tr>
+<tr>
+<td>element.cloneNode()</td>
+<td>克隆某个元素</td>
+</tr>
+<tr>
+<td>element.compareDocumentPosition()</td>
+<td>比较两个元素的文档位置。</td>
+</tr>
+<tr>
+<td>element.contentEditable</td>
+<td>设置或返回元素的内容是否可编辑</td>
+</tr>
+<tr>
+<td>element.dir</td>
+<td>设置或返回一个元素中的文本方向</td>
+</tr>
+<tr>
+<td>element.firstChild</td>
+<td>返回元素的第一个子节点</td>
+</tr>
+<tr>
+<td>element.focus()</td>
+<td>设置文档或元素获取焦点</td>
+</tr>
+<tr>
+<td>element.getAttribute()</td>
+<td>返回指定元素的属性值</td>
+</tr>
+<tr>
+<td>element.getAttributeNode()</td>
+<td>返回指定属性节点</td>
+</tr>
+<tr>
+<td>element.getElementsByTagName()</td>
+<td>返回指定标签名的所有子元素集合。</td>
+</tr>
+<tr>
+<td>element.   getElementsByClassName()</td>
+<td>返回文档中所有指定类名的元素集合，作为 NodeList 对象。</td>
+</tr>
+<tr>
+<td>element.getFeature()</td>
+<td>返回指定特征的执行APIs对象。</td>
+</tr>
+<tr>
+<td>element.getUserData()</td>
+<td>返回一个元素中关联键值的对象。</td>
+</tr>
+<tr>
+<td>element.hasAttribute()</td>
+<td>如果元素中存在指定的属性返回 true，否则返回false。</td>
+</tr>
+<tr>
+<td>element.hasAttributes()</td>
+<td>如果元素有任何属性返回true，否则返回false。</td>
+</tr>
+<tr>
+<td>element.hasChildNodes()</td>
+<td>返回一个元素是否具有任何子元素</td>
+</tr>
+<tr>
+<td>element.hasfocus()</td>
+<td>返回布尔值，检测文档或元素是否获取焦点</td>
+</tr>
+<tr>
+<td>element.id</td>
+<td>设置或者返回元素的 id。</td>
+</tr>
+<tr>
+<td>element.innerHTML</td>
+<td>设置或者返回元素的内容。</td>
+</tr>
+<tr>
+<td>element.insertBefore()</td>
+<td>现有的子元素之前插入一个新的子元素</td>
+</tr>
+<tr>
+<td>element.isContentEditable</td>
+<td>如果元素内容可编辑返回 true，否则返回false</td>
+</tr>
+<tr>
+<td>element.isDefaultNamespace()</td>
+<td>如果指定了namespaceURI 返回 true，否则返回 false。</td>
+</tr>
+<tr>
+<td>element.isEqualNode()</td>
+<td>检查两个元素是否相等</td>
+</tr>
+<tr>
+<td>element.isSameNode()</td>
+<td>检查两个元素所有有相同节点。</td>
+</tr>
+<tr>
+<td>element.isSupported()</td>
+<td>如果在元素中支持指定特征返回 true。</td>
+</tr>
+<tr>
+<td>element.lang</td>
+<td>设置或者返回一个元素的语言。</td>
+</tr>
+<tr>
+<td>element.lastChild</td>
+<td>返回的最后一个子元素</td>
+</tr>
+<tr>
+<td>element.namespaceURI</td>
+<td>返回命名空间的 URI。</td>
+</tr>
+<tr>
+<td>element.nextSibling</td>
+<td>返回该元素紧跟的一个元素</td>
+</tr>
+<tr>
+<td>element.nodeName</td>
+<td>返回元素的标记名（大写）</td>
+</tr>
+<tr>
+<td>element.nodeType</td>
+<td>Returns the node type of an element</td>
+</tr>
+<tr>
+<td>element.nodeValue</td>
+<td>返回元素的类型</td>
+</tr>
+<tr>
+<td>element.normalize()</td>
+<td>使得此成为一个”normal”的形式，其中只有结构（如元素，注释，处理指令，CDATA节和实体引用）隔开Text节点，即元素（包括属性）下面的所有文本节点，既没有相邻的文本节点也没有空的文本节点</td>
+</tr>
+<tr>
+<td>element.offsetHeight</td>
+<td>返回，任何一个元素的高度包括边框和填充，但不是边距</td>
+</tr>
+<tr>
+<td>element.offsetWidth</td>
+<td>返回元素的宽度，包括边框和填充，但不是边距</td>
+</tr>
+<tr>
+<td>element.offsetLeft</td>
+<td>返回当前元素的相对水平偏移位置的偏移容器</td>
+</tr>
+<tr>
+<td>element.offsetParent</td>
+<td>返回元素的偏移容器</td>
+</tr>
+<tr>
+<td>element.offsetTop</td>
+<td>返回当前元素的相对垂直偏移位置的偏移容器</td>
+</tr>
+<tr>
+<td>element.ownerDocument</td>
+<td>返回元素的根元素（文档对象）</td>
+</tr>
+<tr>
+<td>element.parentNode</td>
+<td>返回元素的父节点</td>
+</tr>
+<tr>
+<td>element.previousSibling</td>
+<td>返回某个元素紧接之前元素</td>
+</tr>
+<tr>
+<td>element.querySelector()</td>
+<td>返回匹配指定 CSS 选择器元素的第一个子元素</td>
+</tr>
+<tr>
+<td>document.querySelectorAll()</td>
+<td>返回匹配指定 CSS 选择器元素的所有子元素节点列表</td>
+</tr>
+<tr>
+<td>element.removeAttribute()</td>
+<td>从元素中删除指定的属性</td>
+</tr>
+<tr>
+<td>element.removeAttributeNode()</td>
+<td>删除指定属性节点并返回移除后的节点。</td>
+</tr>
+<tr>
+<td>element.removeChild()</td>
+<td>删除一个子元素</td>
+</tr>
+<tr>
+<td>element.removeEventListener()</td>
+<td>移除由 addEventListener() 方法添加的事件句柄</td>
+</tr>
+<tr>
+<td>element.replaceChild()</td>
+<td>替换一个子元素</td>
+</tr>
+<tr>
+<td>element.scrollHeight</td>
+<td>返回整个元素的高度（包括带滚动条的隐蔽的地方）</td>
+</tr>
+<tr>
+<td>element.scrollLeft</td>
+<td>返回当前视图中的实际元素的左边缘和左边缘之间的距离</td>
+</tr>
+<tr>
+<td>element.scrollTop</td>
+<td>返回当前视图中的实际元素的顶部边缘和顶部边缘之间的距离</td>
+</tr>
+<tr>
+<td>element.scrollWidth</td>
+<td>返回元素的整个宽度（包括带滚动条的隐蔽的地方）</td>
+</tr>
+<tr>
+<td>element.setAttribute()</td>
+<td>设置或者改变指定属性并指定值。</td>
+</tr>
+<tr>
+<td>element.setAttributeNode()</td>
+<td>设置或者改变指定属性节点。</td>
+</tr>
+<tr>
+<td>element.setIdAttribute()</td>
+<td></td>
+</tr>
+<tr>
+<td>element.setIdAttributeNode()</td>
+<td></td>
+</tr>
+<tr>
+<td>element.setUserData()</td>
+<td>在元素中为指定键值关联对象。</td>
+</tr>
+<tr>
+<td>element.style</td>
+<td>设置或返回元素的样式属性</td>
+</tr>
+<tr>
+<td>element.tabIndex</td>
+<td>设置或返回元素的标签顺序。</td>
+</tr>
+<tr>
+<td>element.tagName</td>
+<td>作为一个字符串返回某个元素的标记名（大写）</td>
+</tr>
+<tr>
+<td>element.textContent</td>
+<td>设置或返回一个节点和它的文本内容</td>
+</tr>
+<tr>
+<td>element.title</td>
+<td>设置或返回元素的title属性</td>
+</tr>
+<tr>
+<td>element.toString()</td>
+<td>一个元素转换成字符串</td>
+</tr>
+<tr>
+<td>nodelist.item()</td>
+<td>返回某个元素基于文档树的索引</td>
+</tr>
+<tr>
+<td>nodelist.length</td>
+<td>返回节点列表的节点数目。</td>
+</tr>
+</tbody>
+</table>
+<h2 id="属性对象"><a href="#属性对象" class="headerlink" title="属性对象"></a>属性对象</h2><table>
+<thead>
+<tr>
+<th>属性 / 方法</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>attr.isId</td>
+<td>如果属性是 ID 类型，则 isId 属性返回 true，否则返回 false。</td>
+</tr>
+<tr>
+<td>attr.name</td>
+<td>返回属性名称</td>
+</tr>
+<tr>
+<td>attr.value</td>
+<td>设置或者返回属性值</td>
+</tr>
+<tr>
+<td>attr.specified</td>
+<td>如果属性被指定返回 true，否则返回 false</td>
+</tr>
+<tr>
+<td>nodemap.getNamedItem()</td>
+<td>从节点列表中返回的指定属性节点。</td>
+</tr>
+<tr>
+<td>nodemap.item()</td>
+<td>返回节点列表中处于指定索引号的节点。</td>
+</tr>
+<tr>
+<td>nodemap.length</td>
+<td>返回节点列表的节点数目。</td>
+</tr>
+<tr>
+<td>nodemap.removeNamedItem()</td>
+<td>删除指定属性节点</td>
+</tr>
+</tbody>
+</table>
+<h1 id="DOM常用操作"><a href="#DOM常用操作" class="headerlink" title="DOM常用操作"></a>DOM常用操作</h1><h2 id="选择器"><a href="#选择器" class="headerlink" title="选择器"></a>选择器</h2><p>通过 <code>JavaScript</code> 操作 HTML 元素，首先必须找到该元素，找到元素的方法以下几种：</p>
+<h3 id="ID选择器"><a href="#ID选择器" class="headerlink" title="ID选择器"></a>ID选择器</h3><ul>
+<li>通过元素的 <code>id</code> 找到 HTML 元素，返回元素</li>
 </ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">(magedu353) [python@localhost dist]$ pip install ./mypackage<span class="number">-1.0</span><span class="number">.0</span>.tar.gz </span><br><span class="line">Processing ./mypackage<span class="number">-1.0</span><span class="number">.0</span>.tar.gz</span><br><span class="line">Installing collected packages: mypackage</span><br><span class="line">  Running setup.py install <span class="keyword">for</span> mypackage ... done</span><br><span class="line">Successfully installed mypackage<span class="number">-1.0</span><span class="number">.0</span>    <span class="comment">#安装完成</span></span><br></pre></td></tr></table></figure>
-<p>安装后会出现在：site-packages 这样类似的目录中，并且可以使用<code>pip list</code>命令找到</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">"text/javascript"</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="javascript">        <span class="function"><span class="keyword">function</span> <span class="title">getValue</span>(<span class="params"></span>) </span>&#123;</span></span><br><span class="line"><span class="javascript">            <span class="keyword">var</span> x = <span class="built_in">document</span>.getElementById(<span class="string">"myHeader"</span>)</span></span><br><span class="line"><span class="undefined">            alert(x.innerHTML)</span></span><br><span class="line"><span class="undefined">        &#125;</span></span><br><span class="line"><span class="undefined">    </span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">h1</span> <span class="attr">id</span>=<span class="string">"myHeader"</span> <span class="attr">onclick</span>=<span class="string">"getValue()"</span>&gt;</span>This is a header<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p</span>&gt;</span>Click on the header to alert its value<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="名称选择器"><a href="#名称选择器" class="headerlink" title="名称选择器"></a>名称选择器</h3><ul>
+<li>通过元素的 <code>name</code> 找到元素，返回数组</li>
+</ul>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">"text/javascript"</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="javascript">        <span class="function"><span class="keyword">function</span> <span class="title">getElements</span>(<span class="params"></span>) </span>&#123;</span></span><br><span class="line"><span class="javascript">            <span class="keyword">var</span> x = <span class="built_in">document</span>.getElementsByName(<span class="string">"myInput"</span>);</span></span><br><span class="line"><span class="undefined">            alert(x.length);</span></span><br><span class="line"><span class="undefined">        &#125;</span></span><br><span class="line"><span class="undefined">    </span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">name</span>=<span class="string">"myInput"</span> <span class="attr">type</span>=<span class="string">"text"</span> <span class="attr">size</span>=<span class="string">"20"</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">br</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">name</span>=<span class="string">"myInput"</span> <span class="attr">type</span>=<span class="string">"text"</span> <span class="attr">size</span>=<span class="string">"20"</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">br</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">name</span>=<span class="string">"myInput"</span> <span class="attr">type</span>=<span class="string">"text"</span> <span class="attr">size</span>=<span class="string">"20"</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">br</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">br</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"button"</span> <span class="attr">onclick</span>=<span class="string">"getElements()"</span> <span class="attr">value</span>=<span class="string">"统计myInput元素有多少个？"</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="元素类型选择器"><a href="#元素类型选择器" class="headerlink" title="元素类型选择器"></a>元素类型选择器</h3><ul>
+<li>通过元素的 <code>tag (标签)</code> 找到元素，方法可返回带有指定标签名的对象的集合。 </li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">var x=document.getElementById(&quot;main&quot;);</span><br><span class="line">var y=x.getElementsByTagName(&quot;p&quot;);</span><br></pre></td></tr></table></figure>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">"text/javascript"</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="javascript">        <span class="function"><span class="keyword">function</span> <span class="title">getElements</span>(<span class="params"></span>) </span>&#123;</span></span><br><span class="line"><span class="javascript">            <span class="keyword">var</span> x = <span class="built_in">document</span>.getElementsByTagName(<span class="string">"input"</span>);</span></span><br><span class="line"><span class="undefined">            alert(x.length);</span></span><br><span class="line"><span class="undefined">        &#125;</span></span><br><span class="line"><span class="undefined">    </span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">name</span>=<span class="string">"myInput"</span> <span class="attr">type</span>=<span class="string">"text"</span> <span class="attr">size</span>=<span class="string">"20"</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">br</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">name</span>=<span class="string">"myInput"</span> <span class="attr">type</span>=<span class="string">"text"</span> <span class="attr">size</span>=<span class="string">"20"</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">br</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">name</span>=<span class="string">"myInput"</span> <span class="attr">type</span>=<span class="string">"text"</span> <span class="attr">size</span>=<span class="string">"20"</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">br</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"button"</span> <span class="attr">onclick</span>=<span class="string">"getElements()"</span> <span class="attr">value</span>=<span class="string">"How many input elements?"</span> /&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
 <ul>
-<li>直接解压后安装</li>
+<li>通过类名找到 HTML 元素，方法返回文档中所有指定类名的元素集合，可以通过索引访问，索引从0开始</li>
 </ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">(magedu353) [python@localhost package]$ cd dist/</span><br><span class="line">(magedu353) [python@localhost dist]$ ll</span><br><span class="line">总用量 <span class="number">4</span></span><br><span class="line">-rw-rw-r-- <span class="number">1</span> python python <span class="number">571</span> <span class="number">5</span>月  <span class="number">20</span> <span class="number">12</span>:<span class="number">08</span> mypackage<span class="number">-1.0</span><span class="number">.0</span>.tar.gz</span><br><span class="line">(magedu353) [python@localhost dist]$ tar zxfv mypackage<span class="number">-1.0</span><span class="number">.0</span>.tar.gz     <span class="comment">#解压构建的包</span></span><br><span class="line">mypackage<span class="number">-1.0</span><span class="number">.0</span>/</span><br><span class="line">mypackage<span class="number">-1.0</span><span class="number">.0</span>/m/</span><br><span class="line">mypackage<span class="number">-1.0</span><span class="number">.0</span>/m/__init__.py</span><br><span class="line">mypackage<span class="number">-1.0</span><span class="number">.0</span>/m/m1.py</span><br><span class="line">mypackage<span class="number">-1.0</span><span class="number">.0</span>/setup.py</span><br><span class="line">mypackage<span class="number">-1.0</span><span class="number">.0</span>/PKG-INFO</span><br><span class="line">(magedu353) [python@localhost dist]$ ll</span><br><span class="line">总用量 <span class="number">4</span></span><br><span class="line">drwxrwxr-x <span class="number">3</span> python python  <span class="number">47</span> <span class="number">5</span>月  <span class="number">20</span> <span class="number">12</span>:<span class="number">08</span> mypackage<span class="number">-1.0</span><span class="number">.0</span></span><br><span class="line">-rw-rw-r-- <span class="number">1</span> python python <span class="number">571</span> <span class="number">5</span>月  <span class="number">20</span> <span class="number">12</span>:<span class="number">08</span> mypackage<span class="number">-1.0</span><span class="number">.0</span>.tar.gz</span><br><span class="line">(magedu353) [python@localhost dist]$ cd mypackage<span class="number">-1.0</span><span class="number">.0</span></span><br><span class="line">(magedu353) [python@localhost mypackage<span class="number">-1.0</span><span class="number">.0</span>]$ ll</span><br><span class="line">总用量 <span class="number">8</span></span><br><span class="line">drwxrwxr-x <span class="number">2</span> python python  <span class="number">38</span> <span class="number">5</span>月  <span class="number">20</span> <span class="number">12</span>:<span class="number">08</span> m</span><br><span class="line">-rw-rw-r-- <span class="number">1</span> python python <span class="number">227</span> <span class="number">5</span>月  <span class="number">20</span> <span class="number">12</span>:<span class="number">08</span> PKG-INFO</span><br><span class="line">-rw-rw-r-- <span class="number">1</span> python python <span class="number">258</span> <span class="number">5</span>月  <span class="number">20</span> <span class="number">11</span>:<span class="number">34</span> setup.py</span><br><span class="line">(magedu353) [python@localhost mypackage<span class="number">-1.0</span><span class="number">.0</span>]$ python setup.py install   <span class="comment">#执行安装脚本</span></span><br><span class="line">running install</span><br><span class="line">running build</span><br><span class="line">running build_py</span><br><span class="line">creating build</span><br><span class="line">creating build/lib</span><br><span class="line">creating build/lib/m</span><br><span class="line">copying m/__init__.py -&gt; build/lib/m</span><br><span class="line">copying m/m1.py -&gt; build/lib/m</span><br><span class="line">running install_lib</span><br><span class="line">creating /home/python/.pyenv/versions/magedu353/lib/python3<span class="number">.5</span>/site-packages/m</span><br><span class="line">copying build/lib/m/__init__.py -&gt; /home/python/.pyenv/versions/magedu353/lib/python3.5/site-packages/m</span><br><span class="line">copying build/lib/m/m1.py -&gt; /home/python/.pyenv/versions/magedu353/lib/python3.5/site-packages/m</span><br><span class="line">byte-compiling /home/python/.pyenv/versions/magedu353/lib/python3<span class="number">.5</span>/site-packages/m/__init__.py to __init__.cpython<span class="number">-35.</span>pyc</span><br><span class="line">byte-compiling /home/python/.pyenv/versions/magedu353/lib/python3<span class="number">.5</span>/site-packages/m/m1.py to m1.cpython<span class="number">-35.</span>pyc</span><br><span class="line">running install_egg_info</span><br><span class="line">Writing /home/python/.pyenv/versions/magedu353/lib/python3<span class="number">.5</span>/site-packages/mypackage<span class="number">-1.0</span><span class="number">.0</span>-py3<span class="number">.5</span>.egg-info      <span class="comment">#安装完成</span></span><br></pre></td></tr></table></figure>
-<p>安装后会出现在：site-packages 这样类似的目录中，并且可以使用<code>pip list</code>命令找到</p>
-<h3 id="安装后使用"><a href="#安装后使用" class="headerlink" title="安装后使用"></a>安装后使用</h3><p>安装后就向一般的模块一样，导入使用即可</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">2</span>]: <span class="keyword">import</span> m</span><br><span class="line">m/m1.py</span><br><span class="line">m.m1</span><br><span class="line">m/__init__.py</span><br><span class="line">m</span><br><span class="line"></span><br><span class="line">In [<span class="number">4</span>]: m.__path__</span><br><span class="line">Out[<span class="number">4</span>]: [<span class="string">'/home/python/.pyenv/versions/3.5.3/envs/magedu353/lib/python3.5/site-packages/m'</span>]</span><br></pre></td></tr></table></figure>
-<h3 id="卸载安装包"><a href="#卸载安装包" class="headerlink" title="卸载安装包"></a>卸载安装包</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">(magedu353) [python@localhost test]$ pip uninstall mypackage</span><br><span class="line">Uninstalling mypackage<span class="number">-1.0</span><span class="number">.0</span>:</span><br><span class="line">  /home/python/.pyenv/versions/<span class="number">3.5</span><span class="number">.3</span>/envs/magedu353/lib/python3<span class="number">.5</span>/site-packages/m/__init__.py</span><br><span class="line">  /home/python/.pyenv/versions/<span class="number">3.5</span><span class="number">.3</span>/envs/magedu353/lib/python3<span class="number">.5</span>/site-packages/m/__pycache__/__init__.cpython<span class="number">-35.</span>pyc</span><br><span class="line">  /home/python/.pyenv/versions/<span class="number">3.5</span><span class="number">.3</span>/envs/magedu353/lib/python3<span class="number">.5</span>/site-packages/m/__pycache__/m1.cpython<span class="number">-35.</span>pyc</span><br><span class="line">  /home/python/.pyenv/versions/<span class="number">3.5</span><span class="number">.3</span>/envs/magedu353/lib/python3<span class="number">.5</span>/site-packages/m/m1.py</span><br><span class="line">  /home/python/.pyenv/versions/<span class="number">3.5</span><span class="number">.3</span>/envs/magedu353/lib/python3<span class="number">.5</span>/site-packages/mypackage<span class="number">-1.0</span><span class="number">.0</span>-py3<span class="number">.5</span>.egg-info</span><br><span class="line">Proceed (y/n)? y</span><br><span class="line">  Successfully uninstalled mypackage<span class="number">-1.0</span><span class="number">.0</span></span><br><span class="line">You are using pip version <span class="number">9.0</span><span class="number">.1</span>, however version <span class="number">10.0</span><span class="number">.1</span> <span class="keyword">is</span> available.</span><br><span class="line">You should consider upgrading via the <span class="string">'pip install --upgrade pip'</span> command.</span><br></pre></td></tr></table></figure>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE html&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">"en"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"UTF-8"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p</span> <span class="attr">id</span>=<span class="string">"i1"</span> <span class="attr">name</span>=<span class="string">"yangjinheng"</span> <span class="attr">class</span>=<span class="string">"nihao"</span>&gt;</span>这是内容1<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p</span> <span class="attr">id</span>=<span class="string">"i1"</span> <span class="attr">name</span>=<span class="string">"yangjinheng"</span> <span class="attr">class</span>=<span class="string">"nihao"</span>&gt;</span>这是内容2<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p</span> <span class="attr">id</span>=<span class="string">"i1"</span> <span class="attr">name</span>=<span class="string">"yangjinheng"</span> <span class="attr">class</span>=<span class="string">"nihao"</span>&gt;</span>这是内容3<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="javascript">        <span class="keyword">var</span> x = <span class="built_in">document</span>.getElementsByClassName(<span class="string">"nihao"</span>)</span></span><br><span class="line"><span class="javascript">        <span class="built_in">console</span>.log(x[<span class="number">2</span>])</span></span><br><span class="line"><span class="undefined">    </span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="CSS选择器"><a href="#CSS选择器" class="headerlink" title="CSS选择器"></a>CSS选择器</h3><ul>
+<li>querySelector()</li>
+</ul>
+<p>方法返回文档中匹配指定 CSS 选择器的一个元素。</p>
+<ul>
+<li>querySelectorAll</li>
+</ul>
+<p>方法返回文档中匹配指定 CSS 选择器的全部元素。</p>
+<h2 id="元素对象操作"><a href="#元素对象操作" class="headerlink" title="元素对象操作"></a>元素对象操作</h2><h3 id="改变元素内容"><a href="#改变元素内容" class="headerlink" title="改变元素内容"></a>改变元素内容</h3><ul>
+<li>改变 HTML 内容：<code>.innerHTML .innerText</code> 的区别就是，innerText 将元素内容视作纯文本而非HTML</li>
+</ul>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE html&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">"en"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"UTF-8"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p</span> <span class="attr">id</span>=<span class="string">"i1"</span>&gt;</span>这是内容<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p</span> <span class="attr">id</span>=<span class="string">"i2"</span>&gt;</span>这是内容<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="javascript">        <span class="keyword">var</span> x = <span class="built_in">document</span>.getElementById(<span class="string">"i1"</span>)</span></span><br><span class="line"><span class="xml">        x.innerHTML="<span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">'www.baidu.com'</span>&gt;</span>这是内容<span class="tag">&lt;/<span class="name">a</span>&gt;</span>"</span></span><br><span class="line"><span class="javascript">        <span class="keyword">var</span> y = <span class="built_in">document</span>.getElementById(<span class="string">"i2"</span>)</span></span><br><span class="line"><span class="xml">        y.innerText="<span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">'www.baidu.com'</span>&gt;</span>这是内容<span class="tag">&lt;/<span class="name">a</span>&gt;</span>"</span></span><br><span class="line"><span class="undefined">    </span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="改变元素属性值"><a href="#改变元素属性值" class="headerlink" title="改变元素属性值"></a>改变元素属性值</h3><ul>
+<li>改变元素的属性</li>
+</ul>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE html&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">"en"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"UTF-8"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"text"</span> <span class="attr">id</span>=<span class="string">"i1"</span> <span class="attr">value</span>=<span class="string">"这是输入框内容"</span>/&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="javascript">        <span class="keyword">var</span> x = <span class="built_in">document</span>.getElementById(<span class="string">"i1"</span>);</span></span><br><span class="line"><span class="javascript">        x.value=<span class="string">"测试输入框内容"</span></span></span><br><span class="line"><span class="undefined">    </span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="改变CSS样式"><a href="#改变CSS样式" class="headerlink" title="改变CSS样式"></a>改变CSS样式</h3><ul>
+<li>改变 CSS 样式，className：取得class的值，classlist：取得class的值为列表，classlist.add|remove：对列表进行操作。</li>
+</ul>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE html&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">"en"</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">style</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="css">        <span class="selector-class">.c1</span> &#123;</span></span><br><span class="line"><span class="css">            <span class="selector-tag">background-color</span>: <span class="selector-id">#2459a2</span>;</span></span><br><span class="line"><span class="undefined">            width: 50%;</span></span><br><span class="line"><span class="undefined">        &#125;</span></span><br><span class="line"><span class="undefined"></span></span><br><span class="line"><span class="css">        <span class="selector-class">.c2</span> &#123;</span></span><br><span class="line"><span class="undefined">            height: 48px;</span></span><br><span class="line"><span class="undefined">        &#125;</span></span><br><span class="line"><span class="undefined">    </span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"i1"</span>&gt;</span>这是内容<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"button"</span> <span class="attr">onclick</span>=<span class="string">"modx1()"</span> <span class="attr">value</span>=<span class="string">"增加C1"</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"button"</span> <span class="attr">onclick</span>=<span class="string">"modx2()"</span> <span class="attr">value</span>=<span class="string">"增加C2"</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"button"</span> <span class="attr">onclick</span>=<span class="string">"modx3()"</span> <span class="attr">value</span>=<span class="string">"删除C2"</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="javascript">        <span class="function"><span class="keyword">function</span> <span class="title">modx1</span>(<span class="params"></span>) </span>&#123;</span></span><br><span class="line"><span class="javascript">            <span class="keyword">var</span> x = <span class="built_in">document</span>.getElementById(<span class="string">"i1"</span>);</span></span><br><span class="line"><span class="javascript">            x.className = <span class="string">"c1"</span>;</span></span><br><span class="line"><span class="undefined">        &#125;;</span></span><br><span class="line"><span class="javascript">        <span class="function"><span class="keyword">function</span> <span class="title">modx2</span>(<span class="params"></span>) </span>&#123;</span></span><br><span class="line"><span class="javascript">            <span class="keyword">var</span> x = <span class="built_in">document</span>.getElementById(<span class="string">"i1"</span>);</span></span><br><span class="line"><span class="javascript">            x.classList.add(<span class="string">"c2"</span>);</span></span><br><span class="line"><span class="undefined">        &#125;;</span></span><br><span class="line"><span class="javascript">        <span class="function"><span class="keyword">function</span> <span class="title">modx3</span>(<span class="params"></span>) </span>&#123;</span></span><br><span class="line"><span class="javascript">            <span class="keyword">var</span> x = <span class="built_in">document</span>.getElementById(<span class="string">"i1"</span>);</span></span><br><span class="line"><span class="javascript">            x.classList.remove(<span class="string">"c2"</span>);</span></span><br><span class="line"><span class="undefined">        &#125;;</span></span><br><span class="line"><span class="undefined">    </span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>改变style，粒度更细的样式操作</li>
+</ul>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE html&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">"en"</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"UTF-8"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"i1"</span>&gt;</span>这是内容<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"button"</span> <span class="attr">onclick</span>=<span class="string">"modx1()"</span> <span class="attr">value</span>=<span class="string">"增加红色字体"</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"button"</span> <span class="attr">onclick</span>=<span class="string">"modx2()"</span> <span class="attr">value</span>=<span class="string">"修改字体为50像素"</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"button"</span> <span class="attr">onclick</span>=<span class="string">"modx3()"</span> <span class="attr">value</span>=<span class="string">"修改背景颜色"</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="javascript">        <span class="function"><span class="keyword">function</span> <span class="title">modx1</span>(<span class="params"></span>) </span>&#123;</span></span><br><span class="line"><span class="javascript">            <span class="keyword">var</span> x = <span class="built_in">document</span>.getElementById(<span class="string">"i1"</span>);</span></span><br><span class="line"><span class="javascript">            x.style.color = <span class="string">'red'</span>;</span></span><br><span class="line"><span class="undefined">        &#125;;</span></span><br><span class="line"><span class="javascript">        <span class="function"><span class="keyword">function</span> <span class="title">modx2</span>(<span class="params"></span>) </span>&#123;</span></span><br><span class="line"><span class="javascript">            <span class="keyword">var</span> x = <span class="built_in">document</span>.getElementById(<span class="string">"i1"</span>);</span></span><br><span class="line"><span class="javascript">            x.style.fontSize = <span class="string">'50px'</span>;</span></span><br><span class="line"><span class="undefined">        &#125;;</span></span><br><span class="line"><span class="javascript">        <span class="function"><span class="keyword">function</span> <span class="title">modx3</span>(<span class="params"></span>) </span>&#123;</span></span><br><span class="line"><span class="javascript">            <span class="keyword">var</span> x = <span class="built_in">document</span>.getElementById(<span class="string">"i1"</span>);</span></span><br><span class="line"><span class="javascript">            x.style.backgroundColor = <span class="string">"#2459a2"</span>;</span></span><br><span class="line"><span class="undefined">        &#125;;</span></span><br><span class="line"><span class="undefined">    </span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="元素属性操作"><a href="#元素属性操作" class="headerlink" title="元素属性操作"></a>元素属性操作</h3><ul>
+<li>setAttribute：增加属性，removeAttribute：删除属性，attributes：属性的集合</li>
+</ul>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE html&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">"en"</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"UTF-8"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">id</span>=<span class="string">"i1"</span> <span class="attr">type</span>=<span class="string">"text"</span> <span class="attr">style</span>=<span class="string">"color: brown; background-color: cadetblue; width: 50%"</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"button"</span> <span class="attr">onclick</span>=<span class="string">"modx1()"</span> <span class="attr">value</span>=<span class="string">"添加文字"</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"button"</span> <span class="attr">onclick</span>=<span class="string">"modx2()"</span> <span class="attr">value</span>=<span class="string">"删除文字"</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"button"</span> <span class="attr">onclick</span>=<span class="string">"modx3()"</span> <span class="attr">value</span>=<span class="string">"查看元素所有属性"</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="javascript">        <span class="function"><span class="keyword">function</span> <span class="title">modx1</span>(<span class="params"></span>) </span>&#123;</span></span><br><span class="line"><span class="javascript">            <span class="keyword">var</span> x = <span class="built_in">document</span>.getElementById(<span class="string">"i1"</span>);</span></span><br><span class="line"><span class="javascript">            x.setAttribute(<span class="string">'value'</span>,<span class="string">'请输入内容'</span>);</span></span><br><span class="line"><span class="undefined">        &#125;;</span></span><br><span class="line"><span class="javascript">        <span class="function"><span class="keyword">function</span> <span class="title">modx2</span>(<span class="params"></span>) </span>&#123;</span></span><br><span class="line"><span class="javascript">            <span class="keyword">var</span> x = <span class="built_in">document</span>.getElementById(<span class="string">"i1"</span>);</span></span><br><span class="line"><span class="javascript">            x.removeAttribute(<span class="string">'value'</span>);</span></span><br><span class="line"><span class="undefined">        &#125;;</span></span><br><span class="line"><span class="javascript">        <span class="function"><span class="keyword">function</span> <span class="title">modx3</span>(<span class="params"></span>) </span>&#123;</span></span><br><span class="line"><span class="javascript">            <span class="keyword">var</span> x = <span class="built_in">document</span>.getElementById(<span class="string">"i1"</span>);</span></span><br><span class="line"><span class="javascript">            <span class="keyword">var</span> y = []</span></span><br><span class="line"><span class="javascript">            <span class="keyword">for</span> (i <span class="keyword">in</span> x.attributes) &#123;</span></span><br><span class="line"><span class="undefined">                y.push(i)</span></span><br><span class="line"><span class="undefined">            &#125;;</span></span><br><span class="line"><span class="javascript">            x.setAttribute(<span class="string">'value'</span>,y);</span></span><br><span class="line"><span class="undefined">        &#125;;</span></span><br><span class="line"><span class="undefined">    </span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="给标签增加内容"><a href="#给标签增加内容" class="headerlink" title="给标签增加内容"></a>给标签增加内容</h3><ul>
+<li>直接插入HTML代码，insertAdjacentHTML，插入HTML，afterBegin:插入到标签开始标记之后。beforeEnd:插入到标签结束标记前</li>
+</ul>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE html&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">"en"</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"UTF-8"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"i1"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">p</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"text"</span> <span class="attr">style</span>=<span class="string">"width: 50%"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"button"</span> <span class="attr">onclick</span>=<span class="string">"modx1();"</span> <span class="attr">value</span>=<span class="string">"添加"</span> /&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="javascript">        <span class="function"><span class="keyword">function</span> <span class="title">modx1</span>(<span class="params"></span>) </span>&#123;</span></span><br><span class="line"><span class="xml">            var tag = '<span class="tag">&lt;<span class="name">p</span>&gt;</span><span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"text"</span> <span class="attr">style</span>=<span class="string">"width: 50%"</span> /&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span>';</span></span><br><span class="line"><span class="javascript">            <span class="built_in">document</span>.getElementById(<span class="string">"i1"</span>).insertAdjacentHTML(<span class="string">"afterEnd"</span>, tag);</span></span><br><span class="line"><span class="undefined">        &#125;;</span></span><br><span class="line"><span class="undefined">    </span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>创建 HTML 元素对象插入，createElement(‘HTML标签’)，appendChild，为元素增加子标签。</li>
+</ul>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE html&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">"en"</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"UTF-8"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"i1"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">p</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"text"</span> <span class="attr">style</span>=<span class="string">"width: 50%"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"button"</span> <span class="attr">onclick</span>=<span class="string">"func1();"</span> <span class="attr">value</span>=<span class="string">"添加1"</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"button"</span> <span class="attr">onclick</span>=<span class="string">"func2();"</span> <span class="attr">value</span>=<span class="string">"添加2"</span> /&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="javascript">        <span class="function"><span class="keyword">function</span> <span class="title">func1</span>(<span class="params"></span>) </span>&#123;</span></span><br><span class="line"><span class="xml">            var tag = '<span class="tag">&lt;<span class="name">p</span>&gt;</span><span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"text"</span> <span class="attr">style</span>=<span class="string">"width: 50%"</span> /&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span>';</span></span><br><span class="line"><span class="javascript">            <span class="built_in">document</span>.getElementById(<span class="string">"i1"</span>).insertAdjacentHTML(<span class="string">"beforeEnd"</span>, tag);</span></span><br><span class="line"><span class="undefined">        &#125;;</span></span><br><span class="line"><span class="javascript">        <span class="function"><span class="keyword">function</span> <span class="title">func2</span>(<span class="params"></span>) </span>&#123;</span></span><br><span class="line"><span class="javascript">            <span class="keyword">var</span> tag = <span class="built_in">document</span>.createElement(<span class="string">'input'</span>);</span></span><br><span class="line"><span class="javascript">            tag.setAttribute(<span class="string">'type'</span>, <span class="string">'text'</span>);</span></span><br><span class="line"><span class="javascript">            tag.style.fontSize = <span class="string">"20px"</span>;</span></span><br><span class="line"><span class="javascript">            tag.style.color = <span class="string">"red"</span>;</span></span><br><span class="line"><span class="javascript">            tag.style.width = <span class="string">"50%"</span>;</span></span><br><span class="line"><span class="javascript">            <span class="keyword">var</span> p = <span class="built_in">document</span>.createElement(<span class="string">'p'</span>);</span></span><br><span class="line"><span class="undefined">            p.appendChild(tag);</span></span><br><span class="line"><span class="javascript">            <span class="built_in">document</span>.getElementById(<span class="string">'i1'</span>).appendChild(p);</span></span><br><span class="line"><span class="undefined">        &#125;;</span></span><br><span class="line"><span class="undefined">    </span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="通过JS提交表单"><a href="#通过JS提交表单" class="headerlink" title="通过JS提交表单"></a>通过JS提交表单</h3><ul>
+<li>通过任何元素的.submit方法，都可以提交表单</li>
+</ul>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE html&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">"en"</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"UTF-8"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">form</span> <span class="attr">id</span>=<span class="string">"f1"</span> <span class="attr">action</span>=<span class="string">"http://www.baidu.com"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"text"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">a</span> <span class="attr">onclick</span>=<span class="string">"commit();"</span>&gt;</span>提交<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="javascript">        <span class="function"><span class="keyword">function</span> <span class="title">commit</span>(<span class="params"></span>) </span>&#123;</span></span><br><span class="line"><span class="javascript">            <span class="built_in">document</span>.getElementById(<span class="string">"f1"</span>).submit();</span></span><br><span class="line"><span class="undefined">        &#125;;</span></span><br><span class="line"><span class="undefined">    </span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h2 id="元素事件绑定"><a href="#元素事件绑定" class="headerlink" title="元素事件绑定"></a>元素事件绑定</h2><h3 id="事件种类"><a href="#事件种类" class="headerlink" title="事件种类"></a>事件种类</h3><table>
+<thead>
+<tr>
+<th>属性</th>
+<th>此事件发生在何时</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>onfocus</td>
+<td>元素获得焦点。</td>
+</tr>
+<tr>
+<td>onblur</td>
+<td>元素失去焦点。</td>
+</tr>
+<tr>
+<td>onclick</td>
+<td>当用户点击某个对象时调用的事件句柄。</td>
+</tr>
+<tr>
+<td>ondblclick</td>
+<td>当用户双击某个对象时调用的事件句柄。</td>
+</tr>
+<tr>
+<td>onmousedown</td>
+<td>鼠标按钮被按下。</td>
+</tr>
+<tr>
+<td>onmousemove</td>
+<td>鼠标被移动。</td>
+</tr>
+<tr>
+<td>onmouseout</td>
+<td>鼠标从某元素移开。</td>
+</tr>
+<tr>
+<td>onmouseover</td>
+<td>鼠标移到某元素之上。</td>
+</tr>
+<tr>
+<td>onmouseup</td>
+<td>鼠标按键被松开。</td>
+</tr>
+<tr>
+<td>onreset</td>
+<td>重置按钮被点击。</td>
+</tr>
+<tr>
+<td>onresize</td>
+<td>窗口或框架被重新调整大小。</td>
+</tr>
+<tr>
+<td>onselect</td>
+<td>文本被选中。</td>
+</tr>
+<tr>
+<td>onsubmit</td>
+<td>确认按钮被点击。</td>
+</tr>
+<tr>
+<td>onunload</td>
+<td>用户退出页面。</td>
+</tr>
+<tr>
+<td>onabort</td>
+<td>图像的加载被中断。</td>
+</tr>
+<tr>
+<td>onchange</td>
+<td>域的内容被改变，绑定的函数可以接收，event 对象，其中 event.value 可以得到事件的具体值</td>
+</tr>
+<tr>
+<td>onerror</td>
+<td>在加载文档或图像时发生错误。</td>
+</tr>
+<tr>
+<td>onkeydown</td>
+<td>某个键盘按键被按下，绑定的函数可以接收，event 对象，其中 event.keyCode 按下的按键编号</td>
+</tr>
+<tr>
+<td>onkeypress</td>
+<td>某个键盘按键被按下并松开。</td>
+</tr>
+<tr>
+<td>onkeyup</td>
+<td>某个键盘按键被松开。</td>
+</tr>
+<tr>
+<td>onload</td>
+<td>一张页面或一幅图像完成加载。</td>
+</tr>
+</tbody>
+</table>
+<h3 id="元素内绑定"><a href="#元素内绑定" class="headerlink" title="元素内绑定"></a>元素内绑定</h3><ul>
+<li>直接绑定 this</li>
+</ul>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">onclick</span>=<span class="string">'this.innerHTML="Ooops!"'</span>&gt;</span>点击文本!<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>传递 this 到函数，由函数处理本元素</li>
+</ul>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE html&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">"en"</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"UTF-8"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">'button'</span> <span class="attr">onclick</span>=<span class="string">'func(this)'</span> <span class="attr">value</span>=<span class="string">"点我"</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="javascript">        <span class="function"><span class="keyword">function</span> <span class="title">func</span>(<span class="params">self</span>) </span>&#123;</span></span><br><span class="line"><span class="javascript">            self.value=<span class="string">"ok"</span>;</span></span><br><span class="line"><span class="undefined">        &#125;;</span></span><br><span class="line"><span class="undefined">    </span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="附加绑定"><a href="#附加绑定" class="headerlink" title="附加绑定"></a>附加绑定</h3><ul>
+<li>为元素新增一个事件，事件必须是函数，此处 this 为元素本身</li>
+</ul>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE html&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">"en"</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"UTF-8"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">id</span>=<span class="string">'i2'</span> <span class="attr">type</span>=<span class="string">'button'</span> <span class="attr">value</span>=<span class="string">"点我"</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="javascript">        <span class="built_in">document</span>.getElementById(<span class="string">"i2"</span>).onclick=<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span></span><br><span class="line"><span class="javascript">            <span class="keyword">this</span>.value=<span class="string">"ok"</span>;</span></span><br><span class="line"><span class="undefined">        &#125;;</span></span><br><span class="line"><span class="undefined">    </span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="遍历附加"><a href="#遍历附加" class="headerlink" title="遍历附加"></a>遍历附加</h3><ul>
+<li>下面是一个鼠标滑过表格，表格高亮显示的一段代码</li>
+</ul>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE html&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">"en"</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"UTF-8"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">table</span> <span class="attr">border</span>=<span class="string">"1"</span> <span class="attr">width</span>=<span class="string">30%</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">tbody</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">tr</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">td</span>&gt;</span>1<span class="tag">&lt;/<span class="name">td</span>&gt;</span><span class="tag">&lt;<span class="name">td</span>&gt;</span>2<span class="tag">&lt;/<span class="name">td</span>&gt;</span><span class="tag">&lt;<span class="name">td</span>&gt;</span>3<span class="tag">&lt;/<span class="name">td</span>&gt;</span><span class="tag">&lt;<span class="name">td</span>&gt;</span>4<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">tr</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">td</span>&gt;</span>1<span class="tag">&lt;/<span class="name">td</span>&gt;</span><span class="tag">&lt;<span class="name">td</span>&gt;</span>2<span class="tag">&lt;/<span class="name">td</span>&gt;</span><span class="tag">&lt;<span class="name">td</span>&gt;</span>3<span class="tag">&lt;/<span class="name">td</span>&gt;</span><span class="tag">&lt;<span class="name">td</span>&gt;</span>4<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">tr</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">td</span>&gt;</span>1<span class="tag">&lt;/<span class="name">td</span>&gt;</span><span class="tag">&lt;<span class="name">td</span>&gt;</span>2<span class="tag">&lt;/<span class="name">td</span>&gt;</span><span class="tag">&lt;<span class="name">td</span>&gt;</span>3<span class="tag">&lt;/<span class="name">td</span>&gt;</span><span class="tag">&lt;<span class="name">td</span>&gt;</span>4<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">tr</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">td</span>&gt;</span>1<span class="tag">&lt;/<span class="name">td</span>&gt;</span><span class="tag">&lt;<span class="name">td</span>&gt;</span>2<span class="tag">&lt;/<span class="name">td</span>&gt;</span><span class="tag">&lt;<span class="name">td</span>&gt;</span>3<span class="tag">&lt;/<span class="name">td</span>&gt;</span><span class="tag">&lt;<span class="name">td</span>&gt;</span>4<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">tbody</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">table</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="javascript">        <span class="keyword">var</span> x = <span class="built_in">document</span>.getElementsByTagName(<span class="string">"td"</span>);</span></span><br><span class="line"><span class="javascript">        <span class="keyword">for</span> (<span class="keyword">var</span> i=<span class="number">0</span>,len = x.length; i &lt; len; i++) &#123;</span></span><br><span class="line"><span class="javascript">            x[i].onmouseover = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;<span class="keyword">this</span>.style=<span class="string">"background-color: red;"</span>&#125;;</span></span><br><span class="line"><span class="javascript">            x[i].onmouseout = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;<span class="keyword">this</span>.style=<span class="string">""</span>&#125;;</span></span><br><span class="line"><span class="undefined">        &#125;;</span></span><br><span class="line"><span class="undefined">    </span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="addEventListener"><a href="#addEventListener" class="headerlink" title="addEventListener"></a>addEventListener</h3><p>在 DOM3中，事件分为：捕捉阶段和冒泡阶段</p>
+<p>语法：<code>addEventListener(&quot;exevt&quot;,function,true|false)</code> true：使用捕捉模型，false：使用冒泡模型。</p>
+<p>addEventListener ，可以为一个元素绑定两个同类型的事件。</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE html&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">"en"</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"UTF-8"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">style</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="css">    <span class="selector-id">#main</span>&#123;</span></span><br><span class="line"><span class="undefined">        background-color: red;</span></span><br><span class="line"><span class="undefined">        width: 300px;</span></span><br><span class="line"><span class="undefined">        height: 400px;</span></span><br><span class="line"><span class="undefined">    &#125;</span></span><br><span class="line"><span class="css">    <span class="selector-id">#content</span>&#123;</span></span><br><span class="line"><span class="undefined">        background-color: pink;</span></span><br><span class="line"><span class="undefined">        width: 150px;</span></span><br><span class="line"><span class="undefined">        height: 200px;</span></span><br><span class="line"><span class="undefined">    &#125;</span></span><br><span class="line"><span class="undefined"></span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"main"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"content"</span>&gt;</span></span><br><span class="line"></span><br><span class="line">        <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="javascript">        <span class="keyword">var</span> mymain = <span class="built_in">document</span>.getElementById(<span class="string">"main"</span>);</span></span><br><span class="line"><span class="javascript">        <span class="keyword">var</span> mycontent = <span class="built_in">document</span>.getElementById(<span class="string">"content"</span>);</span></span><br><span class="line"><span class="javascript">        mymain.addEventListener(<span class="string">'click'</span>,<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;<span class="built_in">console</span>.log(<span class="string">'main'</span>)&#125;,<span class="literal">false</span>);</span></span><br><span class="line"><span class="javascript">        mycontent.addEventListener(<span class="string">'click'</span>,<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;<span class="built_in">console</span>.log(<span class="string">'content'</span>)&#125;,<span class="literal">false</span>);</span></span><br><span class="line"><span class="undefined">    </span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">点击粉色的框：则从 content 开始向外冒泡，结果为：conetnt、main</span><br><span class="line">如果：addEventListener 的最后一个参数为 true ，则结果为：main、content，这叫做捕捉</span><br></pre></td></tr></table></figure>
+<ul>
+<li>捕获阶段</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="built_in">document</span> -&gt; body -&gt; div -&gt; p</span><br></pre></td></tr></table></figure>
+<ul>
+<li>冒泡阶段</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">p -&gt; div -&gt; body -&gt; <span class="built_in">document</span></span><br></pre></td></tr></table></figure>
+<h3 id="attachEvent"><a href="#attachEvent" class="headerlink" title="attachEvent"></a>attachEvent</h3><h2 id="其他杂项"><a href="#其他杂项" class="headerlink" title="其他杂项"></a>其他杂项</h2><p>下面是 window 对象下一些常用方法</p>
+<h3 id="弹出选择框"><a href="#弹出选择框" class="headerlink" title="弹出选择框"></a>弹出选择框</h3><figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE html&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">"en"</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"UTF-8"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"i1"</span> <span class="attr">style</span>=<span class="string">"font-size: 100px"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="javascript">        <span class="built_in">document</span>.getElementById(<span class="string">"i1"</span>).innerText=confirm(<span class="string">"选择确定或取消"</span>);</span></span><br><span class="line"><span class="undefined">    </span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="获取网址"><a href="#获取网址" class="headerlink" title="获取网址"></a>获取网址</h3><ul>
+<li>location.href 表示当前地址栏的URL，对它赋值可以实现页面跳转，location.reload() 页面刷新。</li>
+</ul>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE html&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">"en"</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"UTF-8"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"i1"</span> <span class="attr">style</span>=<span class="string">"font-size: 30px"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="javascript">        <span class="built_in">document</span>.getElementById(<span class="string">"i1"</span>).innerText=location.href;</span></span><br><span class="line"><span class="javascript">        location.href=<span class="string">"http://www.baidu.com"</span>;</span></span><br><span class="line"><span class="undefined">    </span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="定时器"><a href="#定时器" class="headerlink" title="定时器"></a>定时器</h3><ul>
+<li>setInterval(function(){},5000)，设定反复执行的定时器，clearInterval(定时器)</li>
+</ul>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE html&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">"en"</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"UTF-8"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"i1"</span> <span class="attr">style</span>=<span class="string">"font-size: 30px"</span>&gt;</span>这是内容<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="javascript">        <span class="function"><span class="keyword">function</span> <span class="title">func</span>(<span class="params"></span>) </span>&#123;</span></span><br><span class="line"><span class="xml">            var tag = '<span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"i1"</span> <span class="attr">style</span>=<span class="string">"font-size: 30px"</span>&gt;</span>这是内容<span class="tag">&lt;/<span class="name">div</span>&gt;</span>'</span></span><br><span class="line"><span class="javascript">            <span class="keyword">var</span> inter = <span class="built_in">document</span>.getElementById(<span class="string">"i1"</span>).insertAdjacentHTML(<span class="string">"afterend"</span>,tag)</span></span><br><span class="line"><span class="undefined">        &#125;;</span></span><br><span class="line"><span class="javascript">        <span class="keyword">var</span> inetr = setInterval(<span class="string">"func()"</span>,<span class="number">1000</span>);</span></span><br><span class="line"><span class="undefined">    </span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>setTimeout(function(){},5000)，设定延迟执行的定时器，clearTimeout()</li>
+</ul>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE html&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">"en"</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"UTF-8"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"i1"</span> <span class="attr">style</span>=<span class="string">"font-size: 30px"</span>&gt;</span>这是内容<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"button"</span> <span class="attr">value</span>=<span class="string">"测试"</span> <span class="attr">onclick</span>=<span class="string">"test()"</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="javascript">        <span class="function"><span class="keyword">function</span> <span class="title">test</span>(<span class="params"></span>) </span>&#123;</span></span><br><span class="line"><span class="javascript">            <span class="built_in">document</span>.getElementById(<span class="string">"i1"</span>).innerText = <span class="string">"这个提示为3秒钟"</span></span></span><br><span class="line"><span class="javascript">            <span class="keyword">var</span> out = setTimeout(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;<span class="built_in">document</span>.getElementById(<span class="string">"i1"</span>).innerText=<span class="string">"这是内容"</span>&#125;,<span class="number">3000</span>);</span></span><br><span class="line"><span class="undefined">        &#125;;</span></span><br><span class="line"><span class="undefined">    </span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>行为 样式 内容分离的写法</li>
+</ul>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE html&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">"en"</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"UTF-8"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">style</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="css">    <span class="selector-id">#i1</span> &#123;</span></span><br><span class="line"><span class="undefined">        font-size: 30px;</span></span><br><span class="line"><span class="undefined">    &#125;</span></span><br><span class="line"><span class="undefined"></span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"i1"</span>&gt;</span>这是内容<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="javascript">        <span class="keyword">var</span> i1 = <span class="built_in">document</span>.getElementById(<span class="string">"i1"</span>);</span></span><br><span class="line"><span class="javascript">        i1.onclick = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123; i1.innerText = <span class="string">"这是新内容"</span> &#125;;</span></span><br><span class="line"><span class="undefined">    </span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
           
         
       
@@ -686,7 +1585,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://yangjinheng.github.io/2017/10/08/python/29.hashlib加密解密/">
+    <link itemprop="mainEntityOfPage" href="https://yangjinheng.github.io/2018/02/11/Linux/Salt-API/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Jin Heng">
@@ -705,7 +1604,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/10/08/python/29.hashlib加密解密/" itemprop="url">hashlib加密解密</a></h1>
+                <a class="post-title-link" href="/2018/02/11/Linux/Salt-API/" itemprop="url">SaltStack_API部署和简单使用</a></h1>
         
 
         <div class="post-meta">
@@ -717,8 +1616,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-08T00:00:00+08:00">
-                2017-10-08
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-02-11T00:00:00+08:00">
+                2018-02-11
               </time>
             
 
@@ -740,8 +1639,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Python/" itemprop="url" rel="index">
-                    <span itemprop="name">Python</span>
+                  <a href="/categories/运维笔记/" itemprop="url" rel="index">
+                    <span itemprop="name">运维笔记</span>
                   </a>
                 </span>
 
@@ -779,17 +1678,339 @@
       
         
           
-            <p>摘要算法又称哈希/散列算法。它通过一个函数，把任意长度的数据转换为一个长度固定的数据串（通常用16进制的字符串表示）。算法不可逆。 </p>
-<p>散列/哈希算法有：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">SHA1  SHA224  SHA256  SHA384  SHA512  MD5</span><br><span class="line">HmacSHA1 HmacSHA224 HmacSHA256 HmacSHA384 HmacSHA512 HmacMD5 PBKDF2</span><br></pre></td></tr></table></figure>
-<h3 id="MD5"><a href="#MD5" class="headerlink" title="MD5"></a>MD5</h3><p>MD5（Message-Digest Algorithm 5，消息摘要算法版本5）是最常见的摘要算法，它由MD2、MD3、MD4发展而来，速度很快。</p>
-<p>MD2、MD4、MD5 都产生16字节（128位）的校验值，一般用32位十六进制数表示。MD2的算法较慢但相对安全，MD4速度很快，但安全性下降，MD5比MD4更安全、速度更快。</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> hashlib</span><br><span class="line"></span><br><span class="line">md5 = hashlib.md5()</span><br><span class="line">md5.update(<span class="string">'123456'</span>.encode(<span class="string">'utf-8'</span>))</span><br><span class="line">print(md5.hexdigest())</span><br></pre></td></tr></table></figure>
-<h3 id="SHA1"><a href="#SHA1" class="headerlink" title="SHA1"></a>SHA1</h3><p>SHA（Secure Hash Algorithm）是由美国专门制定密码算法的标准机构—— 美国国家标准技术研究院（NIST）制定的。</p>
-<p>SHA系列算法的摘要长度分别为：SHA为20字节（160位，通常用一个40位的16进制字符串表示）、SHA256为32字节（256位）、 SHA384为48字节（384位）、SHA512为64字节（512位），由于它产生的数据摘要的长度更长，因此更难以发生碰撞，因此也更为安全，它是未来数据摘要算法的发展方向。由于SHA系列算法的数据摘要长度较长，因此其运算速度与MD5相比，也相对较慢。</p>
-<p>SHA1的应用较为广泛，主要应用于CA和数字证书中，另外在互联网中流行的BT软件中，也是使用SHA1来进行文件校验的。</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> hashlib</span><br><span class="line"></span><br><span class="line"><span class="comment"># sha224, sha256, sha384, sha512同理</span></span><br><span class="line">sha1 = hashlib.sha1()</span><br><span class="line">sha1.update(<span class="string">'123456'</span>.encode(<span class="string">'utf-8'</span>))</span><br><span class="line">print(sha1.hexdigest())</span><br></pre></td></tr></table></figure>
-<h2 id="bcrypt"><a href="#bcrypt" class="headerlink" title="bcrypt"></a>bcrypt</h2>
+            <h2 id="REST-API"><a href="#REST-API" class="headerlink" title="REST API"></a>REST API</h2><h3 id="依赖组件"><a href="#依赖组件" class="headerlink" title="依赖组件"></a>依赖组件</h3><ul>
+<li>依赖组件</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Python CherryPy 模块。</span><br><span class="line"></span><br><span class="line">注意：CherryPy版本3.2.5到3.7.x有一个已知的SSL跟踪，请使用版本3.2.3或最新的10.x版本。</span><br></pre></td></tr></table></figure>
+<ul>
+<li>可选依赖</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ws4py 用于支持 websockets 的 Python模块。</span><br></pre></td></tr></table></figure>
+<ul>
+<li>客户端库</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Java: https://github.com/SUSE/salt-netapi-client</span><br><span class="line">Python: https://github.com/saltstack/pepper</span><br></pre></td></tr></table></figure>
+<h3 id="部署API"><a href="#部署API" class="headerlink" title="部署API"></a>部署API</h3><p>以下所有步骤都在 Salt Master 的计算机上执行，相关配置需要写入 Master 配置文件。</p>
+<ul>
+<li>安装 salt-api，确保 salt-api –version 输出与 salt –version 输出匹配。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">yum install salt-api salt-minion</span><br></pre></td></tr></table></figure>
+<ul>
+<li>安装 CherryPy PyOpenSSL。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">pip install CherryPy</span><br><span class="line">pip install PyOpenSSL</span><br></pre></td></tr></table></figure>
+<ul>
+<li>使用 <code>minion</code>  服务下 <code>salt-call</code> 工具的  <code>create_self_signed_cert()</code> 生成自签名证书。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">salt-call --local tls.create_self_signed_cert</span><br></pre></td></tr></table></figure>
+<ul>
+<li>执行 <code>salt-call --local tls.create_self_signed_cert</code> 可能遇到的问题</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">执行 salt-call --local tls.create_self_signed_cert 报错：</span><br><span class="line">AttributeError: &apos;module&apos; object has no attribute &apos;SSL_ST_INIT&apos;</span><br><span class="line">Module &apos;tls&apos; is not available.</span><br><span class="line"></span><br><span class="line">解决方法：把之前的pyopenssl 卸载掉，从新安装</span><br><span class="line">pip uninstall pyopenssl</span><br><span class="line">pip install pyopenssl</span><br></pre></td></tr></table></figure>
+<ul>
+<li>在Linux系统上新建用户</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">useradd -r saltapi</span><br></pre></td></tr></table></figure>
+<ul>
+<li>编辑 Master 的主配置文件，创建至少一个外部身份验证的用户或组，这里使用Linux系统用户验证（PAM）。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">external_auth:</span><br><span class="line">  pam:</span><br><span class="line">    saltapi:</span><br><span class="line">      - &apos;*&apos;:</span><br><span class="line">        - test.*</span><br><span class="line">        - network.*</span><br><span class="line">    saltadmin:</span><br><span class="line">      - .*</span><br></pre></td></tr></table></figure>
+<p>上面的示例，允许 <code>saltapi</code> 用户在 <code>&#39;*&#39;</code> 的客户端上运行 <code>&#39;test</code> 和 <code>network</code> 模块的指令，允许 <code>saltadmin</code> 用户不受任何限制。</p>
+<p>但需要注意：PAM模不允许 <code>root</code> 用户进行身份验证。</p>
+<ul>
+<li>编辑 Master 的主配置文件，使用 <code>rest_cherrypy</code> 模块配置 SSL 的相关验证配置。 </li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">rest_cherrypy:</span><br><span class="line">  port: 9527</span><br><span class="line">  ssl_crt: /etc/pki/tls/certs/localhost.crt</span><br><span class="line">  ssl_key: /etc/pki/tls/certs/localhost.key</span><br></pre></td></tr></table></figure>
+<p>下面是 CherryPy HTTP 的详细可用配配置</p>
+<table>
+<thead>
+<tr>
+<th>属性</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>port</code></td>
+<td>监听的端口</td>
+</tr>
+<tr>
+<td><code>host</code></td>
+<td>监听的地址，默认 0.0.0.0</td>
+</tr>
+<tr>
+<td><code>debug</code></td>
+<td>以调试模式启动 WEB 服务器，会有大量的调试信息</td>
+</tr>
+<tr>
+<td><code>log_access_file</code></td>
+<td>HTTP访问日志的文件的路径</td>
+</tr>
+<tr>
+<td><code>log_error_file</code></td>
+<td>HTTP错误日志的文件的路径</td>
+</tr>
+<tr>
+<td><code>ssl_crt</code></td>
+<td>SSL证书的路径</td>
+</tr>
+<tr>
+<td><code>ssl_key</code></td>
+<td>SSL证书的私钥路径</td>
+</tr>
+<tr>
+<td><code>ssl_chain</code></td>
+<td>将证书链传递给Context.load_verify_locations，（使用PyOpenSSL时可选）</td>
+</tr>
+<tr>
+<td><code>disable_ssl</code></td>
+<td>禁用SSL的标志，以明文方式传递</td>
+</tr>
+<tr>
+<td><code>webhook_disable_auth</code></td>
+<td>默认为False 需要身份验证，如果此项为 True将禁止身份验证，</td>
+</tr>
+<tr>
+<td><code>webhook_url</code></td>
+<td>配置Webhook入口点的URL地址，默认为  /hook</td>
+</tr>
+<tr>
+<td><code>thread_pool</code></td>
+<td>线程池中线程的数量，默认100</td>
+</tr>
+<tr>
+<td><code>socket_queue_size</code></td>
+<td>HTTP连接队列的最大长度，默认20</td>
+</tr>
+<tr>
+<td><code>expire_responses</code></td>
+<td>是否自动停止超时的HTTP，默认True</td>
+</tr>
+<tr>
+<td><code>max_request_body_size</code></td>
+<td>HTTP请求正文的最大大小，默认 1048576</td>
+</tr>
+<tr>
+<td><code>collect_stats</code></td>
+<td>收集并报告有关CherryPy服务器的统计信息，报告可通过统计URL获得。默认：False</td>
+</tr>
+<tr>
+<td><code>stats_disable_auth</code></td>
+<td>不需要身份验证即可访问 /stats 地址，默认False</td>
+</tr>
+<tr>
+<td><code>static</code></td>
+<td>静态HTML / JavaScript / CSS /图像等文件系统路径。</td>
+</tr>
+<tr>
+<td><code>static_path</code></td>
+<td>从静态设置中指定的目录中提供静态资产时使用的URL前缀。默认： /static</td>
+</tr>
+<tr>
+<td><code>enable_sessions</code></td>
+<td>启用或禁用所有依赖 cookie 的会话，这对于仅强制执行基于标头的身份验证非常有用，默认True</td>
+</tr>
+<tr>
+<td><code>app</code></td>
+<td>HTML文件的文件系统路径，将作为静态文件提供，不建议。默认：index.html</td>
+</tr>
+<tr>
+<td><code>app_path</code></td>
+<td>用于提供应用程序设置中指定的HTML文件的URL前缀。默认：/app</td>
+</tr>
+<tr>
+<td><code>root_prefix</code></td>
+<td>指向应用程序主入口点的URL路径，这对于从同一URL提供多个应用程序非常有用。</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>重启守护进程，API 开始提供服务</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">systemctl restart salt-master</span><br><span class="line">systemctl restart salt-api</span><br></pre></td></tr></table></figure>
+<h2 id="认证会话"><a href="#认证会话" class="headerlink" title="认证会话"></a>认证会话</h2><p>每个请求需要传递 Token 进行身份验证来维持会话，Token 通过 POST 访问 <code>/login</code> 登陆来得到，得到 Token 后有两种方式来认证后续的会话连接：1、在每次请求头中添加名为 <code>X-Auth-Token</code> 的HTTP头部来连接会话，2、使用 Cookie 来保持登陆会话状态。</p>
+<h3 id="自定义头部方式"><a href="#自定义头部方式" class="headerlink" title="自定义头部方式"></a>自定义头部方式</h3><ul>
+<li>以 POST 方式访问 <code>/login</code> 得到 Token</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">curl -sSk https://localhost:9527/login \</span><br><span class="line">    -H &apos;Accept: application/x-yaml&apos; \</span><br><span class="line">    -d username=saltapi \</span><br><span class="line">    -d password=123456 \</span><br><span class="line">    -d eauth=pam</span><br></pre></td></tr></table></figure>
+<ul>
+<li>在 POST 请求头中设定 Token ，POST 请求数据中设定指令，来使用API控制。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">curl -sSk https://localhost:9527 \</span><br><span class="line">    -H &apos;Accept: application/x-yaml&apos; \</span><br><span class="line">    -H &apos;X-Auth-Token: 9d3dc1cbde80642f8edda3b783970b4ca73ab3d6&apos;\</span><br><span class="line">    -d client=local \</span><br><span class="line">    -d tgt=&apos;*&apos; \</span><br><span class="line">    -d fun=test.ping</span><br></pre></td></tr></table></figure>
+<h3 id="使用Cookie方式"><a href="#使用Cookie方式" class="headerlink" title="使用Cookie方式"></a>使用Cookie方式</h3><ul>
+<li>以 POST 方式访问 <code>/login</code> 得到 Token，保存 Cookie 信息。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">curl -sSk https://localhost:9527/login \</span><br><span class="line">    -c ~/cookies.txt \</span><br><span class="line">    -H &apos;Accept: application/x-yaml&apos; \</span><br><span class="line">    -d username=saltapi \</span><br><span class="line">    -d password=123456 \</span><br><span class="line">    -d eauth=pam</span><br></pre></td></tr></table></figure>
+<ul>
+<li>在 POST 请求时将 Cookie 文件发送给服务器，服务器根据 Cookie 来认证会话</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">curl -sSk https://localhost:9527 \</span><br><span class="line">    -b ~/cookies.txt \</span><br><span class="line">    -H &apos;Accept: application/x-yaml&apos; \</span><br><span class="line">    -d client=local \</span><br><span class="line">    -d tgt=&apos;*&apos; \</span><br><span class="line">    -d fun=test.ping</span><br></pre></td></tr></table></figure>
+<h2 id="用法示例"><a href="#用法示例" class="headerlink" title="用法示例"></a>用法示例</h2><h3 id="内容协商"><a href="#内容协商" class="headerlink" title="内容协商"></a>内容协商</h3><p>这个REST接口可以灵活地接受它将接受的数据格式以及它将返回的格式（例如，JSON，YAML，urlencoded）。</p>
+<ol>
+<li>通过设置请求头中的 Content-type 来指定请求正文中的数据格式。</li>
+<li>通过设置请求头中的 Accept 来指定响应正文中需要的数据格式。</li>
+</ol>
+<p>对于大多数HTTP请求，我们建议使用JSON格式。 </p>
+<h3 id="参数介绍"><a href="#参数介绍" class="headerlink" title="参数介绍"></a>参数介绍</h3><ul>
+<li>示例</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">curl -sSk https://localhost:9527 \</span><br><span class="line">    -H &apos;Content-type: application/json&apos; \</span><br><span class="line">    -H &apos;X-Auth-Token: 9d3dc1cbde80642f8edda3b783970b4ca73ab3d6&apos;\</span><br><span class="line">    -d &apos;[</span><br><span class="line">            &#123;</span><br><span class="line">                &quot;client&quot;: &quot;local&quot;,</span><br><span class="line">                &quot;tgt&quot;: &quot;*&quot;,</span><br><span class="line">                &quot;fun&quot;: &quot;test.ping&quot;</span><br><span class="line">            &#125;</span><br><span class="line">    ]&apos;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>client，表示使用什么客户端，该字段表示是对 Salt 的 API 中主要 Python 类的引用（API使用Python编写）</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>选项</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>local</code></td>
+<td>使用 LocalClient 将命令发送给 Minions。 相当于salt CLI命令</td>
+</tr>
+<tr>
+<td><code>runner</code></td>
+<td>使用 RunnerClient 调用 Master 上的 runner 模块。 相当于 salt-run CLI命令</td>
+</tr>
+<tr>
+<td><code>wheel</code></td>
+<td>使用 WheelClient 调用 Master 上的 wheel 模块，Wheel模块没有直接的CLI相同的功能，但是它们通常管理主端资源，比如状态文件、支柱文件、Salt配置文件，而 Wheel 模块提供了与 Salt -key CLI命令类似的功能。</td>
+</tr>
+</tbody>
+</table>
+<p>每种客户端需要不同的参数，例如，<code>local</code> 需要 <code>tgt</code> 参数来指定目标客户端， <code>local</code> 可以接受 <code>arg（数组）</code>和 <code>kwarg（字典）</code>参数，这些值会被发送到客户端由客户端函数来处理。<code>runner</code> 和 <code>wheel</code> 直接在 Master 上执行，因此不需要或接受这些参数。</p>
+<ul>
+<li>官方文档示例</li>
+</ul>
+<figure class="highlight"><table><tr><td class="code"><pre><span class="line">curl -sSk https://localhost:9527 \</span><br><span class="line">    -H 'Content-type: application/json' \</span><br><span class="line">    -H 'X-Auth-Token: 6455367f150426fab3fa8d75ba589e1e78e40e13' \</span><br><span class="line">    -d '[</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="attr">"client"</span>: <span class="string">"local"</span>,</span><br><span class="line">                <span class="attr">"tgt"</span>: <span class="string">"*"</span>,</span><br><span class="line">                <span class="attr">"fun"</span>: <span class="string">"test.arg"</span>,</span><br><span class="line">                <span class="attr">"arg"</span>: [<span class="string">"positional arg one"</span>, <span class="string">"positional arg two"</span>],</span><br><span class="line">                <span class="attr">"kwarg"</span>: &#123;</span><br><span class="line">                    <span class="attr">"keyword arg one"</span>: <span class="string">"Hello from a minion"</span>,</span><br><span class="line">                    <span class="attr">"keyword arg two"</span>: <span class="string">"Hello again from a minion"</span></span><br><span class="line">                &#125;</span><br><span class="line">            &#125;,</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="attr">"client"</span>: <span class="string">"runner"</span>,</span><br><span class="line">                <span class="attr">"fun"</span>: <span class="string">"test.arg"</span>,</span><br><span class="line">                <span class="attr">"keyword arg one"</span>: <span class="string">"Hello from a master"</span>,</span><br><span class="line">                <span class="attr">"keyword arg two"</span>: <span class="string">"Runners do not support positional args"</span></span><br><span class="line">            &#125;</span><br><span class="line">        ]'</span><br></pre></td></tr></table></figure>
+<figure class="highlight"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"return"</span>: [</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="attr">"jerry"</span>: &#123;</span><br><span class="line">        <span class="attr">"args"</span>: [</span><br><span class="line">          <span class="string">"positional arg one"</span>,</span><br><span class="line">          <span class="string">"positional arg two"</span></span><br><span class="line">        ],</span><br><span class="line">        <span class="attr">"kwargs"</span>: &#123;</span><br><span class="line">          <span class="attr">"keyword arg one"</span>: <span class="string">"Hello from a minion"</span>,</span><br><span class="line">          <span class="attr">"keyword arg two"</span>: <span class="string">"Hello again from a minion"</span>,</span><br><span class="line">          [...snip...]</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;,</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="attr">"args"</span>: [],</span><br><span class="line">      <span class="attr">"kwargs"</span>: &#123;</span><br><span class="line">            <span class="attr">"keyword arg one"</span>: <span class="string">"Hello from a master"</span>,</span><br><span class="line">            <span class="attr">"keyword arg two"</span>: <span class="string">"Runners do not support positional args"</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>再举个例子</li>
+</ul>
+<figure class="highlight"><table><tr><td class="code"><pre><span class="line">curl -sSk https://localhost:9527 \</span><br><span class="line">    -H 'Content-type: application/json' \</span><br><span class="line">    -H 'X-Auth-Token: 6455367f150426fab3fa8d75ba589e1e78e40e13' \</span><br><span class="line">    -d '[</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="attr">"client"</span>: <span class="string">"local"</span>,</span><br><span class="line">                <span class="attr">"tgt"</span>: <span class="string">"*"</span>,</span><br><span class="line">                <span class="attr">"fun"</span>: <span class="string">"state.sls"</span>,</span><br><span class="line">                <span class="attr">"kwarg"</span>: &#123;</span><br><span class="line">                    <span class="attr">"mods"</span>: <span class="string">"apache"</span>,</span><br><span class="line">                    <span class="attr">"pillar"</span>: &#123;</span><br><span class="line">                        <span class="attr">"lookup"</span>: &#123;</span><br><span class="line">                            <span class="attr">"wwwdir"</span>: <span class="string">"/srv/httpd/htdocs"</span></span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;,</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="attr">"client"</span>: <span class="string">"runner"</span>,</span><br><span class="line">                <span class="attr">"fun"</span>: <span class="string">"cloud.create"</span>,</span><br><span class="line">                <span class="attr">"provider"</span>: <span class="string">"my-ec2-provider"</span>,</span><br><span class="line">                <span class="attr">"instances"</span>: <span class="string">"my-centos-6"</span>,</span><br><span class="line">                <span class="attr">"image"</span>: <span class="string">"ami-1624987f"</span>,</span><br><span class="line">                "delvol_on_destroy", true</span><br><span class="line">            &#125;</span><br><span class="line">        ]'</span><br></pre></td></tr></table></figure>
+<figure class="highlight"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"return"</span>: [</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="attr">"jerry"</span>: &#123;</span><br><span class="line">        <span class="attr">"pkg_|-install_apache_|-httpd_|-installed"</span>: &#123;</span><br><span class="line">            [...snip full state return here...]</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">      [...snip other minion returns here...]</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">        [...snip full salt-cloud output here...]</span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="接口定义"><a href="#接口定义" class="headerlink" title="接口定义"></a>接口定义</h2><h3 id><a href="#" class="headerlink" title="/"></a>/</h3><ul>
+<li>Salt 的 REST API 的主要入口点</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">curl -k https://172.16.100.253:9527 -H &quot;Accept: application/x-yaml&quot;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">clients:</span><br><span class="line">- _is_master_running</span><br><span class="line">- local</span><br><span class="line">- local_async</span><br><span class="line">- local_batch</span><br><span class="line">- runner</span><br><span class="line">- runner_async</span><br><span class="line">- ssh</span><br><span class="line">- ssh_async</span><br><span class="line">- wheel</span><br><span class="line">- wheel_async</span><br><span class="line">return: Welcome</span><br></pre></td></tr></table></figure>
+<ul>
+<li>返回状态码</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">200 - 成功</span><br><span class="line">401 - 需要验证</span><br><span class="line">406 - 请求的内容类型不可用</span><br></pre></td></tr></table></figure>
+<h3 id="login"><a href="#login" class="headerlink" title="/login"></a>/login</h3><p>登录界面</p>
+<h4 id="GET"><a href="#GET" class="headerlink" title="GET"></a>GET</h4><p>返回请登陆文字</p>
+<ul>
+<li>用法</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">curl -k https://172.16.100.253:9527/login -H &quot;Accept: application/json&quot;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123;&quot;status&quot;: null, &quot;return&quot;: &quot;Please log in&quot;&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="POST"><a href="#POST" class="headerlink" title="POST"></a>POST</h4><p>对登陆 Salt 进行身份验证</p>
+<ul>
+<li>所需要的请求头</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">X-Auth-Token    # 来自已登陆会话的 Token</span><br><span class="line">Accept          # 所需的响应格式</span><br><span class="line">Content-Type    # 请求正文的格式</span><br></pre></td></tr></table></figure>
+<ul>
+<li>所需要的 POST 表单数据</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">eauth           # 服务器支持的认证方式</span><br><span class="line">username        # 用户名</span><br><span class="line">password        # 密码</span><br></pre></td></tr></table></figure>
+<ul>
+<li>响应的状态码</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">200 - 成功</span><br><span class="line">401 - 需要验证</span><br><span class="line">406 - 请求的内容类型不可用</span><br></pre></td></tr></table></figure>
+<ul>
+<li>接口示例</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">curl -sSk https://localhost:<span class="number">9527</span>/login \</span><br><span class="line">    -H <span class="string">'Accept: application/x-yaml'</span> \</span><br><span class="line">    -d username=saltapi \</span><br><span class="line">    -d password=<span class="number">123456</span> \</span><br><span class="line">    -d eauth=pam</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">return:</span><br><span class="line">- eauth: pam</span><br><span class="line">  expire: 1534123855.063944</span><br><span class="line">  perms:</span><br><span class="line">  - &apos;*&apos;</span><br><span class="line">  start: 1534080655.063944</span><br><span class="line">  token: 03420d9caba5f2ded411410c4e27803e857c516e</span><br><span class="line">  user: saltapi</span><br></pre></td></tr></table></figure>
+<h3 id="logout"><a href="#logout" class="headerlink" title="/logout"></a>/logout</h3><h4 id="POST-1"><a href="#POST-1" class="headerlink" title="POST"></a>POST</h4><p>销毁当前活动的会话并使会话cookie过期</p>
+<h3 id="minions"><a href="#minions" class="headerlink" title="/minions/"></a>/minions/</h3><p>获取 Minions 列表或获取 Minion   详细信息的便捷 URL</p>
+<h4 id="GET-1"><a href="#GET-1" class="headerlink" title="GET"></a>GET</h4><ul>
+<li>所需的请求头</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">X-Auth-Token    # 来自已登陆会话的 Token</span><br><span class="line">Accept          # 所需的响应格式</span><br></pre></td></tr></table></figure>
+<ul>
+<li>响应的状态码</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">200 - 成功</span><br><span class="line">401 - 需要验证</span><br><span class="line">406 - 请求的内容类型不可用</span><br></pre></td></tr></table></figure>
+<ul>
+<li>接口示例，获取全部、获取单个</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">curl -sSk https://localhost:9527/minions \</span><br><span class="line">    -H &apos;X-Auth-Token: 8215fbca6712b0f2e0155db5479a7bf6458643a2&apos; \</span><br><span class="line">    -H &apos;Accept: application/x-yaml&apos;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">curl -sSk https://localhost:9527/minions/node2 \</span><br><span class="line">    -H &apos;X-Auth-Token: 8215fbca6712b0f2e0155db5479a7bf6458643a2&apos; \</span><br><span class="line">    -H &apos;Accept: application/x-yaml&apos;</span><br></pre></td></tr></table></figure>
+<h4 id="POST-2"><a href="#POST-2" class="headerlink" title="POST"></a>POST</h4><p>启动执行命令并立即返回作业ID</p>
+<ul>
+<li>所需的请求头</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">X-Auth-Token    # 来自已登陆会话的 Token</span><br><span class="line">Accept          # 所需的响应格式</span><br><span class="line">Content-Type    # 请求正文的格式</span><br></pre></td></tr></table></figure>
+<ul>
+<li>返回的响应码</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">200 - 成功</span><br><span class="line">400 - 错误或格式错误的请求</span><br><span class="line">401 - 需要验证</span><br><span class="line">406 - 请求的内容类型不可用</span><br></pre></td></tr></table></figure>
+<ul>
+<li>请求体，描述Salt命令的 Lowstate 必须在请求体中发送。lowstate 我认为是基础的指令，highstate 表现是 SLS文件。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">curl -sSk https://localhost:9527/minions \</span><br><span class="line">    -H &apos;Accept: application/x-yaml&apos; \</span><br><span class="line">    -H &apos;X-Auth-Token: 4954334e216fcec05b3eaa6da545a6af1a0a316a&apos; \</span><br><span class="line">    -d client=local_async \</span><br><span class="line">    -d tgt=&apos;*&apos; \</span><br><span class="line">    -d fun=test.ping</span><br></pre></td></tr></table></figure>
+<h3 id="jobs"><a href="#jobs" class="headerlink" title="/jobs/"></a>/jobs/</h3><h4 id="GET-2"><a href="#GET-2" class="headerlink" title="GET"></a>GET</h4><p>用于获取以前运行的作业列表，或者指定单个作业得到其返回值</p>
+<ul>
+<li>所需的请求头</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">X-Auth-Token    # 来自已登陆会话的 Token</span><br><span class="line">Accept          # 所需的响应格式</span><br></pre></td></tr></table></figure>
+<ul>
+<li>返回的响应码</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">200 - 成功</span><br><span class="line">401 - 需要验证</span><br><span class="line">406 - 请求的内容类型不可用</span><br></pre></td></tr></table></figure>
+<ul>
+<li>查询所有作业列表，查询单个任务的返回结果</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">curl -k https://localhost:9527/jobs/ \</span><br><span class="line">	-H &quot;Accept: application/x-yaml&quot; \</span><br><span class="line">	-H &quot;X-Auth-Token: 4954334e216fcec05b3eaa6da545a6af1a0a316a&quot;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">curl -k https://172.16.100.253:9527/jobs/20180813013253427489 \</span><br><span class="line">	-H &quot;Accept: application/x-yaml&quot; \</span><br><span class="line">	-H &quot;X-Auth-Token: 4954334e216fcec05b3eaa6da545a6af1a0a316a&quot;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>  这个接口，我测试的时候一直是身份无法认证，原因未知。</p>
+</blockquote>
+<h4 id="POST-3"><a href="#POST-3" class="headerlink" title="POST"></a>POST</h4><ul>
+<li>提交任务</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">curl -sSk https://localhost:9527/jobs \</span><br><span class="line">    -H &apos;Accept: application/x-yaml&apos; \</span><br><span class="line">    -H &apos;X-Auth-Token: 4954334e216fcec05b3eaa6da545a6af1a0a316a&apos; \</span><br><span class="line">    -d client=local_async \</span><br><span class="line">    -d tgt=&apos;*&apos; \</span><br><span class="line">    -d fun=test.ping</span><br></pre></td></tr></table></figure>
+<h3 id="run"><a href="#run" class="headerlink" title="/run"></a>/run</h3><p>运行命令绕过正常的会话处理，除此之外，此URL与根URL（/）相同。</p>
+<h4 id="POST-4"><a href="#POST-4" class="headerlink" title="POST"></a>POST</h4><ul>
+<li>使用用户名密码直接执行指令</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">curl -sSk https://localhost:9527/run \</span><br><span class="line">    -H &apos;Accept: application/json&apos; \</span><br><span class="line">    -H &apos;Content-type: application/json&apos; \</span><br><span class="line">    -d &apos;[&#123;</span><br><span class="line">        &quot;client&quot;: &quot;local&quot;,</span><br><span class="line">        &quot;tgt&quot;: &quot;*&quot;,</span><br><span class="line">        &quot;fun&quot;: &quot;test.ping&quot;,</span><br><span class="line">        &quot;username&quot;: &quot;saltapi&quot;,</span><br><span class="line">        &quot;password&quot;: &quot;123456&quot;,</span><br><span class="line">        &quot;eauth&quot;: &quot;pam&quot;</span><br><span class="line">    &#125;]&apos;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>salt-ssh TODO</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p><a href="https://www.cnblogs.com/kevingrace/p/6379141.html" target="_blank" rel="noopener">https://www.cnblogs.com/kevingrace/p/6379141.html</a></p>
+<h3 id="events"><a href="#events" class="headerlink" title="/events"></a>/events</h3><p>Salt主事件总线的HTTP流，根据服务器发送事件（SSE）规范格式化此流。 每个事件都格式化为JSON。</p>
+<h4 id="GET-3"><a href="#GET-3" class="headerlink" title="GET"></a>GET</h4><ul>
+<li>请求参数</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">X-Auth-Token    # 来自已登陆会话的 Token</span><br><span class="line">Accept          # 所需的响应格式</span><br><span class="line">Content-Type    # 请求正文的格式</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">curl -k https://172.16.100.253:9527/events \</span><br><span class="line">	-H &quot;Accept: application/x-yaml&quot; \</span><br><span class="line">	-H &quot;X-Auth-Token: 312bf96695dc260cd0cdd34b5c96161094d90f9f&quot;</span><br></pre></td></tr></table></figure>
+<h3 id="hook"><a href="#hook" class="headerlink" title="/hook"></a>/hook</h3><p>在Salt的事件总线上触发事件的通用Web钩子</p>
+<p>外部服务可以将数据POST到此URL以触发Salt中的事件。 例如，Amazon SNS，Jenkins-CI或Travis-CI，或GitHub Web挂钩。</p>
+<p>此接口需要配置 Matser 接受 webhook 的请求，需要修改在Master的配置文件中找到 rest_cherrypy 的配置，将webhook_Disable_auth 设置为 True。</p>
+<h4 id="POST-5"><a href="#POST-5" class="headerlink" title="POST"></a>POST</h4><p>事件标记以 <code>salt/netapi/hook</code>  为前缀，URL路径附加到末尾。 例如，发送到 <code>/hook/mycompany/myapp/mydata</code>  的 POST 请求将生成一个带有标签 <code>salt/netapi/hook/mycompany/myapp/mydata</code> 的Salt事件。</p>
+<ul>
+<li>返回响应码</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">200 - 成功</span><br><span class="line">401 - 需要验证</span><br><span class="line">406 - 请求的内容类型不可用</span><br><span class="line">413 - 请求正文太大</span><br></pre></td></tr></table></figure>
+<ul>
+<li>示例</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">curl -k https://172.16.100.253:9527/hook  \</span><br><span class="line">	-H &quot;Accept: application/json&quot; \</span><br><span class="line">	-H &quot;X-Auth-Token: 312bf96695dc260cd0cdd34b5c96161094d90f9f&quot; \</span><br><span class="line">	-d &apos;&#123;&quot;foo&quot;: &quot;Foo!&quot;, &quot;bar&quot;: &quot;Bar!&quot;&#125;&apos;</span><br></pre></td></tr></table></figure>
+<h3 id="keys"><a href="#keys" class="headerlink" title="/keys/"></a>/keys/</h3><h4 id="GET-4"><a href="#GET-4" class="headerlink" title="GET"></a>GET</h4><p>显示 Minion keys 列表，或特定 keys 的详细信息</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">curl -k https://172.16.100.253:9527/keys  \</span><br><span class="line">	-H &quot;Accept: application/json&quot; \</span><br><span class="line">	-H &quot;X-Auth-Token: c5976b09663d1a0cfc3c60cc83e7c3ed0842e885&quot;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">curl -k https://172.16.100.253:9527/keys/node2  \</span><br><span class="line">	-H &quot;Accept: application/json&quot; \</span><br><span class="line">	-H &quot;X-Auth-Token: c5976b09663d1a0cfc3c60cc83e7c3ed0842e885&quot;</span><br></pre></td></tr></table></figure>
+<h4 id="POST-6"><a href="#POST-6" class="headerlink" title="POST"></a>POST</h4><p>轻松为 Minion 生成钥匙，并自动接受新密钥</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">curl -sSk https://172.16.100.253:9527/keys \</span><br><span class="line">        -d mid=172.16.100.252 \</span><br><span class="line">        -d username=saltapi \</span><br><span class="line">        -d password=123456 \</span><br><span class="line">        -d eauth=pam</span><br></pre></td></tr></table></figure>
+<h3 id="ws"><a href="#ws" class="headerlink" title="/ws/"></a>/ws/</h3><h4 id="GET-5"><a href="#GET-5" class="headerlink" title="GET"></a>GET</h4><p>打开与 Salt 的事件总线的 WebSocket 连接 </p>
+<p>Salt Master 的事件总线暴露了各种各样的事情，特别是当 Master 开始执行时以及当最终结果返回结果时。此URL为正在运行的Salt基础结构提供实时窗口。使用 websocket 作为传输机制。 </p>
+<h3 id="stats"><a href="#stats" class="headerlink" title="/stats"></a>/stats</h3><h4 id="GET-6"><a href="#GET-6" class="headerlink" title="GET"></a>GET</h4><p>返回从 CherryPy 服务器收集的统计信息转储</p>
+
           
         
       
@@ -828,7 +2049,7 @@
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/19/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/19/">19</a><span class="page-number current">20</span><a class="page-number" href="/page/21/">21</a><span class="space">&hellip;</span><a class="page-number" href="/page/36/">36</a><a class="extend next" rel="next" href="/page/21/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/page/19/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/19/">19</a><span class="page-number current">20</span><a class="page-number" href="/page/21/">21</a><span class="space">&hellip;</span><a class="page-number" href="/page/39/">39</a><a class="extend next" rel="next" href="/page/21/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -876,7 +2097,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">72</span>
+                  <span class="site-state-item-count">77</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

@@ -250,6 +250,16 @@
         </li>
       
         
+        <li class="menu-item menu-item-golang">
+          <a href="/categories/golang/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br>
+            
+            Golang
+          </a>
+        </li>
+      
+        
         <li class="menu-item menu-item-个人日志">
           <a href="/categories/个人日志/" rel="section">
             
@@ -291,7 +301,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://yangjinheng.github.io/2017/10/03/python/24.pymysql/">
+    <link itemprop="mainEntityOfPage" href="https://yangjinheng.github.io/2017/10/08/python/29.hashlib加密解密/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Jin Heng">
@@ -310,7 +320,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/10/03/python/24.pymysql/" itemprop="url">Pymysql</a></h1>
+                <a class="post-title-link" href="/2017/10/08/python/29.hashlib加密解密/" itemprop="url">hashlib加密解密</a></h1>
         
 
         <div class="post-meta">
@@ -322,8 +332,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-03T00:00:00+08:00">
-                2017-10-03
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-08T00:00:00+08:00">
+                2017-10-08
               </time>
             
 
@@ -384,215 +394,17 @@
       
         
           
-            <h2 id="Connection-Object"><a href="#Connection-Object" class="headerlink" title="Connection Object"></a>Connection Object</h2><ul>
-<li>连接构造方法</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, host=None, user=None, password=<span class="string">""</span>,</span></span></span><br><span class="line"><span class="function"><span class="params">                database=None, port=<span class="number">0</span>, unix_socket=None,</span></span></span><br><span class="line"><span class="function"><span class="params">                charset=<span class="string">''</span>, sql_mode=None,</span></span></span><br><span class="line"><span class="function"><span class="params">                read_default_file=None, conv=None, use_unicode=None,</span></span></span><br><span class="line"><span class="function"><span class="params">                client_flag=<span class="number">0</span>, cursorclass=Cursor, init_command=None,</span></span></span><br><span class="line"><span class="function"><span class="params">                connect_timeout=<span class="number">10</span>, ssl=None, read_default_group=None,</span></span></span><br><span class="line"><span class="function"><span class="params">                compress=None, named_pipe=None, no_delay=None,</span></span></span><br><span class="line"><span class="function"><span class="params">                autocommit=False, db=None, passwd=None, local_infile=False,</span></span></span><br><span class="line"><span class="function"><span class="params">                max_allowed_packet=<span class="number">16</span>*<span class="number">1024</span>*<span class="number">1024</span>, defer_connect=False,</span></span></span><br><span class="line"><span class="function"><span class="params">                auth_plugin_map=&#123;&#125;, read_timeout=None, write_timeout=None,</span></span></span><br><span class="line"><span class="function"><span class="params">                bind_address=None, binary_prefix=False)</span>:</span></span><br></pre></td></tr></table></figure>
-<ul>
-<li>创建数据库连接</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> pymysql</span><br><span class="line"></span><br><span class="line">config = &#123;</span><br><span class="line">          <span class="string">'host'</span>:<span class="string">'172.16.100.252'</span>,</span><br><span class="line">          <span class="string">'port'</span>:<span class="number">3306</span>,</span><br><span class="line">          <span class="string">'user'</span>:<span class="string">'root'</span>,</span><br><span class="line">          <span class="string">'password'</span>:<span class="string">'Jinheng890821@'</span>,</span><br><span class="line">          <span class="string">'db'</span>:<span class="string">'hellodb'</span>,                              <span class="comment">#指定数据库</span></span><br><span class="line">          <span class="string">'charset'</span>:<span class="string">'utf8mb4'</span>,                         <span class="comment">#设定字符集</span></span><br><span class="line">          <span class="string">'cursorclass'</span>:pymysql.cursors.DictCursor,    <span class="comment">#指定游标类</span></span><br><span class="line">          &#125;</span><br><span class="line"></span><br><span class="line">db = pymysql.Connect(**config)</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>游标，相当于使用 <code>mysql</code> 命令刚进入数据库时候那个光标的位置</p>
-</blockquote>
-<ul>
-<li>类的方法</li>
-</ul>
-<table>
-<thead>
-<tr>
-<th>方法</th>
-<th>作用</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>.cursor()</code></td>
-<td>使用此连接并且返回连接游标</td>
-</tr>
-<tr>
-<td><code>.begin()</code></td>
-<td>开始事务</td>
-</tr>
-<tr>
-<td><code>.rollback()</code></td>
-<td>对事务进行回滚</td>
-</tr>
-<tr>
-<td><code>.commit()</code></td>
-<td>对事务进行提交</td>
-</tr>
-<tr>
-<td><code>.close()</code></td>
-<td>关闭连接，如果事务没有提交，则此操作包含了隐式回滚</td>
-</tr>
-<tr>
-<td><code>.select_db(db)</code></td>
-<td>选择数据库</td>
-</tr>
-</tbody>
-</table>
-<h2 id="err类"><a href="#err类" class="headerlink" title="err类"></a>err类</h2><table>
-<thead>
-<tr>
-<th>异常</th>
-<th>描述</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Warning</td>
-<td>当有严重警告时触发，例如插入数据是被截断等等。必须是 StandardError 的子类。</td>
-</tr>
-<tr>
-<td>Error</td>
-<td>警告以外所有其他错误类。必须是 StandardError 的子类。</td>
-</tr>
-<tr>
-<td>InterfaceError</td>
-<td>当有数据库接口模块本身的错误（而不是数据库的错误）发生时触发。 必须是Error的子类。</td>
-</tr>
-<tr>
-<td>DatabaseError</td>
-<td>和数据库有关的错误发生时触发。 必须是Error的子类。</td>
-</tr>
-<tr>
-<td>DataError</td>
-<td>当有数据处理时的错误发生时触发，例如：除零错误，数据超范围等等。 必须是DatabaseError的子类。</td>
-</tr>
-<tr>
-<td>OperationalError</td>
-<td>指非用户控制的，而是操作数据库时发生的错误。例如：连接意外断开、 数据库名未找到、事务处理失败、内存分配错误等等操作数据库是发生的错误。 必须是DatabaseError的子类。</td>
-</tr>
-<tr>
-<td>IntegrityError</td>
-<td>完整性相关的错误，例如外键检查失败等。必须是DatabaseError子类。</td>
-</tr>
-<tr>
-<td>InternalError</td>
-<td>数据库的内部错误，例如游标（cursor）失效了、事务同步失败等等。 必须是DatabaseError子类。</td>
-</tr>
-<tr>
-<td>ProgrammingError</td>
-<td>程序错误，例如数据表（table）没找到或已存在、SQL语句语法错误、 参数数量错误等等。必须是DatabaseError的子类。</td>
-</tr>
-<tr>
-<td>NotSupportedError</td>
-<td>不支持错误，指使用了数据库不支持的函数或API等。例如在连接对象上 使用.rollback()函数，然而数据库并不支持事务或者事务已关闭。 必须是DatabaseError的子类。</td>
-</tr>
-</tbody>
-</table>
-<h2 id="Cursor-Objects"><a href="#Cursor-Objects" class="headerlink" title="Cursor Objects"></a>Cursor Objects</h2><table>
-<thead>
-<tr>
-<th>方法</th>
-<th>作用</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>.callproc( procname [, parameters ] )</code></td>
-<td>调用存储过程并且传递参数，结果集可以通过 <code>.fetch*()</code> 得到</td>
-</tr>
-<tr>
-<td><code>.execute(operation [, parameters])</code></td>
-<td>执行数据库命令，<code>.execute(&#39;operation&#39;, (parameters))</code> 使用类似C风格的字符串格式化方法，可以防止SQL注入攻击</td>
-</tr>
-<tr>
-<td><code>.executemany( operation, seq_of_parameters )</code></td>
-<td>批量操作，<code>.execute(&#39;operation&#39;, (seq_of_parameters))</code> 这里的参数可以是可迭代对象组成的序列，这会调用 <code>operation</code> 对序列中的每个元素执行操作</td>
-</tr>
-<tr>
-<td><code>.fetchone()</code></td>
-<td>获取查询结果集的下一行，返回单个序列，或在没有更多数据可用时返回<code>None</code></td>
-</tr>
-<tr>
-<td><code>.fetchmany([ size = cursor.arraysize ])</code></td>
-<td>获取查询结果的下一组行，返回一系列序列（例如元组列表）。没有更多行可用时返回空序列。</td>
-</tr>
-<tr>
-<td><code>.fetchall()</code></td>
-<td>获取查询结果的所有（剩余）行，并将它们作为一系列序列（例如元组列表）返回。请注意，游标的arraysize属性可能会影响此操作的性能。</td>
-</tr>
-<tr>
-<td><code>.close()</code></td>
-<td>关闭游标。也可以直接关闭连接，从而关闭游标</td>
-</tr>
-<tr>
-<td><code>.nextset()</code></td>
-<td>此方法将使光标跳到下一个可用集合，丢弃当前集合中的任何剩余行</td>
-</tr>
-<tr>
-<td><code>.setinputsizes(sizes)</code></td>
-<td>这可以在调用 <code>.execute*()</code> 之前使用，以预定义操作参数的内存区域。</td>
-</tr>
-<tr>
-<td><code>.setoutputsize(size [，column ])</code></td>
-<td>为大列提取设置列缓冲区大小（例如，LONG s，BLOB s等），该列被指定为结果序列的索引。不指定列将为游标中的所有大型列设置默认大小</td>
-</tr>
-<tr>
-<td><code>.scroll(value [, mode=&#39;relative&#39; ])</code></td>
-<td>根据 <code>mode</code> 移动游标到新位置，默认 <code>mode =&#39;relative&#39;</code> 表示相对当前的偏移量，当为 <code>mode =&#39;absolute&#39;</code> 时移动到绝对位置</td>
-</tr>
-<tr>
-<td><code>next()</code></td>
-<td>返回下一行数据</td>
-</tr>
-<tr>
-<td><code>.mogrify(query,args=None)</code></td>
-<td>参数化查询，防止SQL注入攻击，通过调用 <code>execute()</code> 方法返回发送到数据库的确切字符串。</td>
-</tr>
-</tbody>
-</table>
-<table>
-<thead>
-<tr>
-<th>属性</th>
-<th>作用</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>.description</code></td>
-<td>游标结果的字段描述信息，包含了：字段名，字段类型代码，显示尺寸，内部大小，精确度，规模，是否允许空</td>
-</tr>
-<tr>
-<td><code>.rownumber</code></td>
-<td>显示游标所在行</td>
-</tr>
-<tr>
-<td><code>.rowcount</code></td>
-<td>这是一个只读属性，并返回执行 <code>execute()</code> 方法后影响的行数</td>
-</tr>
-<tr>
-<td><code>.arraysize</code></td>
-<td>此读取/写入属性指定一次使用 <code>.fetchmany()</code> 提取的行数。它默认为1</td>
-</tr>
-<tr>
-<td><code>.connection</code></td>
-<td>此只读属性返回创建光标的Connection对象的引用。</td>
-</tr>
-<tr>
-<td><code>.__iter__</code></td>
-<td>将游标转换为可迭代对象</td>
-</tr>
-<tr>
-<td><code>.lastrowid</code></td>
-<td>获取新创建数据的自增ID</td>
-</tr>
-</tbody>
-</table>
-<h3 id="查询操作"><a href="#查询操作" class="headerlink" title="查询操作"></a>查询操作</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> pymysql</span><br><span class="line"></span><br><span class="line">config = &#123;</span><br><span class="line">          <span class="string">'host'</span>:<span class="string">'172.16.100.252'</span>,</span><br><span class="line">          <span class="string">'port'</span>:<span class="number">3306</span>,</span><br><span class="line">          <span class="string">'user'</span>:<span class="string">'root'</span>,</span><br><span class="line">          <span class="string">'password'</span>:<span class="string">'Jinheng890821@'</span>,</span><br><span class="line">          <span class="string">'db'</span>:<span class="string">'hellodb'</span>,</span><br><span class="line">          <span class="string">'charset'</span>:<span class="string">'utf8mb4'</span>,</span><br><span class="line">          <span class="string">'cursorclass'</span>:pymysql.cursors.DictCursor,</span><br><span class="line">          &#125;</span><br><span class="line"></span><br><span class="line">db = pymysql.Connect(**config)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 设置查询条件</span></span><br><span class="line">max_age = <span class="number">30</span></span><br><span class="line">mix_age = <span class="number">25</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 执行sql语句</span></span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    <span class="keyword">with</span> db.cursor() <span class="keyword">as</span> cursor:</span><br><span class="line">        sql = <span class="string">'SELECT * FROM students WHERE Age BETWEEN %s AND %s'</span></span><br><span class="line">        cursor.execute(sql, (mix_age, max_age))</span><br><span class="line">        result = cursor.fetchone()</span><br><span class="line">        print(result)</span><br><span class="line">        result = cursor.fetchone()</span><br><span class="line">        print(result)</span><br><span class="line">    db.commit()    <span class="comment"># 没有设置默认自动提交，需要主动提交，以保存所执行的语句</span></span><br><span class="line"><span class="keyword">finally</span>:</span><br><span class="line">    db.close()</span><br></pre></td></tr></table></figure>
-<ul>
-<li>查询结果</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">&#123;<span class="string">'StuID'</span>: <span class="number">5</span>, <span class="string">'Name'</span>: <span class="string">'Yu Yutong'</span>, <span class="string">'Age'</span>: <span class="number">26</span>, <span class="string">'Gender'</span>: <span class="string">'M'</span>, <span class="string">'ClassID'</span>: <span class="number">3</span>, <span class="string">'TeacherID'</span>: <span class="number">1</span>&#125;</span><br><span class="line">&#123;<span class="string">'StuID'</span>: <span class="number">17</span>, <span class="string">'Name'</span>: <span class="string">'Lin Chong'</span>, <span class="string">'Age'</span>: <span class="number">25</span>, <span class="string">'Gender'</span>: <span class="string">'M'</span>, <span class="string">'ClassID'</span>: <span class="number">4</span>, <span class="string">'TeacherID'</span>: <span class="keyword">None</span>&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="插入操作"><a href="#插入操作" class="headerlink" title="插入操作"></a>插入操作</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> pymysql</span><br><span class="line"></span><br><span class="line">config = &#123;</span><br><span class="line">          <span class="string">'host'</span>:<span class="string">'172.16.100.252'</span>,</span><br><span class="line">          <span class="string">'port'</span>:<span class="number">3306</span>,</span><br><span class="line">          <span class="string">'user'</span>:<span class="string">'root'</span>,</span><br><span class="line">          <span class="string">'password'</span>:<span class="string">'Jinheng890821@'</span>,</span><br><span class="line">          <span class="string">'db'</span>:<span class="string">'hellodb'</span>,</span><br><span class="line">          <span class="string">'charset'</span>:<span class="string">'utf8mb4'</span>,</span><br><span class="line">          <span class="string">'cursorclass'</span>:pymysql.cursors.DictCursor,</span><br><span class="line">          &#125;</span><br><span class="line"></span><br><span class="line">db = pymysql.Connect(**config)</span><br><span class="line"></span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    <span class="keyword">with</span> db.cursor() <span class="keyword">as</span> cursor:</span><br><span class="line">        sql = <span class="string">'INSERT INTO students VALUES (%s,%s,%s,%s,%s,%s)'</span></span><br><span class="line">        cursor.execute(sql, (NULL,<span class="string">'yangjinheng'</span>,<span class="string">'29'</span>,<span class="string">'M'</span>,<span class="number">10</span>,<span class="number">1</span>))</span><br><span class="line">    db.commit()    <span class="comment">#由于默认开启事务，所以需要自己提交，或者回滚</span></span><br><span class="line"><span class="keyword">finally</span>:</span><br><span class="line">    db.close()</span><br></pre></td></tr></table></figure>
-<ul>
-<li>官方示例</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> pymysql.cursors</span><br><span class="line"></span><br><span class="line"><span class="comment"># Connect to the database</span></span><br><span class="line">connection = pymysql.connect(host=<span class="string">'localhost'</span>,</span><br><span class="line">                             user=<span class="string">'user'</span>,</span><br><span class="line">                             password=<span class="string">'passwd'</span>,</span><br><span class="line">                             db=<span class="string">'db'</span>,</span><br><span class="line">                             charset=<span class="string">'utf8mb4'</span>,</span><br><span class="line">                             cursorclass=pymysql.cursors.DictCursor)</span><br><span class="line"></span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    <span class="keyword">with</span> connection.cursor() <span class="keyword">as</span> cursor:</span><br><span class="line">        <span class="comment"># Create a new record</span></span><br><span class="line">        sql = <span class="string">"INSERT INTO `users` (`email`, `password`) VALUES (%s, %s)"</span></span><br><span class="line">        cursor.execute(sql, (<span class="string">'webmaster@python.org'</span>, <span class="string">'very-secret'</span>))</span><br><span class="line"></span><br><span class="line">    <span class="comment"># connection is not autocommit by default. So you must commit to save</span></span><br><span class="line">    <span class="comment"># your changes.</span></span><br><span class="line">    connection.commit()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">with</span> connection.cursor() <span class="keyword">as</span> cursor:</span><br><span class="line">        <span class="comment"># Read a single record</span></span><br><span class="line">        sql = <span class="string">"SELECT `id`, `password` FROM `users` WHERE `email`=%s"</span></span><br><span class="line">        cursor.execute(sql, (<span class="string">'webmaster@python.org'</span>,))</span><br><span class="line">        result = cursor.fetchone()</span><br><span class="line">        print(result)</span><br><span class="line"><span class="keyword">finally</span>:</span><br><span class="line">    connection.close()</span><br></pre></td></tr></table></figure>
-
+            <p>摘要算法又称哈希/散列算法。它通过一个函数，把任意长度的数据转换为一个长度固定的数据串（通常用16进制的字符串表示）。算法不可逆。 </p>
+<p>散列/哈希算法有：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">SHA1  SHA224  SHA256  SHA384  SHA512  MD5</span><br><span class="line">HmacSHA1 HmacSHA224 HmacSHA256 HmacSHA384 HmacSHA512 HmacMD5 PBKDF2</span><br></pre></td></tr></table></figure>
+<h3 id="MD5"><a href="#MD5" class="headerlink" title="MD5"></a>MD5</h3><p>MD5（Message-Digest Algorithm 5，消息摘要算法版本5）是最常见的摘要算法，它由MD2、MD3、MD4发展而来，速度很快。</p>
+<p>MD2、MD4、MD5 都产生16字节（128位）的校验值，一般用32位十六进制数表示。MD2的算法较慢但相对安全，MD4速度很快，但安全性下降，MD5比MD4更安全、速度更快。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> hashlib</span><br><span class="line"></span><br><span class="line">md5 = hashlib.md5()</span><br><span class="line">md5.update(<span class="string">'123456'</span>.encode(<span class="string">'utf-8'</span>))</span><br><span class="line">print(md5.hexdigest())</span><br></pre></td></tr></table></figure>
+<h3 id="SHA1"><a href="#SHA1" class="headerlink" title="SHA1"></a>SHA1</h3><p>SHA（Secure Hash Algorithm）是由美国专门制定密码算法的标准机构—— 美国国家标准技术研究院（NIST）制定的。</p>
+<p>SHA系列算法的摘要长度分别为：SHA为20字节（160位，通常用一个40位的16进制字符串表示）、SHA256为32字节（256位）、 SHA384为48字节（384位）、SHA512为64字节（512位），由于它产生的数据摘要的长度更长，因此更难以发生碰撞，因此也更为安全，它是未来数据摘要算法的发展方向。由于SHA系列算法的数据摘要长度较长，因此其运算速度与MD5相比，也相对较慢。</p>
+<p>SHA1的应用较为广泛，主要应用于CA和数字证书中，另外在互联网中流行的BT软件中，也是使用SHA1来进行文件校验的。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> hashlib</span><br><span class="line"></span><br><span class="line"><span class="comment"># sha224, sha256, sha384, sha512同理</span></span><br><span class="line">sha1 = hashlib.sha1()</span><br><span class="line">sha1.update(<span class="string">'123456'</span>.encode(<span class="string">'utf-8'</span>))</span><br><span class="line">print(sha1.hexdigest())</span><br></pre></td></tr></table></figure>
+<h2 id="bcrypt"><a href="#bcrypt" class="headerlink" title="bcrypt"></a>bcrypt</h2>
           
         
       
@@ -640,7 +452,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://yangjinheng.github.io/2017/10/02/python/23.元编程/">
+    <link itemprop="mainEntityOfPage" href="https://yangjinheng.github.io/2017/10/07/python/28.urllib网络请求库/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Jin Heng">
@@ -659,7 +471,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/10/02/python/23.元编程/" itemprop="url">元编程</a></h1>
+                <a class="post-title-link" href="/2017/10/07/python/28.urllib网络请求库/" itemprop="url">urllib网络请求库</a></h1>
         
 
         <div class="post-meta">
@@ -671,8 +483,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-02T00:00:00+08:00">
-                2017-10-02
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-07T00:00:00+08:00">
+                2017-10-07
               </time>
             
 
@@ -733,21 +545,130 @@
       
         
           
-            <h2 id="元编程"><a href="#元编程" class="headerlink" title="元编程"></a>元编程</h2><p>用元类进行编程，元类→类→对象，元类比类更抽象，生成类的类  元类定义的都是类的方法，类定义的都是实例方法 </p>
-<h2 id="type类"><a href="#type类" class="headerlink" title="type类"></a>type类</h2><p><code>type</code> 有一个功能，它可以在运行时产生类，<code>type</code> 可以传入一些参数，然后返回一个类。</p>
+            <h2 id="urllib"><a href="#urllib" class="headerlink" title="urllib"></a>urllib</h2><p>urllib 是 Python3 标准库中的模块，无需额外安装，Python3 中的 urllib 综合了 Python2 中 urllib 和 urllib2 的一些功能，发生了较大变化。另外：Requests 库是一个第三方库，它基于 urllib3 编写，比 urllib 更方便，但要额外安装。</p>
 <ul>
-<li>语法</li>
+<li>组成</li>
 </ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">type(name, bases, dict) -&gt; # 生成一个新类</span><br><span class="line">- name：类的名字</span><br><span class="line">- bases：父类的元组</span><br><span class="line">- dict：属性字典</span><br></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th>库</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>urllib.request</code></td>
+<td>请求模块</td>
+</tr>
+<tr>
+<td><code>urllib.error</code></td>
+<td>异常处理模块</td>
+</tr>
+<tr>
+<td><code>urllib.parse</code></td>
+<td>URL解析模块</td>
+</tr>
+<tr>
+<td><code>urllib.robotparser</code></td>
+<td>robots.txt 解析模块</td>
+</tr>
+</tbody>
+</table>
 <ul>
-<li>示例</li>
+<li>导入需要的模块<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> urllib.request</span><br><span class="line"><span class="keyword">import</span> urllib.parse</span><br><span class="line"><span class="keyword">import</span> urllib.error</span><br><span class="line"><span class="keyword">import</span> http.cookiejar</span><br></pre></td></tr></table></figure>
+</li>
 </ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span></span><br><span class="line">    self.x = <span class="number">1000</span></span><br><span class="line">    </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">show</span><span class="params">(self)</span>:</span></span><br><span class="line">    print(self.__dict__)</span><br><span class="line">    </span><br><span class="line">Xclass = type(</span><br><span class="line">    <span class="string">'MyClass'</span>,</span><br><span class="line">    (object,),</span><br><span class="line">    &#123;<span class="string">'a'</span>:<span class="number">100</span>,<span class="string">'b'</span>:<span class="string">'string'</span>,<span class="string">'show'</span>:show,<span class="string">'__init__'</span>:__init__&#125;</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">print(Xclass.a,Xclass.b)</span><br><span class="line">cls = Xclass()</span><br><span class="line">cls.show()</span><br></pre></td></tr></table></figure>
-<h2 id="metaclass元类"><a href="#metaclass元类" class="headerlink" title="metaclass元类"></a>metaclass元类</h2><p><code>metaclass</code> 就是创建类的类，事实上 <code>type</code> 就是一个 <code>metaclass</code>，它就是用来创造 <code>类对象</code> 的类，它是 <code>类对象</code> 的 类，说白了，<code>type</code> 函数就是一个特殊的 <code>metaclass</code> ，<code>type</code> 是 Python 内置的 <code>metaclass</code> 不过我们可以编写自己的 <code>metaclass</code> 。</p>
+<h2 id="urllib-request"><a href="#urllib-request" class="headerlink" title="urllib.request"></a>urllib.request</h2><ul>
+<li>请求打开URL地址，data 参数为 POST 请求时的参数，其余为CA证书相关。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">语法：urlopen(url, data=None, timeout=TIME, *, cafile=None, capath=None, cadefault=False, context=None)</span><br></pre></td></tr></table></figure>
 <ul>
-<li>元类的使用</li>
+<li>GET请求</li>
 </ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Mcls</span><span class="params">(type)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__new__</span><span class="params">(cls,name,bases,dict)</span>:</span></span><br><span class="line">        <span class="comment"># __new__ 是在 __init__ 之前被调用的特殊方法，用来创建对象并返回这个对象</span></span><br><span class="line">        <span class="comment"># 而__init__只是将传入的参数初始化给对象</span></span><br><span class="line">        print(cls)</span><br><span class="line">        print(name)</span><br><span class="line">        print(bases)</span><br><span class="line">        print(dict)</span><br><span class="line">        <span class="keyword">return</span> super().__new__(cls,name,bases,dict)</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span><span class="params">(metaclass=Mcls)</span>:</span>        <span class="comment"># 第一种使用元类的方法，使用 metaclass 关键字指定元类</span></span><br><span class="line">    id = <span class="number">100</span></span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span></span><br><span class="line">        print(<span class="string">'...A-init...'</span>)</span><br><span class="line">        </span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">B</span><span class="params">(A)</span>:</span>                     <span class="comment"># 第二种使用元类的方法，从使用元类的类中继承依然是 metaclass 类型</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span></span><br><span class="line">        print(<span class="string">'...B-init...'</span>)</span><br><span class="line">        </span><br><span class="line">D = Mcls(<span class="string">'D'</span>,(),&#123;&#125;)             <span class="comment"># 第三种类似与 type 函数，它调用 元类的__new__ 方法</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">response = urllib.request.urlopen(<span class="string">'http://httpbin.org/get'</span>)</span><br><span class="line">ret = str(response.read(), encoding=<span class="string">'utf-8'</span>)</span><br><span class="line">print(ret)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>POST请求</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">data = &#123;<span class="string">'hello'</span>: <span class="string">'world'</span>&#125;</span><br><span class="line">body = bytes(urllib.parse.urlencode(data),encoding=<span class="string">'utf-8'</span>)</span><br><span class="line">response = urllib.request.urlopen(<span class="string">'http://httpbin.org/post'</span>,data=body)</span><br><span class="line">ret = str(response.read(), encoding=<span class="string">'utf-8'</span>)</span><br><span class="line">print(ret)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>请求 HTTPS 网站，取消全局证书</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> urllib.request</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> ssl</span><br><span class="line">ssl._create_default_https_context = ssl._create_unverified_context</span><br><span class="line"></span><br><span class="line">url = <span class="string">'https://172.16.100.253:9527/jobs'</span></span><br><span class="line">headers = &#123;</span><br><span class="line">    <span class="string">'Accept'</span>: <span class="string">'application/x-yaml'</span>,</span><br><span class="line">    <span class="string">'X-Auth-Token'</span>: <span class="string">'546df529e7f55afaaeb2d11ae98bd9155cceab57'</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Request = urllib.request.Request(url=url, headers=headers, method=<span class="string">'GET'</span>)</span><br><span class="line">response = urllib.request.urlopen(Request)</span><br><span class="line"></span><br><span class="line">print(response.status)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>设置请求的超时</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    response = urllib.request.urlopen(<span class="string">'http://httpbin.org/get'</span>,timeout=<span class="number">0.1</span>)</span><br><span class="line">    ret = str(response.read(), encoding=<span class="string">'utf-8'</span>)</span><br><span class="line">    print(ret)</span><br><span class="line"><span class="keyword">except</span> urllib.error.URLError <span class="keyword">as</span> e:</span><br><span class="line">    <span class="keyword">import</span> socket</span><br><span class="line">    <span class="keyword">if</span> isinstance(e.reason,socket.timeout):</span><br><span class="line">        print(<span class="string">'request timeout'</span>)</span><br></pre></td></tr></table></figure>
+<h3 id="response"><a href="#response" class="headerlink" title="response"></a>response</h3><ul>
+<li>获得响应码，响应头信息</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">response = urllib.request.urlopen(<span class="string">'http://httpbin.org/get'</span>)</span><br><span class="line">print(response.status)</span><br><span class="line">print(response.getheaders())</span><br><span class="line">print(response.getheader(<span class="string">'Server'</span>))</span><br><span class="line">ret = str(response.read(), encoding=<span class="string">'utf-8'</span>)</span><br></pre></td></tr></table></figure>
+<h3 id="Request"><a href="#Request" class="headerlink" title="Request"></a>Request</h3><p>Request 子类，它能够构造一个请求，自定义请求头信息，和请求体的 POST 表单信息。</p>
+<ul>
+<li>自定义请求头，POST表单，构造请求</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">url = <span class="string">'http://httpbin.org/post'</span></span><br><span class="line"></span><br><span class="line">headers = &#123;</span><br><span class="line">    <span class="string">'User-Agent'</span>:<span class="string">'Mozilla/5.0 (iPhone; U; CPU iPhone OS 4_3_3 like Mac OS X; en-us) AppleWebKit/533.17.9 (KHTML, like Gecko) Version/5.0.2 Mobile/8J2 Safari/6533.18.5'</span>,</span><br><span class="line">    <span class="string">'Host'</span>:<span class="string">'httpbin.org'</span>,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">data = &#123;</span><br><span class="line">    <span class="string">'hello'</span>: <span class="string">'world'</span>,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">body = bytes(urllib.parse.urlencode(data), encoding=<span class="string">'utf-8'</span>)</span><br><span class="line">Request = urllib.request.Request(url=url, data=body, headers=headers, method=<span class="string">'POST'</span>)</span><br><span class="line"></span><br><span class="line">response = urllib.request.urlopen(Request)</span><br><span class="line"></span><br><span class="line">print(response.status)</span><br><span class="line">print(response.getheaders())</span><br><span class="line">ret = str(response.read(), encoding=<span class="string">'utf-8'</span>)</span><br><span class="line">print(ret)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>Request 类的 add_header 方法，可以向构造的请求添加头信息。</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">url = <span class="string">'http://httpbin.org/post'</span></span><br><span class="line">data = &#123;<span class="string">'hello'</span>: <span class="string">'world'</span>,&#125;</span><br><span class="line">header = (<span class="string">'User-Agent'</span>,<span class="string">'Mozilla/5.0 (iPhone; U; CPU iPhone OS 4_3_3 like Mac OS X; en-us) AppleWebKit/533.17.9 (KHTML, like Gecko) Version/5.0.2 Mobile/8J2 Safari/6533.18.5'</span>)</span><br><span class="line"></span><br><span class="line">body = bytes(urllib.parse.urlencode(data), encoding=<span class="string">'utf-8'</span>)</span><br><span class="line">Request = urllib.request.Request(url=url, data=body, method=<span class="string">'POST'</span>)</span><br><span class="line">Request.add_header(*header)</span><br><span class="line"></span><br><span class="line">response = urllib.request.urlopen(Request)</span><br><span class="line"></span><br><span class="line">print(response.status)</span><br><span class="line">print(response.getheaders())</span><br><span class="line">ret = str(response.read(), encoding=<span class="string">'utf-8'</span>)</span><br><span class="line">print(ret)</span><br></pre></td></tr></table></figure>
+<h3 id="Handler"><a href="#Handler" class="headerlink" title="Handler"></a>Handler</h3><ul>
+<li>设置请求线路代理，本机需要安装代理线路程序，例如：监听在 9743。</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">ips = &#123;</span><br><span class="line">    <span class="string">'http'</span>:<span class="string">'http://127.0.0.1:9743'</span>,</span><br><span class="line">    <span class="string">'https'</span>:<span class="string">'https://127.0.0.1:9743'</span>,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">proxy_handler = urllib.request.ProxyHandler(ips)</span><br><span class="line">opener = urllib.request.build_opener(proxy_handler)</span><br><span class="line">response = opener.open(<span class="string">'http://www.baidu.com'</span>)</span><br><span class="line">ret = str(response.read(), encoding=<span class="string">'utf-8'</span>)</span><br><span class="line">print(ret)</span><br></pre></td></tr></table></figure>
+<h3 id="HTTPCookieProcessor"><a href="#HTTPCookieProcessor" class="headerlink" title="HTTPCookieProcessor"></a>HTTPCookieProcessor</h3><ul>
+<li>使用 Mozilla 类型 Cookie</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># --- 在本地保存为 MozillaCookiejar</span></span><br><span class="line">filename = <span class="string">'cookie.txt'</span></span><br><span class="line">cookie = http.cookiejar.MozillaCookieJar(filename)</span><br><span class="line">handler = urllib.request.HTTPCookieProcessor(cookie)</span><br><span class="line">opener = urllib.request.build_opener(handler)</span><br><span class="line"></span><br><span class="line">response = opener.open(<span class="string">'https://baidu.com'</span>)</span><br><span class="line">cookie.save(ignore_discard=<span class="keyword">True</span>,ignore_expires=<span class="keyword">True</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># --- 使用本地已有的 Cookie 请求</span></span><br><span class="line">cookie = http.cookiejar.MozillaCookieJar()</span><br><span class="line">cookie.load(<span class="string">'cookie.txt'</span>,ignore_discard=<span class="keyword">True</span>,ignore_expires=<span class="keyword">True</span>)</span><br><span class="line">handler = urllib.request.HTTPCookieProcessor(cookie)</span><br><span class="line">opener = urllib.request.build_opener(handler)</span><br><span class="line"></span><br><span class="line">response = opener.open(<span class="string">'https://baidu.com'</span>)</span><br><span class="line"></span><br><span class="line">ret = str(response.read(), encoding=<span class="string">'utf-8'</span>)</span><br><span class="line">print(ret)</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>使用 LWP 类型 Cookie</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">--- Cookie 在本地保存为 LWPCookiejar</span><br><span class="line">filename = <span class="string">'cookie.txt'</span></span><br><span class="line">cookie = http.cookiejar.LWPCookieJar(filename)</span><br><span class="line">handler = urllib.request.HTTPCookieProcessor(cookie)</span><br><span class="line">opener = urllib.request.build_opener(handler)</span><br><span class="line"></span><br><span class="line">response = opener.open(<span class="string">'https://baidu.com'</span>)</span><br><span class="line">cookie.save(ignore_discard=<span class="keyword">True</span>,ignore_expires=<span class="keyword">True</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">--- Cookie 使用本地已有的 Cookie 请求</span><br><span class="line">cookie = http.cookiejar.LWPCookieJar()</span><br><span class="line">cookie.load(<span class="string">'cookie.txt'</span>,ignore_discard=<span class="keyword">True</span>,ignore_expires=<span class="keyword">True</span>)</span><br><span class="line">handler = urllib.request.HTTPCookieProcessor(cookie)</span><br><span class="line">opener = urllib.request.build_opener(handler)</span><br><span class="line"></span><br><span class="line">response = opener.open(<span class="string">'https://baidu.com'</span>)</span><br><span class="line"></span><br><span class="line">ret = str(response.read(), encoding=<span class="string">'utf-8'</span>)</span><br><span class="line">print(ret)</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="urllib-error"><a href="#urllib-error" class="headerlink" title="urllib.error"></a>urllib.error</h2><p>异常分为两个字类：URLError 它只有 reason，而它的子类 HTTPError 有 reason code headers 属性。</p>
+<ul>
+<li>URLError</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    response = urllib.request.urlopen(<span class="string">'http://httpbin.org/test.html'</span>)</span><br><span class="line">    ret = str(response.read(), encoding=<span class="string">'utf-8'</span>)</span><br><span class="line">    print(ret)</span><br><span class="line"><span class="keyword">except</span> urllib.error.URLError <span class="keyword">as</span> e:</span><br><span class="line">    print(e.reason)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>HTTPError</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    response = urllib.request.urlopen(<span class="string">'http://httpbin.org/test.html'</span>)</span><br><span class="line">    ret = str(response.read(), encoding=<span class="string">'utf-8'</span>)</span><br><span class="line">    print(ret)</span><br><span class="line"><span class="keyword">except</span> urllib.error.HTTPError <span class="keyword">as</span> e:</span><br><span class="line">    print(e.reason,e.code,e.headers,sep=<span class="string">'\n'</span>)</span><br><span class="line"><span class="keyword">except</span> urllib.error.URLError <span class="keyword">as</span> e:</span><br><span class="line">    print(e.reason)</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    print(<span class="string">'Requet Successfuly'</span>)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>异常原因的判断</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    response = urllib.request.urlopen(<span class="string">'http://httpbin.org/get'</span>,timeout=<span class="number">0.1</span>)</span><br><span class="line">    ret = str(response.read(), encoding=<span class="string">'utf-8'</span>)</span><br><span class="line">    print(ret)</span><br><span class="line"><span class="keyword">except</span> urllib.error.URLError <span class="keyword">as</span> e:</span><br><span class="line">    <span class="keyword">import</span> socket</span><br><span class="line">    <span class="keyword">if</span> isinstance(e.reason,socket.timeout):</span><br><span class="line">        print(<span class="string">'request timeout'</span>)</span><br></pre></td></tr></table></figure>
+<h2 id="urllib-parse"><a href="#urllib-parse" class="headerlink" title="urllib.parse"></a>urllib.parse</h2><p>封装了对URL地址的处理，能对URL地址进行拆分，和拼接，等操作。</p>
+<h3 id="urlparse"><a href="#urlparse" class="headerlink" title="urlparse"></a>urlparse</h3><ul>
+<li>urlparse 将分解 url</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">ret = urllib.parse.urlparse(<span class="string">'https://www.baidu.com/index.html;user?id=5#conetnt'</span>)</span><br><span class="line">print(ret)</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">ParseResult(scheme=<span class="string">'https'</span>, netloc=<span class="string">'www.baidu.com'</span>, path=<span class="string">'/index.html'</span>, params=<span class="string">'user'</span>, query=<span class="string">'id=5'</span>, fragment=<span class="string">'conetnt'</span>)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>指定URL中的协议部分，原始协议信息优先级最高，如果原始信息没有协议的信息，则使用 scheme。</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">ret = urllib.parse.urlparse(<span class="string">'http://www.baidu.com/index.html;user?id=5#conetnt'</span>,scheme=<span class="string">'https'</span>)</span><br><span class="line">print(ret)</span><br><span class="line">ret = urllib.parse.urlparse(<span class="string">'www.baidu.com/index.html;user?id=5#conetnt'</span>,scheme=<span class="string">'https'</span>)</span><br><span class="line">print(ret)</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">ParseResult(scheme=<span class="string">'http'</span>, netloc=<span class="string">'www.baidu.com'</span>, path=<span class="string">'/index.html'</span>, params=<span class="string">'user'</span>, query=<span class="string">'id=5'</span>, fragment=<span class="string">'conetnt'</span>)</span><br><span class="line">ParseResult(scheme=<span class="string">'https'</span>, netloc=<span class="string">''</span>, path=<span class="string">'www.baidu.com/index.html'</span>, params=<span class="string">'user'</span>, query=<span class="string">'id=5'</span>, fragment=<span class="string">'conetnt'</span>)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>指定是否解析锚点信息为锚点</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">ret = urllib.parse.urlparse(<span class="string">'http://www.baidu.com/index.html;user?id=5#conetnt'</span>,allow_fragments=<span class="keyword">False</span>)</span><br><span class="line">print(ret)</span><br><span class="line">ret = urllib.parse.urlparse(<span class="string">'http://www.baidu.com/index.html#conetnt'</span>,allow_fragments=<span class="keyword">False</span>)</span><br><span class="line">print(ret)</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">ParseResult(scheme=<span class="string">'http'</span>, netloc=<span class="string">'www.baidu.com'</span>, path=<span class="string">'/index.html'</span>, params=<span class="string">'user'</span>, query=<span class="string">'id=5#conetnt'</span>, fragment=<span class="string">''</span>)</span><br><span class="line">ParseResult(scheme=<span class="string">'http'</span>, netloc=<span class="string">'www.baidu.com'</span>, path=<span class="string">'/index.html#conetnt'</span>, params=<span class="string">''</span>, query=<span class="string">''</span>, fragment=<span class="string">''</span>)</span><br></pre></td></tr></table></figure>
+<h3 id="urljoin"><a href="#urljoin" class="headerlink" title="urljoin"></a>urljoin</h3><ul>
+<li>组装一个 URL</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">data = [<span class="string">'http'</span>,<span class="string">'www.baidu.com'</span>,<span class="string">'index.html'</span>,<span class="string">'user'</span>,<span class="string">'a=6'</span>,<span class="string">'content'</span>]</span><br><span class="line">print(urllib.parse.urlunparse(data))</span><br></pre></td></tr></table></figure>
+<figure class="highlight"><table><tr><td class="code"><pre><span class="line">http://www.baidu.com/index.html;user?a=6#content</span><br></pre></td></tr></table></figure>
+<ul>
+<li>拼接一个 URL</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">print(urllib.parse.urljoin(<span class="string">'http://www.baidu.com'</span>,<span class="string">'FAQ.html'</span>))</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">http://www.baidu.com/FAQ.html</span><br></pre></td></tr></table></figure>
+<h3 id="urlencode"><a href="#urlencode" class="headerlink" title="urlencode"></a>urlencode</h3><ul>
+<li>转换字典为请求的参数</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">base_url = <span class="string">'http://www.baidu.com/index.html;user?'</span></span><br><span class="line"></span><br><span class="line">params = &#123;</span><br><span class="line">    <span class="string">'name'</span>:<span class="string">'yangjinheng'</span>,</span><br><span class="line">    <span class="string">'age'</span>:<span class="string">'18'</span>,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">args = urllib.parse.urlencode(params)</span><br><span class="line">url = base_url + args</span><br><span class="line"></span><br><span class="line">print(url)</span><br></pre></td></tr></table></figure>
+<figure class="highlight"><table><tr><td class="code"><pre><span class="line">http://www.baidu.com/index.html;user?name=yangjinheng&amp;age=18</span><br></pre></td></tr></table></figure>
 
           
         
@@ -787,7 +708,7 @@
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/22/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/22/">22</a><span class="page-number current">23</span><a class="page-number" href="/page/24/">24</a><span class="space">&hellip;</span><a class="page-number" href="/page/36/">36</a><a class="extend next" rel="next" href="/page/24/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/page/22/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/22/">22</a><span class="page-number current">23</span><a class="page-number" href="/page/24/">24</a><span class="space">&hellip;</span><a class="page-number" href="/page/39/">39</a><a class="extend next" rel="next" href="/page/24/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -835,7 +756,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">72</span>
+                  <span class="site-state-item-count">77</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

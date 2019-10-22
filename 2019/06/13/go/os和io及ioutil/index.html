@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="OS 包介绍 Go 语言标准库 os 包提供了不依赖平台的操作系统接口 设计为 Unix 风格的，而错误处理是 Go 风格的，失败的调用会返回错误值而非错误码，通常错误值里包含更多信息。  OS 包的功能  os/exec      负责执行外部命令os/signal    对输入信息的访问os/user      通过名称或 ID 查询用户账户 execexec 包执行外部命令。它包装了os.S">
+<meta property="og:type" content="article">
+<meta property="og:title" content="go 标准库之 os ioutil">
+<meta property="og:url" content="https://yangjinheng.github.io/2019/06/13/go/os和io及ioutil/index.html">
+<meta property="og:site_name" content="默默">
+<meta property="og:description" content="OS 包介绍 Go 语言标准库 os 包提供了不依赖平台的操作系统接口 设计为 Unix 风格的，而错误处理是 Go 风格的，失败的调用会返回错误值而非错误码，通常错误值里包含更多信息。  OS 包的功能  os/exec      负责执行外部命令os/signal    对输入信息的访问os/user      通过名称或 ID 查询用户账户 execexec 包执行外部命令。它包装了os.S">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-10-22T04:05:30.955Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="go 标准库之 os ioutil">
+<meta name="twitter:description" content="OS 包介绍 Go 语言标准库 os 包提供了不依赖平台的操作系统接口 设计为 Unix 风格的，而错误处理是 Go 风格的，失败的调用会返回错误值而非错误码，通常错误值里包含更多信息。  OS 包的功能  os/exec      负责执行外部命令os/signal    对输入信息的访问os/user      通过名称或 ID 查询用户账户 execexec 包执行外部命令。它包装了os.S">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://yangjinheng.github.io/2019/06/13/go/os和io及ioutil/">
+
+
+
+
+
+  <title>go 标准库之 os ioutil | 默默</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?be46574a10a6c2b7f67e9c32a008cbd5";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">默默</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-前端知识">
+          <a href="/categories/web/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-asterisk"></i> <br>
+            
+            前端知识
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-kubernetes">
+          <a href="/categories/Kubernetes/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-cog"></i> <br>
+            
+            Kubernetes
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-运维笔记">
+          <a href="/categories/运维笔记/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-sitemap"></i> <br>
+            
+            运维笔记
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-python">
+          <a href="/categories/Python/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-laptop"></i> <br>
+            
+            Python
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-golang">
+          <a href="/categories/golang/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br>
+            
+            Golang
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-个人日志">
+          <a href="/categories/个人日志/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-github-alt"></i> <br>
+            
+            个人日志
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://yangjinheng.github.io/2019/06/13/go/os和io及ioutil/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Jin Heng">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="默默">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">go 标准库之 os ioutil</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-06-13T00:00:00+08:00">
+                2019-06-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/golang/" itemprop="url" rel="index">
+                    <span itemprop="name">golang</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>OS 包介绍</p>
+<p>Go 语言标准库 os 包提供了不依赖平台的操作系统接口</p>
+<p>设计为 Unix 风格的，而错误处理是 Go 风格的，失败的调用会返回错误值而非错误码，通常错误值里包含更多信息。</p>
+<ol>
+<li>OS 包的功能</li>
+</ol>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line">os/exec      负责执行外部命令</span><br><span class="line">os/signal    对输入信息的访问</span><br><span class="line">os/user      通过名称或 ID 查询用户账户</span><br></pre></td></tr></table></figure>
+<h2 id="exec"><a href="#exec" class="headerlink" title="exec"></a>exec</h2><p>exec 包执行外部命令。它包装了os.StartProcess函数以便更容易的修正输入和输出，使用管道连接I/O，以及作其它的一些调整。 </p>
+<h2 id="Cmd-对象"><a href="#Cmd-对象" class="headerlink" title="Cmd 对象"></a>Cmd 对象</h2><p>Cmd 代表一个正在准备或者在执行中的外部命令。 </p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">type</span> Cmd <span class="keyword">struct</span> &#123;</span><br><span class="line">    Path <span class="keyword">string</span>      <span class="comment">// Path 要执行的命令的路径，该字段不能为空，如为相对路径会相对于 Dir 字段。</span></span><br><span class="line">    Args []<span class="keyword">string</span>    <span class="comment">// Args 表示命令参数，命令名称是第一个参数，没有则表示无参，一般会用 Command 函数设定 Path 和 Args。</span></span><br><span class="line">    Env []<span class="keyword">string</span>     <span class="comment">// Env 指定进程的环境，如为 nil，则是在当前进程的环境下执行。</span></span><br><span class="line">    Dir <span class="keyword">string</span>       <span class="comment">// Dir 指定命令的工作目录。如为空字符串，会在调用者的进程当前目录下执行。</span></span><br><span class="line">    Stdin io.Reader  <span class="comment">// Stdin指定进程的标准输入，如为 nil，进程会从空设备读取（os.DevNull）</span></span><br><span class="line">    Stdout io.Writer  <span class="comment">// 标准输出 和 标准错误输出，如果任一个为 nil，Run 方法会将对应的文件描述符关联到空设备（os.DevNull）</span></span><br><span class="line">    Stderr io.Writer  <span class="comment">// 如果两个字段相同，同一时间最多有一个线程可以写入。</span></span><br><span class="line">    <span class="comment">// ExtraFiles 指定额外被新进程继承的已打开文件流，不包括标准输入、标准输出、标准错误输出。</span></span><br><span class="line">    <span class="comment">// 如果本字段非nil，entry i会变成文件描述符 3+i。</span></span><br><span class="line">    <span class="comment">//</span></span><br><span class="line">    <span class="comment">// <span class="doctag">BUG:</span> 在OS X 10.6系统中，子进程可能会继承不期望的文件描述符。</span></span><br><span class="line">    <span class="comment">// http://golang.org/issue/2603</span></span><br><span class="line">    ExtraFiles []*os.File</span><br><span class="line">    <span class="comment">// SysProcAttr保管可选的、各操作系统特定的sys执行属性。</span></span><br><span class="line">    <span class="comment">// Run方法会将它作为os.ProcAttr的Sys字段传递给os.StartProcess函数。</span></span><br><span class="line">    SysProcAttr *syscall.SysProcAttr</span><br><span class="line">    <span class="comment">// Process是底层的，只执行一次的进程。</span></span><br><span class="line">    Process *os.Process</span><br><span class="line">    <span class="comment">// ProcessState包含一个已经存在的进程的信息，只有在调用Wait或Run后才可用。</span></span><br><span class="line">    ProcessState *os.ProcessState</span><br><span class="line">    <span class="comment">// 内含隐藏或非导出字段</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="command"><a href="#command" class="headerlink" title="command"></a>command</h3><p>Command 方法返回 Cmd struct 以使用给定参数执行命名程序，返回值只设定了 Cmd 的 Path 和 Args 两个参数，如果 name 不含路径分隔符，则尝试使用 LookPath 获取完整路径，否则直接使用 name 作为路径，name 始终解析为命令的名称，arg 始终是参数。</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Command</span><span class="params">(name <span class="keyword">string</span>, arg ...<span class="keyword">string</span>)</span> *<span class="title">Cmd</span></span></span><br></pre></td></tr></table></figure>
+<h3 id="Output获取命令输出"><a href="#Output获取命令输出" class="headerlink" title="Output获取命令输出"></a>Output获取命令输出</h3><ul>
+<li>执行命令并获取输出，会阻塞等待</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	cmd := exec.Command(<span class="string">"ping"</span>, <span class="string">"-c"</span>, <span class="string">"2"</span>, <span class="string">"baidu.com"</span>)</span><br><span class="line">	result, err := cmd.Output()</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		fmt.Println(err)</span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">	&#125;</span><br><span class="line">	fmt.Println(<span class="keyword">string</span>(result))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="Run运行命令等待完成"><a href="#Run运行命令等待完成" class="headerlink" title="Run运行命令等待完成"></a>Run运行命令等待完成</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">"io/ioutil"</span></span><br><span class="line">	<span class="string">"log"</span></span><br><span class="line">	<span class="string">"os/exec"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="comment">// 执行 PATH 中的命令，不包含 SHELL 内置命令</span></span><br><span class="line">	cmd := exec.Command(<span class="string">"ping"</span>, <span class="string">"-n"</span>, <span class="string">"2"</span>, <span class="string">"baidu.com"</span>)</span><br><span class="line">	<span class="comment">// 获取输出对象，可以从该对象中读取输出结果</span></span><br><span class="line">	stdout, err := cmd.StdoutPipe()</span><br><span class="line">	<span class="comment">// 保证关闭输出流</span></span><br><span class="line">	<span class="keyword">defer</span> stdout.Close()</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		log.Fatal(err)</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">// 运行命令</span></span><br><span class="line">	<span class="keyword">if</span> err := cmd.Start(); err != <span class="literal">nil</span> &#123;</span><br><span class="line">		log.Fatal(err)</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">// 读取输出结果</span></span><br><span class="line">	opBytes, err := ioutil.ReadAll(stdout)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		log.Fatal(err)</span><br><span class="line">	&#125;</span><br><span class="line">	log.Println(<span class="keyword">string</span>(opBytes))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="user-获取用户信息"><a href="#user-获取用户信息" class="headerlink" title="user 获取用户信息"></a>user 获取用户信息</h2><ol>
+<li>在 os/user 中提供了 User 结构体，表示操作系统用户，源码中的定义是：</li>
+</ol>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">type</span> User <span class="keyword">struct</span> &#123;</span><br><span class="line">    Uid <span class="keyword">string</span>          <span class="comment">// 用户 id</span></span><br><span class="line">    Git <span class="keyword">string</span>          <span class="comment">// 组 id</span></span><br><span class="line">    Username <span class="keyword">string</span>     <span class="comment">// 用户名</span></span><br><span class="line">    Name <span class="keyword">string</span>         <span class="comment">// 所属组名</span></span><br><span class="line">    HomeDir <span class="keyword">string</span>      <span class="comment">// 用户对应家目录</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ol start="3">
+<li>在 os/user 中的 Group 结构体表示用户所属组</li>
+</ol>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">type</span> Group <span class="keyword">struct</span> &#123;</span><br><span class="line">    Gid <span class="keyword">string</span>          <span class="comment">// 组 ID</span></span><br><span class="line">    Name <span class="keyword">string</span>         <span class="comment">// 组名称</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ol start="4">
+<li>整个 os/user 包中内容比较少，提供了两个错误类型和获取当前用户，查找用户</li>
+</ol>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">type</span> UnknownUserError</span><br><span class="line">    <span class="function"><span class="keyword">func</span> <span class="params">(e UnknownUserError)</span> <span class="title">Error</span><span class="params">()</span> <span class="title">string</span></span></span><br><span class="line"><span class="function"><span class="title">type</span> <span class="title">UnknownUserIdError</span></span></span><br><span class="line"><span class="function">    <span class="title">func</span> <span class="params">(e UnknownUserIdError)</span> <span class="title">Error</span><span class="params">()</span> <span class="title">string</span></span></span><br><span class="line"><span class="function"><span class="title">type</span> <span class="title">User</span></span></span><br><span class="line"><span class="function">    <span class="title">func</span> <span class="title">Current</span><span class="params">()</span> <span class="params">(*User,error)</span>                  // 获取当前登录用户，返回对象和错误</span></span><br><span class="line"><span class="function">    <span class="title">func</span> <span class="title">Lookup</span><span class="params">(username <span class="keyword">string</span>)</span> <span class="params">(*user, error)</span>   // 根据用户名获取用户，返回对象和错误</span></span><br><span class="line"><span class="function">    <span class="title">func</span> <span class="title">LookupId</span><span class="params">(uid <span class="keyword">string</span>)</span> <span class="params">(*user, error)</span>      // 根据 <span class="title">uid</span> 获取用户，返回对象和错误</span></span><br></pre></td></tr></table></figure>
+<h3 id="user-代码示例"><a href="#user-代码示例" class="headerlink" title="user 代码示例"></a>user 代码示例</h3><ul>
+<li>获取用户的信息</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	user, err := user.Current()</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		fmt.Println(err)</span><br><span class="line">	&#125;</span><br><span class="line">	fmt.Println(user)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="file-文件操作"><a href="#file-文件操作" class="headerlink" title="file 文件操作"></a>file 文件操作</h2><p>使用 os 包对文件或目录进行操作</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">type</span> file <span class="keyword">struct</span> &#123;</span><br><span class="line">	pfd     poll.FD</span><br><span class="line">	name    <span class="keyword">string</span></span><br><span class="line">	dirinfo *dirInfo</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>File 结构体表示操作系统文件（目录）</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">type</span> File <span class="keyword">struct</span> &#123;</span><br><span class="line">    *file</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="文件权限"><a href="#文件权限" class="headerlink" title="文件权限"></a>文件权限</h3><p>文件都是有权限控制的，包含：可读、可写，在 OS 包中 FileMode 表示文件权限，本质是 uint32 ，可取值都以常量形式提供</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">type</span> FileMode <span class="keyword">uint32</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> (</span><br><span class="line">    ModeDir FileMode = <span class="number">1</span> &lt;&lt; (<span class="number">32</span> - <span class="number">1</span> - <span class="literal">iota</span>)</span><br><span class="line">    ModeAppend</span><br><span class="line">    ModeExclusive</span><br><span class="line">    ModeTemporary</span><br><span class="line">    ModeSymlink</span><br><span class="line">    ModeDevice</span><br><span class="line">    ModeNamePipe</span><br><span class="line">    ModeSocker</span><br><span class="line">    ModeSetuid</span><br><span class="line">    ModeSetgid</span><br><span class="line">    ModeCharDevice</span><br><span class="line">    Modesticky</span><br><span class="line">    </span><br><span class="line">    ModeType = ModeDir | Mode Symlink | ModeNamePipe | ModeSocket | ModeDevice</span><br><span class="line">    </span><br><span class="line">    ModePerm FileMode = <span class="number">0777</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<h3 id="文件信息"><a href="#文件信息" class="headerlink" title="文件信息"></a>文件信息</h3><p>FileInfo 是一个 interface 表示文件的信息</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">type</span> FileInfo <span class="keyword">interface</span> &#123;</span><br><span class="line">    Name() <span class="keyword">string</span>          <span class="comment">// 文件的名称</span></span><br><span class="line">    Size() <span class="keyword">int64</span>           <span class="comment">// 文件的大小</span></span><br><span class="line">    Mode() FileMode        <span class="comment">// 文件的权限</span></span><br><span class="line">    ModTime() time.Time    <span class="comment">// 最后修改时间</span></span><br><span class="line">    IsDir() <span class="keyword">bool</span>           <span class="comment">// 是否为目录</span></span><br><span class="line">    Sys() <span class="keyword">interface</span>&#123;&#125;      <span class="comment">// 关于系统资源的操作</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="创建目录"><a href="#创建目录" class="headerlink" title="创建目录"></a>创建目录</h3><p>相对路径：在 Go 语言中相对路径是相对 GOPATH ，也就是项目的根目录</p>
+<ul>
+<li>创建目录</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="comment">// os.Mkdir 创建目录</span></span><br><span class="line">	err := os.Mkdir(<span class="string">"d:/data"</span>, os.ModeDir)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		fmt.Println(<span class="string">"目录创建失败"</span>)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>递归创建目录</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="comment">// os.MkdirAll 递归创建目录</span></span><br><span class="line">	err := os.MkdirAll(<span class="string">"d:/data/data"</span>, os.ModeDir)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		fmt.Println(<span class="string">"目录创建失败"</span>)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="创建文件"><a href="#创建文件" class="headerlink" title="创建文件"></a>创建文件</h3><p>要求创建路径必须存在，如果文件已经存在，则会覆盖</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="comment">// 创建空文件</span></span><br><span class="line">	file, err := os.Create(<span class="string">"d:/yangjinheng.txt"</span>)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		fmt.Println(<span class="string">"目录创建失败"</span>)</span><br><span class="line">	&#125;</span><br><span class="line">	fmt.Println(file)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="重命名"><a href="#重命名" class="headerlink" title="重命名"></a>重命名</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	err := os.Rename(<span class="string">"d:/yangjinheng.txt"</span>, <span class="string">"d:/yangjinheng.md"</span>)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		fmt.Println(<span class="string">"重命名失败"</span>)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="获取文件信息"><a href="#获取文件信息" class="headerlink" title="获取文件信息"></a>获取文件信息</h3><p>Open，表示获取文件或者目录信息</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	f, err := os.Open(<span class="string">"d:/yangjinheng.md"</span>)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		fmt.Println(<span class="string">"打开文件失败"</span>, err)</span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	finfo, err := f.Stat()</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		fmt.Println(<span class="string">"获取文件信息失败"</span>, err)</span><br><span class="line">	&#125;</span><br><span class="line">	fmt.Println(finfo)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="删除文件"><a href="#删除文件" class="headerlink" title="删除文件"></a>删除文件</h3><ul>
+<li>删除一个文件，或者为空的目录</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	err := os.Remove(<span class="string">"d:/yangjinheng.md"</span>)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		fmt.Println(<span class="string">"删除文件失败"</span>, err)</span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>递归删除所有文件</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	err := os.RemoveAll(<span class="string">"d:/dada"</span>)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		fmt.Println(<span class="string">"删除文件失败"</span>, err)</span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="文件流读写"><a href="#文件流读写" class="headerlink" title="文件流读写"></a>文件流读写</h2><h3 id="Reader"><a href="#Reader" class="headerlink" title="Reader"></a>Reader</h3><h3 id="输入流"><a href="#输入流" class="headerlink" title="输入流"></a>输入流</h3><p>流（stream）是应用程序和外部资源进行数据交互的纽带</p>
+<p>流分为输入流和输出流，输出和输出都是相对于程序，把外部数据传入到程序中叫做输入，反之叫输出</p>
+<p>输入流（input stream）输出流（output stream）就是平时所说的 I/O 流</p>
+<p>在 Go 语言标准库 io 包下是 Reader 接口表示输入流，只要实现这个接口就属于输入流</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">type</span> Reader <span class="keyword">interface</span> &#123;</span><br><span class="line">	Read(p []<span class="keyword">byte</span>) (n <span class="keyword">int</span>, err error)  <span class="comment">// 把流中的数据读取到 p 这个切片中，返回长度 n</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>创建字符流</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	r := strings.NewReader(<span class="string">"你好世界"</span>)</span><br><span class="line">	b := <span class="built_in">make</span>([]<span class="keyword">byte</span>, r.Size())</span><br><span class="line">	n, err := r.Read(b)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		fmt.Println(<span class="string">"读取数据流失败"</span>, err)</span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">	&#125;</span><br><span class="line">	fmt.Println(<span class="string">"读取数据长度为"</span>, n)</span><br><span class="line">	fmt.Println(<span class="string">"读取数据内容为"</span>, <span class="keyword">string</span>(b))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="打开文件流"><a href="#打开文件流" class="headerlink" title="打开文件流"></a>打开文件流</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	f, _ := os.Open(<span class="string">"d:/hello.txt"</span>)</span><br><span class="line">	fstat, _ := f.Stat()</span><br><span class="line">	b := <span class="built_in">make</span>([]<span class="keyword">byte</span>, fstat.Size())</span><br><span class="line">	f.Read(b)</span><br><span class="line">	fmt.Println(<span class="keyword">string</span>(b))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="Writer"><a href="#Writer" class="headerlink" title="Writer"></a>Writer</h3><p>输出流就是把程序中的数据写出到外部资源，Go 语言标准库中输出流是 Writer 接口</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">type</span> Writer <span class="keyword">interface</span> &#123;</span><br><span class="line">    write(p []<span class="keyword">byte</span>) (n <span class="keyword">int</span>, err error)    <span class="comment">// p 是一个字节数据切片，它会输出到外部</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>注意：输出流的时候，不要使用 os.Open() 因为这种方式获取的文件是只读的</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	f, err := os.OpenFile(<span class="string">"d:/hello.txt"</span>, os.O_APPEND, <span class="number">066</span>)</span><br><span class="line">	<span class="keyword">defer</span> f.Close()</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		f, _ = os.Create(<span class="string">"d:/hello.txt"</span>)</span><br><span class="line">	&#125;</span><br><span class="line">	f.Write([]<span class="keyword">byte</span>(<span class="string">"hello world"</span>))</span><br><span class="line">	f.WriteString(<span class="string">"\r\n你好世界"</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="ioutil"><a href="#ioutil" class="headerlink" title="ioutil"></a>ioutil</h2><p>ioutil 包下提供了对文件读写的工具函数，通过这些函数快速实现文件的读写操作</p>
+<p>ioutil 包下提供的函数比较少，但是都很方便的函数</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">NopCloser</span><span class="params">(r io.Reader)</span> <span class="title">io</span>.<span class="title">ReadCloser</span></span></span><br><span class="line"><span class="function"><span class="title">func</span> <span class="title">ReadAll</span><span class="params">(r io.Reader)</span> <span class="params">([]<span class="keyword">byte</span>, error)</span>                   // 从流中读取数据为切片</span></span><br><span class="line"><span class="function"><span class="title">func</span> <span class="title">ReadDir</span><span class="params">(dirname <span class="keyword">string</span>)</span> <span class="params">([]os.FileInfo, error)</span>         // 读取目录，返回文件信息</span></span><br><span class="line"><span class="function"><span class="title">func</span> <span class="title">ReadFile</span><span class="params">(filename <span class="keyword">string</span>)</span> <span class="params">([]<span class="keyword">byte</span>, error)</span>              // 直接把文件读取成切片</span></span><br><span class="line"><span class="function"><span class="title">func</span> <span class="title">TempDir</span><span class="params">(dir, prefix <span class="keyword">string</span>)</span> <span class="params">(name <span class="keyword">string</span>, err error)</span></span></span><br><span class="line"><span class="function"><span class="title">func</span> <span class="title">TempFile</span><span class="params">(dir, pattern <span class="keyword">string</span>)</span> <span class="params">(f *os.File, err error)</span></span></span><br><span class="line"><span class="function"><span class="title">func</span> <span class="title">WriteFile</span><span class="params">(filename <span class="keyword">string</span>, data []<span class="keyword">byte</span>, perm os.FileMode)</span> <span class="title">error</span>  // 直接写文件</span></span><br></pre></td></tr></table></figure>
+<h3 id="读取文件内容"><a href="#读取文件内容" class="headerlink" title="读取文件内容"></a>读取文件内容</h3><ol>
+<li>打开完文件后使用 ReadAll 把文件中所有内容都读取为 byte 切片</li>
+</ol>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	f, err := os.Open(<span class="string">"d:/hello.txt"</span>)</span><br><span class="line">	<span class="keyword">defer</span> f.Close()</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		fmt.Println(err)</span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">	&#125;</span><br><span class="line">	b, err := ioutil.ReadAll(f)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		fmt.Println(err)</span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">	&#125;</span><br><span class="line">	fmt.Println(<span class="keyword">string</span>(b))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line">hello world</span><br><span class="line">你好世界</span><br></pre></td></tr></table></figure>
+<ol>
+<li>直接读取文件中的内容</li>
+</ol>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	b, err := ioutil.ReadFile(<span class="string">"d:/hello.txt"</span>)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		fmt.Println(<span class="string">"打开文件出错"</span>, err)</span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">	&#125;</span><br><span class="line">	fmt.Println(<span class="keyword">string</span>(b))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line">hello world</span><br><span class="line">你好世界</span><br></pre></td></tr></table></figure>
+<h3 id="向文件写入内容"><a href="#向文件写入内容" class="headerlink" title="向文件写入内容"></a>向文件写入内容</h3><ol>
+<li>直接使用 WriteFile 函数，注意不是追加模式，而是覆盖，且不存在会直接创建</li>
+</ol>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	err := ioutil.WriteFile(<span class="string">"d:/hello.txt"</span>, []<span class="keyword">byte</span>(<span class="string">"hello world"</span>), <span class="number">0666</span>)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		fmt.Println(err)</span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">	&#125;</span><br><span class="line">	fmt.Println(<span class="string">"数据写入成功"</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="获取目录信息"><a href="#获取目录信息" class="headerlink" title="获取目录信息"></a>获取目录信息</h3><p>可以遍历目录下的文件名</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fi, _ := ioutil.ReadDir(<span class="string">"d:/"</span>)</span><br><span class="line">	<span class="keyword">for</span> _, n := <span class="keyword">range</span> fi &#123;</span><br><span class="line">		fmt.Println(n.Name())</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/06/11/go/1.基本数据结构/" rel="next" title="基础数据结构和语法">
+                <i class="fa fa-chevron-left"></i> 基础数据结构和语法
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/06/20/kubernetes/nfs_client/" rel="prev" title="nfs-client-provisioner 实现 StorageClass">
+                nfs-client-provisioner 实现 StorageClass <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="lv-container" data-id="city" data-uid="MTAyMC80MzE1My8xOTY5OQ=="></div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.jpg" alt="Jin Heng">
+            
+              <p class="site-author-name" itemprop="name">Jin Heng</p>
+              <p class="site-description motion-element" itemprop="description">越努力越幸运</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">77</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/yangjinheng" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:jinhengyang@foxmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#exec"><span class="nav-number">1.</span> <span class="nav-text">exec</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Cmd-对象"><span class="nav-number">2.</span> <span class="nav-text">Cmd 对象</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#command"><span class="nav-number">2.1.</span> <span class="nav-text">command</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Output获取命令输出"><span class="nav-number">2.2.</span> <span class="nav-text">Output获取命令输出</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Run运行命令等待完成"><span class="nav-number">2.3.</span> <span class="nav-text">Run运行命令等待完成</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#user-获取用户信息"><span class="nav-number">3.</span> <span class="nav-text">user 获取用户信息</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#user-代码示例"><span class="nav-number">3.1.</span> <span class="nav-text">user 代码示例</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#file-文件操作"><span class="nav-number">4.</span> <span class="nav-text">file 文件操作</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#文件权限"><span class="nav-number">4.1.</span> <span class="nav-text">文件权限</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#文件信息"><span class="nav-number">4.2.</span> <span class="nav-text">文件信息</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#创建目录"><span class="nav-number">4.3.</span> <span class="nav-text">创建目录</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#创建文件"><span class="nav-number">4.4.</span> <span class="nav-text">创建文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#重命名"><span class="nav-number">4.5.</span> <span class="nav-text">重命名</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#获取文件信息"><span class="nav-number">4.6.</span> <span class="nav-text">获取文件信息</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#删除文件"><span class="nav-number">4.7.</span> <span class="nav-text">删除文件</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#文件流读写"><span class="nav-number">5.</span> <span class="nav-text">文件流读写</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Reader"><span class="nav-number">5.1.</span> <span class="nav-text">Reader</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#输入流"><span class="nav-number">5.2.</span> <span class="nav-text">输入流</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#打开文件流"><span class="nav-number">5.3.</span> <span class="nav-text">打开文件流</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Writer"><span class="nav-number">5.4.</span> <span class="nav-text">Writer</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ioutil"><span class="nav-number">6.</span> <span class="nav-text">ioutil</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#读取文件内容"><span class="nav-number">6.1.</span> <span class="nav-text">读取文件内容</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#向文件写入内容"><span class="nav-number">6.2.</span> <span class="nav-text">向文件写入内容</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#获取目录信息"><span class="nav-number">6.3.</span> <span class="nav-text">获取目录信息</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2017 &mdash; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Jin Heng</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

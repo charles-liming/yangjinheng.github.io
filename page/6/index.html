@@ -250,6 +250,16 @@
         </li>
       
         
+        <li class="menu-item menu-item-golang">
+          <a href="/categories/golang/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br>
+            
+            Golang
+          </a>
+        </li>
+      
+        
         <li class="menu-item menu-item-个人日志">
           <a href="/categories/个人日志/" rel="section">
             
@@ -291,7 +301,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://yangjinheng.github.io/2019/04/11/Linux/etcd/">
+    <link itemprop="mainEntityOfPage" href="https://yangjinheng.github.io/2019/05/12/kubernetes/使用Ceph-RBD-实现动态卷/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Jin Heng">
@@ -310,7 +320,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2019/04/11/Linux/etcd/" itemprop="url">etcd 集群搭建</a></h1>
+                <a class="post-title-link" href="/2019/05/12/kubernetes/使用Ceph-RBD-实现动态卷/" itemprop="url">使用Ceph-RBD-实现动态卷</a></h1>
         
 
         <div class="post-meta">
@@ -322,641 +332,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-04-11T00:00:00+08:00">
-                2019-04-11
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/运维笔记/" itemprop="url" rel="index">
-                    <span itemprop="name">运维笔记</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>Etcd 是 CoreOS 推出的高可用的键值存储系统，主要用于k8s集群的服务发现等，而本身 Etcd 也支持集群模式部署，从而实现自身高可用；</p>
-<ul>
-<li>Etcd 构建自身高可用集群主要有三种形式</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">-   静态发现: 预先已知 Etcd 集群中有哪些节点，在启动时直接指定好 Etcd 的各个 node 节点地址</span><br><span class="line">-   Etcd 动态发现: 通过已有的 Etcd 集群作为数据交互点，然后在扩展新的集群时实现通过已有集群进行服务发现的机制</span><br><span class="line">-   DNS 动态发现: 通过 DNS 查询方式获取其他节点地址信息</span><br></pre></td></tr></table></figure>
-<h2 id="基础概念"><a href="#基础概念" class="headerlink" title="基础概念"></a>基础概念</h2><table>
-<thead>
-<tr>
-<th>关键词</th>
-<th>含义</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Raft</td>
-<td>etcd所采用的保证分布式系统强一致性的算法。</td>
-</tr>
-<tr>
-<td>Node</td>
-<td>一个Raft状态机实例。</td>
-</tr>
-<tr>
-<td>Member</td>
-<td>一个etcd实例。它管理着一个Node，并且可以为客户端请求提供服务。</td>
-</tr>
-<tr>
-<td>Cluster</td>
-<td>由多个Member构成可以协同工作的etcd集群。</td>
-</tr>
-<tr>
-<td>Peer</td>
-<td>对同一个etcd集群中另外一个Member的称呼。</td>
-</tr>
-<tr>
-<td>Client</td>
-<td>向etcd集群发送HTTP请求的客户端。</td>
-</tr>
-<tr>
-<td>WAL</td>
-<td>预写式日志，etcd用于持久化存储的日志格式。</td>
-</tr>
-<tr>
-<td>snapshot</td>
-<td>etcd防止WAL文件过多而设置的快照，存储etcd数据状态。</td>
-</tr>
-<tr>
-<td>Proxy</td>
-<td>etcd的一种模式，为etcd集群提供反向代理服务，提供连接集群任意一个节点对整个集群进行读写操作。</td>
-</tr>
-<tr>
-<td>Leader</td>
-<td>Raft算法中通过竞选而产生的处理所有数据提交的节点。</td>
-</tr>
-<tr>
-<td>Follower</td>
-<td>竞选失败的节点作为Raft中的从属节点，为算法提供强一致性保证。</td>
-</tr>
-<tr>
-<td>Candidate</td>
-<td>当Follower超过一定时间接收不到Leader的心跳时转变为Candidate开始竞选。</td>
-</tr>
-<tr>
-<td>Term</td>
-<td>某个节点成为Leader到下一次竞选时间，称为一个Term。</td>
-</tr>
-<tr>
-<td>Index</td>
-<td>数据项编号。Raft中通过Term和Index来定位数据。</td>
-</tr>
-</tbody>
-</table>
-<h2 id="配置文件选项"><a href="#配置文件选项" class="headerlink" title="配置文件选项"></a>配置文件选项</h2><ul>
-<li>配置文件组织，详见: /etc/etcd/etcd.conf</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#[Member]</span><br><span class="line">....</span><br><span class="line"></span><br><span class="line">#[Clustering]</span><br><span class="line">....</span><br><span class="line"></span><br><span class="line">#[Proxy]</span><br><span class="line">....</span><br><span class="line"></span><br><span class="line">#[Security]</span><br><span class="line">....</span><br><span class="line"></span><br><span class="line">#[Logging]</span><br><span class="line">....</span><br><span class="line"></span><br><span class="line">#[Unsafe]</span><br><span class="line">....</span><br><span class="line"></span><br><span class="line">#[Version]</span><br><span class="line">....</span><br><span class="line"></span><br><span class="line">#[Profiling]</span><br><span class="line">....</span><br><span class="line"></span><br><span class="line">#[Auth]</span><br><span class="line">....</span><br></pre></td></tr></table></figure>
-<ul>
-<li>[Member]</li>
-</ul>
-<table>
-<thead>
-<tr>
-<th>选项</th>
-<th>命令行</th>
-<th>含义</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>ETCD_CORS=””</td>
-<td>–cors</td>
-<td>用于 CORS（跨域资源共享）的逗号分割的 origin 白名单。</td>
-</tr>
-<tr>
-<td>ETCD_DATA_DIR=”/var/lib/etcd/default.etcd”</td>
-<td>–data-dir</td>
-<td>数据的存放目录。</td>
-</tr>
-<tr>
-<td>ETCD_WAL_DIR=””</td>
-<td>–wal-dir</td>
-<td>指定节点的 was 文件的存储目录，若指定了该参数，wal文件会和其他数据文件分开存储。</td>
-</tr>
-<tr>
-<td>ETCD_LISTEN_PEER_URLS=”<a href="http://localhost:2380&quot;" target="_blank" rel="noopener">http://localhost:2380&quot;</a></td>
-<td>–listen-peer-urls</td>
-<td>接收其他 Member 通讯的 URL 列表，域名无效。</td>
-</tr>
-<tr>
-<td>ETCD_LISTEN_CLIENT_URLS=”<a href="http://localhost:2379&quot;" target="_blank" rel="noopener">http://localhost:2379&quot;</a></td>
-<td>–listen-client-urls</td>
-<td>接收客户端请求的地址。</td>
-</tr>
-<tr>
-<td>ETCD_MAX_SNAPSHOTS=”5”</td>
-<td>–max-snapshots</td>
-<td>保持的快照文件的最大数量 (0 表示不限制)。</td>
-</tr>
-<tr>
-<td>ETCD_MAX_WALS=”5”</td>
-<td>–max-wals</td>
-<td>保持的 wal 文件的最大数量 (0 表示不限制)。</td>
-</tr>
-<tr>
-<td>ETCD_NAME=”default”</td>
-<td>–name</td>
-<td>本 Member 的名字。</td>
-</tr>
-<tr>
-<td>ETCD_SNAPSHOT_COUNT=”100000”</td>
-<td>–snapshot-count</td>
-<td>触发快照到硬盘的已提交事务的数量。</td>
-</tr>
-<tr>
-<td>ETCD_HEARTBEAT_INTERVAL=”100”</td>
-<td>–heartbeat-interval</td>
-<td>心跳间隔时间。</td>
-</tr>
-<tr>
-<td>ETCD_ELECTION_TIMEOUT=”1000”</td>
-<td>–election-timeout</td>
-<td>选举的超时时间。</td>
-</tr>
-<tr>
-<td>ETCD_QUOTA_BACKEND_BYTES=”0”</td>
-<td>–quota-backend-bytes</td>
-<td>当后端大小超过给定配额时（0默认为低空间配额），引发警报。</td>
-</tr>
-<tr>
-<td>ETCD_MAX_REQUEST_BYTES=”1572864”</td>
-<td>–max-request-bytes</td>
-<td>服务器将接受的最大客户端请求大小（字节）。</td>
-</tr>
-<tr>
-<td>ETCD_GRPC_KEEPALIVE_MIN_TIME=”5s”</td>
-<td>–grpc-keepalive-min-time</td>
-<td>客户端在ping服务器之前应等待的最短持续时间间隔。</td>
-</tr>
-<tr>
-<td>ETCD_GRPC_KEEPALIVE_INTERVAL=”2h0m0s”</td>
-<td>–grpc-keepalive-interval</td>
-<td>服务器到客户端ping的频率持续时间，以检查连接是否处于活动状态（0表示禁用）。</td>
-</tr>
-<tr>
-<td>ETCD_GRPC_KEEPALIVE_TIMEOUT=”20s”</td>
-<td>–grpc-keepalive-timeout</td>
-<td>关闭非响应连接之前的额外持续等待时间（0表示禁用）。</td>
-</tr>
-</tbody>
-</table>
-<ul>
-<li>[Clustering]</li>
-</ul>
-<table>
-<thead>
-<tr>
-<th>选项</th>
-<th>命令行</th>
-<th>含义</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>ETCD_INITIAL_ADVERTISE_PEER_URLS=”<a href="http://localhost:2380&quot;" target="_blank" rel="noopener">http://localhost:2380&quot;</a></td>
-<td>–initial-advertise-peer-urls</td>
-<td>列出这个Member的伙伴 URL 以便通告给集群的其他Member。</td>
-</tr>
-<tr>
-<td>ETCD_ADVERTISE_CLIENT_URLS=”<a href="http://localhost:2379&quot;" target="_blank" rel="noopener">http://localhost:2379&quot;</a></td>
-<td>–advertise-client-urls</td>
-<td>列出这个 Member 的客户端URL，通告给集群中的其他 Member。这些 URL 可以包含域名。</td>
-</tr>
-<tr>
-<td>ETCD_DISCOVERY=””</td>
-<td>–discovery</td>
-<td>用于启动集群的发现URL。</td>
-</tr>
-<tr>
-<td>ETCD_DISCOVERY_FALLBACK=”proxy”</td>
-<td>–discovery-fallback</td>
-<td>当发现服务失败时的期待行为(“exit” 或 “proxy”). “proxy” 仅支持 v2 API。</td>
-</tr>
-<tr>
-<td>ETCD_DISCOVERY_PROXY=””</td>
-<td>–discovery-proxy</td>
-<td>用于请求到发现服务的 HTTP 代理。</td>
-</tr>
-<tr>
-<td>ETCD_DISCOVERY_SRV=””</td>
-<td>–discovery-srv</td>
-<td>用于启动集群的 DNS srv 域名。</td>
-</tr>
-<tr>
-<td>ETCD_INITIAL_CLUSTER=”default=<a href="http://localhost:2380&quot;" target="_blank" rel="noopener">http://localhost:2380&quot;</a></td>
-<td>–initial-cluster</td>
-<td>为启动初始化集群配置。</td>
-</tr>
-<tr>
-<td>ETCD_INITIAL_CLUSTER_TOKEN=”etcd-cluster”</td>
-<td>–initial-cluster-token</td>
-<td>创建集群的 token，这个值每个集群保持唯一。</td>
-</tr>
-<tr>
-<td>ETCD_INITIAL_CLUSTER_STATE=”new”</td>
-<td>–initial-cluster-state</td>
-<td>设置new为初始静态或DNS引导期间出现的所有Member。如果将此选项设置为existing，则etcd将尝试加入现有群集。</td>
-</tr>
-<tr>
-<td>ETCD_STRICT_RECONFIG_CHECK=”true”</td>
-<td>–strict-reconfig-check</td>
-<td>拒绝将导致法定人数丢失的重配置请求。</td>
-</tr>
-<tr>
-<td>ETCD_ENABLE_V2=”true”</td>
-<td>–enable-v2</td>
-<td>接受etcd V2客户端请求。</td>
-</tr>
-</tbody>
-</table>
-<ul>
-<li>[Proxy]</li>
-</ul>
-<table>
-<thead>
-<tr>
-<th>选项</th>
-<th>命令行</th>
-<th>含义</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>ETCD_PROXY=”off”</td>
-<td>–proxy</td>
-<td>配置etcd以在代理模式下运行。</td>
-</tr>
-<tr>
-<td>ETCD_PROXY_FAILURE_WAIT=”5000”</td>
-<td>–proxy-failure-wait</td>
-<td>在重新考虑代理请求之前，endpoints 将处于失败状态的时间（以毫秒为单位）。</td>
-</tr>
-<tr>
-<td>ETCD_PROXY_REFRESH_INTERVAL=”30000”</td>
-<td>–proxy-refresh-interval</td>
-<td>endpoints 刷新间隔的时间（以毫秒为单位）。</td>
-</tr>
-<tr>
-<td>ETCD_PROXY_DIAL_TIMEOUT=”1000”</td>
-<td>–proxy-dial-timeout</td>
-<td>拨号超时的时间（以毫秒为单位）或0表示禁用超时。</td>
-</tr>
-<tr>
-<td>ETCD_PROXY_WRITE_TIMEOUT=”5000”</td>
-<td>–proxy-write-timeout</td>
-<td>写入超时的时间（以毫秒为单位）或0以禁用超时。</td>
-</tr>
-<tr>
-<td>ETCD_PROXY_READ_TIMEOUT=”0”</td>
-<td>–proxy-read-timeout</td>
-<td>读取超时的时间（以毫秒为单位）或0以禁用超时。</td>
-</tr>
-</tbody>
-</table>
-<ul>
-<li>[Security]</li>
-</ul>
-<table>
-<thead>
-<tr>
-<th>选项</th>
-<th>命令行</th>
-<th>含义</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>ETCD_CERT_FILE=””</td>
-<td>–cert-file</td>
-<td>客户端服务器TLS证书文件的路径。</td>
-</tr>
-<tr>
-<td>ETCD_KEY_FILE=””</td>
-<td>–key-file</td>
-<td>客户端服务器TLS密钥文件的路径。</td>
-</tr>
-<tr>
-<td>ETCD_CLIENT_CERT_AUTH=”false”</td>
-<td>–client-cert-auth</td>
-<td>启用客户端证书验证。</td>
-</tr>
-<tr>
-<td>ETCD_TRUSTED_CA_FILE=””</td>
-<td>–trusted-ca-file</td>
-<td>客户端服务器的路径TLS可信CA证书文件。</td>
-</tr>
-<tr>
-<td>ETCD_AUTO_TLS=”false”</td>
-<td>–auto-tls</td>
-<td>客户端TLS使用生成的证书。</td>
-</tr>
-<tr>
-<td>ETCD_PEER_CERT_FILE=””</td>
-<td>–peer-cert-file</td>
-<td>对等服务器TLS证书文件的路径。这是对等流量的证书，用于服务器和客户端。</td>
-</tr>
-<tr>
-<td>ETCD_PEER_KEY_FILE=””</td>
-<td>–peer-key-file</td>
-<td>对等服务器TLS密钥文件的路径。这是对等流量的关键，用于服务器和客户端。</td>
-</tr>
-<tr>
-<td>ETCD_PEER_CLIENT_CERT_AUTH=”false”</td>
-<td>–peer-client-cert-auth</td>
-<td>启用对等客户端证书验证。</td>
-</tr>
-<tr>
-<td>ETCD_PEER_TRUSTED_CA_FILE=””</td>
-<td>–peer-trusted-ca-file</td>
-<td>对等服务器TLS可信CA文件的路径。</td>
-</tr>
-<tr>
-<td>ETCD_PEER_AUTO_TLS=”false”</td>
-<td>–peer-auto-tls</td>
-<td>Peer TLS使用自动生成的证书。</td>
-</tr>
-</tbody>
-</table>
-<ul>
-<li>[Logging]</li>
-</ul>
-<table>
-<thead>
-<tr>
-<th>选项</th>
-<th>命令行参数</th>
-<th>含义</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>ETCD_DEBUG=”false”</td>
-<td>–debug</td>
-<td>将所有子包的默认日志级别设置为DEBUG。</td>
-</tr>
-<tr>
-<td>ETCD_LOG_PACKAGE_LEVELS=””</td>
-<td>–log-package-levels</td>
-<td>将单个etcd子包设置为特定的日志级别。一个例子是etcdserver=WARNING,security=DEBUG。</td>
-</tr>
-<tr>
-<td>ETCD_LOG_OUTPUT=”default”</td>
-<td>–log-outputs</td>
-<td>指定’stdout’或’stderr’以跳过日志记录，即使在systemd或逗号分隔的输出目标列表下运行也是如此。</td>
-</tr>
-</tbody>
-</table>
-<ul>
-<li>[Unsafe]</li>
-</ul>
-<table>
-<thead>
-<tr>
-<th>选项</th>
-<th>命令行参数</th>
-<th>含义</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>ETCD_FORCE_NEW_CLUSTER=”false”</td>
-<td>–force-new-cluster</td>
-<td>强制创建新的单Member群集。它提交配置更改，强制删除集群中的所有现有Member并添加自身。需要将其设置为还原备份。</td>
-</tr>
-</tbody>
-</table>
-<ul>
-<li>[Version]</li>
-</ul>
-<table>
-<thead>
-<tr>
-<th>选项</th>
-<th>命令行参数</th>
-<th>含义</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>ETCD_VERSION=”false”</td>
-<td>–version</td>
-<td>版本</td>
-</tr>
-<tr>
-<td>ETCD_AUTO_COMPACTION_RETENTION=”0”</td>
-<td>–auto-compaction-retention</td>
-<td>自动压缩用于 mvcc 键值存储的保持力(注：应该指多版本保存)，单位小时。 0 表示关闭自动压缩。</td>
-</tr>
-</tbody>
-</table>
-<ul>
-<li>[Profiling]</li>
-</ul>
-<table>
-<thead>
-<tr>
-<th>选项</th>
-<th>命令行参数</th>
-<th>含义</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>ETCD_ENABLE_PPROF=”false”</td>
-<td>–enable-pprof</td>
-<td>通过HTTP服务器启用运行时分析数据。</td>
-</tr>
-<tr>
-<td>ETCD_METRICS=”basic”</td>
-<td></td>
-</tr>
-</tbody>
-</table>
-<ul>
-<li>[Auth]</li>
-</ul>
-<table>
-<thead>
-<tr>
-<th>选项</th>
-<th>命令行参数</th>
-<th>含义</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>ETCD_AUTH_TOKEN=”simple”</td>
-<td></td>
-</tr>
-</tbody>
-</table>
-<h2 id="静态发现"><a href="#静态发现" class="headerlink" title="静态发现"></a>静态发现</h2><ul>
-<li>集群配置，etcd一般部署集群推荐奇数个节点，推荐的数量为3、5或者7个节点构成一个集群。</li>
-</ul>
-<table>
-<thead>
-<tr>
-<th style="text-align:left">节点</th>
-<th style="text-align:left">地址</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left">node1</td>
-<td style="text-align:left">172.16.100.100</td>
-</tr>
-<tr>
-<td style="text-align:left">node2</td>
-<td style="text-align:left">172.16.100.101</td>
-</tr>
-<tr>
-<td style="text-align:left">node3</td>
-<td style="text-align:left">172.16.100.102</td>
-</tr>
-</tbody>
-</table>
-<ul>
-<li>我自己写的集群启动脚本，注意修改脚本变量声明部分</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 本节点名称</span></span><br><span class="line">MEMBER_NAME=<span class="string">"node2"</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 本节点IP地址</span></span><br><span class="line">MEMBER_IP=<span class="string">"http://172.16.100.101"</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 集群成员地址</span></span><br><span class="line">CLUSTER_MEMBER=<span class="string">"node1=http://172.16.100.100:2380,node2=http://172.16.100.101:2380,node3=http://172.16.100.102:2380"</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">cd</span> $(dirname $(readlink -f <span class="variable">$0</span>))</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="title">start</span></span>() &#123;</span><br><span class="line">    nohup ./etcd --name <span class="variable">$MEMBER_NAME</span> \</span><br><span class="line">    --initial-advertise-peer-urls <span class="variable">$MEMBER_IP</span>:2380 \</span><br><span class="line">    --listen-peer-urls <span class="variable">$MEMBER_IP</span>:2380 \</span><br><span class="line">    --listen-client-urls http://0.0.0.0:2379 \</span><br><span class="line">    --advertise-client-urls <span class="variable">$MEMBER_IP</span>:2379 \</span><br><span class="line">    --initial-cluster-token etcd-cluster-1 \</span><br><span class="line">    --initial-cluster <span class="variable">$CLUSTER_MEMBER</span> \</span><br><span class="line">    --initial-cluster-state new \</span><br><span class="line">    --<span class="built_in">log</span>-output <span class="string">'stdout'</span> &amp;&gt;log.log &amp;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="title">stop</span></span>() &#123;</span><br><span class="line">    <span class="built_in">kill</span> -15 `pidof etcd`</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="title">status</span></span>() &#123;</span><br><span class="line">    ./etcdctl member list</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">case</span> <span class="string">"<span class="variable">$1</span>"</span> <span class="keyword">in</span></span><br><span class="line">    start)</span><br><span class="line">        start;;</span><br><span class="line">    stop)</span><br><span class="line">        stop;;</span><br><span class="line">    restart)</span><br><span class="line">        stop; sleep 3; start;;</span><br><span class="line">    status)</span><br><span class="line">        status;;</span><br><span class="line">    *)</span><br><span class="line">        <span class="built_in">echo</span> <span class="string">"Usage: <span class="variable">$0</span> &#123;start|stop|restart|status&#125;"</span> ;;</span><br><span class="line"><span class="keyword">esac</span></span><br></pre></td></tr></table></figure>
-<ul>
-<li>官方文档的完整记录</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ etcd --name infra0 --initial-advertise-peer-urls http://10.0.1.10:2380 \</span><br><span class="line">  --listen-peer-urls http://10.0.1.10:2380 \</span><br><span class="line">  --listen-client-urls http://10.0.1.10:2379,http://127.0.0.1:2379 \</span><br><span class="line">  --advertise-client-urls http://10.0.1.10:2379 \</span><br><span class="line">  --initial-cluster-token etcd-cluster-1 \</span><br><span class="line">  --initial-cluster infra0=http://10.0.1.10:2380,infra1=http://10.0.1.11:2380,infra2=http://10.0.1.12:2380 \</span><br><span class="line">  --initial-cluster-state new</span><br><span class="line"></span><br><span class="line">$ etcd --name infra1 --initial-advertise-peer-urls http://10.0.1.11:2380 \</span><br><span class="line">  --listen-peer-urls http://10.0.1.11:2380 \</span><br><span class="line">  --listen-client-urls http://10.0.1.11:2379,http://127.0.0.1:2379 \</span><br><span class="line">  --advertise-client-urls http://10.0.1.11:2379 \</span><br><span class="line">  --initial-cluster-token etcd-cluster-1 \</span><br><span class="line">  --initial-cluster infra0=http://10.0.1.10:2380,infra1=http://10.0.1.11:2380,infra2=http://10.0.1.12:2380 \</span><br><span class="line">  --initial-cluster-state new</span><br><span class="line"></span><br><span class="line">$ etcd --name infra2 --initial-advertise-peer-urls http://10.0.1.12:2380 \</span><br><span class="line">  --listen-peer-urls http://10.0.1.12:2380 \</span><br><span class="line">  --listen-client-urls http://10.0.1.12:2379,http://127.0.0.1:2379 \</span><br><span class="line">  --advertise-client-urls http://10.0.1.12:2379 \</span><br><span class="line">  --initial-cluster-token etcd-cluster-1 \</span><br><span class="line">  --initial-cluster infra0=http://10.0.1.10:2380,infra1=http://10.0.1.11:2380,infra2=http://10.0.1.12:2380 \</span><br><span class="line">  --initial-cluster-state new</span><br></pre></td></tr></table></figure>
-<h2 id="TODO"><a href="#TODO" class="headerlink" title="TODO"></a>TODO</h2>
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://yangjinheng.github.io/2019/03/29/kubernetes/kubernetes简介安装/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Jin Heng">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="默默">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/03/29/kubernetes/kubernetes简介安装/" itemprop="url">Kubernetes入门</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-03-29T00:00:00+08:00">
-                2019-03-29
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-05-12T00:00:00+08:00">
+                2019-05-12
               </time>
             
 
@@ -1017,327 +394,287 @@
       
         
           
-            <h1 id="Kubernetes简介"><a href="#Kubernetes简介" class="headerlink" title="Kubernetes简介"></a>Kubernetes简介</h1><ul>
-<li>学习资料来源</li>
+            <h2 id="StorageClass-Ceph-RBD"><a href="#StorageClass-Ceph-RBD" class="headerlink" title="StorageClass Ceph RBD"></a>StorageClass Ceph RBD</h2><p>实验走通了就懒得记笔记了，简单说下过程：</p>
+<ol>
+<li>搭建一个 Ceph 集群</li>
+<li>在 Ceph 集群中创建一个存储池，供 K8S 的 StorageClass 来申请</li>
+<li>部署 rbd-provisioner（自1.12版本之后必须安装的插件），StorageClass 需要调用它产生实例</li>
+<li>新建 StorageClass 访问 Ceph 的 Secret</li>
+<li>新建 StorageClass 并将 provisioner 指向 ceph.com/rbd</li>
+<li>新建 PersistentVolumeClaim 声明请求存储的大小类型等</li>
+<li>在 POD 中使用 PersistentVolumeClaim 类型的 Volume，并在容器中挂载</li>
+</ol>
+<h3 id="配置-Ceph-储存池"><a href="#配置-Ceph-储存池" class="headerlink" title="配置 Ceph 储存池"></a>配置 Ceph 储存池</h3><ul>
+<li>创建 ceph 存储池</li>
 </ul>
-<p>马哥教育：<a href="https://blog.51cto.com/mageedu" target="_blank" rel="noopener">https://blog.51cto.com/mageedu</a></p>
-<p>马哥Github：<a href="https://github.com/iKubernetes" target="_blank" rel="noopener">https://github.com/iKubernetes</a></p>
-<p>阳明的博客（K8S讲师）：<a href="https://www.qikqiak.com/page/archive/" target="_blank" rel="noopener">https://www.qikqiak.com/page/archive/</a></p>
-<p>宋净超（云原生架构手册）：<a href="https://jimmysong.io/kubernetes-handbook/" target="_blank" rel="noopener">https://jimmysong.io/kubernetes-handbook/</a></p>
-<p>Helm 用户指南：<a href="https://whmzsu.github.io/helm-doc-zh-cn/" target="_blank" rel="noopener">https://whmzsu.github.io/helm-doc-zh-cn/</a></p>
-<p>运维之美：<a href="https://www.hi-linux.com/archive/" target="_blank" rel="noopener">https://www.hi-linux.com/archive/</a></p>
-<h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>kubernetes 是希腊语，翻译过来是：舵手的意思，它的原型是谷歌内部使用 Borg 集群管理系统，可以说是集结了 Borg 设计思想的精华，并且吸收了 Borg 系统中的经验和教训。</p>
-<p>它的目标不仅仅是一个编排系统，而是提供一个规范，可以让你来描述集群的架构，定义服务的最终状态，Kubernetes可以帮你将系统自动地达到和维持在这个状态。Kubernetes作为云原生应用的基石，相当于一个云操作系统，其重要性不言而喻。</p>
-<p>kubernetes 在 2014 年发布了第一个版本，目前开源并托管在 Github 上。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">https://github.com/Kubernetes</span><br></pre></td></tr></table></figure>
-<p>目前，AWS、阿里云、微软云，目前已经原生支持 K8S ，目前已经可以让用户直接部署云原生的服务。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">yum install -y ceph-common                                                                   <span class="comment"># 在所有节点安装 ceph-common</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ceph osd pool create kube 4096                                                               <span class="comment"># 创建 pool</span></span><br><span class="line">ceph osd pool ls                                                                             <span class="comment"># 查看 pool</span></span><br><span class="line"></span><br><span class="line">ceph auth get-or-create client.kube mon <span class="string">'allow r'</span> osd <span class="string">'allow rwx pool=kube'</span> -o /etc/ceph/ceph.client.kube.keyring</span><br><span class="line">ceph auth list                                                                               <span class="comment"># 授权 client.kube 用户访问 kube 这个 pool</span></span><br><span class="line"></span><br><span class="line">scp /etc/ceph/ceph.client.kube.keyring node1:/etc/ceph/                                      <span class="comment"># 将用户 keyring 文件拷贝到各个 ceph 节点</span></span><br><span class="line">scp /etc/ceph/ceph.client.kube.keyring node1:/etc/ceph/</span><br></pre></td></tr></table></figure>
+<h3 id="安装-rbd-provisioner"><a href="#安装-rbd-provisioner" class="headerlink" title="安装 rbd-provisioner"></a>安装 rbd-provisioner</h3><ul>
+<li>1.12 版本后 kube-controller-manager 不再内置 rbd 命令，所以 StorageClass 的 provisioner 而是通过外部的插件来实现</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">https://github.com/kubernetes-incubator/external-storage/tree/master/ceph/rbd/deploy/rbac    <span class="comment"># rbd-provisioner</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git <span class="built_in">clone</span> https://github.com/kubernetes-incubator/external-storage.git                     <span class="comment"># 下载 rbd-provisioner</span></span><br><span class="line">$ cat &gt;&gt;external-storage/ceph/rbd/deploy/rbac/clusterrole.yaml&lt;&lt;EOF                          <span class="comment"># 允许 rbd-provisioner 访问 ceph 的密钥</span></span><br><span class="line">  - apiGroups: [<span class="string">""</span>]</span><br><span class="line">    resources: [<span class="string">"secrets"</span>]</span><br><span class="line">    verbs: [<span class="string">"create"</span>, <span class="string">"get"</span>, <span class="string">"list"</span>, <span class="string">"watch"</span>]</span><br><span class="line">EOF</span><br><span class="line">$ kubectl apply -f external-storage/ceph/rbd/deploy/rbac/                                    <span class="comment"># 安装 rbd-provisioner</span></span><br></pre></td></tr></table></figure>
+<h3 id="使用-StorageClass"><a href="#使用-StorageClass" class="headerlink" title="使用 StorageClass"></a>使用 StorageClass</h3><ul>
+<li>创建 CephX 验证 secret</li>
+</ul>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">https:</span><span class="string">//github.com/kubernetes-incubator/external-storage/tree/master/ceph/rbd/examples</span>       <span class="comment"># rbd-provisioner 使用 ceph rbd 的示例</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Secret</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line"><span class="attr">  name:</span> <span class="string">ceph-admin-secret</span></span><br><span class="line"><span class="attr">  namespace:</span> <span class="string">kube-system</span></span><br><span class="line"><span class="attr">type:</span> <span class="string">"kubernetes.io/rbd"</span></span><br><span class="line"><span class="attr">data:</span></span><br><span class="line">  <span class="comment"># ceph auth get-key client.admin | base64                                                  # 从这个命令中取得 keyring 认证的 base64 密钥串复制到下面</span></span><br><span class="line"><span class="attr">  key:</span> <span class="string">QVFER3U5TmM1NXQ4SlJBQXhHMGltdXCCCCCCUXRvN2tTZ1BENGc9PQ==</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Secret</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line"><span class="attr">  name:</span> <span class="string">ceph-secret</span></span><br><span class="line"><span class="attr">  namespace:</span> <span class="string">kube-system</span></span><br><span class="line"><span class="attr">type:</span> <span class="string">"kubernetes.io/rbd"</span></span><br><span class="line"><span class="attr">data:</span></span><br><span class="line">  <span class="comment"># ceph auth get-key client.kube | base64                                                  # 从这个命令中取得 keyring 认证的 base64 密钥串复制到下面</span></span><br><span class="line"><span class="attr">  key:</span> <span class="string">QVFCcUM5VmNAAAAAAAJBQWR1NUxFNzVKeThiazdUWVhOa3N2UWc9PQ==</span></span><br></pre></td></tr></table></figure>
 <ul>
-<li>有什么优势，为什么值得学</li>
+<li>创建 StorageClass 指向 rbd-provisioner，</li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">- 基于 Borg 系统，设计成熟，开源、且轻量级，简单易学、容易理解；</span><br><span class="line">- 模块化，可插拔，支持钩子，可任意组合，例如：网络组件 flannel，存储插件；</span><br><span class="line">- 故障发现（存活性探针）和自我修复能力（副本数量）、服务滚动升级（就绪探针）和在线扩容（副本数量）；</span><br><span class="line">- 可扩展的资源自动调度机制（多维度的水平自动扩容）、多粒度的资源配额管理能力（资源限制）。</span><br></pre></td></tr></table></figure>
-<h2 id="Master包含组件"><a href="#Master包含组件" class="headerlink" title="Master包含组件"></a>Master包含组件</h2><p>Master 组件提供的集群控制，Master 组件对集群做出全局性决策(例如：调度)等，负责维护集群的目标状态。</p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">StorageClass</span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">storage.k8s.io/v1</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line"><span class="attr">  name:</span> <span class="string">ceph-rbd</span></span><br><span class="line"><span class="attr">provisioner:</span> <span class="string">ceph.com/rbd</span></span><br><span class="line"><span class="attr">parameters:</span></span><br><span class="line"><span class="attr">  monitors:</span> <span class="number">172.16</span><span class="number">.100</span><span class="number">.9</span><span class="string">:6789</span></span><br><span class="line"><span class="attr">  pool:</span> <span class="string">kube</span></span><br><span class="line"><span class="attr">  adminId:</span> <span class="string">admin</span></span><br><span class="line"><span class="attr">  adminSecretName:</span> <span class="string">ceph-admin-secret</span></span><br><span class="line"><span class="attr">  adminSecretNamespace:</span> <span class="string">kube-system</span></span><br><span class="line"><span class="attr">  userId:</span> <span class="string">kube</span></span><br><span class="line"><span class="attr">  userSecretName:</span> <span class="string">ceph-secret</span></span><br><span class="line"><span class="attr">  userSecretNamespace:</span> <span class="string">kube-system</span></span><br><span class="line"><span class="attr">  fsType:</span> <span class="string">ext4</span></span><br><span class="line"><span class="attr">  imageFormat:</span> <span class="string">"2"</span></span><br><span class="line"><span class="attr">  imageFeatures:</span> <span class="string">"layering"</span></span><br></pre></td></tr></table></figure>
 <ul>
-<li>etcd</li>
+<li>创建 PersistentVolumeClaim</li>
 </ul>
-<p>用于 Kubernetes 的后端数据存储，所有集群数据都存储在此处</p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">PersistentVolumeClaim</span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line"><span class="attr">  name:</span> <span class="string">ceph-rbd-pvc</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line"><span class="attr">  storageClassName:</span> <span class="string">ceph-rbd</span></span><br><span class="line"><span class="attr">  accessModes:</span></span><br><span class="line"><span class="bullet">  -</span> <span class="string">ReadWriteOnce</span></span><br><span class="line"><span class="attr">  resources:</span></span><br><span class="line"><span class="attr">    requests:</span></span><br><span class="line"><span class="attr">      storage:</span> <span class="number">1</span><span class="string">Gi</span></span><br></pre></td></tr></table></figure>
 <ul>
-<li>kube-apiserver</li>
+<li>在 POD 中使用 PVC，最后在容器中挂载 PVC。</li>
 </ul>
-<p>对外暴露了 Kubernetes API，它是的 Kubernetes 前端控制层，只有 API Server 会与 etcd 通信，其它模块都必须通过 API Server 访问集群状态。</p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Pod</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line"><span class="attr">  name:</span> <span class="string">ceph-sc-pvc-demo</span></span><br><span class="line"><span class="attr">  namespace:</span> <span class="string">default</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line"><span class="attr">  containers:</span></span><br><span class="line"><span class="attr">  - name:</span> <span class="string">myapp</span></span><br><span class="line"><span class="attr">    image:</span> <span class="string">ikubernetes/myapp:v1</span></span><br><span class="line"><span class="attr">    volumeMounts:</span></span><br><span class="line"><span class="attr">      - name:</span> <span class="string">pvc-volume</span></span><br><span class="line"><span class="attr">        mountPath:</span> <span class="string">/usr/share/nginx/html/</span></span><br><span class="line"><span class="attr">  volumes:</span></span><br><span class="line"><span class="attr">    - name:</span> <span class="string">pvc-volume</span></span><br><span class="line"><span class="attr">      persistentVolumeClaim:</span></span><br><span class="line"><span class="attr">        claimName:</span> <span class="string">ceph-rbd-pvc</span></span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://yangjinheng.github.io/2019/05/02/python/webshell和paramiko/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Jin Heng">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="默默">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/05/02/python/webshell和paramiko/" itemprop="url">webshell和paramiko</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-05-02T00:00:00+08:00">
+                2019-05-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Python/" itemprop="url" rel="index">
+                    <span itemprop="name">Python</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="SSHClient"><a href="#SSHClient" class="headerlink" title="SSHClient"></a>SSHClient</h1><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SSHClient</span> <span class="params">(ClosingContextManager)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span></span><br><span class="line">        self._system_host_keys = HostKeys()</span><br><span class="line">        self._host_keys = HostKeys()</span><br><span class="line">        self._host_keys_filename = <span class="keyword">None</span></span><br><span class="line">        self._log_channel = <span class="keyword">None</span></span><br><span class="line">        self._policy = RejectPolicy()</span><br><span class="line">        self._transport = <span class="keyword">None</span></span><br><span class="line">        self._agent = <span class="keyword">None</span></span><br></pre></td></tr></table></figure>
+<p>SSH 服务器会话的一种高级表示形式。这个类封装了 <code>.Transport</code>, <code>.Channel</code> 和 <code>.SFTPClient</code>，以处理验证和打开通道的大部分方面。一个典型的用例是：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">client = SSHClient()</span><br><span class="line">client.load_system_host_keys()</span><br><span class="line">client.connect(&apos;ssh.example.com&apos;)</span><br><span class="line">stdin, stdout, stderr = client.exec_command(&apos;ls -l&apos;)</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">您可以传递用于身份验证和服务器主机密钥检查的显式重写。默认机制是尝试使用本地密钥文件或 SSH 代理(如果正在运行)。此类的实例可用作上下文管理器。</span><br></pre></td></tr></table></figure>
+<h2 id="load-system-host-keys"><a href="#load-system-host-keys" class="headerlink" title="load_system_host_keys"></a>load_system_host_keys</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">load_system_host_keys</span><span class="params">(self, filename=None)</span>:</span></span><br></pre></td></tr></table></figure>
+<p>从系统(只读)文件加载主机密钥。使用此方法读取的主机密钥不会被 Save_host_keys 保存。此方法可多次调用。</p>
+<p>每个新的主机密钥集将与现有集合并(如果有冲突，则新的替换旧的)。</p>
+<p>如果将 filename 保留为 None，将尝试从 OpenSSH 使用的用户的本地 known hosts 文件中读取密钥，如果无法读取该文件，则不会引发任何例外。这可能只适用于POSIX。</p>
+<p>参数：filename 要读取的文件名，或 None</p>
+<p>异常引发：IOError，如果提供了文件名，但无法读取该文件</p>
+<h2 id="load-host-keys"><a href="#load-host-keys" class="headerlink" title="load_host_keys"></a>load_host_keys</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">load_host_keys</span><span class="params">(self, filename)</span>:</span></span><br></pre></td></tr></table></figure>
+<p>从本地主机密钥文件加载主机密钥。</p>
+<p>使用此方法读取的主机密钥将在通过 load_system_host_keys 加载的键之后进行检查，但将由 Save_host_keys 保存(这样就可以修改它们)。</p>
+<p>缺少的主机密钥策略 .AutoAddPolicy 在连接到先前未知的服务器时将密钥添加到此集合并保存它们。此方法可多次调用。</p>
+<p>每个新的主机密钥集将与现有集合并(如果有冲突，则新的替换旧的)。自动保存时，使用最后一个主机名。</p>
+<p>参数：filename 要读取的文件名</p>
+<p>异常引发：IOError，如果提供了文件名，但无法读取该文件</p>
+<h2 id="save-host-keys"><a href="#save-host-keys" class="headerlink" title="save_host_keys"></a>save_host_keys</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">save_host_keys</span><span class="params">(self, filename)</span>:</span></span><br></pre></td></tr></table></figure>
+<p>将主机密钥保存回文件。</p>
+<p>只有加载了 load_host_keys (加上任何直接添加的) 的主机密钥才会被保存-而不是加载了 load_system_host_keys 的任何主机密钥。</p>
+<p>参数：filename 保存到</p>
+<p>异常引发：IOError 如果无法写入文件</p>
+<h2 id="get-host-keys"><a href="#get-host-keys" class="headerlink" title="get_host_keys"></a>get_host_keys</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_host_keys</span><span class="params">(self)</span>:</span></span><br></pre></td></tr></table></figure>
+<p>获取本地的 .hostkeys 对象。这可用于检查本地主机密钥或更改它们。</p>
+<p>返回值：作为 .host keys 对象的本地主机密钥。</p>
+<h2 id="set-log-channel"><a href="#set-log-channel" class="headerlink" title="set_log_channel"></a>set_log_channel</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">set_log_channel</span><span class="params">(self, name)</span>:</span></span><br></pre></td></tr></table></figure>
+<p>设置日志记录通道。</p>
+<p>默认的是 Paramiko.transport，但是它可以设置为您想要的任何东西。</p>
+<p>参数：name 用于日志记录的新通道名称</p>
+<h2 id="set-missing-host-key-policy"><a href="#set-missing-host-key-policy" class="headerlink" title="set_missing_host_key_policy"></a>set_missing_host_key_policy</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">set_missing_host_key_policy</span><span class="params">(self, policy)</span>:</span></span><br></pre></td></tr></table></figure>
+<p>将策略设置为在没有已知主机密钥的情况下连接到服务器时使用。</p>
+<p>详细的说:</p>
+<p>Policy 是一个 policy class (或其实例)，即 .MissingHostKeyPolicy 的一些子类，如 .RejectPolicy (默认值)、.AutoAddPolicy .WarningPolicy 或用户创建的子类。</p>
+<p>当 host key 出现在客户端对象缓存的主机密钥结构中(由 load_system_host_keys 和 / 或 load_host_keys 操纵的主机密钥)时，主机密钥是已知的。</p>
+<p>参数：.MissingHostKeyPolicy policy 从先前未知的服务器接收主机密钥时要使用的策略</p>
+<h2 id="families-and-addresses"><a href="#families-and-addresses" class="headerlink" title="_families_and_addresses"></a>_families_and_addresses</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">_families_and_addresses</span><span class="params">(self, hostname, port)</span>:</span></span><br></pre></td></tr></table></figure>
+<p>生成准备连接的：地址家族 + IP + 端口</p>
+<p>参数：hostname 要连接到的服务器</p>
+<p>参数：port 要连接到的服务器端口</p>
+<p>返回值：yield 可迭代的 (家族，地址) 的元组</p>
+<h2 id="connect"><a href="#connect" class="headerlink" title="connect"></a>connect</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">connect</span><span class="params">(self, hostname, port=SSH_PORT, username=None, password=None, pkey=None, </span></span></span><br><span class="line"><span class="function"><span class="params">            key_filename=None, timeout=None, allow_agent=True, look_for_keys=True, compress=False, </span></span></span><br><span class="line"><span class="function"><span class="params">            sock=None, gss_auth=False, gss_kex=False, gss_deleg_creds=True, gss_host=None,</span></span></span><br><span class="line"><span class="function"><span class="params">            banner_timeout=None, auth_timeout=None, gss_trust_dns=True, passphrase=None,)</span>:</span></span><br></pre></td></tr></table></figure>
+<p>连接到SSH服务器并对其进行身份验证。服务器的主机密钥将根据系统主机密钥(参见 load_system_host_keys)和任何本地主机密钥(load_host_keys)进行检查。<br>如果在这两组主机密钥中都没有找到服务器的主机名，则使用丢失的主机密钥策略(请参阅set_missing_host_key_policy)。<br>默认策略是拒绝密钥并引发一个 .sshexception。</p>
+<p>身份验证按以下优先顺序进行:</p>
+<ol>
+<li><p>传入的 pkey 或 key_filename (如果有的话)<br> key_filename 可以包含 OpenSSH 公共证书路径和常规私有密钥路径;<br> 当找到以 cert.pub 结尾的文件时，假定它们与私钥匹配，并且将加载这两个组件。(私钥本身不需要在 key_filename 中列出，只需要证书即可。)</p>
+</li>
+<li><p>任何我们可以通过SSH代理找到的密钥</p>
+</li>
+<li><p>可在 ~/.ssh/ 中发现的任何 id_rsa、id_dsa 或 id_ecdsa 密钥<br> 当 OpenSSH-style 的公共证书与现有的此类私钥匹配时(例如，一个拥有 id_rsa 和 id_rsa-cert.pub)，证书将与私钥一起加载，并用于身份验证。</p>
+</li>
+<li><p>如果给定密码，则使用普通用户名/密码验证</p>
+</li>
+</ol>
+<p>如果私钥需要密码来解锁，并且传入了密码，则该密码将用于尝试解锁密钥。</p>
+<p>参数  hostname:        字符串   要连接到的服务器<br>参数  port:            整形     要连接到的服务器端口<br>参数  username:        字符串   进行身份验证的用户名(默认为当前本地用户名)<br>参数  password:        字符串   用于密码认证; 如果没有提供 passphrase ，也可用于私钥解密。<br>参数  passphrase:      字符串   用于解密私钥。<br>参数  pkey:            .PKey   用于身份验证的可选私钥<br>参数  key_filename:    字符串   要尝试验证的可选私钥和/或证书的文件名或文件名列表<br>参数  timeout:         浮点数   TCP连接的可选超时(以秒为单位)<br>参数  allow_agent:     布尔值   设置为 False 以禁用到 SSH 代理的连接<br>参数  look_for_keys:   布尔值   设置为 False 以禁用在 ~/.ssh/ 中搜索可发现的私钥文件<br>参数  compress:        布尔值   设置为 True 打开压缩<br>参数  sock:            socket  一个打开的套接字或类似套接字的对象(如 .Channel)，用于与目标主机通信<br>参数  gss_auth:        布尔值  如果您想使用 GSS-API 身份验证，请使用 True<br>参数  gss_kex:         布尔值  执行 GSS-API 密钥交换和用户身份验证<br>参数  gss_deleg_creds: 布尔值  是否委托 GSS-API 客户端凭据<br>参数  gss_host:        字符串  kerberos 数据库中的目标名称。默认值:主机名<br>参数  gss_trust_dns:   布尔值  指示是否信任 DNS 将连接到的主机的名称安全地规范化(默认为 True)。<br>参数  banner_timeout:  浮点数  可选超时(以秒为单位)，以等待出现 SSH banner。<br>参数  auth_timeout:    浮点数  等待身份验证响应的可选超时(以秒为单位)。</p>
+<h2 id="close"><a href="#close" class="headerlink" title="close"></a>close</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">close</span><span class="params">(self)</span>:</span></span><br></pre></td></tr></table></figure>
+<p>关闭这个 SSHClient 及其底层 . transport。</p>
+<p>警告::</p>
+<p>在某些情况下，如果不这样做，可能会导致 Python 解释器在关闭时挂起(通常是由于竞态条件)。</p>
+<p>当您使用完客户端对象时，最好是 close 它们，而不是依赖于垃圾收集。</p>
+<h2 id="exec-command"><a href="#exec-command" class="headerlink" title="exec_command"></a>exec_command</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">exec_command</span><span class="params">(self, command, bufsize=<span class="number">-1</span>, timeout=None, get_pty=False, environment=None,)</span>:</span></span><br></pre></td></tr></table></figure>
+<p>在 SSH 服务器上执行命令。打开一个新的 .Channel，并执行请求的命令。命令的输入和输出流作为 Python file-like 对象返回，这些对象表示 stdin、stdout 和 stderr。</p>
+<p>参数 command     字符串: 要执行的命令</p>
+<p>参数 bufsize     整形:   解释方式与 Python 中内置的 file() 函数相同。</p>
+<p>参数 timeout     整形:   设置命令的通道超时。见 .Channel.settimeout</p>
+<p>参数 environment 字典:   shell 环境变量的 dict，将合并到远程命令在其中执行的默认环境中。</p>
+<p>​                         警告：服务器可能静默地拒绝某些环境变量；有关详细信息，请参阅 .channel.set_Environment_variable 的警告。</p>
+<p>返回值：执行命令结果的三元组 stdin、stdout 和 stderr</p>
+<p>异常引发 .SSHException – 如果服务器无法执行该命令</p>
+<h2 id="invoke-shell"><a href="#invoke-shell" class="headerlink" title="invoke_shell"></a>invoke_shell</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">invoke_shell</span><span class="params">(self, term=<span class="string">'vt100'</span>, width=<span class="number">80</span>, height=<span class="number">24</span>, width_pixels=<span class="number">0</span>, height_pixels=<span class="number">0</span>, environment=None)</span>:</span></span><br></pre></td></tr></table></figure>
+<p>在 SSH 服务器上启动交互式shell会话。打开一个新的 .Channel 并使用请求的终端类型和大小连接到伪终端。</p>
+<p>参数：term 要模拟的终端类型（例如，vt100）</p>
+<p>参数：width 终端窗口的宽度（以字符为单位）</p>
+<p>参数：height 终端窗口的高度（以字符为单位）</p>
+<p>参数：width_pixels 终端窗口的宽度（以像素为单位）</p>
+<p>参数：height_pixels 终端窗口的高度（以像素为单位）</p>
+<p>参数：environment 命令的环境</p>
+<p>返回值：连接到远程 shell 的新 .Channel</p>
+<p>异常引发：.SSHException  - 如果服务器无法调用shell</p>
+<h2 id="open-sftp"><a href="#open-sftp" class="headerlink" title="open_sftp"></a>open_sftp</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">open_sftp</span><span class="params">(self)</span>:</span></span><br></pre></td></tr></table></figure>
+<p>在SSH服务器上打开一个SFTP会话。</p>
+<p>返回值：一个新的 .SFTPClient 会话对象</p>
+<h2 id="get-transport"><a href="#get-transport" class="headerlink" title="get_transport"></a>get_transport</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_transport</span><span class="params">(self)</span>:</span></span><br></pre></td></tr></table></figure>
+<p>返回此 SSH 连接的基础 <code>.Transport</code> 对象。</p>
+<p>这可以用于执行低级任务，例如打开特定类型的通道。</p>
+<h2 id="key-from-filepath"><a href="#key-from-filepath" class="headerlink" title="_key_from_filepath"></a>_key_from_filepath</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">_key_from_filepath</span><span class="params">(self, filename, klass, password)</span>:</span></span><br></pre></td></tr></table></figure>
+<p>尝试从给定的字符串路径 filename ：</p>
+<p>尝试从给定的字符串路径文件名推导出 .pkey</p>
+<ol>
+<li><p>如果 filename 看来是证书，则加载匹配的私钥。</p>
+</li>
+<li><p>否则，文件名将被假定为私钥，如果存在匹配的公共证书，则将加载它。</p>
+</li>
+</ol>
+<h2 id="auth"><a href="#auth" class="headerlink" title="_auth"></a>_auth</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">_auth</span><span class="params">(self, username, password, pkey, key_filenames, allow_agent, </span></span></span><br><span class="line"><span class="function"><span class="params">        look_for_keys, gss_auth, gss_kex, gss_deleg_creds, gss_host, passphrase,)</span>:</span></span><br></pre></td></tr></table></figure>
+<p>按以下顺序尝试：</p>
 <ul>
-<li>kube-controller-manager</li>
+<li>密钥传入，如果有传入。</li>
+<li>可以通过SSH代理找到任何密钥(如果允许的话)。</li>
+<li>在 ~/.ssh/（如果允许）中可发现的任何 id_rsa、id_dsa 或 id_ecdsa 密钥。</li>
+<li>如果提供了密码，请使用普通用户名/密码。<br>(可能需要密码来解锁私钥(如果 passphrase 也没有给出]，或者用于双因素身份验证(这是必需的)。</li>
 </ul>
-<p>处理集群中常规任务，它是单独的进程，内部包含多个控制器，包含如下控制器</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">- 节点控制器: 当节点移除时，负责注意和响应。</span><br><span class="line">- 副本控制器: 负责维护系统中每个副本控制器对象正确数量的 Pod。</span><br><span class="line">- 端点控制器: 填充 端点(Endpoints) 对象(即连接 Services &amp; Pods)。</span><br><span class="line">- 服务帐户和令牌控制器: 为新的命名空间创建默认帐户和 API 访问令牌</span><br></pre></td></tr></table></figure>
-<ul>
-<li>kube-scheduler</li>
-</ul>
-<p>监视新创建的 Pod 为新创建的 POD 分配合适的 node 节点</p>
-<ul>
-<li>addons（插件）</li>
-</ul>
-<p>插件是实现集群功能的 Pod 和 Service，一般被创建于 kube-system 命名空间。例如：coreDNS</p>
-<p>虽然其他插件并不是必需的，但所有 Kubernetes 集群都应该具有Cluster DNS，许多应用依赖于它，为 Kubernetes 服务提供 DNS 记录，容器启动该后会自动将 DNS 服务器包含在自己的 /etc/resolv.conf 中。</p>
-<h2 id="Nodes包含组件"><a href="#Nodes包含组件" class="headerlink" title="Nodes包含组件"></a>Nodes包含组件</h2><p>Node 节点实际负责实施，也就是运行 POD 的节点，上面运行的组件有</p>
-<ul>
-<li>kubelet</li>
-</ul>
-<p>它监测已经分配给自己的 Pod，为 POD 准备卷，下载 POD 所需的 Secret，下载镜像并运行，进行生命周期探测，上报 POD 和节点状态</p>
-<ul>
-<li>kube-proxy</li>
-</ul>
-<p>通过维护主机上的网络规则并执行连接转发，将 Kubernetes 提供的网络服务代理到每个节点上，实现了Kubernetes服务抽象</p>
-<ul>
-<li>docker</li>
-</ul>
-<p>用于运行容器</p>
-<h1 id="组件和附件"><a href="#组件和附件" class="headerlink" title="组件和附件"></a>组件和附件</h1><h2 id="Controller"><a href="#Controller" class="headerlink" title="Controller"></a>Controller</h2><p>这些控制器分别用于确保不同类型的 POD 资源运行于符合用户所期望的状态。</p>
-<ul>
-<li>RelicationController</li>
-</ul>
-<p>控制同一类 POD 对象的副本数量，实现程序的滚动更新，或者回滚的操作。</p>
-<p>在滚动更新时候，允许临时超出规定的副本数量，</p>
-<ul>
-<li>RelicaSet</li>
-</ul>
-<p>副本集控制器，它不直接使用，它有一个声明式中心控制器 Deployment</p>
-<ul>
-<li>Deployment</li>
-</ul>
-<p>它只能管理无状态的应用，这个控制器，支持二级控制器，例如：HPA（Horizontal Pod Autoscaler，水平 POD 自动伸缩控制器），当负载高的时候，自动启动更多的 POD。</p>
-<ul>
-<li>StatefulSet</li>
-</ul>
-<p>管理有状态的应用</p>
-<ul>
-<li>DaeminSet</li>
-</ul>
-<p>如果需要在每一个 node 上运行一个副本，而不是随意运行</p>
-<ul>
-<li>Job</li>
-</ul>
-<p>运行作业，时间不固定的操作，例如：备份、清理，临时启动一个 POD 来进行备份的任务，运行完成就结束了。</p>
-<p>如果运行时候 JOB 挂了，那么需要重新启动起来，如果运行完成了则不需要再启动了。</p>
-<ul>
-<li>Cronjob</li>
-</ul>
-<p>和周期性作业</p>
-<h2 id="Service"><a href="#Service" class="headerlink" title="Service"></a>Service</h2><p>为客户端提供一个稳定的访问入口，Service 靠标签选择器来关联 POD 的，只要 POD 上有相关的标签，那么就会被 Service 选中，作为 Service 的后端，Service 关联 POD 后会动态探测这个 POD 的 IP 地址和端口，并作为自己调度的后端。</p>
-<p>总的来说客户端请求 Service 由 Service 代理至后端的 POD，所以客户端看到的始终是 Service 的地址。</p>
-<p>K8S 上的 Service 不是一个应用程序，也不是一个组件，它是一个 iptables dnat 规则，或者 ipvs 规则，Service 只是规则，所以是 ping 不通的，但是它的确可以请求。</p>
-<p>Service 作为 k8s 的对象来说，是有名称的，可以通过 Service 的名称解析为 Service 的 IP 地址。</p>
-<ul>
-<li>AddOns</li>
-</ul>
-<p>解析域名是由 DNS 来解析的，为 k8s 中提供域名解析这种基础服务，称之为基础架构 POD 也称为 k8s 附件，所以域名解析的 POD 就是 k8s 中的一种 AddOns。</p>
-<p>而 k8s 中的 dns 附件，是动态的，例如：service 名称发生更改，就会自动触发 dns 中的解析记录的改变，如果手动修改 service 的地址，也会自动触发 DNS 解析记录的改变，所以客户端访问服务时，可以直接访问服务的名称。</p>
-<h2 id="网络模型"><a href="#网络模型" class="headerlink" title="网络模型"></a>网络模型</h2><p>k8s 有三种网络：POD网络、集群网络、节点网络</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">POD网络：所有 POD 处于同一个网络中</span><br><span class="line">集群网络：Service 是一个另外一个网络</span><br><span class="line">节点网络：node 节点也是另外一个网络</span><br></pre></td></tr></table></figure>
-<p>所以，接入外部访问时候，请求首先到达 node 网络，然后 node 网络代理至 service 网络，service 根据 ipvs 规则来转发到 pod 网络中的 pod 上。</p>
-<p>k8s 有三种通信：</p>
-<p>同一个 POD 内的多个容器间的通信，可以直接通过 lo 通信</p>
-<p>POD 与 POD 通信，所有 POD 都处于一个网络，可以跨 node 与另外的 POD 直接通信，因为使用了叠加网络。</p>
-<p>POD 与 Service 通信，</p>
-<h2 id="kube-proxy"><a href="#kube-proxy" class="headerlink" title="kube-proxy"></a>kube-proxy</h2><p>在 node 节点上运行的一个守护进程，它负责随时与 apiserver 进行通信，因为每个 pod 发生变化后需要保存在 apiserver 中，而 apiserver 发生改变后会生成一个通知事件，这个事件可以被任何关联的组件接收到，例如被 kube-proxy 一旦发现某个 service 后端的 pod 地址发生改变，那么就由 kube-proxy 负责在本地将地址写入 iptables 或者 ipvs 规则中。</p>
-<p>所以 service 的管理是靠 kube-proxy 来实现的，当你创建一个 service ，那么就靠 kube-proxy 在每个节点上创建为 iptables 或者 ipvs 规则，每个 service 的变动也需要 kube-proxy 反应到规则上。</p>
-<p>apiserver 需要保存各个 node 信息，它需要保存在 etcd 中。</p>
-<h2 id="etcd"><a href="#etcd" class="headerlink" title="etcd"></a>etcd</h2><p>是一个键值存储的系统，与 redis 很想，但是 etcd 还有一些协调功能是 redis 所不具备的，它还有节点选举等功能，从这个角度来讲 etcd 更像 zookpeer。</p>
-<p>由于整个集群的所有信息都保存在 etcd，所以 etcd 如果宕机，那么整个集群就挂了，因而 etcd 需要做高可用。</p>
-<h2 id="flanel"><a href="#flanel" class="headerlink" title="flanel"></a>flanel</h2><p>托管为 k8s 的附件运行</p>
-<p>node 网络：各节点之间进行通信</p>
-<p>POD 网络：所有 node上的 POD 彼此之间通过叠加，或者直接路由方式通信</p>
-<p>service 网络：由 kube-proxy 负责管控和生成</p>
-<h1 id="入门命令"><a href="#入门命令" class="headerlink" title="入门命令"></a>入门命令</h1><h2 id="kubectl"><a href="#kubectl" class="headerlink" title="kubectl"></a>kubectl</h2><p>kubectl 是 apiserver 的客户端程序，这个客户端程序是通过连接 master 节点上的 apiserver ，实现各种 k8s 对象的增删改查等基本操作，在 k8s 可被管理的对象有很多个</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">基本命令 (初级):</span><br><span class="line">  create         从文件或标准输入创建资源</span><br><span class="line">  expose         获取一个复制控制器，服务，部署或者暴露一个 POD 将其作为新的 Kubernetes 服务公开</span><br><span class="line">  run            创建并运行特定的镜像，创建使用 deployment 或 job 管理的容器</span><br><span class="line">  <span class="built_in">set</span>            设置对象的特定功能</span><br><span class="line"></span><br><span class="line">基本命令 (中级):</span><br><span class="line">  explain        文档或者资源</span><br><span class="line">  get            显示一个或多个资源</span><br><span class="line">  edit           编辑服务器上的资源</span><br><span class="line">  delete         按文件名，标准输入，资源和名称或资源和标签选择器删除资源</span><br><span class="line"></span><br><span class="line">部署命令:</span><br><span class="line">  rollout        管理资源的部署</span><br><span class="line">  scale          为部署设置新大小，ReplicaSet, Replication Controller, Job</span><br><span class="line">  autoscale      自动扩展一个部署, ReplicaSet, 或者 ReplicationController</span><br><span class="line"></span><br><span class="line">群集管理命令:</span><br><span class="line">  certificate    修改证书资源.</span><br><span class="line">  cluster-info   显示群集信息</span><br><span class="line">  top            显示资源（CPU /内存/存储）使用情况。</span><br><span class="line">  cordon         将节点标记为不可调度</span><br><span class="line">  uncordon       将节点标记为可调度</span><br><span class="line">  drain          设定 node 进入维护模式</span><br><span class="line">  taint          更新一个或多个节点上的污点</span><br><span class="line"></span><br><span class="line">故障排除和调试命令:</span><br><span class="line">  describe       显示特定资源或资源组的详细信息</span><br><span class="line">  logs           在容器中打印容器的日志</span><br><span class="line">  attach         附加到正在运行的容器</span><br><span class="line">  <span class="built_in">exec</span>           在容器中执行命令</span><br><span class="line">  port-forward   将一个或多个本地端口转发到 pod</span><br><span class="line">  proxy          运行代理到 Kubernetes API 服务器</span><br><span class="line">  cp             将文件和目录复制到容器，和从容器复制，跨容器复制文件</span><br><span class="line">  auth           检查授权</span><br><span class="line"></span><br><span class="line">高级命令:</span><br><span class="line">  diff           针对将要应用的版本的 Diff 实时版本</span><br><span class="line">  apply          通过文件名或标准输入将配置应用于资源</span><br><span class="line">  patch          使用策略合并补丁更新资源的字段</span><br><span class="line">  replace        用文件名或标准输入替换资源</span><br><span class="line">  <span class="built_in">wait</span>           实验阶段命令：在一个或多个资源上等待特定条件，定义一个触发器</span><br><span class="line">  convert        在不同的API版本之间转换配置文件</span><br><span class="line">  kustomize      从目录或远程 URL 构建 kustomization 目标</span><br><span class="line"></span><br><span class="line">设置命令:</span><br><span class="line">  label          更新资源上的标签</span><br><span class="line">  annotate       更新资源上的注释</span><br><span class="line">  completion     命令补全相关功能</span><br><span class="line"></span><br><span class="line">其他命令:</span><br><span class="line">  api-resources  在服务器上打印支持的API资源</span><br><span class="line">  api-versions   以 <span class="string">"group/version"</span> 的形式在服务器上打印支持的API版本</span><br><span class="line">  config         修改 kubeconfig 文件</span><br><span class="line">  plugin         提供与插件交互的实用程序</span><br><span class="line">  version        打印客户端和服务器版本信息</span><br></pre></td></tr></table></figure>
-<h2 id="run"><a href="#run" class="headerlink" title="run"></a>run</h2><ul>
-<li>创建控制器并运行镜像</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl run nginx --image=nginx:latest    <span class="comment"># 创建一个名为 nginx 的控制器，运行 nginx:latest 版本的镜像</span></span><br></pre></td></tr></table></figure>
-<ul>
-<li>指定运行的 POD 数量</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl run nginx --image=nginx --replicas=5  <span class="comment"># 启动 5 个 POD</span></span><br></pre></td></tr></table></figure>
-<ul>
-<li>不运行容器的默认命令，使用自定义的指令</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl run nginx --image=nginx --<span class="built_in">command</span> -- &lt;cmd&gt; &lt;arg1&gt; ... &lt;argN&gt;</span><br></pre></td></tr></table></figure>
-<ul>
-<li>运行一个周期任务</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl run pi --schedule=<span class="string">"0/5 * * * ?"</span> --image=perl --restart=OnFailure -- perl -Mbignum=bpi -wle <span class="string">'print bpi(2000)'</span></span><br></pre></td></tr></table></figure>
-<h2 id="run示例"><a href="#run示例" class="headerlink" title="run示例"></a>run示例</h2><ul>
-<li>指定控制器名称运行 nginx 指定端口和副本数量，以测试模式运行</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl run nginx-deploy --image=nginx --port=80 --replicas=1 --dry-run=<span class="literal">true</span></span><br></pre></td></tr></table></figure>
-<ul>
-<li>查看容器是否运行</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl get deployment</span><br></pre></td></tr></table></figure>
-<ul>
-<li>查看被调度的主机</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl get pod -o wide</span><br></pre></td></tr></table></figure>
-<ul>
-<li>通过 ip 地址直接访问，由于所有的 POD 处于同一个网络中，所以在集群内部是可以访问的</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">curl 10.244.2.2</span><br></pre></td></tr></table></figure>
-<ul>
-<li>假如现在删除刚创建的这个 POD，那么副本控制器会自动在其他的 node 上重建这个 POD</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl delete pods nginx-deploy-5c9b546997-jsmk6</span><br></pre></td></tr></table></figure>
-<ul>
-<li>再次执行查看，会发现容器已经被调度到其他节点上运行了</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl get pod -o wide</span><br></pre></td></tr></table></figure>
-<h2 id="expose"><a href="#expose" class="headerlink" title="expose"></a>expose</h2><p>现在存在一个问题，就是 POD 的 IP 地址可能随时发生变动，所以不能作为访问的入口，那么就需要 service 来代理 POD 来创建一个固定的端点。</p>
-<ul>
-<li>创建一个 service 暴露一个服务</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl expose deployment nginx-deploy --name=nginx --port=80 --target-port=80 --protocol=TCP</span><br></pre></td></tr></table></figure>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">在控制器 nginx-deploy 上创建名字为 nginx 的 service ，它工作端口为 80，代理的后端容器端口 80，协议为 TCP。</span><br></pre></td></tr></table></figure>
-<ul>
-<li>可以看到刚刚创建的名字为 nginx 的 service ，现在就可以在集群内用 service 的地址来访问了，外部不行</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl get service</span><br></pre></td></tr></table></figure>
-<ul>
-<li>删除一个任务</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl delete deployment nginx-deploy</span><br></pre></td></tr></table></figure>
-<h2 id="coredns"><a href="#coredns" class="headerlink" title="coredns"></a>coredns</h2><p>service 提供了对 pod 的固定访问端点，但是 service 本身的变动我们无法知晓，需要 coredns 对 service 做域名解析。</p>
-<ul>
-<li>查看 coredns 运行状态</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl get pods -n kube-system -o wide</span><br></pre></td></tr></table></figure>
-<ul>
-<li>查看各个 kube-system 命名空间运行的服务，可以看到 kube-dns 运行的 IP 地址</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl get service -n kube-system</span><br></pre></td></tr></table></figure>
-<ul>
-<li>使用 kube-dns 来解析 nginx 这个 service 的地址就可以正常解析了</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">dig -t A nginx.default.svc.cluster.local @10.96.0.10</span><br></pre></td></tr></table></figure>
-<ul>
-<li>创建一个访问 nginx 客户端容器，并进入交互式模式，这个容器默认的 dns 服务器就是 kube-dns 所在的服务器</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl run client --image=busybox --replicas=1 -it --restart=Never</span><br></pre></td></tr></table></figure>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">/ <span class="comment"># cat /etc/resolv.conf </span></span><br><span class="line">nameserver 10.96.0.10                                               <span class="comment"># kube-dns 地址</span></span><br><span class="line">search default.svc.cluster.local svc.cluster.local cluster.local    <span class="comment"># 默认的解析搜索域</span></span><br><span class="line">options ndots:5</span><br></pre></td></tr></table></figure>
-<ul>
-<li>在 busybox 这个容器中请求 nginx 这个域名的 service ，能够正常访问</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">wget -O - -q http://nginx:80/</span><br></pre></td></tr></table></figure>
-<h3 id="模拟-POD-被删除"><a href="#模拟-POD-被删除" class="headerlink" title="模拟 POD 被删除"></a>模拟 POD 被删除</h3><ul>
-<li>现在我们删除 service 后端的 POD ，副本控制器会自动创建新的 POD，而 service 则会自动指向新创建的 POD</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl delete pods nginx-deploy-5c9b546997-4w24n</span><br></pre></td></tr></table></figure>
-<ul>
-<li>查看由副本控制器自动创建的 POD</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl get pods</span><br></pre></td></tr></table></figure>
-<ul>
-<li>在 busybox 这个容器中请求 nginx 这个域名的 service ，访问没有受到影响</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">wget -O - -q http://nginx:80/</span><br></pre></td></tr></table></figure>
-<h3 id="模拟-service-被删除"><a href="#模拟-service-被删除" class="headerlink" title="模拟 service 被删除"></a>模拟 service 被删除</h3><ul>
-<li>当我们删除 service 并且重新建立一个 service 再次查看 service 的地址已经发生变化了</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl delete service nginx</span><br></pre></td></tr></table></figure>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl expose deployment nginx-deploy --name=nginx --port=80 --target-port=80 --protocol=TCP</span><br></pre></td></tr></table></figure>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl get service</span><br></pre></td></tr></table></figure>
-<ul>
-<li>在 busybox 这个容器中请求 nginx 这个域名的 service ，访问没有仍然没有受到影响</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">wget -O - -q http://nginx:80/</span><br></pre></td></tr></table></figure>
-<h2 id="labels"><a href="#labels" class="headerlink" title="labels"></a>labels</h2><p>为什么 Pod 被删除后，servic 仍然能够正确的调度到新的 POD 上，这就是 k8s 的 labels 这个机制来保证的。</p>
-<p>能够使用标签机制不止有 pod、在 k8s 中很多对象都可以使用标签，例如：node、service</p>
-<ul>
-<li>查看 service 的详细信息，会发现标签选择器</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl describe service nginx</span><br></pre></td></tr></table></figure>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">Name:              nginx</span><br><span class="line">Namespace:         default</span><br><span class="line">Labels:            run=nginx-deploy</span><br><span class="line">Annotations:       &lt;none&gt;</span><br><span class="line">Selector:          run=nginx-deploy       <span class="comment"># 这个选择器会自动选中 run 标签，且值为 nginx-deploy 的 POD</span></span><br><span class="line">Type:              ClusterIP</span><br><span class="line">IP:                10.101.149.4</span><br><span class="line">Port:              &lt;<span class="built_in">unset</span>&gt;  80/TCP</span><br><span class="line">TargetPort:        80/TCP</span><br><span class="line">Endpoints:         10.244.2.4:80          <span class="comment"># 当 service 的后端，当 POD 发生变动则立即会更新</span></span><br><span class="line">Session Affinity:  None</span><br><span class="line">Events:            &lt;none&gt;</span><br></pre></td></tr></table></figure>
-<ul>
-<li>查看 POD 的标签，会看到拥有 run=nginx-deploy 标签的容器，而人为删除一个 POD 后，副本控制器创建的副本上的标签不会变化，所以标签又被 service 关联。</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl get pods --show-labels</span><br></pre></td></tr></table></figure>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">NAME                            READY   STATUS    RESTARTS   AGE     LABELS</span><br><span class="line">client                          1/1     Running   0          21m     run=client</span><br><span class="line">nginx-deploy-5c9b546997-kh88w   1/1     Running   0          8m37s   pod-template-hash=5c9b546997,run=nginx-deploy</span><br></pre></td></tr></table></figure>
-<ul>
-<li>查看 POD 的详细信息，也可以查看到 POD 的详细信息</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl describe deployment nginx-deploy</span><br></pre></td></tr></table></figure>
-<ul>
-<li>根据标签过滤，使用 -l 来指定标签名称或同时过滤其值</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl get pods --show-labels -l run=nginx-deploy</span><br></pre></td></tr></table></figure>
-<ul>
-<li>标签选择器集中运算</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">关系与：KEY,KEY、KEY=VALUE2,KEY=VALUE2       <span class="comment"># -l run,app</span></span><br><span class="line">等值关系：KEY = VALUE、KEY != VALUE           <span class="comment"># -l run=nginx-deploy,app!=myapp</span></span><br><span class="line">集合关系：KYE <span class="keyword">in</span>|not <span class="keyword">in</span> (VALUE1,VALUE2)      <span class="comment"># -l "release in (canary,bata,alpha)"</span></span><br></pre></td></tr></table></figure>
-<ul>
-<li>显示指定的标签的值，下面显示了两个标签</li>
-</ul>
-<p>​<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl get pods --show-labels -L run,pod-template-hash</span><br></pre></td></tr></table></figure></p>
-<ul>
-<li>为指定的 POD 打标签，为 client 这个 POD 打上一个 release 标签，其值为 canary</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl label pods client release=canary</span><br></pre></td></tr></table></figure>
-<ul>
-<li>修改 POD 的标签，使用 –overwrite 进行修改原有标签</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl label pods client release=stable --overwrite</span><br></pre></td></tr></table></figure>
-<ul>
-<li>删除指定的 nodes 上的标签，使用标签名称加 - 符号</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl label nodes node2 disktype-</span><br></pre></td></tr></table></figure>
-<ul>
-<li>许多资源支持内嵌字段来定义其使用的标签选择器，例如 service 关联 pod 时候：</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">matchLabels：直接给定键值</span><br><span class="line">matchExpressions：基于给定的表达式来定义使用标签选择器：&#123;key:<span class="string">"KEY"</span>,operator:<span class="string">"OPERATOR"</span>,value:[VAL1,VAL2,...]&#125;</span><br><span class="line">    使用 key 与 value 进行 operator 运算，复合条件的才被选择</span><br><span class="line">    操作符：</span><br><span class="line">    	In、NotIn：其 value 列表必须有值</span><br><span class="line">    	Exists、NotExists：其 value 必须为空</span><br></pre></td></tr></table></figure>
-<ul>
-<li>k8s 中很多对象都可以打标签，例如给 nodes 打一个标记，随后在添加资源时候就可以让资源对节点有倾向性了</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl label nodes node2 disktype=ssd</span><br></pre></td></tr></table></figure>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl get nodes --show-labels</span><br></pre></td></tr></table></figure>
-<h2 id="动态扩容"><a href="#动态扩容" class="headerlink" title="动态扩容"></a>动态扩容</h2><ul>
-<li>扩容一个集群的的 POD，下面命令表示修改 deployment 控制器下的 nginx-deply 容器的副本数量为2</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl scale --replicas=5 deployment nginx-deploy</span><br></pre></td></tr></table></figure>
-<h2 id="滚动升级"><a href="#滚动升级" class="headerlink" title="滚动升级"></a>滚动升级</h2><ul>
-<li>更换 nginx-deploy 这个控制器下的 nginx-deploy 容器镜像为 ikubernetes/myapp:v2</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl <span class="built_in">set</span> image deployment nginx-deploy nginx-deploy=ikubernetes/myapp:v2</span><br></pre></td></tr></table></figure>
-<ul>
-<li>查看更新的过程，直到 5 个容器中运行的镜像全部更新完毕</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl rollout status deployment nginx-deploy</span><br></pre></td></tr></table></figure>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[root@node1 ~]<span class="comment"># kubectl rollout status deployment nginx-deploy</span></span><br><span class="line">Waiting <span class="keyword">for</span> deployment <span class="string">"nginx-deploy"</span> rollout to finish: 3 out of 5 new replicas have been updated...</span><br><span class="line">Waiting <span class="keyword">for</span> deployment <span class="string">"nginx-deploy"</span> rollout to finish: 3 out of 5 new replicas have been updated...</span><br><span class="line">Waiting <span class="keyword">for</span> deployment <span class="string">"nginx-deploy"</span> rollout to finish: 3 out of 5 new replicas have been updated...</span><br><span class="line">Waiting <span class="keyword">for</span> deployment <span class="string">"nginx-deploy"</span> rollout to finish: 3 out of 5 new replicas have been updated...</span><br><span class="line">Waiting <span class="keyword">for</span> deployment <span class="string">"nginx-deploy"</span> rollout to finish: 3 out of 5 new replicas have been updated...</span><br><span class="line">Waiting <span class="keyword">for</span> deployment <span class="string">"nginx-deploy"</span> rollout to finish: 4 out of 5 new replicas have been updated...</span><br><span class="line">Waiting <span class="keyword">for</span> deployment <span class="string">"nginx-deploy"</span> rollout to finish: 4 out of 5 new replicas have been updated...</span><br><span class="line">Waiting <span class="keyword">for</span> deployment <span class="string">"nginx-deploy"</span> rollout to finish: 4 out of 5 new replicas have been updated...</span><br><span class="line">Waiting <span class="keyword">for</span> deployment <span class="string">"nginx-deploy"</span> rollout to finish: 4 out of 5 new replicas have been updated...</span><br><span class="line">Waiting <span class="keyword">for</span> deployment <span class="string">"nginx-deploy"</span> rollout to finish: 4 out of 5 new replicas have been updated...</span><br><span class="line">Waiting <span class="keyword">for</span> deployment <span class="string">"nginx-deploy"</span> rollout to finish: 2 old replicas are pending termination...</span><br><span class="line">Waiting <span class="keyword">for</span> deployment <span class="string">"nginx-deploy"</span> rollout to finish: 2 old replicas are pending termination...</span><br><span class="line">Waiting <span class="keyword">for</span> deployment <span class="string">"nginx-deploy"</span> rollout to finish: 2 old replicas are pending termination...</span><br><span class="line">Waiting <span class="keyword">for</span> deployment <span class="string">"nginx-deploy"</span> rollout to finish: 1 old replicas are pending termination...</span><br><span class="line">Waiting <span class="keyword">for</span> deployment <span class="string">"nginx-deploy"</span> rollout to finish: 1 old replicas are pending termination...</span><br><span class="line">Waiting <span class="keyword">for</span> deployment <span class="string">"nginx-deploy"</span> rollout to finish: 1 old replicas are pending termination...</span><br><span class="line">Waiting <span class="keyword">for</span> deployment <span class="string">"nginx-deploy"</span> rollout to finish: 4 of 5 updated replicas are available...</span><br><span class="line">deployment <span class="string">"nginx-deploy"</span> successfully rolled out</span><br></pre></td></tr></table></figure>
-<ul>
-<li>回滚操作，不指定任何的镜像则为上一个版本的镜像</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl rollout undo deployment nginx-deploy</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>  如果防止更新过程中被调度，那么就需要学习就绪性检测才能实现</p>
-</blockquote>
-<h2 id="集群外访问"><a href="#集群外访问" class="headerlink" title="集群外访问"></a>集群外访问</h2><ul>
-<li>修改 service 的网络类型为 NodePort</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl edit service nginx</span><br></pre></td></tr></table></figure>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">type</span>: ClusterIP -&gt; <span class="built_in">type</span>: NodePort</span><br></pre></td></tr></table></figure>
-<ul>
-<li>查看 service 的信息，发现多了一个 30982 端口</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl get service</span><br></pre></td></tr></table></figure>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">NAME         TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)        AGE</span><br><span class="line">kubernetes   ClusterIP   10.96.0.1      &lt;none&gt;        443/TCP        15h</span><br><span class="line">nginx        NodePort    10.105.27.11   &lt;none&gt;        80:30982/TCP   42m</span><br></pre></td></tr></table></figure>
-<ul>
-<li>在集群外部使用任意的 node IP 地址 + 端口来访问</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">http://172.16.100.101:30982/</span><br></pre></td></tr></table></figure>
-<h2 id="排查日志"><a href="#排查日志" class="headerlink" title="排查日志"></a>排查日志</h2><ul>
-<li>查看一个 pod 的某个容器的运行日志</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl logs pod-demo busybox</span><br></pre></td></tr></table></figure>
-<h2 id="连入-POD-容器"><a href="#连入-POD-容器" class="headerlink" title="连入 POD 容器"></a>连入 POD 容器</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl <span class="built_in">exec</span> -it pod-demo -c myapp -- /bin/sh</span><br></pre></td></tr></table></figure>
-<h2 id="在容器内执行命令"><a href="#在容器内执行命令" class="headerlink" title="在容器内执行命令"></a>在容器内执行命令</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl <span class="built_in">exec</span> myapp-deploy-5fdb5f69f-mg9b6 top</span><br><span class="line">kubectl <span class="built_in">exec</span> myapp-deploy-5fdb5f69f-mg9b6 -- sh -c <span class="string">'TEST="this is a test" ; echo $TEST'</span></span><br></pre></td></tr></table></figure>
-<ul>
-<li>执行复杂命令</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">commands=<span class="string">'</span></span><br><span class="line"><span class="string">export CORE_PEER_LOCALMSPID=Org1MSP</span></span><br><span class="line"><span class="string">export CORE_PEER_ADDRESS=peer0-org1:7051</span></span><br><span class="line"><span class="string">export CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/fabric/msp</span></span><br><span class="line"><span class="string">export CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/msp/tlscacerts/tlsca.org1.qloudchain.com-cert.pem</span></span><br><span class="line"><span class="string">peer channel join --blockpath resources/channel-artifacts/channel.block</span></span><br><span class="line"><span class="string">'</span></span><br><span class="line"></span><br><span class="line">kubectl -n baas <span class="built_in">exec</span> cli-org1-6c5fdf6d97-nh4r4 -- bash -c <span class="string">"<span class="variable">$commands</span>"</span></span><br></pre></td></tr></table></figure>
-<h2 id="查看一个POD的镜像"><a href="#查看一个POD的镜像" class="headerlink" title="查看一个POD的镜像"></a>查看一个POD的镜像</h2><ul>
-<li>参考</li>
-</ul>
-<p><a href="https://kubernetes.io/zh/docs/tasks/access-application-cluster/list-all-running-container-images" target="_blank" rel="noopener">https://kubernetes.io/zh/docs/tasks/access-application-cluster/list-all-running-container-images</a></p>
-<ul>
-<li>go模板</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl get pods peer1st-orga-0 -o go-template --template=<span class="string">'&#123;&#123;range .spec.containers&#125;&#125;&#123;&#123;printf "%s\n" .image&#125;&#125;&#123;&#123;end&#125;&#125;'</span></span><br></pre></td></tr></table></figure>
-<ul>
-<li>json方式</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl get pods nfs-client-provisioner-75bd696897-hm7xf -o jsonpath=<span class="string">'&#123;range .spec.containers[*]&#125;&#123;.image&#125;&#123;"\n"&#125;&#123;end&#125;'</span></span><br></pre></td></tr></table></figure>
-<h2 id="查看一个节点污点"><a href="#查看一个节点污点" class="headerlink" title="查看一个节点污点"></a>查看一个节点污点</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl get nodes 172.16.100.101 -o jsonpath=<span class="string">'&#123;.spec.taints&#125;'</span></span><br></pre></td></tr></table></figure>
-<h2 id="过滤显示结果"><a href="#过滤显示结果" class="headerlink" title="过滤显示结果"></a>过滤显示结果</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl get pods --field-selector status.phase=Running --show-labels --selector app=myapp</span><br></pre></td></tr></table></figure>
-<h2 id="并非所有资源都在命名空间"><a href="#并非所有资源都在命名空间" class="headerlink" title="并非所有资源都在命名空间"></a>并非所有资源都在命名空间</h2><p>大多数 kubernetes 资源（例如 Pod、服务、副本控制器等）都位于某些命名空间中。 但是命名空间资源本身并不在命名空间中。</p>
-<p>而且底层资源，例如<a href="https://v1-12.docs.kubernetes.io/docs/admin/node" target="_blank" rel="noopener">节点</a>和持久化卷不属于任何命名空间。</p>
-<p>查看哪些 Kubernetes 资源在命名空间中，哪些不在命名空间中：</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> In a namespace</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> kubectl api-resources --namespaced=<span class="literal">true</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> Not <span class="keyword">in</span> a namespace</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> kubectl api-resources --namespaced=<span class="literal">false</span></span></span><br></pre></td></tr></table></figure>
+
           
         
       
@@ -1376,7 +713,7 @@
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/5/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/page/7/">7</a><span class="space">&hellip;</span><a class="page-number" href="/page/36/">36</a><a class="extend next" rel="next" href="/page/7/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/page/5/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/page/7/">7</a><span class="space">&hellip;</span><a class="page-number" href="/page/39/">39</a><a class="extend next" rel="next" href="/page/7/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1424,7 +761,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">72</span>
+                  <span class="site-state-item-count">77</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

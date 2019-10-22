@@ -250,6 +250,16 @@
         </li>
       
         
+        <li class="menu-item menu-item-golang">
+          <a href="/categories/golang/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br>
+            
+            Golang
+          </a>
+        </li>
+      
+        
         <li class="menu-item menu-item-个人日志">
           <a href="/categories/个人日志/" rel="section">
             
@@ -291,7 +301,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://yangjinheng.github.io/2019/04/27/web/websocket/">
+    <link itemprop="mainEntityOfPage" href="https://yangjinheng.github.io/2019/06/08/go/time/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Jin Heng">
@@ -310,7 +320,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2019/04/27/web/websocket/" itemprop="url">Websocket 笔记</a></h1>
+                <a class="post-title-link" href="/2019/06/08/go/time/" itemprop="url">go 标准库之 time</a></h1>
         
 
         <div class="post-meta">
@@ -322,8 +332,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-04-27T00:00:00+08:00">
-                2019-04-27
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-06-08T00:00:00+08:00">
+                2019-06-08
               </time>
             
 
@@ -345,8 +355,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/web/" itemprop="url" rel="index">
-                    <span itemprop="name">web</span>
+                  <a href="/categories/golang/" itemprop="url" rel="index">
+                    <span itemprop="name">golang</span>
                   </a>
                 </span>
 
@@ -384,19 +394,454 @@
       
         
           
-            <h1 id="socket-io"><a href="#socket-io" class="headerlink" title="socket.io"></a>socket.io</h1><p>由于 Flask-SocketIO 这个库它只支持 socket.io 协议的客户端，不支持原生的 websocket 所以需要学习以下 socket.io 的使用。</p>
-<h2 id="socket-id"><a href="#socket-id" class="headerlink" title="socket.id"></a>socket.id</h2><p>websocket 套接字的唯一标志，在 connect 事件触发后才有值。</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">socket.on(<span class="string">'connect'</span>, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(socket.id)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
-<h2 id="socket-connected"><a href="#socket-connected" class="headerlink" title="socket.connected"></a>socket.connected</h2><p>websocket 套接字是否已经建立连接，布尔值</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">socket.on(<span class="string">'connect'</span>, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(socket.connected)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
-<h2 id="socket-disconnected"><a href="#socket-disconnected" class="headerlink" title="socket.disconnected"></a>socket.disconnected</h2><p>websocket 套接字连接是否已经断开，布尔值</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">socket.on(&apos;connect&apos;, function () &#123;</span><br><span class="line">    console.log(socket.disconnected)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
-<h2 id="socket-open"><a href="#socket-open" class="headerlink" title="socket.open"></a>socket.open</h2><p>手动打开套接字，socket.connect 是它的同义词</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> socket = io（&#123; </span><br><span class="line">    autoConnect：<span class="literal">false</span></span><br><span class="line">&#125;）;</span><br><span class="line"></span><br><span class="line">socket.open（）;</span><br></pre></td></tr></table></figure>
-<p>或者监听断开事件进行重连</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">socket.on（<span class="string">'disconnect'</span>，（）=&gt; &#123; </span><br><span class="line">  socket.open（）; </span><br><span class="line">&#125;）;</span><br></pre></td></tr></table></figure>
-<h2 id="socket-emit"><a href="#socket-emit" class="headerlink" title="socket.emit"></a>socket.emit</h2><p>将数据发送到由字符串名称标识的套接字，数据可以是任何可以序列化的数据结构。</p>
-<h1 id="TODO"><a href="#TODO" class="headerlink" title="TODO"></a>TODO</h1><p>未完待续</p>
+            <h1 id="时间类型"><a href="#时间类型" class="headerlink" title="时间类型"></a>时间类型</h1><p>时间类型在实际开发中使用频率很高，代表现实世界的时间</p>
+<p>Go 语言中时间类型不是关键字，而是使用 time 包下的 Time 结构体</p>
+<h2 id="格式常量"><a href="#格式常量" class="headerlink" title="格式常量"></a>格式常量</h2><p>这些是在 Time.Format 和 time.Parse 中使用的预定义常量，需要注意的是无论格式如何变，模板必须为：2006 年 1 月 2 日 15 点 04 分 05 秒，快捷记忆：2016/1/2/3/4/5 即可。</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> (</span><br><span class="line">        ANSIC       = <span class="string">"Mon Jan _2 15:04:05 2006"</span></span><br><span class="line">        UnixDate    = <span class="string">"Mon Jan _2 15:04:05 MST 2006"</span></span><br><span class="line">        RubyDate    = <span class="string">"Mon Jan 02 15:04:05 -0700 2006"</span></span><br><span class="line">        RFC822      = <span class="string">"02 Jan 06 15:04 MST"</span></span><br><span class="line">        RFC822Z     = <span class="string">"02 Jan 06 15:04 -0700"</span> <span class="comment">// RFC822 with numeric zone</span></span><br><span class="line">        RFC850      = <span class="string">"Monday, 02-Jan-06 15:04:05 MST"</span></span><br><span class="line">        RFC1123     = <span class="string">"Mon, 02 Jan 2006 15:04:05 MST"</span></span><br><span class="line">        RFC1123Z    = <span class="string">"Mon, 02 Jan 2006 15:04:05 -0700"</span> <span class="comment">// RFC1123 with numeric zone</span></span><br><span class="line">        RFC3339     = <span class="string">"2006-01-02T15:04:05Z07:00"</span></span><br><span class="line">        RFC3339Nano = <span class="string">"2006-01-02T15:04:05.999999999Z07:00"</span></span><br><span class="line">        Kitchen     = <span class="string">"3:04PM"</span></span><br><span class="line">        <span class="comment">// Handy time stamps.</span></span><br><span class="line">        Stamp      = <span class="string">"Jan _2 15:04:05"</span></span><br><span class="line">        StampMilli = <span class="string">"Jan _2 15:04:05.000"</span></span><br><span class="line">        StampMicro = <span class="string">"Jan _2 15:04:05.000000"</span></span><br><span class="line">        StampNano  = <span class="string">"Jan _2 15:04:05.000000000"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> (</span><br><span class="line">	_                        = <span class="literal">iota</span></span><br><span class="line">	stdLongMonth             = <span class="literal">iota</span> + stdNeedDate  <span class="comment">// "January"</span></span><br><span class="line">	stdMonth                                       <span class="comment">// "Jan"</span></span><br><span class="line">	stdNumMonth                                    <span class="comment">// "1"</span></span><br><span class="line">	stdZeroMonth                                   <span class="comment">// "01"</span></span><br><span class="line">	stdLongWeekDay                                 <span class="comment">// "Monday"</span></span><br><span class="line">	stdWeekDay                                     <span class="comment">// "Mon"</span></span><br><span class="line">	stdDay                                         <span class="comment">// "2"</span></span><br><span class="line">	stdUnderDay                                    <span class="comment">// "_2"</span></span><br><span class="line">	stdZeroDay                                     <span class="comment">// "02"</span></span><br><span class="line">	stdHour                  = <span class="literal">iota</span> + stdNeedClock <span class="comment">// "15"</span></span><br><span class="line">	stdHour12                                      <span class="comment">// "3"</span></span><br><span class="line">	stdZeroHour12                                  <span class="comment">// "03"</span></span><br><span class="line">	stdMinute                                      <span class="comment">// "4"</span></span><br><span class="line">	stdZeroMinute                                  <span class="comment">// "04"</span></span><br><span class="line">	stdSecond                                      <span class="comment">// "5"</span></span><br><span class="line">	stdZeroSecond                                  <span class="comment">// "05"</span></span><br><span class="line">	stdLongYear              = <span class="literal">iota</span> + stdNeedDate  <span class="comment">// "2006"</span></span><br><span class="line">	stdYear                                        <span class="comment">// "06"</span></span><br><span class="line">	stdPM                    = <span class="literal">iota</span> + stdNeedClock <span class="comment">// "PM"</span></span><br><span class="line">	stdpm                                          <span class="comment">// "pm"</span></span><br><span class="line">	stdTZ                    = <span class="literal">iota</span>                <span class="comment">// "MST"</span></span><br><span class="line">	stdISO8601TZ                                   <span class="comment">// "Z0700"  // prints Z for UTC</span></span><br><span class="line">	stdISO8601SecondsTZ                            <span class="comment">// "Z070000"</span></span><br><span class="line">	stdISO8601ShortTZ                              <span class="comment">// "Z07"</span></span><br><span class="line">	stdISO8601ColonTZ                              <span class="comment">// "Z07:00" // prints Z for UTC</span></span><br><span class="line">	stdISO8601ColonSecondsTZ                       <span class="comment">// "Z07:00:00"</span></span><br><span class="line">	stdNumTZ                                       <span class="comment">// "-0700"  // always numeric</span></span><br><span class="line">	stdNumSecondsTz                                <span class="comment">// "-070000"</span></span><br><span class="line">	stdNumShortTZ                                  <span class="comment">// "-07"    // always numeric</span></span><br><span class="line">	stdNumColonTZ                                  <span class="comment">// "-07:00" // always numeric</span></span><br><span class="line">	stdNumColonSecondsTZ                           <span class="comment">// "-07:00:00"</span></span><br><span class="line">	stdFracSecond0                                 <span class="comment">// ".0", ".00", ... , trailing zeros included</span></span><br><span class="line">	stdFracSecond9                                 <span class="comment">// ".9", ".99", ..., trailing zeros omitted</span></span><br><span class="line"></span><br><span class="line">	stdNeedDate  = <span class="number">1</span> &lt;&lt; <span class="number">8</span>             <span class="comment">// need month, day, year</span></span><br><span class="line">	stdNeedClock = <span class="number">2</span> &lt;&lt; <span class="number">8</span>             <span class="comment">// need hour, minute, second</span></span><br><span class="line">	stdArgShift  = <span class="number">16</span>                 <span class="comment">// extra argument in high bits, above low stdArgShift</span></span><br><span class="line">	stdMask      = <span class="number">1</span>&lt;&lt;stdArgShift - <span class="number">1</span> <span class="comment">// mask out argument</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th>函数</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>func After(d Duration) &lt;-chan Time</td>
+<td>TODO</td>
+</tr>
+<tr>
+<td>func Sleep(d Duration)</td>
+<td>睡眠</td>
+</tr>
+<tr>
+<td>func Tick(d Duration) &lt;-chan Time</td>
+<td>TODO</td>
+</tr>
+</tbody>
+</table>
+<h2 id="Sleep睡眠"><a href="#Sleep睡眠" class="headerlink" title="Sleep睡眠"></a>Sleep睡眠</h2><p>Go 语言中 main() 函数为主线程（协程），程序是从上向下执行的，可以通过 time.Sleep(n) 设置让程序阻塞多少纳秒</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	time.Sleep(<span class="number">10</span> * time.Second)</span><br><span class="line">	fmt.Print(<span class="string">"ok"</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(<span class="string">"1"</span>)</span><br><span class="line">	time.Sleep(<span class="number">1e9</span>)</span><br><span class="line">	fmt.Println(<span class="string">"2"</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="计时器"><a href="#计时器" class="headerlink" title="计时器"></a>计时器</h2><p>延迟指定时间后执行一次，计时器不会阻塞主线程</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(<span class="string">"开始"</span>)</span><br><span class="line">	time.AfterFunc(<span class="number">2e9</span>, <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">		fmt.Println(<span class="string">"延迟触发"</span>)</span><br><span class="line">	&#125;)</span><br><span class="line">	time.Sleep(<span class="number">10e9</span>) <span class="comment">// 一定要休眠，否则程序就结束了</span></span><br><span class="line">	fmt.Println(<span class="string">"结束"</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="Month类型"><a href="#Month类型" class="headerlink" title="Month类型"></a>Month类型</h1><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Printf(<span class="string">"一月%d\n"</span>, time.January)</span><br><span class="line">	fmt.Printf(<span class="string">"二月%d\n"</span>, time.February)</span><br><span class="line">	fmt.Printf(<span class="string">"三月%d\n"</span>, time.March)</span><br><span class="line">	fmt.Printf(<span class="string">"四月%d\n"</span>, time.April)</span><br><span class="line">	fmt.Printf(<span class="string">"五月%d\n"</span>, time.May)</span><br><span class="line">	fmt.Printf(<span class="string">"六月%d\n"</span>, time.June)</span><br><span class="line">	fmt.Printf(<span class="string">"七月%d\n"</span>, time.July)</span><br><span class="line">	fmt.Printf(<span class="string">"八月%d\n"</span>, time.August)</span><br><span class="line">	fmt.Printf(<span class="string">"九月%d\n"</span>, time.September)</span><br><span class="line">	fmt.Printf(<span class="string">"十月%d\n"</span>, time.October)</span><br><span class="line">	fmt.Printf(<span class="string">"十一月%d\n"</span>, time.November)</span><br><span class="line">	fmt.Printf(<span class="string">"十二月%d\n"</span>, time.December)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="Weekday类型"><a href="#Weekday类型" class="headerlink" title="Weekday类型"></a>Weekday类型</h1><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Printf(<span class="string">"星期天%d\n"</span>, time.Sunday)</span><br><span class="line">	fmt.Printf(<span class="string">"星期一%d\n"</span>, time.Monday)</span><br><span class="line">	fmt.Printf(<span class="string">"星期二%d\n"</span>, time.Tuesday)</span><br><span class="line">	fmt.Printf(<span class="string">"星期三%d\n"</span>, time.Wednesday)</span><br><span class="line">	fmt.Printf(<span class="string">"星期四%d\n"</span>, time.Thursday)</span><br><span class="line">	fmt.Printf(<span class="string">"星期五%d\n"</span>, time.Friday)</span><br><span class="line">	fmt.Printf(<span class="string">"星期六%d\n"</span>, time.Saturday)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">星期天0</span><br><span class="line">星期一1</span><br><span class="line">星期二2</span><br><span class="line">星期三3</span><br><span class="line">星期四4</span><br><span class="line">星期五5</span><br><span class="line">星期六6</span><br></pre></td></tr></table></figure>
+<h1 id="Duration类型"><a href="#Duration类型" class="headerlink" title="Duration类型"></a>Duration类型</h1><p>Duration 类型代表两个时间点之间经过的时间，以纳秒为单位。可表示的最长时间段大约290年。</p>
+<h2 id="时间常量"><a href="#时间常量" class="headerlink" title="时间常量"></a>时间常量</h2><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> (</span><br><span class="line">        Nanosecond  Duration = <span class="number">1</span></span><br><span class="line">        Microsecond          = <span class="number">1000</span> * Nanosecond</span><br><span class="line">        Millisecond          = <span class="number">1000</span> * Microsecond</span><br><span class="line">        Second               = <span class="number">1000</span> * Millisecond</span><br><span class="line">        Minute               = <span class="number">60</span> * Second</span><br><span class="line">        Hour                 = <span class="number">60</span> * Minute</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<h2 id="快速预览"><a href="#快速预览" class="headerlink" title="快速预览"></a>快速预览</h2><table>
+<thead>
+<tr>
+<th>函数</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>func ParseDuration(s string) (Duration, error)</td>
+<td>将字符串解析为 Duration 类型，有效单位：”ns”, “us”, “ms”, “s”, “m”, “h”。</td>
+</tr>
+<tr>
+<td>func Since(t Time) Duration</td>
+<td>返回从 t 到现在经历了多久，是：time.Now().Sub(t) 的缩写</td>
+</tr>
+<tr>
+<td>func Until(t Time) Duration</td>
+<td>返回到 t 需要多久，是 t.Sub(time.Now()) 的缩写</td>
+</tr>
+<tr>
+<td>func (d Duration) Hours() float64</td>
+<td>返回指定的 Duration 是多少小时</td>
+</tr>
+<tr>
+<td>func (d Duration) Minutes() float64</td>
+<td>返回指定的 Duration 是多少分钟</td>
+</tr>
+<tr>
+<td>func (d Duration) Nanoseconds() int64</td>
+<td>返回指定的 Duration 是多少纳秒</td>
+</tr>
+<tr>
+<td>func (d Duration) Round(m Duration) Duration</td>
+<td>返回 Duration 四舍五入的结果</td>
+</tr>
+<tr>
+<td>func (d Duration) Truncate(m Duration) Duration</td>
+<td>返回 Duration 截短后的结果</td>
+</tr>
+</tbody>
+</table>
+<h2 id="ParseDuration字符串解析为Duration"><a href="#ParseDuration字符串解析为Duration" class="headerlink" title="ParseDuration字符串解析为Duration"></a>ParseDuration字符串解析为Duration</h2><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	hours, _ := time.ParseDuration(<span class="string">"10h"</span>)</span><br><span class="line">	<span class="built_in">complex</span>, _ := time.ParseDuration(<span class="string">"1h10m10s"</span>)</span><br><span class="line"></span><br><span class="line">	fmt.Println(hours)</span><br><span class="line">	fmt.Println(<span class="built_in">complex</span>)</span><br><span class="line">	fmt.Printf(<span class="string">"%T %T"</span>, hours, <span class="built_in">complex</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">10h0m0s</span><br><span class="line">1h10m10s</span><br><span class="line">time.Duration time.Duration</span><br></pre></td></tr></table></figure>
+<h2 id="Since指定时间到现在已经过去的时间"><a href="#Since指定时间到现在已经过去的时间" class="headerlink" title="Since指定时间到现在已经过去的时间"></a>Since指定时间到现在已经过去的时间</h2><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	t0 := time.Now()</span><br><span class="line">	time.Sleep(<span class="number">3</span> * time.Second)</span><br><span class="line">	fmt.Println(time.Since(t0))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">3.0002169s</span><br></pre></td></tr></table></figure>
+<h2 id="Until指定时间距当前还有多久的时间"><a href="#Until指定时间距当前还有多久的时间" class="headerlink" title="Until指定时间距当前还有多久的时间"></a>Until指定时间距当前还有多久的时间</h2><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	t0 := time.Now()</span><br><span class="line">	time.Sleep(<span class="number">3</span> * time.Second)</span><br><span class="line">	fmt.Println(time.Until(t0))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="number">-3.0005766s</span></span><br></pre></td></tr></table></figure>
+<h2 id="Hours、Minutes、Seconds、Nanoseconds"><a href="#Hours、Minutes、Seconds、Nanoseconds" class="headerlink" title="Hours、Minutes、Seconds、Nanoseconds"></a>Hours、Minutes、Seconds、Nanoseconds</h2><ul>
+<li>返回 Duration 是多少小时、分钟、秒、纳秒</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	h, _ := time.ParseDuration(<span class="string">"4h30m"</span>)</span><br><span class="line">	fmt.Println(h.Hours())</span><br><span class="line">	fmt.Println(h.Minutes())</span><br><span class="line">	fmt.Println(h.Seconds())</span><br><span class="line">	fmt.Println(h.Nanoseconds())</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">4.5</span><br><span class="line">270</span><br><span class="line">16200</span><br><span class="line">16200000000000</span><br></pre></td></tr></table></figure>
+<p>String返回Duration的字符串表示</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	h, _ := time.ParseDuration(<span class="string">"4h30m"</span>)</span><br><span class="line">	fmt.Printf(h.String())</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">4440h0m0s</span><br></pre></td></tr></table></figure>
+<h2 id="Round返回Duration的四舍五入"><a href="#Round返回Duration的四舍五入" class="headerlink" title="Round返回Duration的四舍五入"></a>Round返回Duration的四舍五入</h2><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	d, err := time.ParseDuration(<span class="string">"1h30m30.918273645s"</span>)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		<span class="built_in">panic</span>(err)</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	round := []time.Duration&#123;</span><br><span class="line">		time.Nanosecond,</span><br><span class="line">		time.Microsecond,</span><br><span class="line">		time.Millisecond,</span><br><span class="line">		time.Second,</span><br><span class="line">		<span class="number">2</span> * time.Second,</span><br><span class="line">		time.Minute,</span><br><span class="line">		<span class="number">10</span> * time.Minute,</span><br><span class="line">		time.Hour,</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">for</span> _, r := <span class="keyword">range</span> round &#123;</span><br><span class="line">		fmt.Printf(<span class="string">"d.Round(%6s) = %s\n"</span>, r, d.Round(r).String())</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">d.Round(   1ns) = 1h30m30.918273645s</span><br><span class="line">d.Round(   1µs) = 1h30m30.918274s</span><br><span class="line">d.Round(   1ms) = 1h30m30.918s</span><br><span class="line">d.Round(    1s) = 1h30m31s</span><br><span class="line">d.Round(    2s) = 1h30m30s</span><br><span class="line">d.Round(  1m0s) = 1h31m0s</span><br><span class="line">d.Round( 10m0s) = 1h30m0s</span><br><span class="line">d.Round(1h0m0s) = 2h0m0s</span><br></pre></td></tr></table></figure>
+<h2 id="Truncate返回Duration的截短表示"><a href="#Truncate返回Duration的截短表示" class="headerlink" title="Truncate返回Duration的截短表示"></a>Truncate返回Duration的截短表示</h2><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	d, err := time.ParseDuration(<span class="string">"1h30m30.918273645s"</span>)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		<span class="built_in">panic</span>(err)</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	trunc := []time.Duration&#123;</span><br><span class="line">		time.Nanosecond,</span><br><span class="line">		time.Microsecond,</span><br><span class="line">		time.Millisecond,</span><br><span class="line">		time.Second,</span><br><span class="line">		<span class="number">2</span> * time.Second,</span><br><span class="line">		time.Minute,</span><br><span class="line">		<span class="number">10</span> * time.Minute,</span><br><span class="line">		time.Hour,</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">for</span> _, t := <span class="keyword">range</span> trunc &#123;</span><br><span class="line">		fmt.Printf(<span class="string">"d.Truncate(%6s) = %s\n"</span>, t, d.Truncate(t).String())</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">d.Truncate(   1ns) = 1h30m30.918273645s</span><br><span class="line">d.Truncate(   1µs) = 1h30m30.918273s</span><br><span class="line">d.Truncate(   1ms) = 1h30m30.918s</span><br><span class="line">d.Truncate(    1s) = 1h30m30s</span><br><span class="line">d.Truncate(    2s) = 1h30m30s</span><br><span class="line">d.Truncate(  1m0s) = 1h30m0s</span><br><span class="line">d.Truncate( 10m0s) = 1h30m0s</span><br><span class="line">d.Truncate(1h0m0s) = 1h0m0s</span><br></pre></td></tr></table></figure>
+<h1 id="Location类型"><a href="#Location类型" class="headerlink" title="Location类型"></a>Location类型</h1><p>Location 将时间映射到当前的时区，通常表示在地理区域中使用的时间偏移集合。</p>
+<p>Local表示系统的本地时区。</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> Local *Location = &amp;localLoc</span><br></pre></td></tr></table></figure>
+<p>UTC表示通用协调时间（UTC）。</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> UTC *Location = &amp;utcLoc</span><br></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th>函数</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>func FixedZone(name string, offset int) *Location</td>
+<td>给定名称和偏移量返回 Location</td>
+</tr>
+<tr>
+<td>func LoadLocation(name string) (*Location, error)</td>
+<td>返回使用给定名字创建的 Location，如果名称为””或”UTC”，则返回UTC，如果名称为”Local”，则返回Local，其他视作 从 IANA 时区数据库文件中对应的位置名称，例如：Asia/Shanghai。</td>
+</tr>
+<tr>
+<td>func LoadLocationFromTZData(name string, data []byte) (*Location, error)</td>
+<td>接收时区名称和时区数据文件，格式必须是：/etc/localtime， 返回一个 Location。</td>
+</tr>
+</tbody>
+</table>
+<h2 id="FixedZone给定名称和偏移量创建时区"><a href="#FixedZone给定名称和偏移量创建时区" class="headerlink" title="FixedZone给定名称和偏移量创建时区"></a>FixedZone给定名称和偏移量创建时区</h2><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	location := time.FixedZone(<span class="string">"TEST"</span>, <span class="number">8</span>*<span class="number">60</span>*<span class="number">60</span>)</span><br><span class="line">	fmt.Printf(<span class="string">"%T\n"</span>, location)</span><br><span class="line">	utctime := time.Date(<span class="number">2018</span>, <span class="number">8</span>, <span class="number">30</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, time.UTC)</span><br><span class="line">	fmt.Println(utctime.In(location))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">*time.Location</span><br><span class="line">2018-08-30 08:00:00 +0800 TEST</span><br></pre></td></tr></table></figure>
+<h2 id="LoadLocation根据名称创建时区"><a href="#LoadLocation根据名称创建时区" class="headerlink" title="LoadLocation根据名称创建时区"></a>LoadLocation根据名称创建时区</h2><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	location, err := time.LoadLocation(<span class="string">"Asia/Shanghai"</span>)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		<span class="built_in">panic</span>(err)</span><br><span class="line">	&#125;</span><br><span class="line">	fmt.Printf(<span class="string">"%T\n"</span>, location)</span><br><span class="line">	utctime := time.Date(<span class="number">2018</span>, <span class="number">8</span>, <span class="number">30</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, time.UTC)</span><br><span class="line">	fmt.Println(utctime.In(location))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">*time.Location</span><br><span class="line">2018-08-30 08:00:00 +0800 CST</span><br></pre></td></tr></table></figure>
+<h2 id="String返回一个时区对象的字符串表示"><a href="#String返回一个时区对象的字符串表示" class="headerlink" title="String返回一个时区对象的字符串表示"></a>String返回一个时区对象的字符串表示</h2><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	location, err := time.LoadLocation(<span class="string">"Asia/Shanghai"</span>)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		<span class="built_in">panic</span>(err)</span><br><span class="line">	&#125;</span><br><span class="line">	fmt.Printf(<span class="string">"%T\n"</span>, location)</span><br><span class="line">	fmt.Println(location.String())</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">*time.Location</span><br><span class="line">Asia/Shanghai</span><br></pre></td></tr></table></figure>
+<h1 id="Ticker类型"><a href="#Ticker类型" class="headerlink" title="Ticker类型"></a>Ticker类型</h1><p>Ticker 保管一个通道，并每隔一段时间向其传递 tick。</p>
+<table>
+<thead>
+<tr>
+<th>函数</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>func NewTicker(d Duration) *Ticker</td>
+<td></td>
+</tr>
+<tr>
+<td>func (t *Ticker) Stop()</td>
+</tr>
+</tbody>
+</table>
+<h1 id="Time类型"><a href="#Time类型" class="headerlink" title="Time类型"></a>Time类型</h1><p>时间代表具有纳秒精度的瞬间。</p>
+<h2 id="获取时间信息"><a href="#获取时间信息" class="headerlink" title="获取时间信息"></a>获取时间信息</h2><table>
+<thead>
+<tr>
+<th>函数</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>func Now() Time</td>
+<td>当前时间</td>
+</tr>
+<tr>
+<td>func (t Time) Unix() int64</td>
+<td>获取时间对象 Unix 时间</td>
+</tr>
+<tr>
+<td>func (t Time) UnixNano() int64</td>
+<td>获取时间对象纳秒级别 UnixNano 时间</td>
+</tr>
+<tr>
+<td>func (t Time) UTC() Time</td>
+<td>获取时间对象的 UTC 时间</td>
+</tr>
+<tr>
+<td>func (t Time) Date() (year int, month Month, day int)</td>
+<td>返回时间对象的日期</td>
+</tr>
+<tr>
+<td>func (t Time) Clock() (hour, min, sec int)</td>
+<td>返回时间对象的时间</td>
+</tr>
+<tr>
+<td>func (t Time) Year()、Month() 、Day() Month \</td>
+<td>int</td>
+<td>返回时间对象的年、月、日</td>
+</tr>
+<tr>
+<td>func (t Time) Hour()、Minute()、Second()、Nanosecond()int</td>
+<td>返回时间对象的时、分、秒、纳秒</td>
+</tr>
+<tr>
+<td>func (t Time) Zone() (name string, offset int)</td>
+<td>返回时间对象的时区和时差</td>
+</tr>
+<tr>
+<td>func (t Time) Weekday() Weekday</td>
+<td>获取时间处于一周中的第几天</td>
+</tr>
+<tr>
+<td>func (t Time) YearDay() int</td>
+<td>获取时间处于一年中的第几天</td>
+</tr>
+<tr>
+<td>func (t Time) ISOWeek() (year, week int)</td>
+<td>返回本周是一年中的第几周</td>
+</tr>
+<tr>
+<td>func (t Time) Local() Time</td>
+<td>转换时间对象返回为本地时间</td>
+</tr>
+<tr>
+<td>func (t Time) Location() *Location</td>
+<td>显示时间对象的位置信息</td>
+</tr>
+</tbody>
+</table>
+<h3 id="Now当前时间"><a href="#Now当前时间" class="headerlink" title="Now当前时间"></a>Now当前时间</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	t := time.Now()</span><br><span class="line">	fmt.Println(t)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">2019-06-08 19:54:00.6406089 +0800 CST m=+0.002037601</span><br></pre></td></tr></table></figure>
+<h3 id="Unix获取时间对象的Unix时间"><a href="#Unix获取时间对象的Unix时间" class="headerlink" title="Unix获取时间对象的Unix时间"></a>Unix获取时间对象的Unix时间</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	t1 := time.Now()</span><br><span class="line">	fmt.Println(t1.Unix())</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">1560072911</span><br></pre></td></tr></table></figure>
+<h3 id="UnixNano纳秒级别的Unix时间"><a href="#UnixNano纳秒级别的Unix时间" class="headerlink" title="UnixNano纳秒级别的Unix时间"></a>UnixNano纳秒级别的Unix时间</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	t1 := time.Now()</span><br><span class="line">	fmt.Println(t1.UnixNano())</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">1560073022478293600</span><br></pre></td></tr></table></figure>
+<h3 id="UTC获取时间对象的UTC时间"><a href="#UTC获取时间对象的UTC时间" class="headerlink" title="UTC获取时间对象的UTC时间"></a>UTC获取时间对象的UTC时间</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	t1 := time.Now()</span><br><span class="line">	fmt.Println(t1)</span><br><span class="line">	fmt.Println(t1.UTC())</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">2019-06-09 17:34:44.3403735 +0800 CST m=+0.001994901</span><br><span class="line">2019-06-09 09:34:44.3403735 +0000 UTC</span><br></pre></td></tr></table></figure>
+<h3 id="Date返回日期部分"><a href="#Date返回日期部分" class="headerlink" title="Date返回日期部分"></a>Date返回日期部分</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	t1 := time.Now()</span><br><span class="line">	fmt.Println(t1.Date())</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">2019 June 9</span><br></pre></td></tr></table></figure>
+<h3 id="Clock返回时间部分"><a href="#Clock返回时间部分" class="headerlink" title="Clock返回时间部分"></a>Clock返回时间部分</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	t1 := time.Now()</span><br><span class="line">	fmt.Println(t1.Clock())</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">16 37 41</span><br></pre></td></tr></table></figure>
+<h3 id="Year、Month、Day"><a href="#Year、Month、Day" class="headerlink" title="Year、Month、Day"></a>Year、Month、Day</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	t1 := time.Now()</span><br><span class="line">	fmt.Println(t1.Year())</span><br><span class="line">	fmt.Println(t1.Month())</span><br><span class="line">	fmt.Println(t1.Day())</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">2019</span><br><span class="line">June</span><br><span class="line">9</span><br></pre></td></tr></table></figure>
+<h3 id="Hour、Minute、Second、Nanosecond"><a href="#Hour、Minute、Second、Nanosecond" class="headerlink" title="Hour、Minute、Second、Nanosecond"></a>Hour、Minute、Second、Nanosecond</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	t1 := time.Now()</span><br><span class="line">	fmt.Println(t1.Hour())</span><br><span class="line">	fmt.Println(t1.Minute())</span><br><span class="line">	fmt.Println(t1.Second())</span><br><span class="line">	fmt.Println(t1.Nanosecond())</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">17</span><br><span class="line">20</span><br><span class="line">19</span><br><span class="line">594656600</span><br></pre></td></tr></table></figure>
+<h3 id="Zone获取时间的时区和时差"><a href="#Zone获取时间的时区和时差" class="headerlink" title="Zone获取时间的时区和时差"></a>Zone获取时间的时区和时差</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	t1 := time.Now()</span><br><span class="line">	fmt.Println(t1.Zone())</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">CST 28800</span><br></pre></td></tr></table></figure>
+<h3 id="YearDay获取时间处于一年中的第几天"><a href="#YearDay获取时间处于一年中的第几天" class="headerlink" title="YearDay获取时间处于一年中的第几天"></a>YearDay获取时间处于一年中的第几天</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	t1 := time.Now()</span><br><span class="line">	fmt.Println(t1.YearDay())</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">160</span><br></pre></td></tr></table></figure>
+<h3 id="ISOWeek返回本周是一年中的第几周"><a href="#ISOWeek返回本周是一年中的第几周" class="headerlink" title="ISOWeek返回本周是一年中的第几周"></a>ISOWeek返回本周是一年中的第几周</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	t1 := time.Now()</span><br><span class="line">	fmt.Println(t1.ISOWeek())</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">2019 23</span><br></pre></td></tr></table></figure>
+<h3 id="Weekday获取时间处于一周中的第几天"><a href="#Weekday获取时间处于一周中的第几天" class="headerlink" title="Weekday获取时间处于一周中的第几天"></a>Weekday获取时间处于一周中的第几天</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	t1 := time.Now()</span><br><span class="line">	fmt.Println(t1.Weekday())</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Sunday</span><br></pre></td></tr></table></figure>
+<h3 id="Local返回为本地时间"><a href="#Local返回为本地时间" class="headerlink" title="Local返回为本地时间"></a>Local返回为本地时间</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	t1 := time.Date(<span class="number">2019</span>, <span class="number">6</span>, <span class="number">9</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, time.UTC)</span><br><span class="line">	fmt.Println(t1)</span><br><span class="line">	fmt.Println(t1.Local())</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">2019-06-09 00:00:00 +0000 UTC</span><br><span class="line">2019-06-09 08:00:00 +0800 CST</span><br></pre></td></tr></table></figure>
+<h3 id="Location显示时区位置"><a href="#Location显示时区位置" class="headerlink" title="Location显示时区位置"></a>Location显示时区位置</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="comment">// 创建一个时区</span></span><br><span class="line">	location := time.FixedZone(<span class="string">"TEST"</span>, <span class="number">8</span>*<span class="number">60</span>*<span class="number">60</span>)</span><br><span class="line">	<span class="comment">// 创建一个时间</span></span><br><span class="line">	t1 := time.Date(<span class="number">2019</span>, <span class="number">6</span>, <span class="number">9</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, location)</span><br><span class="line">	t2 := time.Now()</span><br><span class="line">	<span class="comment">// 打印时间的时区位置</span></span><br><span class="line">	fmt.Println(t1.Location())</span><br><span class="line">	fmt.Println(t2.Location())</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line">TEST</span><br><span class="line">Local</span><br></pre></td></tr></table></figure>
+<h2 id="计算新时间"><a href="#计算新时间" class="headerlink" title="计算新时间"></a>计算新时间</h2><table>
+<thead>
+<tr>
+<th>函数</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>func (t Time) Add(d Duration) Time</td>
+<td>为时间做加法（Duration）</td>
+</tr>
+<tr>
+<td>func (t Time) AddDate(years int, months int, days int) Time</td>
+<td>为时间做加法（年月日）的整数</td>
+</tr>
+<tr>
+<td>func (t Time) Sub(u Time) Duration</td>
+<td>计算两个时间对象的时间差</td>
+</tr>
+<tr>
+<td>func (t Time) Round(d Duration) Time</td>
+<td>根据一个 Duration 返回一个四舍五入的时间</td>
+</tr>
+<tr>
+<td>func (t Time) Truncate(d Duration) Time</td>
+<td>根据一个 Duration 返回截短后的时间</td>
+</tr>
+</tbody>
+</table>
+<h3 id="Add时间加法"><a href="#Add时间加法" class="headerlink" title="Add时间加法"></a>Add时间加法</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	start := time.Now()</span><br><span class="line">	end := start.Add(time.Hour * <span class="number">24</span>)</span><br><span class="line">	fmt.Println(start)</span><br><span class="line">	fmt.Println(end)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">2019-06-09 16:05:35.1952646 +0800 CST m=+0.001995601</span><br><span class="line">2019-06-10 16:05:35.1952646 +0800 CST m=+86400.001995601</span><br></pre></td></tr></table></figure>
+<h3 id="AddDate日期加法"><a href="#AddDate日期加法" class="headerlink" title="AddDate日期加法"></a>AddDate日期加法</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	start := time.Now()</span><br><span class="line">	fmt.Println(start)</span><br><span class="line"></span><br><span class="line">	oneYearLater := start.AddDate(<span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>)</span><br><span class="line">	oneMonthLater := start.AddDate(<span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>)</span><br><span class="line">	oneDayLater := start.AddDate(<span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">	fmt.Println(oneDayLater)</span><br><span class="line">	fmt.Println(oneMonthLater)</span><br><span class="line">	fmt.Println(oneYearLater)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">2019-06-09 16:12:10.8930671 +0800 CST m=+0.001994701</span><br><span class="line">2019-06-10 16:12:10.8930671 +0800 CST</span><br><span class="line">2019-07-09 16:12:10.8930671 +0800 CST</span><br><span class="line">2020-06-09 16:12:10.8930671 +0800 CST</span><br></pre></td></tr></table></figure>
+<h3 id="Sub计算时间对象的时间差"><a href="#Sub计算时间对象的时间差" class="headerlink" title="Sub计算时间对象的时间差"></a>Sub计算时间对象的时间差</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	t1 := time.Now()</span><br><span class="line">	time.Sleep(<span class="number">3</span> * time.Second)</span><br><span class="line">	t2 := time.Now()</span><br><span class="line">	fmt.Println(t2.Sub(t1))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">3.0000961s</span><br></pre></td></tr></table></figure>
+<h3 id="Round返回根据Duration四舍五入的时间"><a href="#Round返回根据Duration四舍五入的时间" class="headerlink" title="Round返回根据Duration四舍五入的时间"></a>Round返回根据Duration四舍五入的时间</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	t1 := time.Now()</span><br><span class="line">	fmt.Println(t1)</span><br><span class="line">	fmt.Println(t1.Round(time.Hour))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">2019-06-09 17:14:29.7525024 +0800 CST m=+0.001994701</span><br><span class="line">2019-06-09 17:00:00 +0800 CST</span><br></pre></td></tr></table></figure>
+<h3 id="Truncate直接截短时间"><a href="#Truncate直接截短时间" class="headerlink" title="Truncate直接截短时间"></a>Truncate直接截短时间</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	t1 := time.Now()</span><br><span class="line">	fmt.Println(t1.Truncate(time.Hour))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">2019-06-09 17:00:00 +0800 CST</span><br></pre></td></tr></table></figure>
+<h2 id="从字符串解析"><a href="#从字符串解析" class="headerlink" title="从字符串解析"></a>从字符串解析</h2><table>
+<thead>
+<tr>
+<th>函数</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>func Unix(sec int64, nsec int64) Time</td>
+<td>给定整数的秒和闹秒，返回一个时间对象</td>
+</tr>
+<tr>
+<td>func Date(year int, month Month, day, hour, min, sec, nsec int, loc *Location) Time</td>
+<td>制作时间</td>
+</tr>
+<tr>
+<td>func Parse(layout, value string) (Time, error)</td>
+<td>按照指定的时间格式解析字符串为时间对象</td>
+</tr>
+<tr>
+<td>func ParseInLocation(layout, value string, loc *Location) (Time, error)</td>
+<td>按照指定的时间格式解析字符串为时间对象，设置默认时区</td>
+</tr>
+</tbody>
+</table>
+<h3 id="Unix从时间戳解析时间"><a href="#Unix从时间戳解析时间" class="headerlink" title="Unix从时间戳解析时间"></a>Unix从时间戳解析时间</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	t := time.Unix(<span class="number">1487780010</span>, <span class="number">123456</span>)</span><br><span class="line">	fmt.Print(t)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">2017-02-23 00:13:30.000123456 +0800 CST</span><br></pre></td></tr></table></figure>
+<h3 id="Date从数字制作时间"><a href="#Date从数字制作时间" class="headerlink" title="Date从数字制作时间"></a>Date从数字制作时间</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	t := time.Date(<span class="number">2009</span>, <span class="number">11</span>, <span class="number">10</span>, <span class="number">23</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, time.UTC)</span><br><span class="line">	fmt.Printf(<span class="string">"%s"</span>, t.Local())</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">2009-11-11 07:00:00 +0800 CST</span><br></pre></td></tr></table></figure>
+<h3 id="Parse指定格式将字符串解析为时间"><a href="#Parse指定格式将字符串解析为时间" class="headerlink" title="Parse指定格式将字符串解析为时间"></a>Parse指定格式将字符串解析为时间</h3><p>Parse 将时间解释为 UTC; 当给定区域偏移或缩写时，Parse 会尝试将其与本地位置匹配; </p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="keyword">const</span> teststr = <span class="string">"2006/01/02 15:04:05 -07:00"</span></span><br><span class="line">	t, _ := time.Parse(teststr, <span class="string">"2019/06/09 15:22:33 +08:00"</span>)</span><br><span class="line">	fmt.Println(t)</span><br><span class="line">	fmt.Printf(<span class="string">"%T\n"</span>, t)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">2019-06-09 15:22:33 +0800 CST</span><br><span class="line">time.Time</span><br></pre></td></tr></table></figure>
+<h3 id="ParseInLocation指定格式将字符串解析为时间，备选时区信息"><a href="#ParseInLocation指定格式将字符串解析为时间，备选时区信息" class="headerlink" title="ParseInLocation指定格式将字符串解析为时间，备选时区信息"></a>ParseInLocation指定格式将字符串解析为时间，备选时区信息</h3><p>与 Parse 一样，但在没有时区信息的情况下，ParseInLocation 将时间解释为给定位置，当给定时区时，ParseInLocation 使用给定的位置。 </p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	loc, _ := time.LoadLocation(<span class="string">"Asia/Shanghai"</span>)</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 没有时区，使用传参给定的时区</span></span><br><span class="line">	<span class="keyword">const</span> teststr = <span class="string">"2006/01/02 15:04:05"</span></span><br><span class="line">	t, _ := time.ParseInLocation(teststr, <span class="string">"2019/06/09 15:22:33"</span>, loc)</span><br><span class="line">	fmt.Println(t)</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 有时区信息则使用</span></span><br><span class="line">	<span class="keyword">const</span> timzone = <span class="string">"2006/01/02 15:04:05 -07:00"</span></span><br><span class="line">	t, _ = time.ParseInLocation(timzone, <span class="string">"2019/06/09 15:22:33 +09:00"</span>, loc)</span><br><span class="line">	fmt.Println(t)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">2019-06-09 15:22:33 +0800 CST</span><br><span class="line">2019-06-09 15:22:33 +0900 +0900</span><br></pre></td></tr></table></figure>
+<h2 id="格式化为字符串"><a href="#格式化为字符串" class="headerlink" title="格式化为字符串"></a>格式化为字符串</h2><table>
+<thead>
+<tr>
+<th>函数</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>func (t Time) String() string</td>
+<td>返回一个时间的字符串表示</td>
+</tr>
+<tr>
+<td>func (t Time) Format(layout string) string</td>
+<td>格式化输出时间</td>
+</tr>
+<tr>
+<td>func (t Time) AppendFormat(b []byte, layout string) []byte</td>
+<td>将返回的格式化的时间追加到缓冲区</td>
+</tr>
+</tbody>
+</table>
+<h3 id="String返回时间的字符串表示"><a href="#String返回时间的字符串表示" class="headerlink" title="String返回时间的字符串表示"></a>String返回时间的字符串表示</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	t1 := time.Now()</span><br><span class="line">	fmt.Println(t1.String())</span><br><span class="line">	fmt.Printf(<span class="string">"%T"</span>, t1.String())</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">2019-06-09 17:28:00.0984589 +0800 CST m=+0.002030001</span><br><span class="line">string</span><br></pre></td></tr></table></figure>
+<h3 id="Format格式化输出时间为字符串"><a href="#Format格式化输出时间为字符串" class="headerlink" title="Format格式化输出时间为字符串"></a>Format格式化输出时间为字符串</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	t4 := time.Now()</span><br><span class="line">	fmt.Println(t4.Format(<span class="string">"2006.01.02 15.04.05 +08:00"</span>))</span><br><span class="line">	fmt.Printf(<span class="string">"%T"</span>, t4.Format(<span class="string">"2006.01.02 15.04.05 +08:00"</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">2019.06.09 16.31.24 +08:00</span><br><span class="line">string</span><br></pre></td></tr></table></figure>
+<h3 id="AppendFormat将格式化的时间追加到缓冲区"><a href="#AppendFormat将格式化的时间追加到缓冲区" class="headerlink" title="AppendFormat将格式化的时间追加到缓冲区"></a>AppendFormat将格式化的时间追加到缓冲区</h3><p>就像Format一样，但是将文本表示附加到b并返回扩展缓冲区。</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	t := time.Now()</span><br><span class="line">	text := []<span class="keyword">byte</span>(<span class="string">"Time: "</span>)</span><br><span class="line"></span><br><span class="line">	text = t.AppendFormat(text, time.RFC3339)</span><br><span class="line">	fmt.Println(<span class="keyword">string</span>(text))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Time: 2019-06-09T16:23:39+08:00</span><br></pre></td></tr></table></figure>
+<h2 id="判断时间"><a href="#判断时间" class="headerlink" title="判断时间"></a>判断时间</h2><table>
+<thead>
+<tr>
+<th>函数</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>func (t Time) After(u Time) bool</td>
+<td>判断是否在某个时间之后</td>
+</tr>
+<tr>
+<td>func (t Time) Before(u Time) bool</td>
+<td>判断是否在某个时间之前</td>
+</tr>
+<tr>
+<td>func (t Time) Equal(u Time) bool</td>
+<td>判断不同时间是否表示同一时刻</td>
+</tr>
+<tr>
+<td>func (t Time) IsZero() bool</td>
+<td>报告时间是否是 0001 年 1 月 1 日 00:00:00</td>
+</tr>
+</tbody>
+</table>
+<h3 id="After判断是否在某个时间之后"><a href="#After判断是否在某个时间之后" class="headerlink" title="After判断是否在某个时间之后"></a>After判断是否在某个时间之后</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	t1 := time.Now()</span><br><span class="line">	t2 := time.Date(<span class="number">3000</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, time.UTC)</span><br><span class="line"></span><br><span class="line">	fmt.Println(t1.After(t2))</span><br><span class="line">	fmt.Println(t2.After(t1))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">false</span><br><span class="line">true</span><br></pre></td></tr></table></figure>
+<h3 id="Before判断是否在某个时间之前"><a href="#Before判断是否在某个时间之前" class="headerlink" title="Before判断是否在某个时间之前"></a>Before判断是否在某个时间之前</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">func main() &#123;</span><br><span class="line">	t1 := time.Now()</span><br><span class="line">	t2 := time.Date(3000, 1, 1, 0, 0, 0, 0, time.UTC)</span><br><span class="line"></span><br><span class="line">	fmt.Println(t1.Before(t2))</span><br><span class="line">	fmt.Println(t2.Before(t1))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">true</span><br><span class="line">false</span><br></pre></td></tr></table></figure>
+<h3 id="Equal判断不同时间是否表示同一时刻"><a href="#Equal判断不同时间是否表示同一时刻" class="headerlink" title="Equal判断不同时间是否表示同一时刻"></a>Equal判断不同时间是否表示同一时刻</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	loc, _ := time.LoadLocation(<span class="string">"Asia/Shanghai"</span>)</span><br><span class="line"></span><br><span class="line">	d1 := time.Date(<span class="number">2019</span>, <span class="number">6</span>, <span class="number">9</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, time.UTC)</span><br><span class="line">	d2 := time.Date(<span class="number">2019</span>, <span class="number">6</span>, <span class="number">9</span>, <span class="number">8</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, loc)</span><br><span class="line"></span><br><span class="line">	fmt.Println(d1 == d2)</span><br><span class="line">	fmt.Println(d1.Equal(d2))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">false</span><br><span class="line">true</span><br></pre></td></tr></table></figure>
+<h3 id="IsZero报告时间是否是-0001-1-1-00-00-00"><a href="#IsZero报告时间是否是-0001-1-1-00-00-00" class="headerlink" title="IsZero报告时间是否是 0001/1/1 00:00:00"></a>IsZero报告时间是否是 0001/1/1 00:00:00</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	t1 := time.Now()</span><br><span class="line">	fmt.Println(t1.IsZero())</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">false</span><br></pre></td></tr></table></figure>
+<h2 id="未整理TODO"><a href="#未整理TODO" class="headerlink" title="未整理TODO"></a>未整理TODO</h2><table>
+<thead>
+<tr>
+<th>函数</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>func (t *Time) GobDecode(data []byte) error</td>
+<td></td>
+</tr>
+<tr>
+<td>func (t Time) GobEncode() ([]byte, error)</td>
+<td></td>
+</tr>
+<tr>
+<td>func (t Time) MarshalBinary() ([]byte, error)</td>
+<td></td>
+</tr>
+<tr>
+<td>func (t Time) MarshalJSON() ([]byte, error)</td>
+<td></td>
+</tr>
+<tr>
+<td>func (t Time) MarshalText() ([]byte, error)</td>
+<td></td>
+</tr>
+<tr>
+<td>func (t *Time) UnmarshalBinary(data []byte) error</td>
+<td></td>
+</tr>
+<tr>
+<td>func (t *Time) UnmarshalJSON(data []byte) error</td>
+<td></td>
+</tr>
+<tr>
+<td>func (t *Time) UnmarshalText(data []byte) error</td>
+</tr>
+</tbody>
+</table>
+<h1 id="Timer-类型"><a href="#Timer-类型" class="headerlink" title="Timer 类型"></a>Timer 类型</h1><table>
+<thead>
+<tr>
+<th>函数</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>func AfterFunc(d Duration, f func()) *Timer</td>
+<td></td>
+</tr>
+<tr>
+<td>func NewTimer(d Duration) *Timer</td>
+<td></td>
+</tr>
+<tr>
+<td>func (t *Timer) Reset(d Duration) bool</td>
+<td></td>
+</tr>
+<tr>
+<td>func (t *Timer) Stop() bool</td>
+</tr>
+</tbody>
+</table>
 
           
         
@@ -445,7 +890,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://yangjinheng.github.io/2019/04/12/Linux/nginx-upsync-module/">
+    <link itemprop="mainEntityOfPage" href="https://yangjinheng.github.io/2019/05/12/kubernetes/K8S+Ceph+EFK/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Jin Heng">
@@ -464,7 +909,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2019/04/12/Linux/nginx-upsync-module/" itemprop="url">nginx-upsync-module 服务发现</a></h1>
+                <a class="post-title-link" href="/2019/05/12/kubernetes/K8S+Ceph+EFK/" itemprop="url">Helm + storageclass + EFK</a></h1>
         
 
         <div class="post-meta">
@@ -476,8 +921,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-04-12T00:00:00+08:00">
-                2019-04-12
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-05-12T00:00:00+08:00">
+                2019-05-12
               </time>
             
 
@@ -499,8 +944,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/运维笔记/" itemprop="url" rel="index">
-                    <span itemprop="name">运维笔记</span>
+                  <a href="/categories/Kubernetes/" itemprop="url" rel="index">
+                    <span itemprop="name">Kubernetes</span>
                   </a>
                 </span>
 
@@ -538,118 +983,96 @@
       
         
           
-            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>Upsync：微博开源基于Nginx容器动态流量管理方案Nginx 以其超高的性能与稳定性，在业界获得了广泛的使用，微博的七层就大量使用了 Nginx 。结合 Nginx 的健康检查模块，以及动态 reload 机制，可以近乎无损的服务的升级上线与扩容。这个时候扩容的频次比较低，大多数情况下是有计划的扩容。</p>
+            <p>本文使用 K8S 集群上运行 EFK，使用 Ceph 集群作为 ElasticSearch 集群的持久存储。</p>
+<p>用到知识有：Storage Class、PVC、Helm，另外，很多服务镜像需要翻墙。</p>
+<p>helm install 阻塞过程会下载镜像可能会比较慢。</p>
+<p>helm 里面有很多可以定制的项目，这里我就不定制了，反正我的资源也够用，懒得调了。</p>
+<p>感觉没啥可以写的 😂</p>
+<h2 id="Storage-Class"><a href="#Storage-Class" class="headerlink" title="Storage Class"></a>Storage Class</h2><figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Secret</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line"><span class="attr">  name:</span> <span class="string">ceph-admin-secret</span></span><br><span class="line"><span class="attr">  namespace:</span> <span class="string">kube-system</span></span><br><span class="line"><span class="attr">type:</span> <span class="string">"kubernetes.io/rbd"</span></span><br><span class="line"><span class="attr">data:</span></span><br><span class="line">  <span class="comment"># ceph auth get-key client.admin | base64</span></span><br><span class="line"><span class="attr">  key:</span> <span class="string">QVFER3U5TmMQNXQ4SlJBAAhHMGltdXZlNFZkUXAvN2tTZ1BENGc9PQ==</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Secret</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line"><span class="attr">  name:</span> <span class="string">ceph-secret</span></span><br><span class="line"><span class="attr">  namespace:</span> <span class="string">kube-system</span></span><br><span class="line"><span class="attr">type:</span> <span class="string">"kubernetes.io/rbd"</span></span><br><span class="line"><span class="attr">data:</span></span><br><span class="line">  <span class="comment"># ceph auth get-key client.kube | base64</span></span><br><span class="line"><span class="attr">  key:</span> <span class="string">QVFCcUM5VmNWVDdQCCCCWR1NUxFNfVKeTAiazdUWVhOa3N2UWc9PQ==</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">StorageClass</span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">storage.k8s.io/v1</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line"><span class="attr">  name:</span> <span class="string">ceph-rbd</span></span><br><span class="line"><span class="attr">provisioner:</span> <span class="string">ceph.com/rbd</span></span><br><span class="line"><span class="attr">parameters:</span></span><br><span class="line"><span class="attr">  monitors:</span> <span class="number">172.16</span><span class="number">.100</span><span class="number">.9</span><span class="string">:6789</span></span><br><span class="line"><span class="attr">  pool:</span> <span class="string">kube</span></span><br><span class="line"><span class="attr">  adminId:</span> <span class="string">admin</span></span><br><span class="line"><span class="attr">  adminSecretName:</span> <span class="string">ceph-admin-secret</span></span><br><span class="line"><span class="attr">  adminSecretNamespace:</span> <span class="string">kube-system</span></span><br><span class="line"><span class="attr">  userId:</span> <span class="string">kube</span></span><br><span class="line"><span class="attr">  userSecretName:</span> <span class="string">ceph-secret</span></span><br><span class="line"><span class="attr">  userSecretNamespace:</span> <span class="string">kube-system</span></span><br><span class="line"><span class="attr">  fsType:</span> <span class="string">ext4</span></span><br><span class="line"><span class="attr">  imageFormat:</span> <span class="string">"2"</span></span><br><span class="line"><span class="attr">  imageFeatures:</span> <span class="string">"layering"</span></span><br></pre></td></tr></table></figure>
+<h2 id="Helm-Elasticsearch"><a href="#Helm-Elasticsearch" class="headerlink" title="Helm Elasticsearch"></a>Helm Elasticsearch</h2><ul>
+<li>下载 elasticsearch 的 StatfullSet 的 chart</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">helm fetch stable/elasticsearch</span><br></pre></td></tr></table></figure>
 <ul>
-<li>nginx reload</li>
+<li>编辑 values.yaml，修改 storageClass 指向上面创建的 storageClass</li>
 </ul>
-<p>reload 时 Nginx 的请求处理能力会下降（ 注：Nginx 对于握手成功的请求不会丢失 ），在高并发的场景下请求处理能力下降意味着用户的请求被拒绝了，且每一次的 reload 对 Nginx 的 QPS 与耗时的影响通常会持续 8~10s，考虑到一次扩容会有频繁的变更，这对在线业务来说，是不堪承受之重。因此，要避免对 Nginx 进行 reload。</p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">storageClass:</span> <span class="string">"ceph-rbd"</span></span><br></pre></td></tr></table></figure>
 <ul>
-<li>nginx upstream</li>
+<li>使用 helm 指定 values.yaml 部署 elasticsearch</li>
 </ul>
-<p>在 Nginx 的设计中，每一个 upstream 维护了一张静态路由表，存储了 backend 的 ip、port 以及其他的 meta 信息。每次请求到达后，会依据 location 检索路由表，然后依据具体的调度算法（如：round robin）选择一个 backend 转发请求。但这张路由表是静态的，如果变更后，则必须 reload，通过上图就可以发现用户体验受到较大影响。</p>
-<h2 id="upsync介绍"><a href="#upsync介绍" class="headerlink" title="upsync介绍"></a>upsync介绍</h2><p>避免 reload 最直观的想法就是，每次更新后 backend 后在内存中动态更新/创建一张路由表，从而避免 reaload，通过 Nginx 扩展一个模块 <a href="https://github.com/weibocom/nginx-upsync-module" target="_blank" rel="noopener">nginx-upsync-module</a> 来动态更新维护路由表。</p>
-<p>路由表中所有的 backend 信息（含 meta）存储到 consul ，所有的 Nginx 从 consul 拉取相关信息，有变更则更新路由表，利用 consul 解决一致性问题，同时利用 consul 的订阅机制解决实时性问题，利用 consul 的 index (版本号) 进行增量摘取，解决带宽占用问题。</p>
-<p>在 consul 中，一个 k/v 对代表一个 backend 信息，增加一个即视作扩容，减少一个即为缩容。调整 meta 信息，如权重，也可以达到动态流量调整的目的。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">helm install --name els1 -f values.yaml stable/elasticsearch</span><br></pre></td></tr></table></figure>
 <ul>
-<li>路由表更新方式</li>
+<li>安装后查看，调试直到全部处于 READY 状态</li>
 </ul>
-<p>每个 work 进程定时的去 consul 拉取相应 upstream 的配置，定时的间隔可配；其中 consul 提供了 time_wait 机制，利用 value 的版本号，若 consul 发现对应 upstream 的值没有变化，便会 hang 住这个请求 5 分钟（默认），在这五分钟内对此 upstream 的任何操作，都会立刻返回给 Nginx，对相应路由进行更新。对于拉取的间隔可以结合场景的需要进行配置，基本可以实现所要求的实时性。upstream 变更后，除了更新 Nginx 的缓存路由信息，还会把本 upstream 的后端 server 列表 dump 到本地，保持本地 server 信息与 consul 的一致性。</p>
-<p>除了注册／注销后端的 server 到 consul，会更新到 Nginx 的 upstream 路由信息外，对后端 server 属性的修改也会同步到 nginx 的 upstream 路由。当前本模块支持修改的属性有 weight、max_fails、fail_timeout、down，修改 server 的权重可以动态的调整后端的流量，若想要临时移除server，可以把 server 的 down 属性置为 1（ 当前 down 的属性暂不支持 dump 到本地的 server 列表内  ），流量便会停止打到该 server，若要恢复流量，可重新把 down 置为 0。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ kubectl get pods</span><br><span class="line">NAME                                         READY   STATUS    RESTARTS   AGE</span><br><span class="line">els1-elasticsearch-client-55696f5bdd-qczbf   1/1     Running   1          78m</span><br><span class="line">els1-elasticsearch-client-55696f5bdd-tdwdc   1/1     Running   1          78m</span><br><span class="line">els1-elasticsearch-data-0                    1/1     Running   1          78m</span><br><span class="line">els1-elasticsearch-data-1                    1/1     Running   1          56m</span><br><span class="line">els1-elasticsearch-master-0                  1/1     Running   1          78m</span><br><span class="line">els1-elasticsearch-master-1                  1/1     Running   1          53m</span><br><span class="line">els1-elasticsearch-master-2                  1/1     Running   1          52m</span><br><span class="line">rbd-provisioner-9b8ffbcc-nxdjd               1/1     Running   2          81m</span><br></pre></td></tr></table></figure>
 <ul>
-<li>高可用性相关</li>
+<li>也可以使用 helm 命令查看</li>
 </ul>
-<p>Nginx 的后端列表更新依赖于 consul，但是不强依赖于它，表现在：一是即使中途 consul 意外挂了，也不会影响 Nginx 的服务，Nginx 会沿用最后一次更新的服务列表继续提供服务；二是若 consul 重新启动提供服务，这个时候 Nginx 会继续去 consul 探测，这个时候 consul 的后端服务列表发生了变化，也会及时的更新到 Nginx。</p>
-<p>另一方面，work 进程每次更新都会把后端列表 dump 到本地，目的是降低对 consul 的依赖性，即使在 consul 不可用之时，也可以 reload Nginx。</p>
-<p>Nginx 启动时，master 进程首先会解析本地的配置文件，解析完成功，接着进行一系列的初始化，之后便会开始 work 进程的初始化。work 初始化时会去 consul 拉取配置，进行 work 进程 upstream 路由信息的更新，若拉取成功，便直接更新，若拉取失败，便会打开配置的 dump 后端列表的文件，提取之前 dump 下来的 server 信息，进行 upstream 路由的更新，之后便开始正常的提供服务。</p>
-<p>每次去拉取 consul 都会设置连接超时，由于 consul 在无更新的情况下默认会 hang 五分钟，所以响应超时配置时间应大于五分钟。大于五分钟之后，consul 依旧没有返回，便直接做超时处理。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ helm status els1</span><br><span class="line"></span><br><span class="line">LAST DEPLOYED: Sun May 12 16:28:56 2019</span><br><span class="line">NAMESPACE: default</span><br><span class="line">STATUS: DEPLOYED</span><br><span class="line"></span><br><span class="line">RESOURCES:</span><br><span class="line">==&gt; v1/ConfigMap</span><br><span class="line">NAME                     DATA  AGE</span><br><span class="line">els1-elasticsearch       4     88m</span><br><span class="line">els1-elasticsearch-test  1     88m</span><br><span class="line"></span><br><span class="line">==&gt; v1/Pod(related)</span><br><span class="line">NAME                                        READY  STATUS   RESTARTS  AGE</span><br><span class="line">els1-elasticsearch-client-55696f5bdd-qczbf  1/1    Running  1         88m</span><br><span class="line">els1-elasticsearch-client-55696f5bdd-tdwdc  1/1    Running  1         88m</span><br><span class="line">els1-elasticsearch-data-0                   1/1    Running  1         88m</span><br><span class="line">els1-elasticsearch-data-1                   1/1    Running  1         66m</span><br><span class="line">els1-elasticsearch-master-0                 1/1    Running  1         88m</span><br><span class="line">els1-elasticsearch-master-1                 1/1    Running  1         63m</span><br><span class="line">els1-elasticsearch-master-2                 1/1    Running  1         62m</span><br><span class="line"></span><br><span class="line">==&gt; v1/Service</span><br><span class="line">NAME                          TYPE       CLUSTER-IP     EXTERNAL-IP  PORT(S)   AGE</span><br><span class="line">els1-elasticsearch-client     ClusterIP  10.98.197.185  &lt;none&gt;       9200/TCP  88m</span><br><span class="line">els1-elasticsearch-discovery  ClusterIP  None           &lt;none&gt;       9300/TCP  88m</span><br><span class="line"></span><br><span class="line">==&gt; v1/ServiceAccount</span><br><span class="line">NAME                       SECRETS  AGE</span><br><span class="line">els1-elasticsearch-client  1        88m</span><br><span class="line">els1-elasticsearch-data    1        88m</span><br><span class="line">els1-elasticsearch-master  1        88m</span><br><span class="line"></span><br><span class="line">==&gt; v1beta1/Deployment</span><br><span class="line">NAME                       READY  UP-TO-DATE  AVAILABLE  AGE</span><br><span class="line">els1-elasticsearch-client  2/2    2           2          88m</span><br><span class="line"></span><br><span class="line">==&gt; v1beta1/StatefulSet</span><br><span class="line">NAME                       READY  AGE</span><br><span class="line">els1-elasticsearch-data    2/2    88m</span><br><span class="line">els1-elasticsearch-master  3/3    88m</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">NOTES:</span><br><span class="line">The elasticsearch cluster has been installed.</span><br><span class="line"></span><br><span class="line">Elasticsearch can be accessed:</span><br><span class="line"></span><br><span class="line">  * Within your cluster, at the following DNS name at port 9200:</span><br><span class="line"></span><br><span class="line">    els1-elasticsearch-client.default.svc</span><br><span class="line"></span><br><span class="line">  * From outside the cluster, run these commands <span class="keyword">in</span> the same shell:</span><br><span class="line"></span><br><span class="line">    <span class="built_in">export</span> POD_NAME=$(kubectl get pods --namespace default -l <span class="string">"app=elasticsearch,component=client,release=els1"</span> -o jsonpath=<span class="string">"&#123;.items[0].metadata.name&#125;"</span>)</span><br><span class="line">    <span class="built_in">echo</span> <span class="string">"Visit http://127.0.0.1:9200 to use Elasticsearch"</span></span><br><span class="line">    kubectl port-forward --namespace default <span class="variable">$POD_NAME</span> 9200:9200</span><br></pre></td></tr></table></figure>
 <ul>
-<li>性能相关</li>
+<li>启动一个临时的容器，解析集群地址，测试集群信息，查看集群节点</li>
 </ul>
-<p>nginx-upsync-module 模块，潜在的带来额外的性能开销，比如间隔性的向 consul 发送请求，由于间隔比较久，且每个请求相当于 Nginx 的一个客户端请求，所以影响有限。</p>
-<h2 id="upsync模块语法"><a href="#upsync模块语法" class="headerlink" title="upsync模块语法"></a>upsync模块语法</h2><ul>
-<li>upsync</li>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ kubectl run cirros1 --rm -it --image=cirros -- /bin/sh</span><br><span class="line"></span><br><span class="line">/ <span class="comment"># nslookup els1-elasticsearch-client.default.svc</span></span><br><span class="line">Server:    10.96.0.10</span><br><span class="line">Address 1: 10.96.0.10 kube-dns.kube-system.svc.cluster.local</span><br><span class="line"></span><br><span class="line">Name:      els1-elasticsearch-client.default.svc</span><br><span class="line">Address 1: 10.98.197.185 els1-elasticsearch-client.default.svc.cluster.local</span><br><span class="line">/ <span class="comment"># curl els1-elasticsearch-client.default.svc.cluster.local:9200/_cat/nodes</span></span><br><span class="line">10.244.2.28  7 96 2 0.85 0.26 0.16 di - els1-elasticsearch-data-0</span><br><span class="line">10.244.1.37  7 83 1 0.04 0.06 0.11 di - els1-elasticsearch-data-1</span><br><span class="line">10.244.2.25 19 96 2 0.85 0.26 0.16 i  - els1-elasticsearch-client-55696f5bdd-tdwdc</span><br><span class="line">10.244.2.27 28 96 2 0.85 0.26 0.16 mi * els1-elasticsearch-master-2</span><br><span class="line">10.244.1.39 19 83 1 0.04 0.06 0.11 i  - els1-elasticsearch-client-55696f5bdd-qczbf</span><br><span class="line">10.244.2.29 21 96 2 0.85 0.26 0.16 mi - els1-elasticsearch-master-1</span><br><span class="line">10.244.1.38 23 83 1 0.04 0.06 0.11 mi - els1-elasticsearch-master-0</span><br></pre></td></tr></table></figure>
+<h2 id="Helm-fluentd-elasticsearch"><a href="#Helm-fluentd-elasticsearch" class="headerlink" title="Helm fluentd-elasticsearch"></a>Helm fluentd-elasticsearch</h2><ul>
+<li>安装 kiwigrid 源</li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">功能：从 consul 或 etcd 获取服务列表</span><br><span class="line">位置：upstream</span><br><span class="line">语法：upsync $consul.api.com:$port/v1/kv/upstreams/$upstream_name [upsync_type=consul] [upsync_interval=seconds/minutes] [upsync_timeout=seconds/minutes] [strong_dependency=off/on];</span><br><span class="line">默认：upsync_interval=5s upsync_timeout=6m strong_dependency=off</span><br></pre></td></tr></table></figure>
-<table>
-<thead>
-<tr>
-<th>参数</th>
-<th>解释</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>upsync_interval</td>
-<td>从 consul 获取服务列表的间隔时间</td>
-</tr>
-<tr>
-<td>upsync_timeout</td>
-<td>从 consul 获取服务列表的请求超时时间</td>
-</tr>
-<tr>
-<td>upsync_type</td>
-<td>指定从什么类型的服务(consul 或 etcd)获取服务列表</td>
-</tr>
-<tr>
-<td>strong_dependency</td>
-<td>nginx 启动是否强制依赖 upsync_type 指定的服务的开关。如果 upsync_type 指定的是 consul，在 nginx 启动是，consul并未运行，那么 nginx 启动会失败。</td>
-</tr>
-</tbody>
-</table>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">helm repo add kiwigrid https://kiwigrid.github.io</span><br></pre></td></tr></table></figure>
 <ul>
-<li>upsync_dump_path</li>
+<li>下载 fluentd-elasticsearch</li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">功能：备份 upstream 配置的后端服务器到指定的路径下</span><br><span class="line">位置：upstream</span><br><span class="line">语法： upsync_dump_path $path;</span><br><span class="line">默认：/tem/servers_$host.conf</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">helm fetch kiwigrid/fluentd-elasticsearch</span><br></pre></td></tr></table></figure>
 <ul>
-<li>upsync_lb</li>
+<li>获取集群地址</li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">功能：指定使用的调度方法</span><br><span class="line">位置：upstream</span><br><span class="line">语法：upsync_lb round_robin/ip_hash/hash</span><br><span class="line">默认：round_robin</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">els1-elasticsearch-client.default.svc.cluster.local:9200</span><br></pre></td></tr></table></figure>
 <ul>
-<li>upstream_show</li>
+<li>编辑修改 values.yaml，指定 elasticsearch 集群的位置</li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">功能：列出指定的 upstream 配置的所有后端服务器</span><br><span class="line">位置：location</span><br><span class="line">语法：upstream_show；</span><br><span class="line">默认：None</span><br></pre></td></tr></table></figure>
-<h2 id="编译nginx"><a href="#编译nginx" class="headerlink" title="编译nginx"></a>编译nginx</h2><ul>
-<li>克隆 nginx-upsync-module 库</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">https://github.com/weibocom/nginx-upsync-module.git</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">elasticsearch:</span><br><span class="line">  host: <span class="string">'els1-elasticsearch-client.default.svc.cluster.local'</span></span><br><span class="line">  port: 9200</span><br></pre></td></tr></table></figure>
 <ul>
-<li>下载 nginx 源码编译安装</li>
+<li>修改对污点的容忍程度，使其容忍 Master 节点的污点，也运行在 Master 节点上收集信息</li>
 </ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">wget http://nginx.org/download/nginx-1.14.2.tar.gz</span><br><span class="line">tar xf nginx-1.14.2.tar.gz</span><br></pre></td></tr></table></figure>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">tolerations:</span> </span><br><span class="line"><span class="attr">  - key:</span> <span class="string">node-role.kubernetes.io/master</span></span><br><span class="line"><span class="attr">    operator:</span> <span class="string">Exists</span></span><br><span class="line"><span class="attr">    effect:</span> <span class="string">NoSchedule</span></span><br></pre></td></tr></table></figure>
 <ul>
-<li>编译时候增加 nginx-upsync-module 模块</li>
+<li>如果使用 prometheus 监控应该打开 prometheusRole 规则</li>
 </ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">./configure --add-dynamic-module=../nginx-upsync-module ...</span><br></pre></td></tr></table></figure>
-<h2 id="upsync配置示例"><a href="#upsync配置示例" class="headerlink" title="upsync配置示例"></a>upsync配置示例</h2><figure class="highlight nginx"><table><tr><td class="code"><pre><span class="line"><span class="attribute">worker_processes</span>  <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line"><span class="attribute">load_module</span> modules/ngx_http_upsync_module.so;</span><br><span class="line"></span><br><span class="line"><span class="section">events</span> &#123;</span><br><span class="line">    <span class="attribute">worker_connections</span>  <span class="number">1024</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="section">http</span> &#123;</span><br><span class="line">    <span class="attribute">include</span>       mime.types;</span><br><span class="line">    <span class="attribute">default_type</span>  application/octet-stream;</span><br><span class="line"></span><br><span class="line">    <span class="attribute">log_format</span>  main  <span class="string">'<span class="variable">$remote_addr</span> - <span class="variable">$remote_user</span> [<span class="variable">$time_local</span>] "<span class="variable">$request</span>" '</span></span><br><span class="line">                      <span class="string">'<span class="variable">$status</span> <span class="variable">$body_bytes_sent</span> "<span class="variable">$http_referer</span>" '</span></span><br><span class="line">                      <span class="string">'"<span class="variable">$http_user_agent</span>" "<span class="variable">$http_x_forwarded_for</span>"'</span>;</span><br><span class="line"></span><br><span class="line">    <span class="attribute">access_log</span>  logs/access.log  main;</span><br><span class="line"></span><br><span class="line">    <span class="attribute">upstream</span> test &#123;</span><br><span class="line">        <span class="attribute">upsync</span> <span class="number">172.16.100.100:2379</span>/v2/keys/upstreams/pool upsync_timeout=<span class="number">6m</span> upsync_interval=<span class="number">500ms</span> upsync_type=etcd strong_dependency=<span class="literal">off</span>;</span><br><span class="line">        <span class="attribute">upsync_dump_path</span> /etc/nginx/server_list.conf;</span><br><span class="line">        <span class="attribute">include</span> /etc/nginx/server_list.conf;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="attribute">upstream</span> bar &#123;</span><br><span class="line">        <span class="attribute">server</span> <span class="number">127.0.0.1:8090</span> weight=<span class="number">1</span> fail_timeout=<span class="number">10</span> max_fails=<span class="number">3</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="section">server</span> &#123;</span><br><span class="line">        <span class="attribute">listen</span> <span class="number">80</span>;</span><br><span class="line"></span><br><span class="line">        <span class="attribute">location</span> = /index.html &#123;</span><br><span class="line">            <span class="attribute">proxy_pass</span> http://test;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="attribute">location</span> = /bar &#123;</span><br><span class="line">            <span class="attribute">proxy_pass</span> http://bar;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="attribute">location</span> = /upstream_show &#123;</span><br><span class="line">            upstream_show;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">podAnnotations:</span></span><br><span class="line">  <span class="string">prometheus.io/scrape:</span> <span class="string">"true"</span></span><br><span class="line">  <span class="string">prometheus.io/port:</span> <span class="string">"24231"</span></span><br><span class="line">  </span><br><span class="line"><span class="attr">service:</span></span><br><span class="line"><span class="attr">  type:</span> <span class="string">ClusterIP</span></span><br><span class="line"><span class="attr">  ports:</span></span><br><span class="line"><span class="attr">    - name:</span> <span class="string">"monitor-agent"</span></span><br><span class="line"><span class="attr">      port:</span> <span class="number">24231</span></span><br></pre></td></tr></table></figure>
 <ul>
-<li>准备初始的 server 列表，vim /etc/nginx/server_list.conf</li>
+<li>使用 helm 指定 values.yaml 部署 fluentd-elasticsearch</li>
 </ul>
-<figure class="highlight nginx"><table><tr><td class="code"><pre><span class="line"><span class="attribute">server</span> <span class="number">172.16.100.102:80</span> weight=<span class="number">1</span> max_fails=<span class="number">2</span> fail_timeout=<span class="number">10s</span>;</span><br><span class="line"><span class="attribute">server</span> <span class="number">172.16.100.103:80</span> weight=<span class="number">1</span> max_fails=<span class="number">2</span> fail_timeout=<span class="number">10s</span>;</span><br></pre></td></tr></table></figure>
-<h2 id="ETCD数据操作"><a href="#ETCD数据操作" class="headerlink" title="ETCD数据操作"></a>ETCD数据操作</h2><ul>
-<li>增加节点，默认属性为：weight=1 max_fails=2 fail_timeout=10 down=0 backup=0;</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">curl -X PUT http://172.16.100.100:2379/v2/keys/upstreams/pool/172.16.100.102:80</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">helm install --name flu1 -f values.yaml kiwigrid/fluentd-elasticsearch</span><br></pre></td></tr></table></figure>
 <ul>
-<li>删除数据</li>
+<li>查看状态 flu1 这个 helm 服务的运行状态</li>
 </ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">curl -X DELETE http://172.16.100.100:2379/v2/keys/upstreams/pool/172.16.100.102:80</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[root@master fluentd-elasticsearch]<span class="comment"># helm status flu1</span></span><br><span class="line">LAST DEPLOYED: Sun May 12 18:13:12 2019</span><br><span class="line">NAMESPACE: default</span><br><span class="line">STATUS: DEPLOYED</span><br><span class="line"></span><br><span class="line">RESOURCES:</span><br><span class="line">==&gt; v1/ClusterRole</span><br><span class="line">NAME                        AGE</span><br><span class="line">flu1-fluentd-elasticsearch  17m</span><br><span class="line"></span><br><span class="line">==&gt; v1/ClusterRoleBinding</span><br><span class="line">NAME                        AGE</span><br><span class="line">flu1-fluentd-elasticsearch  17m</span><br><span class="line"></span><br><span class="line">==&gt; v1/ConfigMap</span><br><span class="line">NAME                        DATA  AGE</span><br><span class="line">flu1-fluentd-elasticsearch  6     17m</span><br><span class="line"></span><br><span class="line">==&gt; v1/DaemonSet</span><br><span class="line">NAME                        DESIRED  CURRENT  READY  UP-TO-DATE  AVAILABLE  NODE SELECTOR  AGE</span><br><span class="line">flu1-fluentd-elasticsearch  3        3        3      3           3          &lt;none&gt;         17m</span><br><span class="line"></span><br><span class="line">==&gt; v1/Pod(related)</span><br><span class="line">NAME                              READY  STATUS   RESTARTS  AGE</span><br><span class="line">flu1-fluentd-elasticsearch-p49fc  1/1    Running  1         17m</span><br><span class="line">flu1-fluentd-elasticsearch-q5b9k  1/1    Running  0         17m</span><br><span class="line">flu1-fluentd-elasticsearch-swfvt  1/1    Running  0         17m</span><br><span class="line"></span><br><span class="line">==&gt; v1/Service</span><br><span class="line">NAME                        TYPE       CLUSTER-IP      EXTERNAL-IP  PORT(S)    AGE</span><br><span class="line">flu1-fluentd-elasticsearch  ClusterIP  10.106.106.209  &lt;none&gt;       24231/TCP  17m</span><br><span class="line"></span><br><span class="line">==&gt; v1/ServiceAccount</span><br><span class="line">NAME                        SECRETS  AGE</span><br><span class="line">flu1-fluentd-elasticsearch  1        17m</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">NOTES:</span><br><span class="line">1. To verify that Fluentd has started, run:</span><br><span class="line"></span><br><span class="line">  kubectl --namespace=default get pods -l <span class="string">"app.kubernetes.io/name=fluentd-elasticsearch,app.kubernetes.io/instance=flu1"</span></span><br><span class="line"></span><br><span class="line">THIS APPLICATION CAPTURES ALL CONSOLE OUTPUT AND FORWARDS IT TO elasticsearch . Anything that might be identifying,</span><br><span class="line">including things like IP addresses, container images, and object names will NOT be anonymized.</span><br><span class="line">2. Get the application URL by running these commands:</span><br><span class="line">  <span class="built_in">export</span> POD_NAME=$(kubectl get pods --namespace default -l <span class="string">"app.kubernetes.io/name=fluentd-elasticsearch,app.kubernetes.io/instance=flu1"</span> -o jsonpath=<span class="string">"&#123;.items[0].metadata.name&#125;"</span>)</span><br><span class="line">  <span class="built_in">echo</span> <span class="string">"Visit http://127.0.0.1:8080 to use your application"</span></span><br><span class="line">  kubectl port-forward <span class="variable">$POD_NAME</span> 8080:80</span><br></pre></td></tr></table></figure>
 <ul>
-<li>获取数据</li>
+<li>是否生成了索引，直接使用访问 elasticsearch 的 RESTfull API 接口。</li>
 </ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">curl http://172.16.100.100:2379/v2/keys/upstreams/pool</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ kubectl run cirros1 --rm -it --image=cirros -- /bin/sh</span><br><span class="line">/ <span class="comment"># curl els1-elasticsearch-client.default.svc.cluster.local:9200/_cat/indices</span></span><br><span class="line">green open logstash-2019.05.10 a2b-GyKsSLOZPqGKbCpyJw 5 1   158 0 84.2kb   460b</span><br><span class="line">green open logstash-2019.05.09 CwYylNhdRf-A5UELhrzHow 5 1 71418 0 34.3mb 17.4mb</span><br><span class="line">green open logstash-2019.05.12 5qRFpV46RGG_bWC4xbsyVA 5 1 34496 0 26.1mb 13.2mb</span><br></pre></td></tr></table></figure>
+<h2 id="Helm-kibana"><a href="#Helm-kibana" class="headerlink" title="Helm kibana"></a>Helm kibana</h2><ul>
+<li>下载 stable/kibana</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">helm fetch stable/kibana</span><br></pre></td></tr></table></figure>
 <ul>
-<li>增加节点，或者修改属性</li>
+<li>编辑 values.yaml，修改 elasticsearch 指向 elasticsearch 集群的地址</li>
 </ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">curl -X PUT -d value=<span class="string">'&#123;"weight":1, "max_fails":2, "fail_timeout":10&#125;'</span> http://172.16.100.100:2379/v2/keys/upstreams/pool/172.16.100.102:80</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">elasticsearch.hosts: http://els1-elasticsearch-client.default.svc.cluster.local:920</span><br></pre></td></tr></table></figure>
 <ul>
-<li>标记节点下线</li>
+<li>修改 service 的工作模式，使得可以从集群外部访问</li>
 </ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">curl -X PUT -d value=<span class="string">'&#123;"weight":2, "max_fails":2, "fail_timeout":10, "down":1&#125;'</span> http://172.16.100.100:2379/v2/keys/upstreams/pool/172.16.100.102:80</span><br></pre></td></tr></table></figure>
-<h2 id="查看当前-upstream"><a href="#查看当前-upstream" class="headerlink" title="查看当前 upstream"></a>查看当前 upstream</h2><ul>
-<li><a href="http://172.16.100.101/upstream_show" target="_blank" rel="noopener">http://172.16.100.101/upstream_show</a></li>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">service:</span></span><br><span class="line"><span class="attr">  type:</span> <span class="string">NodePort</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>使用 helm 指定 values.yaml 部署 kibana</li>
 </ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">Upstream name: <span class="built_in">test</span>; Backend server count: 2</span><br><span class="line">        server 172.16.100.102:80 weight=1 max_fails=2 fail_timeout=10s;</span><br><span class="line">        server 172.16.100.103:80 weight=1 max_fails=2 fail_timeout=10s;</span><br><span class="line"></span><br><span class="line">Upstream name: bar; Backend server count: 1</span><br><span class="line">        server 127.0.0.1:8090 weight=1 max_fails=3 fail_timeout=10s;</span><br></pre></td></tr></table></figure>
-
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">helm install --name kib1 -f values.yaml stable/kibana</span><br></pre></td></tr></table></figure>
+<ul>
+<li>获取 service 端口</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ kubectl get svc</span><br><span class="line">NAME                           TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)         AGE</span><br><span class="line">els1-elasticsearch-client      ClusterIP   10.98.197.185   &lt;none&gt;        9200/TCP        4h51m</span><br><span class="line">els1-elasticsearch-discovery   ClusterIP   None            &lt;none&gt;        9300/TCP        4h51m</span><br><span class="line">flu1-fluentd-elasticsearch     ClusterIP   10.101.97.11    &lt;none&gt;        24231/TCP       157m</span><br><span class="line">kib1-kibana                    NodePort    10.103.7.215    &lt;none&gt;        443:31537/TCP   6m50s</span><br><span class="line">kubernetes                     ClusterIP   10.96.0.1       &lt;none&gt;        443/TCP         3d4h</span><br></pre></td></tr></table></figure>
+<ul>
+<li>由于 service 工作在 NodePort 模式下，所以可以在集群外部访问了</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">172.16.100.6:31537</span><br></pre></td></tr></table></figure>
           
         
       
@@ -688,7 +1111,7 @@
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/4/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><span class="space">&hellip;</span><a class="page-number" href="/page/36/">36</a><a class="extend next" rel="next" href="/page/6/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/page/4/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><span class="space">&hellip;</span><a class="page-number" href="/page/39/">39</a><a class="extend next" rel="next" href="/page/6/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -736,7 +1159,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">72</span>
+                  <span class="site-state-item-count">77</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
