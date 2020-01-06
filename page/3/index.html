@@ -504,7 +504,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://yangjinheng.github.io/2019/06/11/go/sort/">
+    <link itemprop="mainEntityOfPage" href="https://yangjinheng.github.io/2019/06/11/go/1.基本数据结构/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Jin Heng">
@@ -523,7 +523,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2019/06/11/go/sort/" itemprop="url">go 标准库之 sort</a></h1>
+                <a class="post-title-link" href="/2019/06/11/go/1.基本数据结构/" itemprop="url">基础数据结构和语法</a></h1>
         
 
         <div class="post-meta">
@@ -597,24 +597,1127 @@
       
         
           
-            <h1 id="sort"><a href="#sort" class="headerlink" title="sort"></a>sort</h1><p>go 语言标准库中提供了排序的 API</p>
-<p>sort 包提供了多种排序算法，这些排序算法是内部实现的，每次使用 sort 时候会自动选择最优的算法。</p>
-<h2 id="整数升序降序"><a href="#整数升序降序" class="headerlink" title="整数升序降序"></a>整数升序降序</h2><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	arr1 := []<span class="keyword">int</span>&#123;<span class="number">10</span>, <span class="number">3</span>, <span class="number">9</span>, <span class="number">2</span>, <span class="number">5</span>, <span class="number">7</span>, <span class="number">4</span>, <span class="number">1</span>&#125;</span><br><span class="line">	<span class="comment">// sort.Ints(arr1)</span></span><br><span class="line">    sort.Sort(sort.IntSlice(arr1))</span><br><span class="line">	fmt.Println(arr1)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[1 2 3 4 5 7 9 10]</span><br></pre></td></tr></table></figure>
-<h2 id="整数升序降序-1"><a href="#整数升序降序-1" class="headerlink" title="整数升序降序"></a>整数升序降序</h2><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	arr1 := []<span class="keyword">int</span>&#123;<span class="number">10</span>, <span class="number">3</span>, <span class="number">9</span>, <span class="number">2</span>, <span class="number">5</span>, <span class="number">7</span>, <span class="number">4</span>, <span class="number">1</span>&#125;</span><br><span class="line">	sort.Ints(arr1)</span><br><span class="line">	fmt.Println(arr1)</span><br><span class="line">	sort.Sort(sort.Reverse(sort.IntSlice(arr1)))</span><br><span class="line">	fmt.Println(arr1)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[1 2 3 4 5 7 9 10]</span><br><span class="line">[10 9 7 5 4 3 2 1]</span><br></pre></td></tr></table></figure>
-<h2 id="浮点数排序"><a href="#浮点数排序" class="headerlink" title="浮点数排序"></a>浮点数排序</h2><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	arr1 := []<span class="keyword">float64</span>&#123;<span class="number">3.14</span>, <span class="number">2.22</span>, <span class="number">5.66</span>, <span class="number">6.88</span>, <span class="number">9.82</span>, <span class="number">4.33</span>&#125;</span><br><span class="line">	sort.Float64s(arr1)</span><br><span class="line">	fmt.Println(arr1)</span><br><span class="line">	sort.Sort(sort.Reverse(sort.Float64Slice(arr1)))</span><br><span class="line">	fmt.Println(arr1)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[2.22 3.14 4.33 5.66 6.88 9.82]</span><br><span class="line">[9.82 6.88 5.66 4.33 3.14 2.22]</span><br></pre></td></tr></table></figure>
-<h2 id="字符串排序"><a href="#字符串排序" class="headerlink" title="字符串排序"></a>字符串排序</h2><ul>
-<li>升序降序</li>
+            <h1 id="基础命令"><a href="#基础命令" class="headerlink" title="基础命令"></a>基础命令</h1><h2 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h2><ol>
+<li>Go 源码是以 .go 为扩展名的</li>
+<li>Go 应用程序的执行入口是 main() 函数</li>
+<li>严格区分大小写</li>
+<li>Go 代码的每个语句结尾不需要加 ;</li>
+<li>Go 编译器是一行一行编译的，因此一行就写一条语句，否则报错</li>
+<li>Go 语言 import 包如果没有使用到，那么代码不能编译通过</li>
+</ol>
+<h2 id="Go命令"><a href="#Go命令" class="headerlink" title="Go命令"></a>Go命令</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">Usage: go &lt;<span class="built_in">command</span>&gt; [arguments]</span><br><span class="line"></span><br><span class="line">The commands are:</span><br><span class="line"></span><br><span class="line">	bug               <span class="comment"># 提交bug</span></span><br><span class="line">	build             <span class="comment"># 编译软件包和依赖项</span></span><br><span class="line">	clean             <span class="comment"># 删除目标文件和缓存的文件</span></span><br><span class="line">	doc               <span class="comment"># 显示包或标志的文档</span></span><br><span class="line">	env               <span class="comment"># 打印Go环境信息</span></span><br><span class="line">	fix               <span class="comment"># 更新软件包以使用新的API</span></span><br><span class="line">	fmt               <span class="comment"># gofmt(重新格式化)包源</span></span><br><span class="line">	generate          <span class="comment"># 通过处理源文件生成Go文件</span></span><br><span class="line">	get               <span class="comment"># 从远程下载第三方go语言库</span></span><br><span class="line">	install           <span class="comment"># 编译和安装包和依赖项</span></span><br><span class="line">	list              <span class="comment"># 列出包或模块</span></span><br><span class="line">	mod               <span class="comment"># 模块维护</span></span><br><span class="line">	run               <span class="comment"># 编译并运行Go程序</span></span><br><span class="line">	<span class="built_in">test</span>              <span class="comment"># 测试包</span></span><br><span class="line">	tool              <span class="comment"># 运行指定的go工具</span></span><br><span class="line">	version           <span class="comment"># 打印Go版本</span></span><br><span class="line">	vet               <span class="comment"># 静态解析文件，检查是否存在语法错误</span></span><br><span class="line"></span><br><span class="line">有关命令的详细信息，请使用 go <span class="built_in">help</span> &lt;<span class="built_in">command</span>&gt;。</span><br><span class="line"></span><br><span class="line">其他帮助:</span><br><span class="line"></span><br><span class="line">    buildmode         <span class="comment"># 构建模式</span></span><br><span class="line">    c                 <span class="comment"># 在Go和C之间调用</span></span><br><span class="line">    cache             <span class="comment"># 建立并测试缓存</span></span><br><span class="line">    environment       <span class="comment"># 环境变量</span></span><br><span class="line">    filetype          <span class="comment"># 文件类型</span></span><br><span class="line">    go.mod            <span class="comment"># go.mod 文件</span></span><br><span class="line">    gopath            <span class="comment"># GOPATH环境变量</span></span><br><span class="line">    gopath-get        <span class="comment"># 旧版 GOPATH go get</span></span><br><span class="line">    goproxy           <span class="comment"># 模块代理协议</span></span><br><span class="line">    importpath        <span class="comment"># 导入路径语法</span></span><br><span class="line">    modules           <span class="comment"># 模块，模块版本等</span></span><br><span class="line">    module-get        <span class="comment"># 模块感知 go get</span></span><br><span class="line">    module-auth       <span class="comment"># 使用 go.sum 进行模块身份验证</span></span><br><span class="line">    module-private    <span class="comment"># 非公共模块的模块配置</span></span><br><span class="line">    packages          <span class="comment"># 包列表和模式</span></span><br><span class="line">    testflag          <span class="comment"># 测试标志</span></span><br><span class="line">    testfunc          <span class="comment"># 测试功能</span></span><br></pre></td></tr></table></figure>
+<h2 id="godoc命令"><a href="#godoc命令" class="headerlink" title="godoc命令"></a>godoc命令</h2><p>可以使用 <code>godoc &lt;package&gt; &lt;function&gt;</code> 查看包或函数的详细源码。</p>
+<h2 id="gofmt命令"><a href="#gofmt命令" class="headerlink" title="gofmt命令"></a>gofmt命令</h2><p>gofmt 工具可以帮助程序员把代码进行格式化，按照规范进行格式化，使用 gofmt 工具的前提是 go 代码已经编译通过。</p>
+<h1 id="变量和常量"><a href="#变量和常量" class="headerlink" title="变量和常量"></a>变量和常量</h1><p>Go 语言的变量是有明确类型的，变量名称应该遵循驼峰法则，Go 语言中一个变量被声明之后，系统自动赋予该类型的零值，int 为 0，float 为 0.0 ，bool 为 false 等，指针为 nil。</p>
+<h2 id="变量声明"><a href="#变量声明" class="headerlink" title="变量声明"></a>变量声明</h2><ul>
+<li>声明变量后，变量会被初始化为该类型的 0 值。</li>
 </ul>
-<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	arr1 := []<span class="keyword">string</span>&#123;<span class="string">"a"</span>, <span class="string">"c"</span>, <span class="string">"b"</span>, <span class="string">"d"</span>, <span class="string">"f"</span>, <span class="string">"i"</span>, <span class="string">"z"</span>, <span class="string">"x"</span>, <span class="string">"w"</span>, <span class="string">"y"</span>&#125;</span><br><span class="line">	sort.Strings(arr1)</span><br><span class="line">	fmt.Println(arr1)</span><br><span class="line">	sort.Sort(sort.Reverse(sort.StringSlice(arr1)))</span><br><span class="line">	fmt.Println(arr1)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[a b c d f i w x y z]</span><br><span class="line">[z y x w i f d c b a]</span><br></pre></td></tr></table></figure>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> a <span class="keyword">int</span></span><br><span class="line"><span class="keyword">var</span> b, c <span class="keyword">string</span></span><br></pre></td></tr></table></figure>
 <ul>
-<li>搜索字符串</li>
+<li>批量声明，变量会被初始化为该类型的 0 值。</li>
 </ul>
-<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	arr1 := []<span class="keyword">string</span>&#123;<span class="string">"a"</span>, <span class="string">"c"</span>, <span class="string">"b"</span>, <span class="string">"d"</span>, <span class="string">"f"</span>, <span class="string">"i"</span>, <span class="string">"z"</span>, <span class="string">"x"</span>, <span class="string">"w"</span>, <span class="string">"y"</span>&#125;</span><br><span class="line">	sort.Strings(arr1)</span><br><span class="line">	fmt.Println(arr1)                        <span class="comment">// SearchStrings 的目标应该是升序的</span></span><br><span class="line">	d := sort.SearchStrings(arr1, <span class="string">"d"</span>)       <span class="comment">// 存在返回索引位置</span></span><br><span class="line">	e := sort.SearchStrings(arr1, <span class="string">"ever"</span>)    <span class="comment">// 不存在返回应该插入的位置</span></span><br><span class="line">	fmt.Println(d, e)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="number">3</span> <span class="number">4</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> (</span><br><span class="line">	a <span class="keyword">int</span></span><br><span class="line">    b <span class="keyword">float32</span></span><br><span class="line">    c <span class="keyword">string</span></span><br><span class="line">    d []<span class="keyword">int</span></span><br><span class="line">    e <span class="function"><span class="keyword">func</span><span class="params">()</span> <span class="title">bool</span></span></span><br><span class="line"><span class="function">    <span class="title">e</span> <span class="title">struct</span></span> &#123;</span><br><span class="line">        x <span class="keyword">int</span></span><br><span class="line">    &#125;</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="number">0</span> <span class="number">0</span>  [] &lt;<span class="literal">nil</span>&gt; &#123;<span class="number">0</span>&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="变量声明且赋值"><a href="#变量声明且赋值" class="headerlink" title="变量声明且赋值"></a>变量声明且赋值</h2><ul>
+<li>标准写法和省略类型的写法</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> a <span class="keyword">int</span> = <span class="number">100</span></span><br><span class="line"><span class="keyword">var</span> b, c <span class="keyword">int</span> = <span class="number">100</span>, <span class="number">200</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> a = <span class="number">100</span></span><br><span class="line"><span class="keyword">var</span> b, c = <span class="number">100</span>, <span class="number">200</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>批量声明并赋值，也可以省略类型</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> (</span><br><span class="line">	a    <span class="keyword">int</span>     = <span class="number">100</span></span><br><span class="line">	b, c <span class="keyword">float64</span> = <span class="number">64.5</span>, <span class="number">65</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> (</span><br><span class="line">	a    = <span class="number">100</span></span><br><span class="line">	b, c = <span class="number">64.5</span>, <span class="number">65</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<h2 id="短变量声明"><a href="#短变量声明" class="headerlink" title="短变量声明"></a>短变量声明</h2><ul>
+<li>使用短变量声明时必须在函数中，它不使用 var 关键字和类型。</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	a := <span class="number">100</span></span><br><span class="line">    b, c := <span class="number">64.5</span>, <span class="number">65</span></span><br><span class="line">	fmt.Println(a, b, c)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>使用短变量声明时，左侧必须至少有一个没有被声明的变量</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	a := <span class="number">100</span></span><br><span class="line">	a, b := <span class="number">200</span>, <span class="number">300</span></span><br><span class="line">	fmt.Print(a, b)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="常量"><a href="#常量" class="headerlink" title="常量"></a>常量</h2><p>常量是一个固定值，在编译期就确定结果，声明时候必须赋值且结果不可以改变，因为常量在编译期就确定可以方式程序运行过程中意外修改。</p>
+<ul>
+<li>注意事项</li>
+</ul>
+<p>常量使用关键字 const ，常量定义完以后可以不使用；</p>
+<p>常量可以是表达式，但不允许出现变量；</p>
+<p>常量声明时候可以不指定类型，使用默认类型；</p>
+<p>没有指定类型的常量，可以直接进行运算(不进行类型转换)；</p>
+<h3 id="常量定义"><a href="#常量定义" class="headerlink" title="常量定义"></a>常量定义</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="keyword">const</span> a <span class="keyword">string</span> = <span class="string">"yangjinheng"</span></span><br><span class="line">	<span class="keyword">const</span> b = <span class="number">123</span></span><br><span class="line">	<span class="keyword">const</span> c = <span class="number">3</span>*<span class="number">3</span> + <span class="number">5</span></span><br><span class="line">	<span class="keyword">const</span> d = <span class="number">3.1415926</span></span><br><span class="line">	fmt.Println(d + b)</span><br><span class="line">	fmt.Println(a, b, c, d)</span><br><span class="line">	fmt.Printf(<span class="string">"%T %T %T %T"</span>, a, b, c, d)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">yangjinheng 123 14 3.1415926</span><br><span class="line">string int int float64</span><br></pre></td></tr></table></figure>
+<h3 id="定义多个常量"><a href="#定义多个常量" class="headerlink" title="定义多个常量"></a>定义多个常量</h3><ul>
+<li>常量组的方式（推荐使用）</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="keyword">const</span> (</span><br><span class="line">		a = <span class="number">1</span></span><br><span class="line">		b = <span class="number">3.14</span></span><br><span class="line">		c = <span class="number">3</span> + <span class="number">2</span></span><br><span class="line">	)</span><br><span class="line">	fmt.Println(a, b, c)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">1 3.14 5</span><br></pre></td></tr></table></figure>
+<ul>
+<li>定义多个常量时候，如果有变量没有赋值，那么与前一个常量值相同(第一个常量必须赋值)</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="keyword">const</span> (</span><br><span class="line">		a = <span class="number">1</span></span><br><span class="line">		b = <span class="number">3.14</span></span><br><span class="line">		c</span><br><span class="line">        d</span><br><span class="line">	)</span><br><span class="line">	fmt.Println(a, b, c, d)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">1 3.14 3.14 3.14</span><br></pre></td></tr></table></figure>
+<h3 id="常量生成器"><a href="#常量生成器" class="headerlink" title="常量生成器"></a>常量生成器</h3><ul>
+<li>iota 是一个递增常量生成器，默认：起始值为 0，步长为 1</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="keyword">const</span> (</span><br><span class="line">		a = <span class="literal">iota</span></span><br><span class="line">		b</span><br><span class="line">		c</span><br><span class="line">		d</span><br><span class="line">		e</span><br><span class="line">	)</span><br><span class="line">	fmt.Println(a, b, c, d, e)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">0 1 2 3 4</span><br></pre></td></tr></table></figure>
+<ul>
+<li>调整默认的 iota 值</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="keyword">const</span> (</span><br><span class="line">		a = <span class="literal">iota</span> &lt;&lt; <span class="number">1</span></span><br><span class="line">		b</span><br><span class="line">		c</span><br><span class="line">		d</span><br><span class="line">		e</span><br><span class="line">	)</span><br><span class="line">	fmt.Println(a, b, c, d, e)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">0 2 4 6 8</span><br></pre></td></tr></table></figure>
+<ul>
+<li>无论是否使用 iota 一组常量中每个变量值是 iota 已经固定好的</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="keyword">const</span> (</span><br><span class="line">		a = <span class="number">9</span></span><br><span class="line">		b = <span class="literal">iota</span></span><br><span class="line">		c = <span class="number">10</span></span><br><span class="line">		d = <span class="literal">iota</span></span><br><span class="line">		e</span><br><span class="line">	)</span><br><span class="line">	fmt.Println(a, b, c, d, e)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">9 1 10 3 4</span><br></pre></td></tr></table></figure>
+<h2 id="变量地址"><a href="#变量地址" class="headerlink" title="变量地址"></a>变量地址</h2><p>变量本质上就是内存中一块数据的标记，把值存储到变量中实质上是把值存储在内存中，每次对变量重新赋值就是在修改变量地址中的内容。</p>
+<h3 id="获取变量内存地址"><a href="#获取变量内存地址" class="headerlink" title="获取变量内存地址"></a>获取变量内存地址</h3><ul>
+<li>在 Go 语言中可以通过 <strong>&amp;+变量名</strong> 获取到变量地址</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	a := <span class="number">100</span></span><br><span class="line">	fmt.Println(&amp;a)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="变量赋值不会修改内存地址"><a href="#变量赋值不会修改内存地址" class="headerlink" title="变量赋值不会修改内存地址"></a>变量赋值不会修改内存地址</h3><ul>
+<li>对变量的赋值不会让变量产生新的内存地址</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	a := <span class="number">3</span></span><br><span class="line">	fmt.Println(&amp;a, a)</span><br><span class="line">	a = <span class="number">1000</span></span><br><span class="line">	fmt.Println(&amp;a, a)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">0xc00005e080 3</span><br><span class="line">0xc00005e080 1000</span><br></pre></td></tr></table></figure>
+<h3 id="创建基本类型变量会开辟新地址"><a href="#创建基本类型变量会开辟新地址" class="headerlink" title="创建基本类型变量会开辟新地址"></a>创建基本类型变量会开辟新地址</h3><ul>
+<li>新创建的基本类型变量会开辟新的内存地址</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	a := <span class="number">3</span></span><br><span class="line">	fmt.Println(&amp;a, a)</span><br><span class="line">	b := a</span><br><span class="line">	fmt.Println(&amp;b, b)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">0xc00005e080 3</span><br><span class="line">0xc00005e0b0 3</span><br></pre></td></tr></table></figure>
+<ul>
+<li>对基本类型变量的修改只影响自己</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	a := <span class="number">3</span></span><br><span class="line">	fmt.Println(&amp;a, a)</span><br><span class="line">	b := a</span><br><span class="line">	fmt.Println(&amp;b, b)</span><br><span class="line">	b = <span class="number">100</span></span><br><span class="line">	fmt.Println(a, b)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="输入与输出"><a href="#输入与输出" class="headerlink" title="输入与输出"></a>输入与输出</h1><h2 id="打印输出"><a href="#打印输出" class="headerlink" title="打印输出"></a>打印输出</h2><ul>
+<li>FprintXX，在 Go Web 中使用比较多，把内容写到响应流中。</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    fmt.Fprint(os.Stdout,<span class="string">"内容1"</span>)              <span class="comment">// 向流中写入内容，不换行</span></span><br><span class="line">    fmt.Fprintln(os.Stdout,<span class="string">"内容2"</span>)            <span class="comment">// 向流中写入内容和换行</span></span><br><span class="line">    fmt.Fprintf(os.Stdout,<span class="string">"%s"</span>,<span class="string">"内容3"</span>)        <span class="comment">// 根据 verb 格式向流中写入内容，不换行</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">内容1内容2</span><br><span class="line">内容3</span><br></pre></td></tr></table></figure>
+<ul>
+<li>printXX，直接将内容输出到标准输出</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(<span class="string">"1"</span>, <span class="string">"2"</span>)                     <span class="comment">// 接收多个参数，输出每个参数前加空格，所有对象输出完毕后加换行</span></span><br><span class="line">	fmt.Print(<span class="string">"3"</span>, <span class="string">"4"</span>, <span class="string">"5"</span>)                  <span class="comment">// 没有换行和空格的输出每个对象</span></span><br><span class="line">	fmt.Println(<span class="string">"6"</span>)</span><br><span class="line">	fmt.Println(<span class="string">"7"</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="number">1</span> <span class="number">2</span></span><br><span class="line"><span class="number">3456</span></span><br><span class="line"><span class="number">7</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>SprintXX，不输出任何东西，只是将字符串返回</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	str1 := fmt.Sprintln(<span class="string">"1"</span>, <span class="string">"2"</span>)</span><br><span class="line">	str2 := fmt.Sprintf(<span class="string">"%c"</span>, <span class="number">34543</span>)</span><br><span class="line">	str3 := fmt.Sprintf(<span class="string">"%c"</span>, <span class="number">34523</span>)</span><br><span class="line">	fmt.Println(str1, str2, str3)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="接收输入"><a href="#接收输入" class="headerlink" title="接收输入"></a>接收输入</h2><p>Go 语言中有多种接收用户输入的方式，其中 fmt 包中的 Scan 函数最简单。</p>
+<ul>
+<li>Scanln语法</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line">Scanln(&amp;变量名称, &amp;变量名称)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>接收参数并且打印</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> name, age <span class="keyword">string</span></span><br><span class="line">	fmt.Print(<span class="string">"请输入姓名和年龄："</span>)</span><br><span class="line">	fmt.Scanln(&amp;name, &amp;age)</span><br><span class="line">	fmt.Printf(<span class="string">"姓名 %s 年龄 %s"</span>, name, age)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>接收指定格式的数据</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> name, age <span class="keyword">string</span></span><br><span class="line">	fmt.Print(<span class="string">"请输入姓名和年龄："</span>)</span><br><span class="line">	fmt.Scanf(<span class="string">"%s\n%s"</span>, &amp;name, &amp;age)</span><br><span class="line">	fmt.Printf(<span class="string">"姓名 %s 年龄 %s"</span>, name, age)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="转义字符"><a href="#转义字符" class="headerlink" title="转义字符"></a>转义字符</h2><p>在 go 语言中可以使用 %+特定字母 或者 \+ 特定字母形成转义字符，这个表示特定含义的组合称为转义字符，在 go 语言中称为 verb。</p>
+<ul>
+<li>常用转义字符</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>verb</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>%d</td>
+<td>十进制整数</td>
+</tr>
+<tr>
+<td>%x, %X</td>
+<td>大小写方式显示十六进制整数</td>
+</tr>
+<tr>
+<td>%o</td>
+<td>八进制整数</td>
+</tr>
+<tr>
+<td>%f, %g, %e</td>
+<td>浮点数</td>
+</tr>
+<tr>
+<td>%t</td>
+<td>布尔值</td>
+</tr>
+<tr>
+<td>%c</td>
+<td>字符，就是 ASCII 码表的转换，例如：fmt.Printf(“%c”, i)</td>
+</tr>
+<tr>
+<td>%s</td>
+<td>字符串</td>
+</tr>
+<tr>
+<td>%q</td>
+<td>带双引号的字符串</td>
+</tr>
+<tr>
+<td>%v</td>
+<td>原始内容</td>
+</tr>
+<tr>
+<td>%T</td>
+<td>输出数据类型</td>
+</tr>
+<tr>
+<td>%p</td>
+<td>输出内存地址，例如：fmt.Printf(“%p”, &amp;i)</td>
+</tr>
+<tr>
+<td>%%</td>
+<td>输出%本身</td>
+</tr>
+<tr>
+<td>\n</td>
+<td>换行</td>
+</tr>
+<tr>
+<td>\t</td>
+<td>制表符</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>示例</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	i := <span class="number">44</span></span><br><span class="line">	fmt.Printf(<span class="string">"%d, %x, %X, %o\n"</span>, i, i, i, i)</span><br><span class="line">	str1 := fmt.Sprintf(<span class="string">"%d, %x, %X, %o"</span>, i, i, i, i)</span><br><span class="line">	fmt.Printf(str1)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="打印数据类型"><a href="#打印数据类型" class="headerlink" title="打印数据类型"></a>打印数据类型</h2><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	a := <span class="string">"hello, world"</span></span><br><span class="line">	fmt.Printf(<span class="string">"%T"</span>, a)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="基本数据类型"><a href="#基本数据类型" class="headerlink" title="基本数据类型"></a>基本数据类型</h1><h2 id="整型"><a href="#整型" class="headerlink" title="整型"></a>整型</h2><ol>
+<li>有符号整形：它的二进制最高位表示符号，0 为正数、1 为负数，int 和 intx 为有符号整形</li>
+</ol>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 举例，int8</span></span><br><span class="line"><span class="number">0000</span> <span class="number">0010</span> = <span class="number">2</span></span><br><span class="line"><span class="number">1000</span> <span class="number">0010</span> = <span class="number">-2</span></span><br></pre></td></tr></table></figure>
+<ol>
+<li>无符号整形：由于没有表示正负的符号，所以只能表示正数，unit 和 unitx 为无符号整形</li>
+</ol>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 举例 uint8</span></span><br><span class="line"><span class="number">0000</span> <span class="number">0010</span> = <span class="number">2</span></span><br><span class="line"><span class="number">1000</span> <span class="number">0010</span> = <span class="number">130</span></span><br></pre></td></tr></table></figure>
+<ol start="3">
+<li>取值范围计算方法，其中 n 表示位数，例如；int8</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>最小</th>
+<th>最大</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>有符号整型</td>
+<td>-2**(n-1)</td>
+<td>2**(n-1) - 1</td>
+</tr>
+<tr>
+<td>无符号整形</td>
+<td>0</td>
+<td>2**n - 1</td>
+</tr>
+</tbody>
+</table>
+<h3 id="有符号整型"><a href="#有符号整型" class="headerlink" title="有符号整型"></a>有符号整型</h3><table>
+<thead>
+<tr>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>int8</td>
+<td>[-128, 127]，计算方法：-2**(8-1) 至 2**(8-1) - 1</td>
+</tr>
+<tr>
+<td>int16</td>
+<td>[-32768, 32767]</td>
+</tr>
+<tr>
+<td>int32</td>
+<td>[-2147483648, 2147483647]，Go 语言没有字符类型，所有字符使用 int32 存储</td>
+</tr>
+<tr>
+<td>int64</td>
+<td>[-9223372036854775808, 9223372036854775807]</td>
+</tr>
+<tr>
+<td>int</td>
+<td>与系统的位数有关，如果系统是 64 为则为 int64</td>
+</tr>
+</tbody>
+</table>
+<h3 id="无符号整型"><a href="#无符号整型" class="headerlink" title="无符号整型"></a>无符号整型</h3><table>
+<thead>
+<tr>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>uint8</td>
+<td>[0, 255]</td>
+</tr>
+<tr>
+<td>uint16</td>
+<td>[0, 65535]</td>
+</tr>
+<tr>
+<td>uint32</td>
+<td>[0, 4294967295]</td>
+</tr>
+<tr>
+<td>uint64</td>
+<td>[0, 18446744073709551615]</td>
+</tr>
+<tr>
+<td>uint</td>
+<td>与系统的位数有关，如果系统是 64 为则为 int64</td>
+</tr>
+</tbody>
+</table>
+<h3 id="赋值示例"><a href="#赋值示例" class="headerlink" title="赋值示例"></a>赋值示例</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> (</span><br><span class="line">		a <span class="keyword">int8</span>   = <span class="number">127</span></span><br><span class="line">		b <span class="keyword">int16</span>  = <span class="number">32767</span></span><br><span class="line">		c <span class="keyword">int32</span>  = <span class="number">2147483647</span></span><br><span class="line">		d <span class="keyword">int64</span>  = <span class="number">9223372036854775807</span></span><br><span class="line">		e <span class="keyword">int</span>    = <span class="number">9223372036854775807</span></span><br><span class="line">		f <span class="keyword">uint8</span>  = <span class="number">255</span></span><br><span class="line">		g <span class="keyword">uint16</span> = <span class="number">65535</span></span><br><span class="line">		h <span class="keyword">uint32</span> = <span class="number">4294967295</span></span><br><span class="line">		i <span class="keyword">uint64</span> = <span class="number">18446744073709551615</span></span><br><span class="line">		j <span class="keyword">uint</span>   = <span class="number">18446744073709551615</span></span><br><span class="line">	)</span><br><span class="line">	fmt.Printf(<span class="string">"%T %T %T %T %T %T %T %T %T %T \n"</span>, a, b, c, d, e, f, g, h, i, j)</span><br><span class="line">	fmt.Print(a, b, c, d, e, f, g, h, i, j)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="浮点型"><a href="#浮点型" class="headerlink" title="浮点型"></a>浮点型</h2><p>浮点类型用于存储带有小数点的数字，整数可以赋值给浮点类型，但是整型变量不可以赋值给浮点类型，浮点数的运算结果还是浮点数。</p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>float32</td>
+<td>IEEE-754 32位浮点数，3.4028234663852886e+38</td>
+</tr>
+<tr>
+<td>float64</td>
+<td>IEEE-754 64位浮点数，推荐使用，1.7976931348623157e+308</td>
+</tr>
+<tr>
+<td>complex64</td>
+<td>复数带有 float32 实部和虚部</td>
+</tr>
+<tr>
+<td>complex128</td>
+<td>复数带有 float64 实部和虚部</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>Float 最大值在 Math 包中有几个常量可以看到</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> (</span><br><span class="line">	MaxFloat32             = <span class="number">3.40282346638528859811704183484516925440e+38</span>  <span class="comment">// 2**127 * (2**24 - 1) / 2**23</span></span><br><span class="line">	SmallestNonzeroFloat32 = <span class="number">1.401298464324817070923729583289916131280e-45</span> <span class="comment">// 1 / 2**(127 - 1 + 23)</span></span><br><span class="line"></span><br><span class="line">	MaxFloat64             = <span class="number">1.797693134862315708145274237317043567981e+308</span> <span class="comment">// 2**1023 * (2**53 - 1) / 2**52</span></span><br><span class="line">	SmallestNonzeroFloat64 = <span class="number">4.940656458412465441765687928682213723651e-324</span> <span class="comment">// 1 / 2**(1023 - 1 + 52)</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<h3 id="Float-类型转换"><a href="#Float-类型转换" class="headerlink" title="Float 类型转换"></a>Float 类型转换</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> a <span class="keyword">float32</span> = <span class="number">1.5</span></span><br><span class="line">	<span class="keyword">var</span> b <span class="keyword">float64</span> = <span class="number">3.3</span></span><br><span class="line">	fmt.Println(a + <span class="keyword">float32</span>(b))</span><br><span class="line">	fmt.Println(b + <span class="keyword">float64</span>(a))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="其他类型"><a href="#其他类型" class="headerlink" title="其他类型"></a>其他类型</h2><h3 id="布尔类型"><a href="#布尔类型" class="headerlink" title="布尔类型"></a>布尔类型</h3><p>布尔类型关键字 boll ，它只有两个值，true、false，布尔类型不能和其他类型互相转换，占用一个 byte，布尔类型多用于判断。</p>
+<ul>
+<li>查看数据占有的 byte 大小</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> a <span class="keyword">bool</span> = <span class="literal">true</span></span><br><span class="line">	<span class="keyword">var</span> b <span class="keyword">bool</span> = <span class="literal">false</span></span><br><span class="line">	<span class="keyword">var</span> c <span class="keyword">byte</span> = <span class="number">1</span></span><br><span class="line">	<span class="keyword">var</span> d <span class="keyword">int8</span> = <span class="number">1</span></span><br><span class="line">	<span class="keyword">var</span> e <span class="keyword">int</span> = <span class="number">1</span></span><br><span class="line">	fmt.Println(a, b)</span><br><span class="line">	fmt.Println(</span><br><span class="line">		unsafe.Sizeof(a),</span><br><span class="line">		unsafe.Sizeof(b),</span><br><span class="line">		unsafe.Sizeof(c),</span><br><span class="line">		unsafe.Sizeof(d),</span><br><span class="line">		unsafe.Sizeof(e),</span><br><span class="line">	)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">1 1 1 1 8</span><br></pre></td></tr></table></figure>
+<h3 id="特殊类型"><a href="#特殊类型" class="headerlink" title="特殊类型"></a>特殊类型</h3><table>
+<thead>
+<tr>
+<th>类型</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>byte</td>
+<td>与 uint8 相同，强调值为原始数据，一个字节占用 8 位</td>
+</tr>
+<tr>
+<td>rune</td>
+<td>与 int32 相同，常用在获取 Unicode 码</td>
+</tr>
+<tr>
+<td>uintptr</td>
+<td>无符号整数，用于存储指针值的未解释位</td>
+</tr>
+</tbody>
+</table>
+<h2 id="字符串类型"><a href="#字符串类型" class="headerlink" title="字符串类型"></a>字符串类型</h2><h3 id="字符"><a href="#字符" class="headerlink" title="字符"></a>字符</h3><ul>
+<li>编码的发展历史</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">1.  最开始使用 8 个可开合的晶体管表示世界万物，这个就是字节的由来，后来产生可以控制字节的机器，计算机</span><br><span class="line">2.  把字节中 32 以下情况称为**控制码**，后再控制码的基础上添加空格、标点符号、数字、大小写字母等直到 127，最终形成了 ANSI 的 ASCII 码（American Standard Code for Information Interchange，美国信息交换标准代码），这时已经较好的支持英文了。</span><br><span class="line">3.  随着计算机再全球的应用，再原 ASCII 基础上添加了新的字母、符号、横线竖线直到 255 号，从 128 到 255 被称为扩展字符集，但此时计算机还只是支持英文</span><br><span class="line">4.  中国开始使用计算机，为了支持中文，保留了钱 127 号，称这些为半角，把后面的内容以两个字节拼接形成中文汉字，和表单符号，这后半部分就是全角，其中汉字 6763 个满足中文大部分情况下的使用要求，称这个编码为：GB2313</span><br><span class="line">5.  随着计算机在中国的普及、使用 GB2312 有的时候无法打出某些汉字，又在 GB2312 基础上添加了近 20000 个汉字包括繁体和符号等，形成GBK，后来支持少数民族又在 GBK 的基础上退出 GB18080</span><br><span class="line">6.  全球中每个国家都有着一套自己的编码，ISO 国际标准化组织，为了统一，希望包含全球所有文字和符号，俗称：Unicode</span><br><span class="line">7.  随着互联网的快速法阵，为了解决 Unicode 网络中传输浪费流量问题，出现了 UTF-8 编码，有UTF-8(8位传输)、UTF-16(16位传输)两种，其中 UTF-8 使用最多，为边长编码方式，中文仅占3个字节。</span><br></pre></td></tr></table></figure>
+<ul>
+<li>字符概述</li>
+</ul>
+<p>字符就是单个字母，或者单个文字，Go语言不支持字符类型，在 Go 中所有的字符值都转换为对应的字符编码表中 int32 的值。默认使用 UTF-8 编码。</p>
+<ul>
+<li>打印字符</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> i <span class="keyword">rune</span> = <span class="number">24352</span></span><br><span class="line">	<span class="keyword">var</span> j <span class="keyword">rune</span> = <span class="number">24353</span></span><br><span class="line">	c := fmt.Sprintf(<span class="string">"%c"</span>, i)</span><br><span class="line">	d := fmt.Sprintf(<span class="string">"%c"</span>, j)</span><br><span class="line">	fmt.Println(c, d)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="字符串"><a href="#字符串" class="headerlink" title="字符串"></a>字符串</h3><p>字符串是一端不可变的字符序列，内容是任意任容，可以是一段文字，也可以是一串数字，但在双引号内的数字不能进行数学运算，必须转换成整形或者浮点型</p>
+<ul>
+<li>双引号中的控制字符会被转义，而反引号中的内容会原样输出</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">"fmt"</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	a := <span class="string">"hello,yangjinheng\n"</span></span><br><span class="line">	b := <span class="string">`hello, yangjinheng\n`</span></span><br><span class="line">	fmt.Print(a, b)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line">hello, world</span><br><span class="line">hello, yangjinheng\n</span><br></pre></td></tr></table></figure>
+<h3 id="len-字节数"><a href="#len-字节数" class="headerlink" title="len()字节数"></a>len()字节数</h3><ul>
+<li>len() 相对于字符串是取得字符串的<strong>字节</strong>数，<strong>英文占1个字节，一个汉字占用3字节</strong></li>
+</ul>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	s := <span class="string">"杨金恒yangjinheng"</span></span><br><span class="line">	fmt.Print(<span class="built_in">len</span>(s))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">20</span><br></pre></td></tr></table></figure>
+<h3 id="按字节截取字符串"><a href="#按字节截取字符串" class="headerlink" title="按字节截取字符串"></a>按字节截取字符串</h3><ul>
+<li>取 0 - 11 的英文字符串</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	s := <span class="string">"yangjinheng杨金恒"</span></span><br><span class="line">	s1 := s[<span class="number">0</span>:<span class="number">11</span>]</span><br><span class="line">	fmt.Println(s1)</span><br><span class="line">	fmt.Printf(<span class="string">"%T"</span>, s1)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">yangjinheng</span><br><span class="line">string</span><br></pre></td></tr></table></figure>
+<ul>
+<li>取 11 往后的所有字符串</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	s := <span class="string">"yangjinheng杨金恒"</span></span><br><span class="line">	s1 := s[<span class="number">11</span>:]</span><br><span class="line">	fmt.Println(s1)</span><br><span class="line">	fmt.Printf(<span class="string">"%T"</span>, s1)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">杨金恒</span><br><span class="line">string</span><br></pre></td></tr></table></figure>
+<ul>
+<li>取出一个汉字</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	s := <span class="string">"yangjinheng杨金恒"</span></span><br><span class="line">	s1 := s[<span class="number">11</span>:<span class="number">14</span>]</span><br><span class="line">	fmt.Println(s1)</span><br><span class="line">	fmt.Printf(<span class="string">"%T"</span>, s1)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">杨</span><br><span class="line">string</span><br></pre></td></tr></table></figure>
+<ul>
+<li>取出一个字符</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	s := <span class="string">"yangjinheng杨金恒"</span></span><br><span class="line">	s1 := s[<span class="number">0</span>]</span><br><span class="line">	new_s1 := fmt.Sprintf(<span class="string">"%c"</span>, s1)</span><br><span class="line">	fmt.Println(s1, new_s1)</span><br><span class="line">	fmt.Printf(<span class="string">"%T %T"</span>, s1, new_s1)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">121 y</span><br><span class="line">uint8 string</span><br></pre></td></tr></table></figure>
+<h3 id="字符串切片"><a href="#字符串切片" class="headerlink" title="字符串切片"></a>字符串切片</h3><ul>
+<li>字符串转切片</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	s1 := <span class="string">"yangjinheng杨金恒"</span></span><br><span class="line">	s2 := []<span class="keyword">rune</span>(s1)</span><br><span class="line">	s3 := s2[<span class="number">11</span>:]</span><br><span class="line">	fmt.Printf(<span class="string">"类型为: %T 长度为: %d\n"</span>, s1, <span class="built_in">len</span>(s1)) <span class="comment">// 类型为 string 长度 20</span></span><br><span class="line">	fmt.Printf(<span class="string">"类型为: %T 长度为: %d\n"</span>, s2, <span class="built_in">len</span>(s2)) <span class="comment">// 类型为 string 长度 14</span></span><br><span class="line">	fmt.Println(s1, s2)</span><br><span class="line">	fmt.Printf(<span class="string">"%c"</span>, s3)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">类型为: string 长度为: 20</span><br><span class="line">类型为: []int32 长度为: 14</span><br><span class="line">yangjinheng杨金恒 [121 97 110 103 106 105 110 104 101 110 103 26472 37329 24658]</span><br><span class="line">[杨 金 恒]</span><br></pre></td></tr></table></figure>
+<h1 id="strconv字符类型转换"><a href="#strconv字符类型转换" class="headerlink" title="strconv字符类型转换"></a>strconv字符类型转换</h1><p>strconv 包实现与基本数据类型的字符串表示形式之间的转换。</p>
+<ul>
+<li>字符串内容转十进制数字（字符串转数字）</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>函数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>func ParseInt(s string, base int, bitSize int) (i int64, err error)</td>
+<td>将字符串（指定字符串内容的进制数和位数）转换为十进制 int64 有符号整型</td>
+</tr>
+<tr>
+<td>func ParseUint(s string, base int, bitSize int) (uint64, error)</td>
+<td>将字符串（指定字符串内容的进制数和位数）转换为十进制 int64 无符号整型</td>
+</tr>
+<tr>
+<td>func ParseFloat(s string, bitSize int) (float64, error)</td>
+<td>将字符串（指定字符串内容的位数）转换为 float64 浮点数</td>
+</tr>
+<tr>
+<td>func Atoi(s string) (int, error)</td>
+<td>将字符串转换为十进制 int 有符号整型</td>
+</tr>
+<tr>
+<td></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>int64 数字，转为指定进制，并输出为字符串（数字转字符串）</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>函数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>func FormatInt(i int64, base int) string</td>
+<td>将 int64 数字，转换为指定进制并输出为字符串</td>
+</tr>
+<tr>
+<td>func FormatUint(i uint64, base int) string</td>
+<td>将 uint64 数字，转换为指定进制并输出为字符串</td>
+</tr>
+<tr>
+<td>func FormatFloat(f float64, fmt byte, prec, bitSize int) string</td>
+<td>将 float64 浮点数，（fmt 指数）（prec 小数点后位数）（bitSize 位数）转换为字符串</td>
+</tr>
+<tr>
+<td>func Itoa(i int) string</td>
+<td>将 int 数字，转换为十进制，并输出为字符串</td>
+</tr>
+<tr>
+<td></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>字符串转布尔值</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>函数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>func ParseBool（str string）（bool，error）</td>
+<td>接收字符串：1，t，T，TRUE，true，True，0，f，F，FALSE，false，False，任何其他值都会返回错误</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>布尔值转字符串</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>函数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>func FormatBool(b bool) string</td>
+<td>接收布尔值，返回一个字符串</td>
+</tr>
+</tbody>
+</table>
+<h2 id="字符串转整数"><a href="#字符串转整数" class="headerlink" title="字符串转整数"></a>字符串转整数</h2><ul>
+<li>将字符串 1024 转为数字</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> b <span class="keyword">string</span> = <span class="string">"8888"</span></span><br><span class="line">	tmp, _ := strconv.Atoi(b)</span><br><span class="line">	fmt.Println(tmp)</span><br><span class="line">    fmt.Printf(<span class="string">"%T"</span>, tmp)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>将字符串 11111111 视作 2 进制，转换为数字</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> b <span class="keyword">string</span> = <span class="string">"11111111"</span></span><br><span class="line">	tmp, _ := strconv.ParseInt(b, <span class="number">2</span>, <span class="number">32</span>)</span><br><span class="line">	fmt.Println(tmp)</span><br><span class="line">	fmt.Printf(<span class="string">"%T"</span>, tmp)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>  strconv.ParseInt(s string, base int, bitSize int)，s 为要转换的字符串，base 为字符串内保存的多少进制数，bitSize 表示转换后数字的类型</p>
+</blockquote>
+<h2 id="字符串转浮点数"><a href="#字符串转浮点数" class="headerlink" title="字符串转浮点数"></a>字符串转浮点数</h2><ul>
+<li>将字符串 3.1415926 转为浮点数</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> b <span class="keyword">string</span> = <span class="string">"3.1415926"</span></span><br><span class="line">	tmp, _ := strconv.ParseFloat(b, <span class="number">64</span>)</span><br><span class="line">	fmt.Println(tmp)</span><br><span class="line">	fmt.Printf(<span class="string">"%T"</span>, tmp)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="整数转字符串"><a href="#整数转字符串" class="headerlink" title="整数转字符串"></a>整数转字符串</h2><ul>
+<li>int 类型数字（十进制）转换为字符串</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> i <span class="keyword">int</span> = <span class="number">8888</span></span><br><span class="line">	s := strconv.Itoa(i)</span><br><span class="line">	fmt.Println(s)</span><br><span class="line">	fmt.Printf(<span class="string">"%T"</span>, s)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>将 int64 的 255 转为二进制输出为字符串</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> a <span class="keyword">int64</span> = <span class="number">255</span></span><br><span class="line">	tmp := strconv.FormatInt(a, <span class="number">2</span>)</span><br><span class="line">	fmt.Println(tmp)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="浮点数转字符串"><a href="#浮点数转字符串" class="headerlink" title="浮点数转字符串"></a>浮点数转字符串</h2><ul>
+<li>浮点数 3.1415926 转为：无指数，小数点后保留 10 位，的 64 位浮点数</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> i <span class="keyword">float64</span> = <span class="number">3.1415926</span></span><br><span class="line">    <span class="comment">// 第一个参数：浮点数</span></span><br><span class="line">    <span class="comment">// 第二个参数：</span></span><br><span class="line">    <span class="comment">//         'f'(-ddd.ddd)</span></span><br><span class="line">    <span class="comment">//         'b'(-ddddp+ddd)指数位二进制</span></span><br><span class="line">    <span class="comment">//         'e'(-d.dddde±dd)十进制指数</span></span><br><span class="line">    <span class="comment">//         'E'(-d.ddddE±dd)十进制指数（大E和小e区别就是输出的样式）</span></span><br><span class="line">    <span class="comment">//         'g'(指数很大时使用'e'格式，否则使用'f')</span></span><br><span class="line">    <span class="comment">//         'G'(指数很大时使用'E'格式，否则使用'f')</span></span><br><span class="line">    <span class="comment">// 第三个参数：小数点后保留的位数（不够补零，超出则四舍五入）</span></span><br><span class="line">    <span class="comment">// 第四个参数：浮点数位数</span></span><br><span class="line">	s := strconv.FormatFloat(i, <span class="string">'f'</span>, <span class="number">10</span>, <span class="number">64</span>)</span><br><span class="line">	fmt.Println(s)</span><br><span class="line">	fmt.Printf(<span class="string">"%T"</span>, s)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="运算符"><a href="#运算符" class="headerlink" title="运算符"></a>运算符</h1><p>Go语言支持：算数运算符、比较运算符、逻辑运算符、赋值运算符、关系运算符、位运算符</p>
+<p>不同的运算符使用场景不同，运算符一起使用的时候需要注意优先级的问题</p>
+<h2 id="算数运算符"><a href="#算数运算符" class="headerlink" title="算数运算符"></a>算数运算符</h2><blockquote>
+<p>  在 go 语言中，不同类型的数据之间进行运算必须经过转换，例如：int8 和 int16 之间不可以进行运算，必须要进行转换</p>
+</blockquote>
+<ul>
+<li>算数运算符，乘法除法高于取余，取余高于加法减法</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>运算符</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>/</td>
+<td>除法</td>
+</tr>
+<tr>
+<td>*</td>
+<td>乘法</td>
+</tr>
+<tr>
+<td>%</td>
+<td>取余</td>
+</tr>
+<tr>
+<td>++</td>
+<td>自增</td>
+</tr>
+<tr>
+<td>–</td>
+<td>自减</td>
+</tr>
+</tbody>
+</table>
+<h2 id="比较运算符"><a href="#比较运算符" class="headerlink" title="比较运算符"></a>比较运算符</h2><table>
+<thead>
+<tr>
+<th>运算符</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>==</td>
+<td>检查两个操作数的值是否相等，如果相等，则条件为真。</td>
+</tr>
+<tr>
+<td>!=</td>
+<td>检查两个操作数的值是否相等，如果值不相等，则条件为真。</td>
+</tr>
+<tr>
+<td>&gt;</td>
+<td>检查左操作数的值是否大于右操作数的值，如果是，则条件为真。</td>
+</tr>
+<tr>
+<td>&lt;</td>
+<td>检查左操作数的值是否小于右操作数的值，如果是，则条件为真。</td>
+</tr>
+<tr>
+<td>&gt;=</td>
+<td>检查左操作数的值是否大于或等于右操作数的值，如果是，则条件为真。</td>
+</tr>
+<tr>
+<td>&lt;=</td>
+<td>检查左操作数的值是否小于或等于右操作数的值，如果是，则条件为真。</td>
+</tr>
+</tbody>
+</table>
+<h2 id="逻辑运算符"><a href="#逻辑运算符" class="headerlink" title="逻辑运算符"></a>逻辑运算符</h2><table>
+<thead>
+<tr>
+<th>运算符</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>&amp;&amp;</td>
+<td>逻辑<code>AND</code>运算符。如果两个操作数都不为零，则条件为真。</td>
+</tr>
+<tr>
+<td>\</td>
+<td>\</td>
+<td></td>
+<td>逻辑<code>OR</code>运算符。如果两个操作数中的任何一个非零，则条件变为真。</td>
+</tr>
+<tr>
+<td>!</td>
+<td>逻辑非运算符。用于反转其操作数的逻辑状态。如果条件为真，则逻辑非运算符将为假。</td>
+</tr>
+</tbody>
+</table>
+<h2 id="位操作"><a href="#位操作" class="headerlink" title="位操作"></a>位操作</h2><table>
+<thead>
+<tr>
+<th>运算符</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>&amp;</td>
+<td>如果两个操作数中都存在二进制<code>AND</code>运算符，则将其复制到结果。</td>
+</tr>
+<tr>
+<td>\</td>
+<td></td>
+<td>二进制<code>OR</code>运算符复制一个位，如果它存在于任一操作数。</td>
+</tr>
+<tr>
+<td>^</td>
+<td>二进制<code>XOR</code>运算符复制位，如果它在一个操作数中设置，但不是在两个操作数中设置。</td>
+</tr>
+<tr>
+<td>&lt;&lt;</td>
+<td>二进制左移位运算符。左操作数值向左移动由右操作数指定的位数。</td>
+</tr>
+<tr>
+<td>&gt;&gt;</td>
+<td>二进制右移运算符。左操作数值向右移动由右操作数指定位数。</td>
+</tr>
+</tbody>
+</table>
+<h2 id="赋值运算"><a href="#赋值运算" class="headerlink" title="赋值运算"></a>赋值运算</h2><table>
+<thead>
+<tr>
+<th>运算符</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>=</td>
+<td>简单赋值操作符，将值从右侧操作数分配给左侧操作数</td>
+</tr>
+<tr>
+<td>+=</td>
+<td>相加和赋值运算符，向左操作数添加右操作数，并将结果赋给左操作数</td>
+</tr>
+<tr>
+<td>-=</td>
+<td>减去和赋值运算符，从左操作数中减去右操作数，并将结果赋给左操作数</td>
+</tr>
+<tr>
+<td>*=</td>
+<td>乘法和赋值运算符，它将右操作数与左操作数相乘，并将结果赋给左操作数</td>
+</tr>
+<tr>
+<td>/=</td>
+<td>除法和赋值运算符，它用右操作数划分左操作数，并将结果分配给左操作数</td>
+</tr>
+<tr>
+<td>%=</td>
+<td>模数和赋值运算符，它使用两个操作数来取模，并将结果分配给左操作数</td>
+</tr>
+<tr>
+<td>&lt;&lt;=</td>
+<td>左移和赋值运算符</td>
+</tr>
+<tr>
+<td>&gt;&gt;=</td>
+<td>右移和赋值运算符</td>
+</tr>
+<tr>
+<td>&amp;=</td>
+<td>按位和赋值运算符</td>
+</tr>
+<tr>
+<td>^=</td>
+<td>按位异或和赋值运算符</td>
+</tr>
+<tr>
+<td>=</td>
+<td>按位包含OR和赋值运算符</td>
+</tr>
+</tbody>
+</table>
+<h2 id="其他运算"><a href="#其他运算" class="headerlink" title="其他运算"></a>其他运算</h2><table>
+<thead>
+<tr>
+<th>运算符</th>
+<th>描述</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>&amp;</td>
+<td>返回变量的地址</td>
+<td><code>＆a</code>将给出变量<code>a</code>的实际地址。</td>
+</tr>
+<tr>
+<td>*</td>
+<td>指向变量的指针</td>
+<td><code>*a</code> 是指向变量<code>a</code>的指针。</td>
+</tr>
+</tbody>
+</table>
+<h1 id="派生数据类型"><a href="#派生数据类型" class="headerlink" title="派生数据类型"></a>派生数据类型</h1><h2 id="指针"><a href="#指针" class="headerlink" title="指针"></a>指针</h2><p>指针变量指向值的内存地址，指针的主要应用是实现在多个地方操作同一个内存地址的值。</p>
+<h3 id="创建指针变量"><a href="#创建指针变量" class="headerlink" title="创建指针变量"></a>创建指针变量</h3><ul>
+<li>在 Go 岩中使用 * 符号可以获取或操作指针变量内存地址中的值</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	a := <span class="number">100</span></span><br><span class="line">	b := &amp;a</span><br><span class="line">	fmt.Println(a, *b)</span><br><span class="line">	fmt.Printf(<span class="string">"%T %T"</span>, a, b)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">*int *float64</span><br></pre></td></tr></table></figure>
+<h3 id="修改指针变量指向的值"><a href="#修改指针变量指向的值" class="headerlink" title="修改指针变量指向的值"></a>修改指针变量指向的值</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	a := <span class="number">100</span></span><br><span class="line">	b := &amp;a</span><br><span class="line">	fmt.Println(a, *b)</span><br><span class="line">	fmt.Printf(<span class="string">"%T %T\n"</span>, a, b)</span><br><span class="line">	*b = <span class="number">200</span></span><br><span class="line">	fmt.Println(a, *b)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">100 100</span><br><span class="line">int *int</span><br><span class="line">200 200</span><br></pre></td></tr></table></figure>
+<h3 id="声明指针变量"><a href="#声明指针变量" class="headerlink" title="声明指针变量"></a>声明指针变量</h3><p>声明指针是不会开辟内存地址的，只是准备指向某个内存空间，并且无法使用 * 符号对指针变量指向的内存地址进行赋值</p>
+<ul>
+<li>使用 var 变量名 *变量类型可以声明一个空指针</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> a *<span class="keyword">int</span></span><br><span class="line">	<span class="keyword">var</span> b *<span class="keyword">float64</span></span><br><span class="line">	fmt.Println(a, b)</span><br><span class="line">	fmt.Printf(<span class="string">"%T %T"</span>, a, b)</span><br><span class="line">    <span class="comment">// *a = 100</span></span><br><span class="line">	<span class="comment">// *b = 200</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;nil&gt; &lt;nil&gt;</span><br><span class="line">*int *float64</span><br></pre></td></tr></table></figure>
+<h3 id="new函数"><a href="#new函数" class="headerlink" title="new函数"></a>new函数</h3><p>new函数可以直接创建一个类型的指针，且有内存地址，可以通过 * 符号对指针变量指向的内存地址进行赋值</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	a := <span class="built_in">new</span>(<span class="keyword">int</span>)</span><br><span class="line">	*a = <span class="number">100</span></span><br><span class="line">	fmt.Println(*a)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">100</span><br></pre></td></tr></table></figure>
+<h2 id="数组"><a href="#数组" class="headerlink" title="数组"></a>数组</h2><p>具有固定长度，相同类型元素序列，在 Go 语言中，数组的长度是不可以改变的。</p>
+<p>数组声明后就会在内存中开辟一块连续的空间，每个值称为数组的元素，且元素值为类型对应的默认值。</p>
+<p>在 Go 语言中，数组是值类型，所以当把一个数组变量赋值给另一个数组变量时候，此时是赋值副本，会重新开辟新的内存空间。</p>
+<ul>
+<li>声明数组的语法</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> arr [<span class="number">5</span>]<span class="keyword">int</span></span><br><span class="line">	fmt.Println(arr)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[0 0 0 0 0]</span><br></pre></td></tr></table></figure>
+<ul>
+<li>数组的声明同时赋值</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> arr1 [<span class="number">5</span>]<span class="keyword">int</span> = [<span class="number">5</span>]<span class="keyword">int</span>&#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>&#125; <span class="comment">// 声明同时赋值</span></span><br><span class="line">	arr2 := [<span class="number">3</span>]<span class="keyword">int</span>&#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>&#125;                 <span class="comment">//短变量赋值（常用）</span></span><br><span class="line">	arr3 := [...]<span class="keyword">int</span>&#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>&#125;               <span class="comment">//自动确定元素个数（常用）</span></span><br><span class="line">	arr4 := [<span class="number">5</span>]<span class="keyword">int</span>&#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>&#125;                 <span class="comment">//元素不足时候，其余为默认值</span></span><br><span class="line">	fmt.Println(arr1)</span><br><span class="line">	fmt.Println(arr2)</span><br><span class="line">	fmt.Println(arr3)</span><br><span class="line">	fmt.Println(arr4)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[1 2 3 4 5]</span><br><span class="line">[1 2 3]</span><br><span class="line">[1 2 3]</span><br><span class="line">[1 2 3 0 0]</span><br></pre></td></tr></table></figure>
+<ul>
+<li>修改数组元素的值</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> arr1 [<span class="number">5</span>]<span class="keyword">int</span> = [<span class="number">5</span>]<span class="keyword">int</span>&#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>&#125;</span><br><span class="line">	arr1[<span class="number">1</span>] = <span class="number">100</span></span><br><span class="line">	fmt.Println(arr1[<span class="number">1</span>])</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">100</span><br></pre></td></tr></table></figure>
+<ul>
+<li>获取数组长度</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> arr1 [<span class="number">5</span>]<span class="keyword">int</span> = [<span class="number">5</span>]<span class="keyword">int</span>&#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>&#125;</span><br><span class="line">	fmt.Println(<span class="built_in">len</span>(arr1))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="number">5</span></span><br></pre></td></tr></table></figure>
+<h3 id="数组是值类型"><a href="#数组是值类型" class="headerlink" title="数组是值类型"></a>数组是值类型</h3><p>在 Go 语言中，数组是值类型，所以当把一个数组变量赋值给另一个数组变量时候，此时是赋值副本，会重新开辟新的内存空间。</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	arr1 := [<span class="number">5</span>]<span class="keyword">int</span>&#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>&#125;</span><br><span class="line">	arr2 := arr1</span><br><span class="line">	arr2[<span class="number">1</span>] = <span class="number">100</span></span><br><span class="line">	fmt.Println(arr1, arr2)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[1 2 3 4 5]</span><br><span class="line">[1 100 3 4 5]</span><br></pre></td></tr></table></figure>
+<h3 id="二维数组"><a href="#二维数组" class="headerlink" title="二维数组"></a>二维数组</h3><p>二维数组，表示数组中的每个值都是一个数组。</p>
+<ul>
+<li>声明二维数组</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> arr1 [<span class="number">3</span>][<span class="number">3</span>]<span class="keyword">int</span> = [<span class="number">3</span>][<span class="number">3</span>]<span class="keyword">int</span>&#123;&#123;<span class="number">1</span>, <span class="number">3</span>, <span class="number">4</span>&#125;, &#123;<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>&#125;, &#123;<span class="number">7</span>, <span class="number">8</span>, <span class="number">9</span>&#125;&#125;</span><br><span class="line">	arr2 := [<span class="number">3</span>][<span class="number">3</span>]<span class="keyword">int</span>&#123;</span><br><span class="line">		&#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>&#125;,</span><br><span class="line">		&#123;<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>&#125;,</span><br><span class="line">		&#123;<span class="number">7</span>, <span class="number">8</span>, <span class="number">9</span>&#125;,</span><br><span class="line">	&#125;</span><br><span class="line">	arr3 := arr2[<span class="number">0</span>]</span><br><span class="line">	arr3[<span class="number">0</span>] = <span class="number">100</span></span><br><span class="line">	fmt.Println(arr1)</span><br><span class="line">	fmt.Println(arr2)</span><br><span class="line">	fmt.Println(arr3)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[[1 3 4] [4 5 6] [7 8 9]]</span><br><span class="line">[[1 2 3] [4 5 6] [7 8 9]]</span><br><span class="line">[100 2 3]</span><br></pre></td></tr></table></figure>
+<h2 id="结构体"><a href="#结构体" class="headerlink" title="结构体"></a>结构体</h2><h2 id="管道"><a href="#管道" class="headerlink" title="管道"></a>管道</h2><h2 id="函数"><a href="#函数" class="headerlink" title="函数"></a>函数</h2><h2 id="切片"><a href="#切片" class="headerlink" title="切片"></a>切片</h2><p>切片的英文名称 slice，切片是具有可变长度，相同类型元素的序列，由于长度是可变的，可以解决数组长度在数据不确定的情况下浪费内存的问题。</p>
+<ul>
+<li>声明语法，和数组的<strong>唯一区别是不需要声明长度</strong></li>
+</ul>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> slice []<span class="keyword">string</span></span><br><span class="line"><span class="keyword">var</span> array [<span class="number">3</span>]<span class="keyword">string</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>仅声明切片时，没有开辟内存空间，不能直接对切片进行操作，需要初始化</strong></li>
+</ul>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> slice []<span class="keyword">string</span></span><br><span class="line">fmt.Println(slice==<span class="literal">nil</span>)</span><br></pre></td></tr></table></figure>
+<h3 id="定义切片"><a href="#定义切片" class="headerlink" title="定义切片"></a>定义切片</h3><ul>
+<li>定义一个切片</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	slice := []<span class="keyword">string</span>&#123;<span class="string">"hello"</span>, <span class="string">"world"</span>&#125;</span><br><span class="line">	fmt.Println(slice[<span class="number">0</span>])</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">hello</span><br></pre></td></tr></table></figure>
+<h3 id="切片是引用类型"><a href="#切片是引用类型" class="headerlink" title="切片是引用类型"></a>切片是引用类型</h3><ul>
+<li>切片是引用类型，所以当它作为右值的时候，会将内存地址给左值</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	slice := []<span class="keyword">string</span>&#123;<span class="string">"hello"</span>, <span class="string">"world"</span>&#125;</span><br><span class="line">	fmt.Println(slice)</span><br><span class="line">	slice1 := slice</span><br><span class="line">	slice1[<span class="number">0</span>] = <span class="string">"你好"</span></span><br><span class="line">	fmt.Println(slice, slice1)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[hello world]</span><br><span class="line">[你好 world] [你好 world]</span><br></pre></td></tr></table></figure>
+<h3 id="make初始化切片"><a href="#make初始化切片" class="headerlink" title="make初始化切片"></a>make初始化切片</h3><p>在 go 语言中，可以使用 make 函数创建 slice、map、channel、interface</p>
+<ul>
+<li>make 语法，初始容量可以省略，默认和长度相等</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="built_in">make</span>(类型,初始长度,[初始容量])</span><br></pre></td></tr></table></figure>
+<ul>
+<li>使用 make 初始化一个切片，初始化为 int 长度为 4（int 默认为0），容量为 6</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	slice := <span class="built_in">make</span>([]<span class="keyword">int</span>, <span class="number">4</span>, <span class="number">6</span>)</span><br><span class="line">	fmt.Println(<span class="built_in">len</span>(slice), <span class="built_in">cap</span>(slice))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">4 6</span><br></pre></td></tr></table></figure>
+<h3 id="切片的容量与长度"><a href="#切片的容量与长度" class="headerlink" title="切片的容量与长度"></a>切片的容量与长度</h3><p>长度是切片元素个数，容量切片可以有的元素个数。</p>
+<p>长度可可以使用索引访问，超出索引的容量还没有元素，所以不能使用索引访问。</p>
+<ul>
+<li>使用 make 函数定义的切片没有内容，但这个切片已经申请了内存空间。</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	slice := <span class="built_in">make</span>([]<span class="keyword">int</span>, <span class="number">4</span>, <span class="number">6</span>)</span><br><span class="line">	fmt.Println(<span class="built_in">len</span>(slice), <span class="built_in">cap</span>(slice))</span><br><span class="line">	fmt.Println(slice[<span class="number">1</span>])</span><br><span class="line">	fmt.Println(slice[<span class="number">2</span>])</span><br><span class="line">	fmt.Println(slice[<span class="number">3</span>])</span><br><span class="line">	fmt.Println(slice[<span class="number">4</span>])</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">4 6</span><br><span class="line">0</span><br><span class="line">0</span><br><span class="line">0</span><br><span class="line">panic: runtime error: index out of range</span><br><span class="line"></span><br><span class="line">goroutine 1 [running]:</span><br><span class="line">main.main()</span><br><span class="line">	c:/Users/LENOVO/OneDrive/Go语言/gowork/varb.go:11 +0x1f4</span><br><span class="line">exit status 2</span><br></pre></td></tr></table></figure>
+<h3 id="append函数"><a href="#append函数" class="headerlink" title="append函数"></a>append函数</h3><p>使用 append 可以向一个切片的尾部添加元素</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">slice := make([]int, 0)</span><br><span class="line">slice = append(slice, 1, 2, 3)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>添加若干同类型元素到切片内</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	slice := <span class="built_in">make</span>([]<span class="keyword">int</span>, <span class="number">4</span>, <span class="number">6</span>)</span><br><span class="line">	fmt.Println(<span class="built_in">len</span>(slice), <span class="built_in">cap</span>(slice))</span><br><span class="line">	fmt.Println(slice[<span class="number">1</span>])</span><br><span class="line">	fmt.Println(slice[<span class="number">2</span>])</span><br><span class="line">	fmt.Println(slice[<span class="number">3</span>])</span><br><span class="line">	slice = <span class="built_in">append</span>(slice, <span class="number">100</span>, <span class="number">101</span>)</span><br><span class="line">	fmt.Println(slice[<span class="number">4</span>])</span><br><span class="line">	fmt.Println(slice)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">4 6</span><br><span class="line">0</span><br><span class="line">0</span><br><span class="line">0</span><br><span class="line">100</span><br><span class="line">[0 0 0 0 100 101]</span><br></pre></td></tr></table></figure>
+<ul>
+<li>合并两个切片的时候，使用 … 来展开切片</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	slice1 := <span class="built_in">make</span>([]<span class="keyword">int</span>, <span class="number">4</span>, <span class="number">6</span>)</span><br><span class="line">	slice2 := []<span class="keyword">int</span>&#123;<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>&#125;</span><br><span class="line">	slice1 = <span class="built_in">append</span>(slice1, slice2...)</span><br><span class="line">	fmt.Println(slice1)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[0 0 0 0 4 5 6]</span><br></pre></td></tr></table></figure>
+<h3 id="超出容量则翻倍"><a href="#超出容量则翻倍" class="headerlink" title="超出容量则翻倍"></a>超出容量则翻倍</h3><ul>
+<li>当 append 超出了切片的容量，那么切片的容量会翻倍增加</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	slice := <span class="built_in">make</span>([]<span class="keyword">int</span>, <span class="number">0</span>)</span><br><span class="line">	slice = <span class="built_in">append</span>(slice, <span class="number">1</span>)</span><br><span class="line">	fmt.Println(<span class="built_in">len</span>(slice), <span class="built_in">cap</span>(slice))</span><br><span class="line">	slice = <span class="built_in">append</span>(slice, <span class="number">1</span>)</span><br><span class="line">	fmt.Println(<span class="built_in">len</span>(slice), <span class="built_in">cap</span>(slice), <span class="string">"容量已经满了，再添加元素，容量会自动翻倍然后添加元素"</span>)</span><br><span class="line">	slice = <span class="built_in">append</span>(slice, <span class="number">1</span>)</span><br><span class="line">	fmt.Println(<span class="built_in">len</span>(slice), <span class="built_in">cap</span>(slice))</span><br><span class="line">	slice = <span class="built_in">append</span>(slice, <span class="number">1</span>)</span><br><span class="line">	fmt.Println(<span class="built_in">len</span>(slice), <span class="built_in">cap</span>(slice), <span class="string">"容量已经满了，再添加元素，容量会自动翻倍然后添加元素"</span>)</span><br><span class="line">	slice = <span class="built_in">append</span>(slice, <span class="number">1</span>)</span><br><span class="line">	fmt.Println(<span class="built_in">len</span>(slice), <span class="built_in">cap</span>(slice))</span><br><span class="line">	slice = <span class="built_in">append</span>(slice, <span class="number">1</span>)</span><br><span class="line">	fmt.Println(<span class="built_in">len</span>(slice), <span class="built_in">cap</span>(slice))</span><br><span class="line">	slice = <span class="built_in">append</span>(slice, <span class="number">1</span>)</span><br><span class="line">	fmt.Println(<span class="built_in">len</span>(slice), <span class="built_in">cap</span>(slice))</span><br><span class="line">	slice = <span class="built_in">append</span>(slice, <span class="number">1</span>)</span><br><span class="line">	fmt.Println(<span class="built_in">len</span>(slice), <span class="built_in">cap</span>(slice), <span class="string">"容量已经满了，再添加元素，容量会自动翻倍然后添加元素"</span>)</span><br><span class="line">	slice = <span class="built_in">append</span>(slice, <span class="number">1</span>)</span><br><span class="line">	fmt.Println(<span class="built_in">len</span>(slice), <span class="built_in">cap</span>(slice))</span><br><span class="line">	slice = <span class="built_in">append</span>(slice, <span class="number">1</span>)</span><br><span class="line">	fmt.Println(<span class="built_in">len</span>(slice), <span class="built_in">cap</span>(slice))</span><br><span class="line">	slice = <span class="built_in">append</span>(slice, <span class="number">1</span>)</span><br><span class="line">	fmt.Println(<span class="built_in">len</span>(slice), <span class="built_in">cap</span>(slice))</span><br><span class="line">	slice = <span class="built_in">append</span>(slice, <span class="number">1</span>)</span><br><span class="line">	fmt.Println(<span class="built_in">len</span>(slice), <span class="built_in">cap</span>(slice))</span><br><span class="line">	slice = <span class="built_in">append</span>(slice, <span class="number">1</span>)</span><br><span class="line">	fmt.Println(<span class="built_in">len</span>(slice), <span class="built_in">cap</span>(slice))</span><br><span class="line">	slice = <span class="built_in">append</span>(slice, <span class="number">1</span>)</span><br><span class="line">	fmt.Println(<span class="built_in">len</span>(slice), <span class="built_in">cap</span>(slice))</span><br><span class="line">	slice = <span class="built_in">append</span>(slice, <span class="number">1</span>)</span><br><span class="line">	fmt.Println(<span class="built_in">len</span>(slice), <span class="built_in">cap</span>(slice))</span><br><span class="line">	slice = <span class="built_in">append</span>(slice, <span class="number">1</span>)</span><br><span class="line">	fmt.Println(<span class="built_in">len</span>(slice), <span class="built_in">cap</span>(slice), <span class="string">"容量已经满了，再添加元素，容量会自动翻倍然后添加元素"</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">1 1</span><br><span class="line">2 2 容量已经满了，再添加元素，容量会自动翻倍然后添加元素</span><br><span class="line">3 4</span><br><span class="line">4 4 容量已经满了，再添加元素，容量会自动翻倍然后添加元素</span><br><span class="line">5 8</span><br><span class="line">6 8</span><br><span class="line">7 8</span><br><span class="line">8 8 容量已经满了，再添加元素，容量会自动翻倍然后添加元素</span><br><span class="line">9 16</span><br><span class="line">10 16</span><br><span class="line">11 16</span><br><span class="line">12 16</span><br><span class="line">13 16</span><br><span class="line">14 16</span><br><span class="line">15 16</span><br><span class="line">16 16 容量已经满了，再添加元素，容量会自动翻倍然后添加元素</span><br></pre></td></tr></table></figure>
+<h3 id="通过数组产生切片"><a href="#通过数组产生切片" class="headerlink" title="通过数组产生切片"></a>通过数组产生切片</h3><ul>
+<li>取出数组的一部分就会产生一个切片</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	arr1 := [<span class="number">10</span>]<span class="keyword">string</span>&#123;<span class="string">"1"</span>, <span class="string">"2"</span>, <span class="string">"3"</span>, <span class="string">"4"</span>, <span class="string">"5"</span>, <span class="string">"6"</span>, <span class="string">"7"</span>, <span class="string">"8"</span>, <span class="string">"9"</span>, <span class="string">"10"</span>&#125;</span><br><span class="line">	s := arr1[<span class="number">0</span>:<span class="number">2</span>]</span><br><span class="line">	fmt.Printf(<span class="string">"%T %T\n"</span>, s, arr1)</span><br><span class="line">	fmt.Println(s, arr1)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[]string [10]string                // 第一个是切片没有长度，第二个是数组</span><br><span class="line">[1 2] [1 2 3 4 5 6 7 8 9 10]</span><br></pre></td></tr></table></figure>
+<ul>
+<li>切片是指针，指向数组元素地址，修改切片的内容，数组的内容会发生变化</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	arr1 := [<span class="number">10</span>]<span class="keyword">string</span>&#123;<span class="string">"1"</span>, <span class="string">"2"</span>, <span class="string">"3"</span>, <span class="string">"4"</span>, <span class="string">"5"</span>, <span class="string">"6"</span>, <span class="string">"7"</span>, <span class="string">"8"</span>, <span class="string">"9"</span>, <span class="string">"10"</span>&#125;</span><br><span class="line">	s := arr1[<span class="number">0</span>:<span class="number">2</span>]</span><br><span class="line">	s[<span class="number">0</span>] = <span class="string">"TEST"</span></span><br><span class="line">	fmt.Printf(<span class="string">"%T %T\n"</span>, s, arr1)</span><br><span class="line">	fmt.Printf(<span class="string">"%p %p\n"</span>, s, &amp;arr1[<span class="number">0</span>])</span><br><span class="line">	fmt.Println(s, arr1)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>当向数组产生的切片添加内容时，切片增加的部分实际是在修改原数组的内容</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	arr1 := [<span class="number">10</span>]<span class="keyword">string</span>&#123;<span class="string">"1"</span>, <span class="string">"2"</span>, <span class="string">"3"</span>, <span class="string">"4"</span>, <span class="string">"5"</span>, <span class="string">"6"</span>, <span class="string">"7"</span>, <span class="string">"8"</span>, <span class="string">"9"</span>, <span class="string">"10"</span>&#125;</span><br><span class="line">	s := arr1[<span class="number">0</span>:<span class="number">2</span>]</span><br><span class="line">	s[<span class="number">0</span>] = <span class="string">"TEST"</span></span><br><span class="line">	fmt.Printf(<span class="string">"%T %T\n"</span>, s, arr1)</span><br><span class="line">	s = <span class="built_in">append</span>(s, <span class="string">"TEST"</span>)</span><br><span class="line">	fmt.Println(s, arr1)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[]string [10]string</span><br><span class="line">[TEST 2 TEST] [TEST 2 TEST 4 5 6 7 8 9 10]  // 向切片追加内容，实际上是修改了引用数组的部分</span><br></pre></td></tr></table></figure>
+<ul>
+<li>当切片超出数组长度时候，超出部分会被分配新的内存空间，同时内存地址发生变动</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	arr1 := [<span class="number">3</span>]<span class="keyword">string</span>&#123;<span class="string">"1"</span>, <span class="string">"2"</span>, <span class="string">"3"</span>&#125;</span><br><span class="line">	s := arr1[<span class="number">0</span>:<span class="number">1</span>]</span><br><span class="line">	s[<span class="number">0</span>] = <span class="string">"TEST"</span></span><br><span class="line">	fmt.Printf(<span class="string">"%T %T\n"</span>, s, arr1)</span><br><span class="line">	s = <span class="built_in">append</span>(s, <span class="string">"TEST"</span>)</span><br><span class="line">	s = <span class="built_in">append</span>(s, <span class="string">"TEST"</span>)</span><br><span class="line">	fmt.Printf(<span class="string">"%p %p\n"</span>, s, &amp;arr1[<span class="number">0</span>])</span><br><span class="line">	s = <span class="built_in">append</span>(s, <span class="string">"TEST"</span>)</span><br><span class="line">	fmt.Printf(<span class="string">"%p %p\n"</span>, s, &amp;arr1[<span class="number">0</span>])</span><br><span class="line">	fmt.Println(s, arr1)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[]string [3]string</span><br><span class="line">0xc000074240 0xc000074240</span><br><span class="line">0xc00009c000 0xc000074240</span><br><span class="line">[TEST TEST TEST TEST] [TEST TEST TEST]</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>  切片本质上就是一个指针</p>
+</blockquote>
+<h3 id="copy函数"><a href="#copy函数" class="headerlink" title="copy函数"></a>copy函数</h3><p>copy函数可以把一个切片内容复制到另一个切片中，copy 是严格按照索引进行的内容复制。如果源数据多余拷贝目标的容量，那么多余部分会被删除。</p>
+<ul>
+<li>基础语法</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="built_in">copy</span>(dst, src)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>copy 函数会严格按照索引进行从源到目标的复制，</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	arr1 := []<span class="keyword">int</span>&#123;<span class="number">1</span>, <span class="number">2</span>&#125;</span><br><span class="line">	arr2 := []<span class="keyword">int</span>&#123;<span class="number">100</span>, <span class="number">200</span>, <span class="number">300</span>, <span class="number">400</span>&#125;</span><br><span class="line">	<span class="built_in">copy</span>(arr2, arr1)</span><br><span class="line">	fmt.Println(arr2)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[1 2 300 400]</span><br></pre></td></tr></table></figure>
+<ul>
+<li>源数据多余目标所能承载的部分，则会 copy 函数会抛弃多余的部分。</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	arr1 := []<span class="keyword">int</span>&#123;<span class="number">1</span>, <span class="number">2</span>&#125;</span><br><span class="line">	arr2 := []<span class="keyword">int</span>&#123;<span class="number">100</span>, <span class="number">200</span>, <span class="number">300</span>, <span class="number">400</span>&#125;</span><br><span class="line">	<span class="built_in">copy</span>(arr1, arr2)</span><br><span class="line">	fmt.Println(arr1)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[100 200]</span><br></pre></td></tr></table></figure>
+<ul>
+<li>也可以复制一部分</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	arr1 := []<span class="keyword">int</span>&#123;<span class="number">1</span>, <span class="number">2</span>&#125;</span><br><span class="line">	arr2 := []<span class="keyword">int</span>&#123;<span class="number">100</span>, <span class="number">200</span>, <span class="number">300</span>, <span class="number">400</span>&#125;</span><br><span class="line">	<span class="built_in">copy</span>(arr1, arr2[<span class="number">2</span>:<span class="number">4</span>])</span><br><span class="line">	fmt.Println(arr1)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[300 400]</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>  copy 对源切片中的数据是不会产生影响的。</p>
+</blockquote>
+<h3 id="删除切片中的元素"><a href="#删除切片中的元素" class="headerlink" title="删除切片中的元素"></a>删除切片中的元素</h3><ul>
+<li>删除</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	arr1 := []<span class="keyword">int</span>&#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>&#125;</span><br><span class="line">	n := <span class="number">2</span></span><br><span class="line">	newslice := <span class="built_in">make</span>([]<span class="keyword">int</span>, n)   <span class="comment">// 新建一个要删除元素前大小的切片</span></span><br><span class="line">	<span class="built_in">copy</span>(newslice, arr1[<span class="number">0</span>:n])    <span class="comment">// 将源切片内容拷贝给切片（已经不包含要删除的元素了）</span></span><br><span class="line">	newslice = <span class="built_in">append</span>(newslice, arr1[n+<span class="number">1</span>:]...)  <span class="comment">// 将源切片中要删除元素后的元素全部追加给新切片</span></span><br><span class="line">	fmt.Println(arr1)            <span class="comment">// 源切片没有改变</span></span><br><span class="line">	fmt.Println(newslice)        <span class="comment">// 新切片中已经没有了要删除的元素了</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[1 2 3 4 5 6]</span><br><span class="line">[1 2 4 5 6]</span><br></pre></td></tr></table></figure>
+<h3 id="通过copy删除元素"><a href="#通过copy删除元素" class="headerlink" title="通过copy删除元素"></a>通过copy删除元素</h3><ul>
+<li>copy 函数删除元素后不会对原来切片产生影响</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    s := <span class="keyword">int</span>&#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>&#125;</span><br><span class="line">    n := <span class="number">2</span>                                           <span class="comment">// 要删除的元素</span></span><br><span class="line">    newslice := <span class="built_in">make</span>([]<span class="keyword">int</span>, n)                       <span class="comment">// 新的切片大小为要删除的长度</span></span><br><span class="line">    <span class="built_in">copy</span>(newslice, s[<span class="number">0</span>:n])                           <span class="comment">// 拷贝要删除的元素的前半部分数组到新切片</span></span><br><span class="line">    newslice = <span class="built_in">append</span>(newslice, s[n+<span class="number">1</span>:]...)          <span class="comment">// 追加要删除的元素的后半部分数组到新切片</span></span><br><span class="line">    fmt.Println(newslice)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="接口"><a href="#接口" class="headerlink" title="接口"></a>接口</h2><h2 id="map"><a href="#map" class="headerlink" title="map"></a>map</h2><p>map 以散列表方式存储键值对集合，map 中每个元素都是键值对。</p>
+<ul>
+<li>使用 make 进行初始化</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	m := <span class="built_in">make</span>(<span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">string</span>)</span><br><span class="line">	fmt.Println(m)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">map[]</span><br></pre></td></tr></table></figure>
+<ul>
+<li>声明 map 并赋初始值</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	m := <span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">string</span>&#123;<span class="string">"name"</span>: <span class="string">"yangjinheng"</span>, <span class="string">"address"</span>: <span class="string">"shanxi"</span>, <span class="string">"phone"</span>: <span class="string">"13621093306"</span>&#125;</span><br><span class="line">	fmt.Println(m)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">map[name:yangjinheng address:shanxi phone:13621093306]</span><br></pre></td></tr></table></figure>
+<h3 id="修改数据"><a href="#修改数据" class="headerlink" title="修改数据"></a>修改数据</h3><ul>
+<li>修改或新增数据，当键存在时候修改数据，当键不存在时候则为新增</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	m := <span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">string</span>&#123;<span class="string">"name"</span>: <span class="string">"yangjinheng"</span>, <span class="string">"address"</span>: <span class="string">"shanxi"</span>, <span class="string">"phone"</span>: <span class="string">"13621093306"</span>&#125;</span><br><span class="line">	m[<span class="string">"gender"</span>] = <span class="string">"man"</span></span><br><span class="line">    m[<span class="string">"address"</span>] = <span class="string">"xian"</span></span><br><span class="line">	fmt.Println(m)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">map[phone:13621093306 gender:man name:yangjinheng address:xian]</span><br></pre></td></tr></table></figure>
+<h3 id="删除数据"><a href="#删除数据" class="headerlink" title="删除数据"></a>删除数据</h3><ul>
+<li>delete 是顶级函数，delete 没有返回值，当被删除的键存在时则会被删除，不存在时，map 不做改变。</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;  </span><br><span class="line">	m := <span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">string</span>&#123;<span class="string">"name"</span>: <span class="string">"yangjinheng"</span>, <span class="string">"address"</span>: <span class="string">"shanxi"</span>, <span class="string">"phone"</span>: <span class="string">"13621093306"</span>&#125;</span><br><span class="line">	<span class="built_in">delete</span>(m, <span class="string">"phone"</span>)</span><br><span class="line">	<span class="built_in">delete</span>(m, <span class="string">"gender"</span>)</span><br><span class="line">	fmt.Println(m)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">map[name:yangjinheng address:shanxi]</span><br></pre></td></tr></table></figure>
+<h3 id="查询数据"><a href="#查询数据" class="headerlink" title="查询数据"></a>查询数据</h3><ul>
+<li>多返回值的索引查询</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	m := <span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">string</span>&#123;<span class="string">"name"</span>: <span class="string">"yangjinheng"</span>, <span class="string">"address"</span>: <span class="string">"shanxi"</span>, <span class="string">"phone"</span>: <span class="string">"13621093306"</span>&#125;</span><br><span class="line">	value, ok := m[<span class="string">"name"</span>]</span><br><span class="line">	fmt.Println(value, ok)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">yangjinheng true</span><br></pre></td></tr></table></figure>
+<ul>
+<li>for 循环遍历</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	m := <span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">string</span>&#123;<span class="string">"name"</span>: <span class="string">"yangjinheng"</span>, <span class="string">"address"</span>: <span class="string">"shanxi"</span>, <span class="string">"phone"</span>: <span class="string">"13621093306"</span>&#125;</span><br><span class="line">	<span class="keyword">for</span> key, value := <span class="keyword">range</span> m &#123;</span><br><span class="line">		fmt.Println(key, value)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">name yangjinheng</span><br><span class="line">address shanxi</span><br><span class="line">phone 13621093306</span><br></pre></td></tr></table></figure>
+<h2 id="链表"><a href="#链表" class="headerlink" title="链表"></a>链表</h2><h3 id="实例化"><a href="#实例化" class="headerlink" title="实例化"></a>实例化</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	mylist := list.New()</span><br><span class="line">	fmt.Println(mylist)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&amp;&#123;&#123;0xc000074240 0xc000074240 &lt;nil&gt; &lt;nil&gt;&#125; 0&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="Back最后一个链表对象"><a href="#Back最后一个链表对象" class="headerlink" title="Back最后一个链表对象"></a>Back最后一个链表对象</h3><ul>
+<li>返回列表l的最后一个元素，如果列表为空，则返回 nil。</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	mylist := list.New()</span><br><span class="line">	mylist.PushBack(<span class="number">1</span>)</span><br><span class="line">	mylist.PushBack(<span class="string">"a"</span>)</span><br><span class="line">	fmt.Println(mylist.Back())           <span class="comment">// 得到链表的最后一个对象</span></span><br><span class="line">	fmt.Println(mylist.Back().Value)     <span class="comment">// 得到链表最后一个对象的值</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&amp;&#123;0xc000074240 0xc000074270 0xc000074240 a&#125;</span><br><span class="line">a</span><br></pre></td></tr></table></figure>
+<p>Front第一个链表对象</p>
+<ul>
+<li>返回列表的第一个元素，如果列表为空，则返回nil。</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	mylist := list.New()</span><br><span class="line">	mylist.PushBack(<span class="number">1</span>)</span><br><span class="line">	mylist.PushBack(<span class="string">"a"</span>)</span><br><span class="line">	fmt.Println(mylist.Front())</span><br><span class="line">	fmt.Println(mylist.Front().Value)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line">&amp;&#123;<span class="number">0xc0000742a0</span> <span class="number">0xc000074240</span> <span class="number">0xc000074240</span> <span class="number">1</span>&#125;</span><br><span class="line"><span class="number">1</span></span><br></pre></td></tr></table></figure>
+<h3 id="InsertAfter指定元素后插入"><a href="#InsertAfter指定元素后插入" class="headerlink" title="InsertAfter指定元素后插入"></a>InsertAfter指定元素后插入</h3><p>在一个元素对象之后插入一个值。</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	mylist := list.New()</span><br><span class="line">	mylist.PushBack(<span class="number">1</span>)</span><br><span class="line">	mylist.PushBack(<span class="number">2</span>)</span><br><span class="line">	mylist.PushBack(<span class="number">3</span>)</span><br><span class="line">	mylist.InsertAfter(<span class="number">4</span>, mylist.Back())</span><br><span class="line">	fmt.Println(mylist)</span><br><span class="line">	<span class="keyword">for</span> e := mylist.Front(); e != <span class="literal">nil</span>; e = e.Next() &#123;</span><br><span class="line">		fmt.Println(e.Value)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&amp;&#123;&#123;0xc000074270 0xc000074300 &lt;nil&gt; &lt;nil&gt;&#125; 4&#125;</span><br><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td></tr></table></figure>
+<h3 id="InsertBefore指定元素前插入"><a href="#InsertBefore指定元素前插入" class="headerlink" title="InsertBefore指定元素前插入"></a>InsertBefore指定元素前插入</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	mylist := list.New()</span><br><span class="line">	mylist.PushBack(<span class="number">1</span>)</span><br><span class="line">	mylist.PushBack(<span class="number">2</span>)</span><br><span class="line">	mylist.PushBack(<span class="number">3</span>)</span><br><span class="line">	mylist.InsertBefore(<span class="number">4</span>, mylist.Back())</span><br><span class="line">	fmt.Println(mylist)</span><br><span class="line">	<span class="keyword">for</span> e := mylist.Front(); e != <span class="literal">nil</span>; e = e.Next() &#123;</span><br><span class="line">		fmt.Println(e.Value)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&amp;&#123;&#123;0xc000074270 0xc0000742d0 &lt;nil&gt; &lt;nil&gt;&#125; 4&#125;</span><br><span class="line">1</span><br><span class="line">2</span><br><span class="line">4</span><br><span class="line">3</span><br></pre></td></tr></table></figure>
+<h3 id="Len链表长度"><a href="#Len链表长度" class="headerlink" title="Len链表长度"></a>Len链表长度</h3><ul>
+<li>取得当前链表的长度</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	mylist := list.New()</span><br><span class="line">	mylist.PushBack(<span class="number">1</span>)</span><br><span class="line">	mylist.PushBack(<span class="number">2</span>)</span><br><span class="line">	mylist.PushBack(<span class="number">3</span>)</span><br><span class="line">	mylist.InsertBefore(<span class="number">4</span>, mylist.Back())</span><br><span class="line">	fmt.Println(mylist.Len())</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">4</span><br></pre></td></tr></table></figure>
+<h3 id="MoveAfter移动到指定元素后"><a href="#MoveAfter移动到指定元素后" class="headerlink" title="MoveAfter移动到指定元素后"></a>MoveAfter移动到指定元素后</h3><p>将元素移动到另一个元素后面</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	mylist := list.New()</span><br><span class="line">	mylist.PushBack(<span class="number">1</span>)</span><br><span class="line">	mylist.PushBack(<span class="number">2</span>)</span><br><span class="line">	mylist.PushBack(<span class="number">3</span>)</span><br><span class="line">	mylist.InsertBefore(<span class="number">4</span>, mylist.Back())</span><br><span class="line">	mylist.MoveAfter(mylist.Front(), mylist.Back())</span><br><span class="line">	<span class="keyword">for</span> e := mylist.Front(); e != <span class="literal">nil</span>; e = e.Next() &#123;</span><br><span class="line">		fmt.Println(e.Value)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="number">2</span></span><br><span class="line"><span class="number">4</span></span><br><span class="line"><span class="number">3</span></span><br><span class="line"><span class="number">1</span></span><br></pre></td></tr></table></figure>
+<h3 id="MoveBefore移动到指定元素前"><a href="#MoveBefore移动到指定元素前" class="headerlink" title="MoveBefore移动到指定元素前"></a>MoveBefore移动到指定元素前</h3><p>将元素移动到另一个元素后面</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	mylist := list.New()</span><br><span class="line">	mylist.PushBack(<span class="number">1</span>)</span><br><span class="line">	mylist.PushBack(<span class="number">2</span>)</span><br><span class="line">	mylist.PushBack(<span class="number">4</span>)</span><br><span class="line">	mylist.PushBack(<span class="number">3</span>)</span><br><span class="line">	mylist.MoveBefore(mylist.Back(), mylist.Back().Prev())</span><br><span class="line">	<span class="keyword">for</span> e := mylist.Front(); e != <span class="literal">nil</span>; e = e.Next() &#123;</span><br><span class="line">		fmt.Println(e.Value)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="number">1</span></span><br><span class="line"><span class="number">2</span></span><br><span class="line"><span class="number">3</span></span><br><span class="line"><span class="number">4</span></span><br></pre></td></tr></table></figure>
+<h3 id="MoveToBack移动到尾部"><a href="#MoveToBack移动到尾部" class="headerlink" title="MoveToBack移动到尾部"></a>MoveToBack移动到尾部</h3><p>将一个元素移动到尾部</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	mylist := list.New()</span><br><span class="line">	mylist.PushBack(<span class="number">1</span>)</span><br><span class="line">	mylist.PushBack(<span class="number">2</span>)</span><br><span class="line">	mylist.PushBack(<span class="number">3</span>)</span><br><span class="line">	mylist.PushBack(<span class="number">4</span>)</span><br><span class="line">	mylist.MoveToBack(mylist.Front())</span><br><span class="line">	<span class="keyword">for</span> e := mylist.Front(); e != <span class="literal">nil</span>; e = e.Next() &#123;</span><br><span class="line">		fmt.Println(e.Value)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">1</span><br></pre></td></tr></table></figure>
+<h3 id="MoveToFront移动到链表的首部"><a href="#MoveToFront移动到链表的首部" class="headerlink" title="MoveToFront移动到链表的首部"></a>MoveToFront移动到链表的首部</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	mylist := list.New()</span><br><span class="line">	mylist.PushBack(<span class="number">1</span>)</span><br><span class="line">	mylist.PushBack(<span class="number">2</span>)</span><br><span class="line">	mylist.PushBack(<span class="number">3</span>)</span><br><span class="line">	mylist.PushBack(<span class="number">4</span>)</span><br><span class="line">	mylist.MoveToFront(mylist.Back())</span><br><span class="line">	<span class="keyword">for</span> e := mylist.Front(); e != <span class="literal">nil</span>; e = e.Next() &#123;</span><br><span class="line">		fmt.Println(e.Value)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">4</span><br><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td></tr></table></figure>
+<h3 id="PushBack从尾部追加"><a href="#PushBack从尾部追加" class="headerlink" title="PushBack从尾部追加"></a>PushBack从尾部追加</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	mylist := list.New()</span><br><span class="line">	mylist.PushBack(<span class="number">1</span>)</span><br><span class="line">	mylist.PushBack(<span class="number">2</span>)</span><br><span class="line">	mylist.PushBack(<span class="number">3</span>)</span><br><span class="line">	mylist.PushBack(<span class="number">4</span>)</span><br><span class="line">	<span class="keyword">for</span> e := mylist.Front(); e != <span class="literal">nil</span>; e = e.Next() &#123;</span><br><span class="line">		fmt.Println(e.Value)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td></tr></table></figure>
+<h3 id="PushFront从首部追加"><a href="#PushFront从首部追加" class="headerlink" title="PushFront从首部追加"></a>PushFront从首部追加</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	mylist := list.New()</span><br><span class="line">	mylist.PushBack(<span class="number">1</span>)</span><br><span class="line">	mylist.PushBack(<span class="number">2</span>)</span><br><span class="line">	mylist.PushBack(<span class="number">3</span>)</span><br><span class="line">	mylist.PushBack(<span class="number">4</span>)</span><br><span class="line">	mylist.PushFront(<span class="number">0</span>)</span><br><span class="line">	<span class="keyword">for</span> e := mylist.Front(); e != <span class="literal">nil</span>; e = e.Next() &#123;</span><br><span class="line">		fmt.Println(e.Value)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">0</span><br><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td></tr></table></figure>
+<h3 id="Remove移除一个元素"><a href="#Remove移除一个元素" class="headerlink" title="Remove移除一个元素"></a>Remove移除一个元素</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	mylist := list.New()</span><br><span class="line">	mylist.PushBack(<span class="number">1</span>)</span><br><span class="line">	mylist.PushBack(<span class="number">2</span>)</span><br><span class="line">	mylist.PushBack(<span class="number">3</span>)</span><br><span class="line">	mylist.PushBack(<span class="number">4</span>)</span><br><span class="line">	mylist.PushFront(<span class="number">0</span>)</span><br><span class="line">	mylist.Remove(mylist.Back())</span><br><span class="line">	<span class="keyword">for</span> e := mylist.Front(); e != <span class="literal">nil</span>; e = e.Next() &#123;</span><br><span class="line">		fmt.Println(e.Value)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">0</span><br><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td></tr></table></figure>
+<h3 id="PushBackList尾部追加另一个链表"><a href="#PushBackList尾部追加另一个链表" class="headerlink" title="PushBackList尾部追加另一个链表"></a>PushBackList尾部追加另一个链表</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	mylist1 := list.New()</span><br><span class="line">	mylist1.PushBack(<span class="number">1</span>)</span><br><span class="line">	mylist1.PushBack(<span class="number">2</span>)</span><br><span class="line">	mylist2 := list.New()</span><br><span class="line">	mylist2.PushBack(<span class="number">3</span>)</span><br><span class="line">	mylist2.PushBack(<span class="number">4</span>)</span><br><span class="line">	mylist1.PushBackList(mylist2)</span><br><span class="line">	<span class="keyword">for</span> e := mylist1.Front(); e != <span class="literal">nil</span>; e = e.Next() &#123;</span><br><span class="line">		fmt.Println(e.Value)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td></tr></table></figure>
+<h3 id="PushFrontList首部追加另一个链表"><a href="#PushFrontList首部追加另一个链表" class="headerlink" title="PushFrontList首部追加另一个链表"></a>PushFrontList首部追加另一个链表</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	mylist1 := list.New()</span><br><span class="line">	mylist1.PushBack(<span class="number">1</span>)</span><br><span class="line">	mylist1.PushBack(<span class="number">2</span>)</span><br><span class="line">	mylist2 := list.New()</span><br><span class="line">	mylist2.PushBack(<span class="number">3</span>)</span><br><span class="line">	mylist2.PushBack(<span class="number">4</span>)</span><br><span class="line">	mylist1.PushFrontList(mylist2)</span><br><span class="line">	<span class="keyword">for</span> e := mylist1.Front(); e != <span class="literal">nil</span>; e = e.Next() &#123;</span><br><span class="line">		fmt.Println(e.Value)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">3</span><br><span class="line">4</span><br><span class="line">1</span><br><span class="line">2</span><br></pre></td></tr></table></figure>
+<h3 id="链表的遍历"><a href="#链表的遍历" class="headerlink" title="链表的遍历"></a>链表的遍历</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	mylist := list.New()</span><br><span class="line">	mylist.PushFront(<span class="number">0</span>)</span><br><span class="line">	mylist.PushBack(<span class="number">1</span>)</span><br><span class="line">	mylist.PushBack(<span class="number">2</span>)</span><br><span class="line">	<span class="keyword">for</span> e := mylist.Front(); e != <span class="literal">nil</span>; e = e.Next() &#123;</span><br><span class="line">		fmt.Println(e.Value)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="number">0</span></span><br><span class="line"><span class="number">1</span></span><br><span class="line"><span class="number">2</span></span><br></pre></td></tr></table></figure>
+<h2 id="双向循环链表"><a href="#双向循环链表" class="headerlink" title="双向循环链表"></a>双向循环链表</h2><p>循环链表的特点是没有节点的指针域为 nil，通过任何一个元素都可以找到其他元素。</p>
+<ol>
+<li>双向循环链表和双向链表有什么区别</li>
+</ol>
+<ul>
+<li>双向循环链表没有严格意义上的头元素和尾元素</li>
+<li>没有元素的前连接和后连接为 nil</li>
+<li>一个长度为 n 的双向循环链表，通过某个元素向某个方向移动，在最多 n - 1 次后一定会找到另外一个元素</li>
+</ul>
+<h3 id="创建和遍历"><a href="#创建和遍历" class="headerlink" title="创建和遍历"></a>创建和遍历</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="comment">// 初始化一个 5 个元素的链表，这个初始化的元素代表整个链表，也代表第一个元素</span></span><br><span class="line">	r := ring.New(<span class="number">5</span>)</span><br><span class="line">	r.Value = <span class="number">0</span></span><br><span class="line">	r.Next().Value = <span class="number">1</span></span><br><span class="line">	r.Next().Next().Value = <span class="number">2</span></span><br><span class="line">	r.Prev().Value = <span class="number">4</span></span><br><span class="line">	r.Prev().Prev().Value = <span class="number">3</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">// 循环链表有几个元素，func 就执行几次</span></span><br><span class="line">	r.Do(<span class="function"><span class="keyword">func</span><span class="params">(i <span class="keyword">interface</span>&#123;&#125;)</span></span> &#123;</span><br><span class="line">		fmt.Println(i)</span><br><span class="line">	&#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="number">0</span></span><br><span class="line"><span class="number">1</span></span><br><span class="line"><span class="number">2</span></span><br><span class="line"><span class="number">3</span></span><br><span class="line"><span class="number">4</span></span><br></pre></td></tr></table></figure>
+<h3 id="Move移动链表指针"><a href="#Move移动链表指针" class="headerlink" title=".Move移动链表指针"></a>.Move移动链表指针</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="comment">// 初始化一个 5 个元素的链表，这个初始化的元素代表整个链表，也代表第一个元素</span></span><br><span class="line">	r := ring.New(<span class="number">5</span>)</span><br><span class="line">	r.Value = <span class="number">0</span></span><br><span class="line">	r.Next().Value = <span class="number">1</span></span><br><span class="line">	r.Next().Next().Value = <span class="number">2</span></span><br><span class="line">	r.Prev().Value = <span class="number">4</span></span><br><span class="line">	r.Prev().Prev().Value = <span class="number">3</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">// 链表移动指定次数，获得元素值，次数可以是正或负，表示向前或者向后</span></span><br><span class="line">	fmt.Println(<span class="string">"获取移动指定次数后的元素"</span>, r.Move(<span class="number">2</span>).Value)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line">获取移动指定次数后的元素 <span class="number">2</span></span><br></pre></td></tr></table></figure>
+<h3 id="Link增加链表"><a href="#Link增加链表" class="headerlink" title=".Link增加链表"></a>.Link增加链表</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="comment">// 初始化一个 5 个元素的链表，这个初始化的元素代表整个链表，也代表第一个元素</span></span><br><span class="line">	r := ring.New(<span class="number">5</span>)</span><br><span class="line">	r.Value = <span class="number">0</span></span><br><span class="line">	r.Next().Value = <span class="number">1</span></span><br><span class="line">	r.Next().Next().Value = <span class="number">2</span></span><br><span class="line">	r.Prev().Value = <span class="number">4</span></span><br><span class="line">	r.Prev().Prev().Value = <span class="number">3</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">// 在当前元素后链接另外一个链表，r 当前是第一个元素</span></span><br><span class="line">	r1 := ring.New(<span class="number">1</span>)</span><br><span class="line">	r1.Value = <span class="number">5</span></span><br><span class="line">	r.Link(r1)</span><br><span class="line">	r.Do(<span class="function"><span class="keyword">func</span><span class="params">(i <span class="keyword">interface</span>&#123;&#125;)</span></span> &#123;</span><br><span class="line">		fmt.Println(<span class="string">"Link可以追加链表"</span>, i)</span><br><span class="line">	&#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="number">0</span></span><br><span class="line"><span class="number">1</span></span><br><span class="line"><span class="number">2</span></span><br><span class="line"><span class="number">3</span></span><br><span class="line"><span class="number">4</span></span><br><span class="line">Link <span class="number">0</span></span><br><span class="line">Link <span class="number">5</span></span><br><span class="line">Link <span class="number">1</span></span><br><span class="line">Link <span class="number">2</span></span><br><span class="line">Link <span class="number">3</span></span><br><span class="line">Link <span class="number">4</span></span><br></pre></td></tr></table></figure>
+<h3 id="Unlink删除元素"><a href="#Unlink删除元素" class="headerlink" title=".Unlink删除元素"></a>.Unlink删除元素</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="comment">// 初始化一个 5 个元素的链表，这个初始化的元素代表整个链表，也代表第一个元素</span></span><br><span class="line">	r := ring.New(<span class="number">5</span>)</span><br><span class="line">	r.Value = <span class="number">0</span></span><br><span class="line">	r.Next().Value = <span class="number">1</span></span><br><span class="line">	r.Next().Next().Value = <span class="number">2</span></span><br><span class="line">	r.Prev().Value = <span class="number">4</span></span><br><span class="line">	r.Prev().Prev().Value = <span class="number">3</span></span><br><span class="line"></span><br><span class="line">	r.Do(<span class="function"><span class="keyword">func</span><span class="params">(i <span class="keyword">interface</span>&#123;&#125;)</span></span> &#123;</span><br><span class="line">		fmt.Println(i)</span><br><span class="line">	&#125;)</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 从当前对象后开始删除指定个数的元素，例如：参数为 4 或 9 都会删除之后的 4 个元素</span></span><br><span class="line">	<span class="comment">// 1%5 = 1; 2%5 = 2; 3%5 = 3; 4%5 = 4; 5%5 = 0;</span></span><br><span class="line">	<span class="comment">// 6%5 = 1; 7%5 = 2; 8%5 = 3; 9%5 = 4; 10%5 = 0;</span></span><br><span class="line">	r.Unlink(<span class="number">9</span>)</span><br><span class="line"></span><br><span class="line">	r.Do(<span class="function"><span class="keyword">func</span><span class="params">(i <span class="keyword">interface</span>&#123;&#125;)</span></span> &#123;</span><br><span class="line">		fmt.Println(<span class="string">"UnLink"</span>, i)</span><br><span class="line">	&#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="流程控制"><a href="#流程控制" class="headerlink" title="流程控制"></a>流程控制</h1><h2 id="if条件判断"><a href="#if条件判断" class="headerlink" title="if条件判断"></a>if条件判断</h2><ul>
+<li>注意事项</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">- if 语句的表达式不需要 () 包起来</span><br><span class="line">- 在 Go 语言 if 语句中的表达式必须为布尔值类型</span><br><span class="line">- if 语句会隔离变量作用域，无论表达式中的还是，分支内的都不能在外部访问</span><br></pre></td></tr></table></figure>
+<ul>
+<li>Go 语言中的表达式不写 ()</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span> 表达式 &#123;</span><br><span class="line">    some things...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="单分支"><a href="#单分支" class="headerlink" title="单分支"></a>单分支</h3><ul>
+<li>b 变量不能在 if 语句外部访问</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	a := <span class="number">10</span></span><br><span class="line">	<span class="keyword">if</span> a == <span class="number">10</span> &#123;</span><br><span class="line">		fmt.Println(a)</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span> a := <span class="number">20</span>; a == <span class="number">20</span> &#123;</span><br><span class="line">		b := <span class="number">100</span></span><br><span class="line">		fmt.Println(a, b)</span><br><span class="line">	&#125;</span><br><span class="line">	fmt.Println(a)</span><br><span class="line">	<span class="comment">// fmt.Println(b)</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">10 100</span><br></pre></td></tr></table></figure>
+<h3 id="if…else语句"><a href="#if…else语句" class="headerlink" title="if…else语句"></a>if…else语句</h3><p>if…else，程序有两个分支，一个是条件满足，一个是条件不满足</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	score := <span class="number">68</span></span><br><span class="line">	<span class="keyword">if</span> score &gt;= <span class="number">60</span> &#123;</span><br><span class="line">		fmt.Println(<span class="string">"及格"</span>)</span><br><span class="line">	&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">		fmt.Println(<span class="string">"不及格"</span>)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="多分支-if"><a href="#多分支-if" class="headerlink" title="多分支 if"></a>多分支 if</h3><p>当满足互斥的判断条件时候，可以使用多分支，多分支的 if 最终只会执行一条分支块。</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	score := <span class="number">70</span></span><br><span class="line">	<span class="keyword">if</span> score &gt;= <span class="number">60</span> &amp;&amp; score &lt; <span class="number">70</span> &#123;</span><br><span class="line">		fmt.Println(<span class="string">"及格"</span>)</span><br><span class="line">	&#125; <span class="keyword">else</span> <span class="keyword">if</span> score &gt;= <span class="number">70</span> &amp;&amp; score &lt; <span class="number">80</span> &#123;</span><br><span class="line">		fmt.Println(<span class="string">"良好"</span>)</span><br><span class="line">	&#125; <span class="keyword">else</span> <span class="keyword">if</span> score &gt;= <span class="number">80</span> &amp;&amp; score &lt; <span class="number">100</span> &#123;</span><br><span class="line">		fmt.Println(<span class="string">"优秀"</span>)</span><br><span class="line">	&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">		fmt.Println(<span class="string">"不及格"</span>)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="switch语句"><a href="#switch语句" class="headerlink" title="switch语句"></a>switch语句</h2><p>switch也属于条件判断语句，支持多种写法，switch 会隔离变量作用域。</p>
+<ul>
+<li>基本语法</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">switch</span> [定义变量;] [变量] &#123;</span><br><span class="line">    <span class="keyword">case</span> [条件语句]|[变量具体值,变量具体值,...]:</span><br><span class="line">        ...</span><br><span class="line">    <span class="keyword">case</span> [条件语句]|[变量具体值,变量具体值,...]:</span><br><span class="line">        ...</span><br><span class="line">    <span class="keyword">case</span> [条件语句]|[变量具体值,变量具体值,...]:</span><br><span class="line">        ...</span><br><span class="line">    <span class="keyword">default</span>:</span><br><span class="line">        ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="等值匹配"><a href="#等值匹配" class="headerlink" title="等值匹配"></a>等值匹配</h3><ul>
+<li>switch 用法之一，等值比较决定分支，变量等值比较时候，case 可以判断多个值</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	score := <span class="number">100</span></span><br><span class="line">	<span class="keyword">switch</span> i := <span class="number">100</span>; score &#123;</span><br><span class="line">	<span class="keyword">case</span> <span class="number">60</span>, <span class="number">61</span>, <span class="number">62</span>, <span class="number">63</span>, <span class="number">64</span>, <span class="number">65</span>, <span class="number">66</span>, <span class="number">67</span>, <span class="number">68</span>, <span class="number">69</span>:</span><br><span class="line">		fmt.Println(<span class="string">"及格"</span>)</span><br><span class="line">	<span class="keyword">case</span> <span class="number">70</span>, <span class="number">71</span>, <span class="number">72</span>, <span class="number">73</span>, <span class="number">74</span>, <span class="number">75</span>, <span class="number">76</span>, <span class="number">77</span>, <span class="number">78</span>, <span class="number">79</span>:</span><br><span class="line">		fmt.Println(<span class="string">"良好"</span>)</span><br><span class="line">	<span class="keyword">case</span> <span class="number">80</span>, <span class="number">81</span>, <span class="number">82</span>, <span class="number">83</span>, <span class="number">84</span>, <span class="number">85</span>, <span class="number">86</span>, <span class="number">87</span>, <span class="number">88</span>, <span class="number">89</span>:</span><br><span class="line">		fmt.Println(<span class="string">"优秀"</span>)</span><br><span class="line">	<span class="keyword">case</span> i:</span><br><span class="line">		fmt.Println(<span class="string">"满分"</span>)</span><br><span class="line">	<span class="keyword">default</span>:</span><br><span class="line">		fmt.Println(<span class="string">"不及格"</span>)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="条件判断"><a href="#条件判断" class="headerlink" title="条件判断"></a>条件判断</h3><ul>
+<li>switch 用法之二，条件决定分支</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	score := <span class="number">12</span></span><br><span class="line">	<span class="keyword">switch</span> i := <span class="number">120</span>; &#123;</span><br><span class="line">	<span class="keyword">case</span> score &gt;= <span class="number">60</span> &amp;&amp; score &lt; <span class="number">70</span>:</span><br><span class="line">		fmt.Println(<span class="string">"及格"</span>)</span><br><span class="line">	<span class="keyword">case</span> score &gt;= <span class="number">70</span> &amp;&amp; score &lt; <span class="number">80</span>:</span><br><span class="line">		fmt.Println(<span class="string">"良好"</span>)</span><br><span class="line">	<span class="keyword">case</span> score &gt;= <span class="number">80</span> &amp;&amp; score &lt; <span class="number">90</span>:</span><br><span class="line">		fmt.Println(<span class="string">"优秀"</span>)</span><br><span class="line">	<span class="keyword">case</span> score &gt;= <span class="number">90</span> &amp;&amp; score &lt; <span class="number">100</span>:</span><br><span class="line">		fmt.Println(<span class="string">"优秀Plus"</span>)</span><br><span class="line">	<span class="keyword">case</span> score &gt;= <span class="number">100</span> &amp;&amp; score &lt;= i:</span><br><span class="line">		fmt.Println(<span class="string">"超级优秀"</span>)</span><br><span class="line">	<span class="keyword">default</span>:</span><br><span class="line">		fmt.Println(<span class="string">"不及格"</span>)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="穿透和中断"><a href="#穿透和中断" class="headerlink" title="穿透和中断"></a>穿透和中断</h3><p>穿透：默认情况下只能执行一个 case 语句，使用 fallthrough 关键词可以继续直接执行下一个语句（不执行匹配）</p>
+<p>中断：无论后面还有什么语句，直接退出当前语句块</p>
+<ul>
+<li>穿透</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="keyword">switch</span> num := <span class="number">1</span>; num &#123;</span><br><span class="line">	<span class="keyword">case</span> <span class="number">1</span>:</span><br><span class="line">		fmt.Println(<span class="string">"1"</span>)</span><br><span class="line">		<span class="keyword">fallthrough</span></span><br><span class="line">	<span class="keyword">case</span> <span class="number">2</span>:</span><br><span class="line">		fmt.Println(<span class="string">"2"</span>)</span><br><span class="line">	<span class="keyword">case</span> <span class="number">3</span>:</span><br><span class="line">		fmt.Println(<span class="string">"3"</span>)</span><br><span class="line">	<span class="keyword">case</span> <span class="number">4</span>:</span><br><span class="line">		fmt.Println(<span class="string">"4"</span>)</span><br><span class="line">	<span class="keyword">default</span>:</span><br><span class="line">		fmt.Println(<span class="string">"无"</span>)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td></tr></table></figure>
+<ul>
+<li>中断</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="keyword">switch</span> num := <span class="number">1</span>; num &#123;</span><br><span class="line">	<span class="keyword">case</span> <span class="number">1</span>:</span><br><span class="line">		fmt.Println(<span class="string">"1"</span>)</span><br><span class="line">		<span class="keyword">fallthrough</span></span><br><span class="line">	<span class="keyword">case</span> <span class="number">2</span>:</span><br><span class="line">		fmt.Println(<span class="string">"2"</span>)</span><br><span class="line">		<span class="keyword">break</span></span><br><span class="line">		fmt.Println(<span class="string">"test2"</span>)</span><br><span class="line">	<span class="keyword">case</span> <span class="number">3</span>:</span><br><span class="line">		fmt.Println(<span class="string">"3"</span>)</span><br><span class="line">	<span class="keyword">case</span> <span class="number">4</span>:</span><br><span class="line">		fmt.Println(<span class="string">"4"</span>)</span><br><span class="line">	<span class="keyword">default</span>:</span><br><span class="line">		fmt.Println(<span class="string">"无"</span>)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td></tr></table></figure>
+<h2 id="for循环"><a href="#for循环" class="headerlink" title="for循环"></a>for循环</h2><p>for 循环有三种形式</p>
+<ul>
+<li>类似 while 循环，每次迭代前重新计算表达式的值，如果为 true 就进入循环</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> a &lt; b &#123;</span><br><span class="line">	a *= <span class="number">2</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>类 c 风格的循环，它由 init; condition; post 组成，init 语句只在第一次执行，post 在循环结束执行（且仅在块被执行后执行）</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="number">10</span>; i++ &#123;</span><br><span class="line">	f(i)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>从 range 循环，它可以用来遍历数组、切片、字符串、或映射的所有条目，或者在 channel 上接收的值（只能从中接收单个变量）</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 遍历数组</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	arr2 := [<span class="number">3</span>][<span class="number">3</span>]<span class="keyword">int</span>&#123;</span><br><span class="line">		&#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>&#125;,</span><br><span class="line">		&#123;<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>&#125;,</span><br><span class="line">		&#123;<span class="number">7</span>, <span class="number">8</span>, <span class="number">9</span>&#125;,</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">for</span> i, j := <span class="keyword">range</span> arr2 &#123;</span><br><span class="line">		fmt.Println(i, j)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 遍历字符串</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	str1 := <span class="string">"yangjinheng"</span></span><br><span class="line">	<span class="keyword">for</span> i, j := <span class="keyword">range</span> str1 &#123;</span><br><span class="line">		fmt.Println(i, j)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="冒泡排序"><a href="#冒泡排序" class="headerlink" title="冒泡排序"></a>冒泡排序</h3><ul>
+<li>for 循环的冒泡排序</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	arr1 := []<span class="keyword">int</span>&#123;<span class="number">1</span>, <span class="number">6</span>, <span class="number">9</span>, <span class="number">4</span>, <span class="number">8</span>, <span class="number">3</span>, <span class="number">87</span>, <span class="number">43</span>, <span class="number">8</span>, <span class="number">7</span>, <span class="number">534</span>, <span class="number">4</span>&#125;</span><br><span class="line">	<span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="built_in">len</span>(arr1)<span class="number">-1</span>; i++ &#123;</span><br><span class="line">		flag := <span class="literal">true</span></span><br><span class="line">		<span class="keyword">for</span> j := <span class="number">0</span>; j &lt; <span class="built_in">len</span>(arr1)-i<span class="number">-1</span>; j++ &#123;</span><br><span class="line">			<span class="keyword">if</span> arr1[j] &gt; arr1[j+<span class="number">1</span>] &#123;</span><br><span class="line">				arr1[j], arr1[j+<span class="number">1</span>] = arr1[j+<span class="number">1</span>], arr1[j]</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		count++</span><br><span class="line">	&#125;</span><br><span class="line">	fmt.Print(arr1, count)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[1 3 4 4 6 7 8 8 9 43 87 534] 12</span><br></pre></td></tr></table></figure>
+<ul>
+<li>优化后的冒泡排序</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	arr1 := []<span class="keyword">int</span>&#123;<span class="number">1</span>, <span class="number">6</span>, <span class="number">9</span>, <span class="number">4</span>, <span class="number">8</span>, <span class="number">3</span>, <span class="number">87</span>, <span class="number">43</span>, <span class="number">8</span>, <span class="number">7</span>, <span class="number">534</span>, <span class="number">4</span>&#125;</span><br><span class="line">	count := <span class="number">0</span></span><br><span class="line">	<span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="built_in">len</span>(arr1)<span class="number">-1</span>; i++ &#123;</span><br><span class="line">		flag := <span class="literal">true</span></span><br><span class="line">		<span class="keyword">for</span> j := <span class="number">0</span>; j &lt; <span class="built_in">len</span>(arr1)-i<span class="number">-1</span>; j++ &#123;</span><br><span class="line">			<span class="keyword">if</span> arr1[j] &gt; arr1[j+<span class="number">1</span>] &#123;</span><br><span class="line">				arr1[j], arr1[j+<span class="number">1</span>] = arr1[j+<span class="number">1</span>], arr1[j]</span><br><span class="line">				flag = <span class="literal">false</span></span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">if</span> flag &#123;</span><br><span class="line">			<span class="keyword">break</span></span><br><span class="line">		&#125;</span><br><span class="line">		count++</span><br><span class="line">	&#125;</span><br><span class="line">	fmt.Print(arr1, count)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[1 3 4 4 6 7 8 8 9 43 87 534] 8</span><br></pre></td></tr></table></figure>
+<ul>
+<li>选择排序</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	arr1 := []<span class="keyword">int</span>&#123;<span class="number">10</span>, <span class="number">386</span>, <span class="number">479</span>, <span class="number">627</span>, <span class="number">20</span>, <span class="number">523</span>, <span class="number">482</span>, <span class="number">483</span>, <span class="number">542</span>, <span class="number">699</span>, <span class="number">535</span>, <span class="number">617</span>, <span class="number">1000</span>, <span class="number">1</span>, <span class="number">577</span>, <span class="number">471</span>, <span class="number">615</span>, <span class="number">583</span>&#125;</span><br><span class="line">	<span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="built_in">len</span>(arr1); i++ &#123;</span><br><span class="line">		min_index := i</span><br><span class="line">		<span class="keyword">for</span> j := i + <span class="number">1</span>; j &lt; <span class="built_in">len</span>(arr1); j++ &#123;</span><br><span class="line">			<span class="keyword">if</span> arr1[min_index] &gt; arr1[j] &#123;</span><br><span class="line">				min_index = j</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">if</span> min_index != i &#123;</span><br><span class="line">			arr1[min_index], arr1[i] = arr1[i], arr1[min_index]</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	fmt.Println(arr1)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[1 10 20 386 471 479 482 483 523 535 542 577 583 615 617 627 699 1000]</span><br></pre></td></tr></table></figure>
+<h3 id="continue"><a href="#continue" class="headerlink" title="continue"></a>continue</h3><p>continue 控制本次循环的结束</p>
+<h2 id="goto"><a href="#goto" class="headerlink" title="goto"></a>goto</h2><p>goto 是 Go 语言的一个关键字，goto 可以在执行时候让控制流跳转到指定的位置。</p>
+<p>label 不会形成任何的语句块，它就像一个标记，跳转到这个位置继续让程序向下执行。</p>
+<ul>
+<li>Label 不会形成语句块，它仅仅将控制流跳转到指定位置</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	i := <span class="number">60</span></span><br><span class="line">	<span class="keyword">if</span> i == <span class="number">60</span> &#123;</span><br><span class="line">		<span class="keyword">goto</span> Loop1               <span class="comment">// 条件成立，跳转</span></span><br><span class="line">	&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">		<span class="keyword">goto</span> Loop2</span><br><span class="line">	&#125;</span><br><span class="line">	fmt.Println(<span class="string">"执行完毕"</span>)</span><br><span class="line">Loop1:                           <span class="comment">// 跳转到这个位置</span></span><br><span class="line">	fmt.Println(<span class="string">"Loop1"</span>)         <span class="comment">// label 不会形成语句块，程序会一直向下执行，无视其他 label</span></span><br><span class="line">Loop2:</span><br><span class="line">	fmt.Println(<span class="string">"Loop2"</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Loop1</span><br><span class="line">Loop2</span><br></pre></td></tr></table></figure>
+<h3 id="for循环中使用"><a href="#for循环中使用" class="headerlink" title="for循环中使用"></a>for循环中使用</h3><ul>
+<li>for 循环中使用 goto 程序的控制流会被交出，不会进行 for 循环的语句了</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="number">5</span>; i++ &#123;</span><br><span class="line">		fmt.Println(i)</span><br><span class="line">		<span class="keyword">if</span> i == <span class="number">2</span> &#123;</span><br><span class="line">			<span class="keyword">goto</span> Loop1</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">Loop1:</span><br><span class="line">	fmt.Println(<span class="string">"Loop1"</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">0</span><br><span class="line">1</span><br><span class="line">2</span><br><span class="line">Loop1</span><br></pre></td></tr></table></figure>
+<ul>
+<li>在标签后调用 goto 有可能会让程序陷入死循环</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="number">10</span>; i++ &#123;</span><br><span class="line">	Loop1:</span><br><span class="line">		fmt.Println(i)</span><br><span class="line">		<span class="keyword">if</span> i == <span class="number">5</span> &#123;</span><br><span class="line">			time.Sleep(<span class="number">1</span> * time.Second)</span><br><span class="line">			<span class="keyword">goto</span> Loop1</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="number">0</span></span><br><span class="line"><span class="number">1</span></span><br><span class="line"><span class="number">2</span></span><br><span class="line"><span class="number">3</span></span><br><span class="line"><span class="number">4</span></span><br><span class="line"><span class="number">5</span></span><br><span class="line"><span class="number">5</span></span><br><span class="line"><span class="number">5</span></span><br></pre></td></tr></table></figure>
+<h1 id="包的组织"><a href="#包的组织" class="headerlink" title="包的组织"></a>包的组织</h1><p>Go 语言中组织单元最大的为项目，项目由多个包组成，包由多个文件组成，文件包含了很多行代码</p>
+<p>包在文件系统中表现在一个目录，目录下所有的的文件中的 package 必须相同，建议与目录同名</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line">project_name/                  <span class="comment">// 项目名称</span></span><br><span class="line">├── bin                        <span class="comment">// 存放小工具</span></span><br><span class="line">├── main.<span class="keyword">go</span>                    <span class="comment">// 主函数所在文件，名称任意，mian.go 在项目根目录中</span></span><br><span class="line">├── pkg                        <span class="comment">// 编译后生成的内容，自动化生成，无需创建</span></span><br><span class="line">└── src                        <span class="comment">// 所有源代码都必须存放到这个目录</span></span><br><span class="line">    ├── test1                  <span class="comment">// 目录，一般为包名称</span></span><br><span class="line">    │   └── test1.<span class="keyword">go</span>           <span class="comment">// 源代码文件</span></span><br><span class="line">    └── test2</span><br><span class="line">        └── test2.<span class="keyword">go</span></span><br></pre></td></tr></table></figure>
+<h2 id="包的规范"><a href="#包的规范" class="headerlink" title="包的规范"></a>包的规范</h2><ol>
+<li>包是 Go 语言中的逻辑分组，物理上表现为不同的目录。</li>
+<li>目录下所有文件都属于一个包，且文件中定义的 package 关键字必须一致。</li>
+<li>虽然允许源码文件的 package 和目录名称不同，但是最终编译都会编译成目录名称。</li>
+<li>一个 Go 语言项目必须要有 main 包，其他包个的个数不限。</li>
+<li>Go 语言在寻找包的时候会从 GOPATH/src 路径中寻找包，如果不存在，则会去 GOROOT 目录中寻找。</li>
+<li>不同包资源下资源可以互相访问，在导入其他包之后，可以访问包下首字母为大写的内容。</li>
+<li>包下不同文件中全局资源可以随意访问。</li>
+</ol>
+<h2 id="包的示例"><a href="#包的示例" class="headerlink" title="包的示例"></a>包的示例</h2><ul>
+<li>目录结构</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line">project_demo/                           <span class="comment">// 项目</span></span><br><span class="line">├── main.<span class="keyword">go</span>                             <span class="comment">// 主函数</span></span><br><span class="line">└── src                                 <span class="comment">// 源码文件</span></span><br><span class="line">    └── demo                            <span class="comment">// demo 包</span></span><br><span class="line">        ├── demo1.<span class="keyword">go</span>                    <span class="comment">// go 代码文件</span></span><br><span class="line">        └── demo2.<span class="keyword">go</span>                    <span class="comment">// go 代码文件</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>src/demo/demo2.go 的内容</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> demo                            <span class="comment">// 属于 demo 包</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">"fmt"</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">demo2</span><span class="params">()</span></span> &#123;                          <span class="comment">// demo 包内可以访问的函数</span></span><br><span class="line">	fmt.Println(<span class="string">"this is a demo2"</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>src/demo/demo1.go 的内容</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> demo                           <span class="comment">// 属于 demo 包</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">"fmt"</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">demo1</span><span class="params">()</span></span> &#123;                         <span class="comment">// demo 包内可以访问的函数</span></span><br><span class="line">	fmt.Println(<span class="string">"this is a demo1"</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Echo</span><span class="params">()</span></span> &#123;                          <span class="comment">// 首字母大写的可以跨包访问</span></span><br><span class="line">	fmt.Println(<span class="string">"this is a Echo1"</span>)</span><br><span class="line">	demo1()</span><br><span class="line">	demo2()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>main.go 的内容</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">"demo"</span>                         <span class="comment">// 导入 demo 包</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	demo.Echo()                       <span class="comment">// 调用 demo 包下的 Echo 函数</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>结果</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line">this is a Echo1</span><br><span class="line">this is a demo1</span><br><span class="line">this is a demo2</span><br></pre></td></tr></table></figure>
+<h1 id="GC"><a href="#GC" class="headerlink" title="GC"></a>GC</h1><p>GC 英文名称全程：gtbage collector，一些常用的 GC 算法：</p>
+<ol>
+<li>引用计算法</li>
+</ol>
+<p>当对象被引用时计数器增加一，不被引用时计数器减少一，PHP 和 Object-C 使用，缺点是：互相引用的无法回收，计数器增加消耗。</p>
+<ol start="2">
+<li>标记清除</li>
+</ol>
+<p>停止程序运行，遍历对象，进行标记，标记完成后将没有引用的对象进行清除，缺点是：由于标记清除需要停止程序，当对象特别多的时候，标记和清除的过程比较耗时</p>
+<ol start="3">
+<li>三色标记法</li>
+</ol>
+<p>是标记清除的改进版，从逻辑上分为白色区域（未搜索）、灰色区域（正在搜索）、黑色区域（已经搜索）灰色区域内容是子引用没有进行搜索，黑色区域表示子引用已经存在</p>
+<ol start="4">
+<li>分代收集</li>
+</ol>
+<p>一般有三代，例如：Java 新生代、老年代、永久代，当新生代中达到阈值时会把对象放入老年代，相同道理当老年代内容达到阈值，会放入永久代</p>
+<h2 id="Go-语言的-GC"><a href="#Go-语言的-GC" class="headerlink" title="Go 语言的 GC"></a>Go 语言的 GC</h2><ol>
+<li>Go 语言采用 Stop The World 方式，就是三色标记法</li>
+<li>每个 Go 语言版本基本上都会对 GC 进行优化，从 Go 语言 1.5 开始支持并发收集，从 1.8 版本已经把 STW 时间优化到了 100 微秒，通常只需要 10 微秒以下，且在 1.10 版本时再次优化 GC 对 CPU 的占用</li>
+<li>Go 语言中 GC 是自动运行的，在下列情况下会触发 GC</li>
+</ol>
+<p>当需要申请内存时，发现 GC 是上次 GC 两倍时会触发</p>
+<p>每 2 分钟自动运行一次 GC</p>
+<ol start="4">
+<li>GC 调优，小对象复用、局部变量尽量少声明，多个小对象可以放入结构体，方便 GC 扫描，少用字符串连接</li>
+<li>在 runtime 包下 mgc.go 中明确的说明了 Go 语言的 GC 的解释</li>
+</ol>
 
           
         
