@@ -301,250 +301,6 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://yangjinheng.github.io/2017/09/30/python/21.selectorsIO复用/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Jin Heng">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="默默">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/09/30/python/21.selectorsIO复用/" itemprop="url">selectorsIO多路复用</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-30T00:00:00+08:00">
-                2017-09-30
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Python/" itemprop="url" rel="index">
-                    <span itemprop="name">Python</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="selectors"><a href="#selectors" class="headerlink" title="selectors"></a>selectors</h2><p>该模块允许基于 <code>select</code> 模块原语的高级和高效的I/O复用。鼓励用户使用此模块，除非他们需要精确控制所使用的操作系统级原语。</p>
-<p>模块定义了一个 BaseSelector的抽象基类， 以及它的子类，包括：SelectSelector， PollSelector, EpollSelector, DevpollSelector, KqueueSelector，另外还有 <code>DefaultSelector</code> 类实例化它，就可以返回当前平台上最好的I/O复用器实例。</p>
-<p>模块定义了两个常量，用于描述Event Mask，指示在给定文件对象上应该等待哪些I/O事件。 </p>
-<table>
-<thead>
-<tr>
-<th>属性</th>
-<th>含义</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>EVENT_READ</code></td>
-<td>表示可读，它的值是1</td>
-</tr>
-<tr>
-<td><code>EVENT_WRITE</code></td>
-<td>表示可写，它的值是2</td>
-</tr>
-</tbody>
-</table>
-<h2 id="selectors-SelectorKey"><a href="#selectors-SelectorKey" class="headerlink" title="selectors.SelectorKey"></a>selectors.SelectorKey</h2><p>是一个命名元祖类，SelectorKey 是用于将文件对象与其基础文件描述符，所选事件掩码和附加数据相关联的命名元祖。它由几个 BaseSelector 方法返回，它包含下列几个属性。</p>
-<table>
-<thead>
-<tr>
-<th>属性</th>
-<th>含义</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>fileobj</code></td>
-<td>需要监视的IO对象</td>
-</tr>
-<tr>
-<td><code>fd</code></td>
-<td>底层文件描述符</td>
-</tr>
-<tr>
-<td><code>events</code></td>
-<td>等待此IO对象发生的事件，可用：<code>EVENT_READ</code> 和 <code>EVENT_WRITE</code></td>
-</tr>
-<tr>
-<td><code>data</code></td>
-<td>与此文件对象关联的可选不透明数据：例如，这可以用于存储每个客户端的会话ID</td>
-</tr>
-</tbody>
-</table>
-<h2 id="selectors-BaseSelector"><a href="#selectors-BaseSelector" class="headerlink" title="selectors.BaseSelector"></a>selectors.BaseSelector</h2><p>BaseSelector 用于等待多个文件对象的I/O事件就绪。它支持文件流注册，注销和一种方法来等待这些流上的I/O事件，并具有可选的超时。它是一个抽象的基类，所以不能实例化，需要实例化 DefaultSelector 类才能使用。 BaseSelector 及其具体实现支持上下文管理协议。</p>
-<table>
-<thead>
-<tr>
-<th>方法</th>
-<th>作用</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>register(fileobj, events, data=None)</code></td>
-<td>注册文件对象以进行选择，监视文件对象的I/O事件。 <em>fileobj</em> 是要监视的文件对象。它可以是整数文件描述符或具有 <code>fileno()</code> 方法的对象。 <em>events</em> 是要监视的事件的按位掩码。 <em>data</em> 是一个不透明的对象。</td>
-</tr>
-<tr>
-<td><code>unregister(fileobj)</code></td>
-<td>从选择中取消注册文件对象，将其从监视中删除。文件对象在关闭前应该取消注册。 <em>fileobj</em> 必须是先前注册的文件对象。这将返回关联的 SelectorKey 实例，或者如果 fileobj 未注册，则引发 KeyError。如果 fileobj 无效，它将提高 ValueError （例如，它没有 fileno() 方法或其 fileno() 方法具有无效的返回值）。</td>
-</tr>
-<tr>
-<td><code>modify(fileobj, events, data=None)</code></td>
-<td>更改注册文件对象的受监视事件或附加数据。这相当于 <code>BaseSelector.unregister(fileobj)()</code> 随后是 <code>BaseSelector.register(fileobj, events, data)()</code>，除了它可以更有效地实现。</td>
-</tr>
-<tr>
-<td><code>select(timeout=None)</code></td>
-<td>等待直到某些已注册的文件对象准备就绪，或超时到期。如果是 timeout &gt; 0，则指定最大等待时间（以秒为单位）。如果是 timeout &lt;= 0，调用不会阻塞，并且会报告当前准备好的文件对象。如果 timeout 是 None，调用将阻塞，直到受监视的文件对象准备就绪。返回：SelectorKey和mark的元祖</td>
-</tr>
-<tr>
-<td><code>close()</code></td>
-<td>关闭选择器。必须调用此函数才能确保释放任何基础资源。选择器一旦关闭，不得使用。</td>
-</tr>
-<tr>
-<td><code>get_key(fileobj)</code></td>
-<td>返回与注册文件对象相关联的键。这将返回与此文件对象关联的 SelectorKey 实例，或者如果文件对象未注册，则引发 KeyError。</td>
-</tr>
-<tr>
-<td><code>get_map()</code></td>
-<td>返回阻塞IO复用器上已经 返回文件对象到选择器键的映射。这将返回 Mapping 实例将注册文件对象映射到其关联的 SelectorKey 实例。</td>
-</tr>
-<tr>
-<td><code>fileno()</code></td>
-<td>这将返回底层IO复用器对象使用的文件描述符。</td>
-</tr>
-</tbody>
-</table>
-<ul>
-<li>步骤</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># 实例化一个 selector 对象</span><br><span class="line"># 在 selector 对象上注册监视一个文件描述符，选择监视类型，填写回调函数</span><br><span class="line"># 创建 selector 对象的事件循环</span><br><span class="line"># 遍历事件循环，在事件发生时候调用回调函数</span><br></pre></td></tr></table></figure>
-<ul>
-<li>官方示例</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> selectors</span><br><span class="line"><span class="keyword">import</span> socket</span><br><span class="line"></span><br><span class="line">sel = selectors.DefaultSelector()</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">accept</span><span class="params">(sock, mask)</span>:</span></span><br><span class="line">    conn, addr = sock.accept()  <span class="comment"># Should be ready</span></span><br><span class="line">    print(<span class="string">'accepted'</span>, conn, <span class="string">'from'</span>, addr)</span><br><span class="line">    conn.setblocking(<span class="keyword">False</span>)</span><br><span class="line">    sel.register(conn, selectors.EVENT_READ, read)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">read</span><span class="params">(conn, mask)</span>:</span></span><br><span class="line">    data = conn.recv(<span class="number">1000</span>)  <span class="comment"># Should be ready</span></span><br><span class="line">    <span class="keyword">if</span> data:</span><br><span class="line">        print(<span class="string">'echoing'</span>, repr(data), <span class="string">'to'</span>, conn)</span><br><span class="line">        conn.send(data)  <span class="comment"># Hope it won't block</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        print(<span class="string">'closing'</span>, conn)</span><br><span class="line">        sel.unregister(conn)</span><br><span class="line">        conn.close()</span><br><span class="line"></span><br><span class="line">sock = socket.socket()</span><br><span class="line">sock.bind((<span class="string">'localhost'</span>, <span class="number">1234</span>))</span><br><span class="line">sock.listen(<span class="number">100</span>)</span><br><span class="line">sock.setblocking(<span class="keyword">False</span>)</span><br><span class="line">sel.register(sock, selectors.EVENT_READ, accept)</span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span> <span class="keyword">True</span>:</span><br><span class="line">    events = sel.select()</span><br><span class="line">    <span class="keyword">for</span> key, mask <span class="keyword">in</span> events:</span><br><span class="line">        callback = key.data</span><br><span class="line">        callback(key.fileobj, mask)</span><br></pre></td></tr></table></figure>
-<ul>
-<li>基于事件驱动的群聊</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> socket</span><br><span class="line"><span class="keyword">import</span> threading</span><br><span class="line"><span class="keyword">import</span> datetime</span><br><span class="line"><span class="keyword">import</span> logging</span><br><span class="line"><span class="keyword">import</span> selectors</span><br><span class="line"></span><br><span class="line">FORMAT = <span class="string">"%(asctime)s %(threadName)s %(thread)d %(message)s"</span></span><br><span class="line">logging.basicConfig(format=FORMAT, level=logging.INFO)</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ChatServer</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, ip=<span class="string">'127.0.0.1'</span>, port=<span class="number">60000</span>)</span>:</span> <span class="comment"># 启动服务</span></span><br><span class="line">        self.sock = socket.socket()</span><br><span class="line">        self.addr = (ip, port)</span><br><span class="line">        self.event = threading.Event()</span><br><span class="line">        self.selector = selectors.DefaultSelector() <span class="comment"># 创建selector</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">accept</span><span class="params">(self, sock)</span>:</span>  <span class="comment"># 多人连接</span></span><br><span class="line">        conn, addr = sock.accept()    <span class="comment">#接受连入的请求</span></span><br><span class="line">        conn.setblocking(<span class="keyword">False</span>)</span><br><span class="line">        self.selector.register(conn, selectors.EVENT_READ, self.recv)  <span class="comment"># 注册，监视每一个连接的 socket 对象</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">recv</span><span class="params">(self, sock)</span>:</span>  <span class="comment"># 接收客户端数据</span></span><br><span class="line">        data = sock.recv(<span class="number">1024</span>)  <span class="comment"># 数据已到达，接收数据</span></span><br><span class="line">        <span class="keyword">if</span> data == <span class="string">b''</span>:  <span class="comment"># 客户端主动断开，注销并关闭socket</span></span><br><span class="line">            self.selector.unregister(sock)</span><br><span class="line">            sock.close()</span><br><span class="line">            <span class="keyword">return</span></span><br><span class="line">        msg = <span class="string">"&#123;:%Y/%m/%d %H:%M:%S&#125; &#123;&#125;:&#123;&#125;\n&#123;&#125;\n"</span>.format(datetime.datetime.now(),*sock.getpeername(),data.decode())</span><br><span class="line">        logging.info(msg)</span><br><span class="line">        msg = msg.encode()</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> key <span class="keyword">in</span> self.selector.get_map().values():  <span class="comment"># 遍历目前在IO复用器上套接字</span></span><br><span class="line">            <span class="keyword">if</span> key.data == self.recv:  <span class="comment"># 排除 self.accept 套接字，向 recv 的套接字发送数据</span></span><br><span class="line">                key.fileobj.send(msg)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">start</span><span class="params">(self)</span>:</span> <span class="comment"># 启动监听</span></span><br><span class="line">        self.sock.bind(self.addr)  <span class="comment"># 绑定</span></span><br><span class="line">        self.sock.listen()  <span class="comment"># 监听</span></span><br><span class="line">        self.sock.setblocking(<span class="keyword">False</span>) <span class="comment"># 不阻塞</span></span><br><span class="line">        self.selector.register(self.sock, selectors.EVENT_READ, self.accept)  <span class="comment"># 注册</span></span><br><span class="line">        threading.Thread(target=self.select, name=<span class="string">'selector'</span>, daemon=<span class="keyword">True</span>).start()  <span class="comment"># 启动IO复用器</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">select</span><span class="params">(self)</span>:</span>  <span class="comment"># 阻塞</span></span><br><span class="line">        <span class="keyword">while</span> <span class="keyword">not</span> self.event.is_set():</span><br><span class="line">            events = self.selector.select()  <span class="comment"># 开始监视，一旦有请求连接过来，返回(key, mask)元组</span></span><br><span class="line">            print(<span class="string">'-'</span> * <span class="number">30</span>)</span><br><span class="line">            <span class="keyword">for</span> key, mask <span class="keyword">in</span> events:</span><br><span class="line">                logging.info(key)</span><br><span class="line">                logging.info(mask)</span><br><span class="line">                callback = key.data  <span class="comment"># 回调函数，此处是self.accept，self.recv 函数</span></span><br><span class="line">                callback(key.fileobj)  <span class="comment"># 调用 self.accept，self.recv 参数为连入的套接字</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">stop</span><span class="params">(self)</span>:</span> <span class="comment"># 停止服务</span></span><br><span class="line">        self.event.set()</span><br><span class="line">        fobjs = []</span><br><span class="line">        <span class="keyword">for</span> fd, key <span class="keyword">in</span> self.selector.get_map().items():</span><br><span class="line">            fobjs.append(key.fileobj)</span><br><span class="line">        <span class="keyword">for</span> fobj <span class="keyword">in</span> fobjs:</span><br><span class="line">            self.selector.unregister(fobj)</span><br><span class="line">            fobj.close()</span><br><span class="line">        self.selector.close()</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></span><br><span class="line">    cs = ChatServer()</span><br><span class="line">    cs.start()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> <span class="keyword">True</span>:</span><br><span class="line">        cmd = input(<span class="string">'&gt;&gt;'</span>).strip()</span><br><span class="line">        <span class="keyword">if</span> cmd == <span class="string">'quit'</span>:</span><br><span class="line">            cs.stop()</span><br><span class="line">            threading.Event().wait(<span class="number">3</span>)</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">        logging.info(threading.enumerate())</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://yangjinheng.github.io/2017/09/29/python/20.Socket编程/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1018,11 +774,173 @@
 
 
     
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://yangjinheng.github.io/2017/09/28/python/19.queue队列/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Jin Heng">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="默默">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/09/28/python/19.queue队列/" itemprop="url">queue队列</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-28T00:00:00+08:00">
+                2017-09-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Python/" itemprop="url" rel="index">
+                    <span itemprop="name">Python</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="queue模块"><a href="#queue模块" class="headerlink" title="queue模块"></a>queue模块</h1><h2 id="FIFO队列Queue"><a href="#FIFO队列Queue" class="headerlink" title="FIFO队列Queue"></a>FIFO队列Queue</h2><h3 id="创建队列"><a href="#创建队列" class="headerlink" title="创建队列"></a>创建队列</h3><p>语法：<code>queue.Queue(maxsize=0)</code></p>
+<p><code>maxsize</code>：队列的最大长度</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">1</span>]: <span class="keyword">import</span> queue</span><br><span class="line"></span><br><span class="line">In [<span class="number">2</span>]: q = queue.Queue()</span><br></pre></td></tr></table></figure>
+<h3 id="写入数据-put"><a href="#写入数据-put" class="headerlink" title="写入数据.put"></a>写入数据.put</h3><p>语法：<code>put(self, item, block=True, timeout=None)</code></p>
+<p><code>block</code>：阻塞标志，表示当队列长度达到最大时是否阻塞。</p>
+<p><code>timeout</code>：阻塞时间，秒。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">2</span>]: q = Queue()</span><br><span class="line">    </span><br><span class="line">In [<span class="number">4</span>]: q.put(<span class="string">'d1'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">5</span>]: q.put(<span class="string">'d2'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">6</span>]: q.put(<span class="string">'d3'</span>)</span><br></pre></td></tr></table></figure>
+<h3 id="非阻塞写入-put-nowait"><a href="#非阻塞写入-put-nowait" class="headerlink" title="非阻塞写入.put_nowait"></a>非阻塞写入.put_nowait</h3><p>语法：<code>put_nowait(self, item)</code></p>
+<h3 id="读出数据-get"><a href="#读出数据-get" class="headerlink" title="读出数据.get"></a>读出数据.get</h3><p>阻塞读取并弹出数据</p>
+<p>语法：<code>get(self, block=True, timeout=None)</code></p>
+<p><code>block</code>：阻塞标志，表示是否阻塞。</p>
+<p><code>timeout</code>：阻塞时间，秒。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">2</span>]: q = Queue()</span><br><span class="line">    </span><br><span class="line">In [<span class="number">9</span>]: q.get()</span><br><span class="line">Out[<span class="number">9</span>]: <span class="string">'d1'</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">10</span>]: q.get()</span><br><span class="line">Out[<span class="number">10</span>]: <span class="string">'d2'</span></span><br></pre></td></tr></table></figure>
+<h3 id="非阻塞读出-get-nowait"><a href="#非阻塞读出-get-nowait" class="headerlink" title="非阻塞读出.get_nowait"></a>非阻塞读出.get_nowait</h3><p>当弹出到最后一个元素时候，弹出异常。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">22</span>]: q.get_nowait()</span><br><span class="line">Out[<span class="number">22</span>]: <span class="string">'d1'</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">23</span>]: q.get_nowait()</span><br><span class="line">Out[<span class="number">23</span>]: <span class="string">'d2'</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">14</span>]: q.get_nowait()</span><br><span class="line">---------------------------------------------------------------------------</span><br><span class="line">Empty                                     Traceback (most recent call last)</span><br><span class="line">&lt;ipython-input<span class="number">-14</span>-aad002f32be5&gt; <span class="keyword">in</span> &lt;module&gt;()</span><br><span class="line">----&gt; 1 q.get_nowait()</span><br><span class="line"></span><br><span class="line">c:\users\lenovo\appdata\local\programs\python\python36\lib\queue.py <span class="keyword">in</span> get_nowait(self)</span><br><span class="line">    <span class="number">190</span>         <span class="keyword">raise</span> the Empty exception.</span><br><span class="line">    <span class="number">191</span>         <span class="string">'''</span></span><br><span class="line"><span class="string">--&gt; 192         return self.get(block=False)</span></span><br><span class="line"><span class="string">    193</span></span><br><span class="line"><span class="string">    194     # Override these methods to implement other queue organizations</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">c:\users\lenovo\appdata\local\programs\python\python36\lib\queue.py in get(self, block, timeout)</span></span><br><span class="line"><span class="string">    159             if not block:</span></span><br><span class="line"><span class="string">    160                 if not self._qsize():</span></span><br><span class="line"><span class="string">--&gt; 161                     raise Empty</span></span><br><span class="line"><span class="string">    162             elif timeout is None:</span></span><br><span class="line"><span class="string">    163                 while not self._qsize():</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Empty:</span></span><br></pre></td></tr></table></figure>
+<h3 id="队列长度-qsize"><a href="#队列长度-qsize" class="headerlink" title="队列长度.qsize"></a>队列长度.qsize</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">8</span>]: q.qsize()</span><br><span class="line">Out[<span class="number">8</span>]: <span class="number">3</span></span><br></pre></td></tr></table></figure>
+<h3 id="是否为空-empty"><a href="#是否为空-empty" class="headerlink" title="是否为空.empty"></a>是否为空.empty</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">4</span>]: q.put(<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">5</span>]: q.empty()</span><br><span class="line">Out[<span class="number">5</span>]: <span class="keyword">False</span></span><br><span class="line">    </span><br><span class="line">In [<span class="number">6</span>]: q.get()</span><br><span class="line">Out[<span class="number">6</span>]: <span class="number">1</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">7</span>]: q.empty()</span><br><span class="line">Out[<span class="number">7</span>]: <span class="keyword">True</span></span><br></pre></td></tr></table></figure>
+<h3 id="是否为满-full"><a href="#是否为满-full" class="headerlink" title="是否为满.full"></a>是否为满.full</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">38</span>]: q=Queue(maxsize=<span class="number">3</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">39</span>]: q.put(<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">40</span>]: q.put(<span class="number">2</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">41</span>]: q.put(<span class="number">3</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">43</span>]: q.full()</span><br><span class="line">Out[<span class="number">43</span>]: <span class="keyword">True</span></span><br></pre></td></tr></table></figure>
+<h3 id="阻塞调用-join"><a href="#阻塞调用-join" class="headerlink" title="阻塞调用.join"></a>阻塞调用.join</h3><p>阻塞调用线程，直到队列中的所有任务被处理掉。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">3</span>]: q = queue.Queue()</span><br><span class="line"></span><br><span class="line">In [<span class="number">5</span>]: q.join()</span><br><span class="line"><span class="comment">#因队列为0返回</span></span><br><span class="line">In [<span class="number">5</span>]: q.join()</span><br><span class="line"><span class="comment">#因队列为0返回</span></span><br><span class="line">In [<span class="number">10</span>]: q.put(<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">11</span>]: q.join()</span><br><span class="line"><span class="comment">#开始阻塞，直到队列被处理完毕</span></span><br></pre></td></tr></table></figure>
+<h3 id="报告进度-task-done"><a href="#报告进度-task-done" class="headerlink" title="报告进度.task_done"></a>报告进度.task_done</h3><p>主要是为 <code>join</code>配套使用，每次<code>get</code>后需要调用task_done，直到所有任务都task_done，join才取消阻塞。</p>
+<h2 id="后进先出LifoQueue"><a href="#后进先出LifoQueue" class="headerlink" title="后进先出LifoQueue"></a>后进先出LifoQueue</h2>
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/26/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/26/">26</a><span class="page-number current">27</span><a class="page-number" href="/page/28/">28</a><span class="space">&hellip;</span><a class="page-number" href="/page/39/">39</a><a class="extend next" rel="next" href="/page/28/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/page/26/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/26/">26</a><span class="page-number current">27</span><a class="page-number" href="/page/28/">28</a><span class="space">&hellip;</span><a class="page-number" href="/page/38/">38</a><a class="extend next" rel="next" href="/page/28/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1070,7 +988,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">77</span>
+                  <span class="site-state-item-count">76</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -1135,7 +1053,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; 2017 &mdash; <span itemprop="copyrightYear">2019</span>
+        <div class="copyright">&copy; 2017 &mdash; <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>

@@ -301,6 +301,425 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://yangjinheng.github.io/2019/06/09/go/strings/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Jin Heng">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="默默">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/06/09/go/strings/" itemprop="url">go 标准库之 strings</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-06-09T00:00:00+08:00">
+                2019-06-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/golang/" itemprop="url" rel="index">
+                    <span itemprop="name">golang</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="字符串方法"><a href="#字符串方法" class="headerlink" title="字符串方法"></a>字符串方法</h1><h2 id="方法概览"><a href="#方法概览" class="headerlink" title="方法概览"></a>方法概览</h2><table>
+<thead>
+<tr>
+<th>函数</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>func Contains(s, substr string) bool</td>
+<td>检测 substr 是否在 s 中存在</td>
+</tr>
+<tr>
+<td>func Compare(a, b string) int</td>
+<td>将字符串按照字母表相比较返回整数，a&lt;b则为-1，a&gt;b则为+1，a==b则为0</td>
+</tr>
+<tr>
+<td>func Count(s, substr string) int</td>
+<td>返回 substr 在 s 中存在的次数</td>
+</tr>
+<tr>
+<td>func EqualFold(s, t string) bool</td>
+<td>不区分大小写的完全匹配</td>
+</tr>
+<tr>
+<td>func Fields(s string) []string</td>
+<td>以连续的空白字符为分隔符（\t, \n, \v, \f, \r, ‘ ‘, U+0085 (NEL), U+00A0 (NBSP)），将 s 分割成多个字串，结果中不包含空白本身</td>
+</tr>
+<tr>
+<td>func HasPrefix(s, prefix string) bool</td>
+<td>测试 s 是否以 prefix 开头</td>
+</tr>
+<tr>
+<td>func HasSuffix(s, suffix string) bool</td>
+<td>测试 s 是否以 suffix 结尾</td>
+</tr>
+<tr>
+<td>func Index(s, substr string) int</td>
+<td>返回 s 中第一个匹配 substr 的索引，如果不存在则返回 -1</td>
+</tr>
+<tr>
+<td>func LastIndex(s, substr string) int</td>
+<td>返回 s 中最后一个匹配 substr 的索引，如果不存在返回 -1</td>
+</tr>
+<tr>
+<td>func Join(a []string, sep string) string</td>
+<td>指定分隔符连接一个数组中的元素以创建成一个字符串</td>
+</tr>
+<tr>
+<td>func Replace(s, old, new string, n int) string</td>
+<td>在 s 这个字符串中查找替换字符串，并且指定替换次数，0 不替换，-1 全部替换</td>
+</tr>
+<tr>
+<td>func Split(s, sep string) []string</td>
+<td>使用分隔符对字符串进行切分，返回一个切片</td>
+</tr>
+<tr>
+<td>func SplitN(s, sep string, n int) []string</td>
+<td>使用分隔符对字符串进行指定次数的切分，返回一个切片</td>
+</tr>
+<tr>
+<td>func SplitAfter(s, sep string) []string</td>
+<td>使用分隔符对字符串进行切分，返回一个切片，但保留每个切片的分隔符结尾</td>
+</tr>
+<tr>
+<td>func SplitAfterN(s, sep string, n int) []string</td>
+<td>使用分隔符对字符串，按指定次数进行切分，返回一个切片，但保留每个切片的分隔符结尾</td>
+</tr>
+<tr>
+<td>func Title(s string) string</td>
+<td>返回首字母大写的字符串</td>
+</tr>
+<tr>
+<td>func ToLower(s string) string</td>
+<td>将字符串转换为小写</td>
+</tr>
+<tr>
+<td>func ToUpper(s string) string</td>
+<td>将字符串全部转换为大写</td>
+</tr>
+<tr>
+<td>func TrimSpace(s string) string</td>
+<td>从开头和结尾删除空白</td>
+</tr>
+<tr>
+<td>func TrimSuffix(s, suffix string) string</td>
+<td>从结尾删除匹配的字符串</td>
+</tr>
+<tr>
+<td>func TrimPrefix(s, prefix string) string</td>
+<td>删除开头的指定字符串</td>
+</tr>
+</tbody>
+</table>
+<h2 id="字符串检测"><a href="#字符串检测" class="headerlink" title="字符串检测"></a>字符串检测</h2><hr>
+<h3 id="Contains-是否包含字符串"><a href="#Contains-是否包含字符串" class="headerlink" title="Contains 是否包含字符串"></a>Contains 是否包含字符串</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(strings.Contains(<span class="string">"seafood"</span>, <span class="string">"foo"</span>))</span><br><span class="line">	fmt.Println(strings.Contains(<span class="string">"seafood"</span>, <span class="string">"bar"</span>))</span><br><span class="line">	fmt.Println(strings.Contains(<span class="string">"seafood"</span>, <span class="string">""</span>))</span><br><span class="line">	fmt.Println(strings.Contains(<span class="string">""</span>, <span class="string">""</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="literal">true</span></span><br><span class="line"><span class="literal">false</span></span><br><span class="line"><span class="literal">true</span></span><br><span class="line"><span class="literal">true</span></span><br></pre></td></tr></table></figure>
+<h3 id="Compare-按字母表比大小"><a href="#Compare-按字母表比大小" class="headerlink" title="Compare 按字母表比大小"></a>Compare 按字母表比大小</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(strings.Compare(<span class="string">"a"</span>, <span class="string">"b"</span>))</span><br><span class="line">	fmt.Println(strings.Compare(<span class="string">"a"</span>, <span class="string">"a"</span>))</span><br><span class="line">	fmt.Println(strings.Compare(<span class="string">"b"</span>, <span class="string">"a"</span>))</span><br><span class="line">	fmt.Println(strings.Compare(<span class="string">"ac"</span>, <span class="string">"ab"</span>))</span><br><span class="line">	fmt.Println(strings.Compare(<span class="string">"ab"</span>, <span class="string">"ac"</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="number">-1</span></span><br><span class="line"><span class="number">0</span></span><br><span class="line"><span class="number">1</span></span><br><span class="line"><span class="number">1</span></span><br><span class="line"><span class="number">-1</span></span><br></pre></td></tr></table></figure>
+<h3 id="Count返回指定字符串存在的次数"><a href="#Count返回指定字符串存在的次数" class="headerlink" title="Count返回指定字符串存在的次数"></a>Count返回指定字符串存在的次数</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(strings.Count(<span class="string">"yangjinheng,yangzhongxiao"</span>, <span class="string">"ng"</span>))</span><br><span class="line">	fmt.Println(strings.Count(<span class="string">"yangjinheng,yangzhongxiao"</span>, <span class="string">"yang"</span>))</span><br><span class="line">	fmt.Println(strings.Count(<span class="string">"five"</span>, <span class="string">""</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="number">4</span></span><br><span class="line"><span class="number">2</span></span><br><span class="line"><span class="number">5</span></span><br></pre></td></tr></table></figure>
+<h3 id="EqualFold不区分大小写是否匹配"><a href="#EqualFold不区分大小写是否匹配" class="headerlink" title="EqualFold不区分大小写是否匹配"></a>EqualFold不区分大小写是否匹配</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(strings.EqualFold(<span class="string">"YANGJINHENG"</span>, <span class="string">"YangJinHeng"</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="literal">true</span></span><br></pre></td></tr></table></figure>
+<h3 id="HasPrefix测试是否以指定字符串开头"><a href="#HasPrefix测试是否以指定字符串开头" class="headerlink" title="HasPrefix测试是否以指定字符串开头"></a>HasPrefix测试是否以指定字符串开头</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(strings.HasPrefix(<span class="string">"Gopher"</span>, <span class="string">"Gop"</span>))</span><br><span class="line">	fmt.Println(strings.HasPrefix(<span class="string">"Gopher"</span>, <span class="string">"C"</span>))</span><br><span class="line">	fmt.Println(strings.HasPrefix(<span class="string">"Gopher"</span>, <span class="string">""</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">true</span><br><span class="line">false</span><br><span class="line">true</span><br></pre></td></tr></table></figure>
+<h3 id="HasSuffix测试是否以指定字符串结尾"><a href="#HasSuffix测试是否以指定字符串结尾" class="headerlink" title="HasSuffix测试是否以指定字符串结尾"></a>HasSuffix测试是否以指定字符串结尾</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(strings.HasSuffix(<span class="string">"Amigo"</span>, <span class="string">"go"</span>))</span><br><span class="line">	fmt.Println(strings.HasSuffix(<span class="string">"Amigo"</span>, <span class="string">"O"</span>))</span><br><span class="line">	fmt.Println(strings.HasSuffix(<span class="string">"Amigo"</span>, <span class="string">"Ami"</span>))</span><br><span class="line">	fmt.Println(strings.HasSuffix(<span class="string">"Amigo"</span>, <span class="string">""</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">true</span><br><span class="line">false</span><br><span class="line">false</span><br><span class="line">true</span><br></pre></td></tr></table></figure>
+<h2 id="字符串索引位置"><a href="#字符串索引位置" class="headerlink" title="字符串索引位置"></a>字符串索引位置</h2><hr>
+<h3 id="Index返回第一个匹配字串的索引"><a href="#Index返回第一个匹配字串的索引" class="headerlink" title="Index返回第一个匹配字串的索引"></a>Index返回第一个匹配字串的索引</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(strings.Index(<span class="string">"chicken"</span>, <span class="string">"ken"</span>))</span><br><span class="line">	fmt.Println(strings.Index(<span class="string">"chicken"</span>, <span class="string">"dmr"</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">4</span><br><span class="line">-1</span><br></pre></td></tr></table></figure>
+<h3 id="LastIndex返回最后一个匹配字串的索引"><a href="#LastIndex返回最后一个匹配字串的索引" class="headerlink" title="LastIndex返回最后一个匹配字串的索引"></a>LastIndex返回最后一个匹配字串的索引</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(strings.Index(<span class="string">"go gopher"</span>, <span class="string">"go"</span>))</span><br><span class="line">	fmt.Println(strings.LastIndex(<span class="string">"go gopher"</span>, <span class="string">"go"</span>))</span><br><span class="line">	fmt.Println(strings.LastIndex(<span class="string">"go gopher"</span>, <span class="string">"rodent"</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">0</span><br><span class="line">3</span><br><span class="line">-1</span><br></pre></td></tr></table></figure>
+<h2 id="切片和连接"><a href="#切片和连接" class="headerlink" title="切片和连接"></a>切片和连接</h2><hr>
+<h3 id="Join将切片连接为字符串"><a href="#Join将切片连接为字符串" class="headerlink" title="Join将切片连接为字符串"></a>Join将切片连接为字符串</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	s := []<span class="keyword">string</span>&#123;<span class="string">"foo"</span>, <span class="string">"bar"</span>, <span class="string">"baz"</span>&#125;</span><br><span class="line">	fmt.Println(strings.Join(s, <span class="string">"-"</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">foo-bar-baz</span><br></pre></td></tr></table></figure>
+<h3 id="Fields用空格字符分隔返回切片"><a href="#Fields用空格字符分隔返回切片" class="headerlink" title="Fields用空格字符分隔返回切片"></a>Fields用空格字符分隔返回切片</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	s1 := <span class="string">"java python php go"</span></span><br><span class="line">	s2 := strings.Fields(s1)</span><br><span class="line">	fmt.Printf(<span class="string">"%T\n%q"</span>, s2, s2)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[]string</span><br><span class="line">[&quot;java&quot; &quot;python&quot; &quot;php&quot; &quot;go&quot;]</span><br></pre></td></tr></table></figure>
+<h3 id="Split指定分隔字串对字符串进行切片"><a href="#Split指定分隔字串对字符串进行切片" class="headerlink" title="Split指定分隔字串对字符串进行切片"></a>Split指定分隔字串对字符串进行切片</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	s1 := strings.Split(<span class="string">"a,,b,,c"</span>, <span class="string">",,"</span>)</span><br><span class="line">	fmt.Printf(<span class="string">"%T %q"</span>, s1, s1)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[]string [&quot;a&quot; &quot;b&quot; &quot;c&quot;]</span><br></pre></td></tr></table></figure>
+<h3 id="SplitN指定分隔字串对字符串进行指定次数切片"><a href="#SplitN指定分隔字串对字符串进行指定次数切片" class="headerlink" title="SplitN指定分隔字串对字符串进行指定次数切片"></a>SplitN指定分隔字串对字符串进行指定次数切片</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Printf(<span class="string">"%q\n"</span>, strings.SplitN(<span class="string">"a--b--c--d"</span>, <span class="string">"--"</span>, <span class="number">2</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[&quot;a&quot; &quot;b--c--d&quot;]</span><br></pre></td></tr></table></figure>
+<h3 id="SplitAfter指定分隔符字串进行切片，保留分隔符"><a href="#SplitAfter指定分隔符字串进行切片，保留分隔符" class="headerlink" title="SplitAfter指定分隔符字串进行切片，保留分隔符"></a>SplitAfter指定分隔符字串进行切片，保留分隔符</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Printf(<span class="string">"%q\n"</span>, strings.SplitAfter(<span class="string">",,a,,b,,c"</span>, <span class="string">",,"</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[&quot;,,&quot; &quot;a,,&quot; &quot;b,,&quot; &quot;c&quot;]</span><br></pre></td></tr></table></figure>
+<h3 id="SplitAfterN指定分隔符字串指定指定次数进行切片，保留分隔符"><a href="#SplitAfterN指定分隔符字串指定指定次数进行切片，保留分隔符" class="headerlink" title="SplitAfterN指定分隔符字串指定指定次数进行切片，保留分隔符"></a>SplitAfterN指定分隔符字串指定指定次数进行切片，保留分隔符</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Printf(<span class="string">"%q\n"</span>, strings.SplitAfterN(<span class="string">"a--b--c--d"</span>, <span class="string">"--"</span>, <span class="number">2</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[&quot;a--&quot; &quot;b--c--d&quot;]</span><br></pre></td></tr></table></figure>
+<h2 id="大小写转换"><a href="#大小写转换" class="headerlink" title="大小写转换"></a>大小写转换</h2><h3 id="Title字符串首字母大写"><a href="#Title字符串首字母大写" class="headerlink" title="Title字符串首字母大写"></a>Title字符串首字母大写</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(strings.Title(<span class="string">"her royal highness"</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Her Royal Highness</span><br></pre></td></tr></table></figure>
+<h3 id="ToLower全部转为小写"><a href="#ToLower全部转为小写" class="headerlink" title="ToLower全部转为小写"></a>ToLower全部转为小写</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(strings.ToLower(<span class="string">"YANGJINHENG"</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line">yangjinheng</span><br></pre></td></tr></table></figure>
+<h3 id="ToUpper全部转为大写"><a href="#ToUpper全部转为大写" class="headerlink" title="ToUpper全部转为大写"></a>ToUpper全部转为大写</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(strings.ToUpper(<span class="string">"Gopher"</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">GOPHER</span><br></pre></td></tr></table></figure>
+<h2 id="删除开头结尾查找替换"><a href="#删除开头结尾查找替换" class="headerlink" title="删除开头结尾查找替换"></a>删除开头结尾查找替换</h2><h3 id="Replace查找替换字符串"><a href="#Replace查找替换字符串" class="headerlink" title="Replace查找替换字符串"></a>Replace查找替换字符串</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(strings.Replace(<span class="string">"hello, world world"</span>, <span class="string">"world"</span>, <span class="string">"golang"</span>, <span class="number">1</span>))</span><br><span class="line">	fmt.Println(strings.Replace(<span class="string">"oink oink oink"</span>, <span class="string">"oink"</span>, <span class="string">"moo"</span>, <span class="number">-1</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">hello, golang golang</span><br><span class="line">moo moo moo</span><br></pre></td></tr></table></figure>
+<h3 id="TrimSpace从开头和结尾删除空白"><a href="#TrimSpace从开头和结尾删除空白" class="headerlink" title="TrimSpace从开头和结尾删除空白"></a>TrimSpace从开头和结尾删除空白</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(strings.TrimSpace(<span class="string">" \t\n Hello, Gophers \n\t\r\n"</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Hello, Gophers</span><br></pre></td></tr></table></figure>
+<h3 id="TrimPrefix从字符串开头删除匹配的任意单个字符"><a href="#TrimPrefix从字符串开头删除匹配的任意单个字符" class="headerlink" title="TrimPrefix从字符串开头删除匹配的任意单个字符"></a>TrimPrefix从字符串开头删除匹配的任意单个字符</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Print(strings.TrimPrefix(<span class="string">"----Hello,Gophers----"</span>, <span class="string">"--"</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">--Hello,Gophers----</span><br></pre></td></tr></table></figure>
+<h3 id="TrimSuffix从结尾删除匹配到的字符串"><a href="#TrimSuffix从结尾删除匹配到的字符串" class="headerlink" title="TrimSuffix从结尾删除匹配到的字符串"></a>TrimSuffix从结尾删除匹配到的字符串</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(strings.TrimSuffix(<span class="string">"¡¡¡Hello, Gophers!!!"</span>, <span class="string">", Gophers!!!"</span>))</span><br><span class="line">	fmt.Println(strings.TrimSuffix(<span class="string">"¡¡¡Hello, Gophers!!!"</span>, <span class="string">", Marmots!!!"</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line">¡¡¡Hello</span><br><span class="line">¡¡¡Hello, Gophers!!!</span><br></pre></td></tr></table></figure>
+<h1 id="字符方法"><a href="#字符方法" class="headerlink" title="字符方法"></a>字符方法</h1><h2 id="方法概览-1"><a href="#方法概览-1" class="headerlink" title="方法概览"></a>方法概览</h2><table>
+<thead>
+<tr>
+<th>函数</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>func ContainsAny(s, chars string) bool</td>
+<td>检测 chars 中的任意 Unicode码位值是否在 s 内</td>
+</tr>
+<tr>
+<td>func ContainsRune(s string, r rune) bool</td>
+<td>检测一个 rune 这个 Unicode码位值是否在 s 内存在</td>
+</tr>
+<tr>
+<td>func FieldsFunc(s string, f func(rune) bool) []string</td>
+<td>将 s 中每个字符传入 f 这个函数，f 函数返回 true 则不保留，最后返回一个切片</td>
+</tr>
+<tr>
+<td>func IndexAny(s, chars string) int</td>
+<td>返回 s 中第一个匹配 chars 中任意字符的索引位置</td>
+</tr>
+<tr>
+<td>func IndexByte(s string, c byte) int</td>
+<td>返回 s 中第一个匹配 byte （英文字符）的索引位置</td>
+</tr>
+<tr>
+<td>func IndexFunc(s string, f func(rune) bool) int</td>
+<td>返回 s 中第一个符合 f 这个函数的字符位置</td>
+</tr>
+<tr>
+<td>func IndexRune(s string, r rune) int</td>
+<td>返回 s 中第一个匹配 rune （中英文）字符的索引位置</td>
+</tr>
+<tr>
+<td>func LastIndexAny(s, chars string) int</td>
+<td>返回 s 中最后一个匹配 chars 中任意字符的索引位置</td>
+</tr>
+<tr>
+<td>func LastIndexByte(s string, c byte) int</td>
+<td>返回 s 中最后一个匹配 byte （英文字符）的索引位置</td>
+</tr>
+<tr>
+<td>func LastIndexFunc(s string, f func(rune) bool) int</td>
+<td>返回 s 中最后一个符合 f 这个函数的字符位置</td>
+</tr>
+<tr>
+<td>func Map(mapping func(rune) rune, s string) string</td>
+<td>函数决定返回 s 中每个字符的映射，产生新的字符串</td>
+</tr>
+<tr>
+<td>func ToTitle(s string) string</td>
+<td>将字符串全部转换为大写</td>
+</tr>
+<tr>
+<td>func ToTitleSpecial(c unicode.SpecialCase, s string) string</td>
+<td>按照指定的字符集映射为大写</td>
+</tr>
+<tr>
+<td>func ToLowerSpecial(c unicode.SpecialCase, s string) string</td>
+<td>按照指定的字符集映射为小写</td>
+</tr>
+<tr>
+<td>func ToUpperSpecial(c unicode.SpecialCase, s string) string</td>
+<td>将字符串按照指定的字符集转换为大写</td>
+</tr>
+<tr>
+<td>func Trim(s string, cutset string) string</td>
+<td>从字符串开头和结尾删除 cutset 这个字符集合中的任意单个字符</td>
+</tr>
+<tr>
+<td>func TrimFunc(s string, f func(rune) bool) string</td>
+<td>函数决定如何删除字符串开头和结尾的字符</td>
+</tr>
+<tr>
+<td>func TrimRight(s string, cutset string) string</td>
+<td>删除结尾的指定字符集合中的任意字符</td>
+</tr>
+<tr>
+<td>func TrimRightFunc(s string, f func(rune) bool) string</td>
+<td>函数决定如何从结尾删除字符</td>
+</tr>
+<tr>
+<td>func TrimLeft(s string, cutset string) string</td>
+<td>删除开头的指定字符集合中的任意字符</td>
+</tr>
+<tr>
+<td>func TTrimLeftFunc(s string, f func(rune) bool) string</td>
+<td>函数决定如何从开头删除字符</td>
+</tr>
+</tbody>
+</table>
+<h2 id="ContainsAny检测是否包含任意字符"><a href="#ContainsAny检测是否包含任意字符" class="headerlink" title="ContainsAny检测是否包含任意字符"></a>ContainsAny检测是否包含任意字符</h2><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(strings.ContainsAny(<span class="string">"team"</span>, <span class="string">"a"</span>))</span><br><span class="line">	fmt.Println(strings.ContainsAny(<span class="string">"failure"</span>, <span class="string">"fe99"</span>))</span><br><span class="line">	fmt.Println(strings.ContainsAny(<span class="string">"failure"</span>, <span class="string">"u &amp; i"</span>))</span><br><span class="line">	fmt.Println(strings.ContainsAny(<span class="string">"foo"</span>, <span class="string">""</span>))</span><br><span class="line">	fmt.Println(strings.ContainsAny(<span class="string">""</span>, <span class="string">""</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">true</span><br><span class="line">true</span><br><span class="line">true</span><br><span class="line">false</span><br><span class="line">false</span><br></pre></td></tr></table></figure>
+<h2 id="ContainsRune检测是否包含指定Unicode码位值"><a href="#ContainsRune检测是否包含指定Unicode码位值" class="headerlink" title="ContainsRune检测是否包含指定Unicode码位值"></a>ContainsRune检测是否包含指定Unicode码位值</h2><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(strings.ContainsRune(<span class="string">"aardvark"</span>, <span class="number">97</span>))</span><br><span class="line">	fmt.Println(strings.ContainsRune(<span class="string">"timeout"</span>, <span class="number">97</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">true</span><br><span class="line">false</span><br></pre></td></tr></table></figure>
+<h2 id="FieldsFunc使用字符由外置函数决定切片"><a href="#FieldsFunc使用字符由外置函数决定切片" class="headerlink" title="FieldsFunc使用字符由外置函数决定切片"></a>FieldsFunc使用字符由外置函数决定切片</h2><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	s := <span class="string">"http://example.jinheng.com/home?a=4&amp;b=5"</span></span><br><span class="line">	func1 := <span class="function"><span class="keyword">func</span><span class="params">(c <span class="keyword">rune</span>)</span> <span class="title">bool</span></span> &#123;</span><br><span class="line">		<span class="keyword">switch</span> c &#123;</span><br><span class="line">		<span class="keyword">case</span> <span class="string">':'</span>:</span><br><span class="line">			<span class="keyword">return</span> <span class="literal">true</span></span><br><span class="line">		<span class="keyword">case</span> <span class="string">'/'</span>:</span><br><span class="line">			<span class="keyword">return</span> <span class="literal">true</span></span><br><span class="line">		<span class="keyword">case</span> <span class="string">'?'</span>:</span><br><span class="line">			<span class="keyword">return</span> <span class="literal">true</span></span><br><span class="line">		<span class="keyword">case</span> <span class="string">'&amp;'</span>:</span><br><span class="line">			<span class="keyword">return</span> <span class="literal">true</span></span><br><span class="line">		<span class="keyword">default</span>:</span><br><span class="line">			<span class="keyword">return</span> <span class="literal">false</span></span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	result := strings.FieldsFunc(s, func1)</span><br><span class="line">	fmt.Printf(<span class="string">"%q"</span>, result)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[&quot;http&quot; &quot;example.jinheng.com&quot; &quot;home&quot; &quot;a=4&quot; &quot;b=5&quot;]</span><br></pre></td></tr></table></figure>
+<h2 id="字符索引位置"><a href="#字符索引位置" class="headerlink" title="字符索引位置"></a>字符索引位置</h2><hr>
+<h3 id="IndexAny返回第一个匹配任意字符的索引"><a href="#IndexAny返回第一个匹配任意字符的索引" class="headerlink" title="IndexAny返回第一个匹配任意字符的索引"></a>IndexAny返回第一个匹配任意字符的索引</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(strings.IndexAny(<span class="string">"chicken"</span>, <span class="string">"aeiouy"</span>))</span><br><span class="line">	fmt.Println(strings.IndexAny(<span class="string">"chicken"</span>, <span class="string">"ahiouy"</span>))</span><br><span class="line">	fmt.Println(strings.IndexAny(<span class="string">"crwth"</span>, <span class="string">"aeiouy"</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">2</span><br><span class="line">1</span><br><span class="line">-1</span><br></pre></td></tr></table></figure>
+<h3 id="IndexByte返回第一个匹配byte字符的索引"><a href="#IndexByte返回第一个匹配byte字符的索引" class="headerlink" title="IndexByte返回第一个匹配byte字符的索引"></a>IndexByte返回第一个匹配byte字符的索引</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(strings.IndexByte(<span class="string">"golang"</span>, <span class="string">'g'</span>))</span><br><span class="line">	<span class="comment">// fmt.Println(strings.IndexByte("golang你好", '你'))  // 会抛出异常因为 byte 不能承载一个汉字</span></span><br><span class="line">	fmt.Println(strings.IndexByte(<span class="string">"gophers"</span>, <span class="string">'h'</span>))</span><br><span class="line">	fmt.Println(strings.IndexByte(<span class="string">"golang"</span>, <span class="string">'x'</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">0</span><br><span class="line">3</span><br><span class="line">-1</span><br></pre></td></tr></table></figure>
+<h3 id="IndexFunc返回第一个函数判定为true的索引"><a href="#IndexFunc返回第一个函数判定为true的索引" class="headerlink" title="IndexFunc返回第一个函数判定为true的索引"></a>IndexFunc返回第一个函数判定为true的索引</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	f := <span class="function"><span class="keyword">func</span><span class="params">(c <span class="keyword">rune</span>)</span> <span class="title">bool</span></span> &#123;</span><br><span class="line">		<span class="comment">// fmt.Println(unicode.Is(unicode.Han, c))</span></span><br><span class="line">		<span class="keyword">return</span> unicode.Is(unicode.Han, c)</span><br><span class="line">	&#125;</span><br><span class="line">	fmt.Println(strings.IndexFunc(<span class="string">"Hello, 世界"</span>, f))</span><br><span class="line">	fmt.Println(strings.IndexFunc(<span class="string">"Hello, world"</span>, f))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">7</span><br><span class="line">-1</span><br></pre></td></tr></table></figure>
+<h3 id="IndexRune返回第一个匹配rune字符的索引"><a href="#IndexRune返回第一个匹配rune字符的索引" class="headerlink" title="IndexRune返回第一个匹配rune字符的索引"></a>IndexRune返回第一个匹配rune字符的索引</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(strings.IndexRune(<span class="string">"chicken"</span>, <span class="string">'k'</span>))</span><br><span class="line">	fmt.Println(strings.IndexRune(<span class="string">"chicken"</span>, <span class="string">'d'</span>))</span><br><span class="line">	fmt.Println(strings.IndexRune(<span class="string">"你好世界"</span>, <span class="string">'界'</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">4</span><br><span class="line">-1</span><br><span class="line">9</span><br></pre></td></tr></table></figure>
+<h3 id="LastIndexAny返回最后一个匹配任意字符的索引"><a href="#LastIndexAny返回最后一个匹配任意字符的索引" class="headerlink" title="LastIndexAny返回最后一个匹配任意字符的索引"></a>LastIndexAny返回最后一个匹配任意字符的索引</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(strings.LastIndexAny(<span class="string">"go gopher"</span>, <span class="string">"go"</span>))</span><br><span class="line">	fmt.Println(strings.LastIndexAny(<span class="string">"go gopher"</span>, <span class="string">"rodent"</span>))</span><br><span class="line">	fmt.Println(strings.LastIndexAny(<span class="string">"go gopher"</span>, <span class="string">"fail"</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">0</span><br><span class="line">3</span><br><span class="line">-1</span><br></pre></td></tr></table></figure>
+<h3 id="LastIndexByte返回最后一个匹配byte字符的索引"><a href="#LastIndexByte返回最后一个匹配byte字符的索引" class="headerlink" title="LastIndexByte返回最后一个匹配byte字符的索引"></a>LastIndexByte返回最后一个匹配byte字符的索引</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(strings.LastIndexByte(<span class="string">"Hello, world"</span>, <span class="string">'l'</span>))</span><br><span class="line">	<span class="comment">// fmt.Println(strings.LastIndexByte("Hello, 世界", '世'))</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">10</span><br></pre></td></tr></table></figure>
+<h3 id="LastIndexFunc返回最后一个函数片顶为true的索引"><a href="#LastIndexFunc返回最后一个函数片顶为true的索引" class="headerlink" title="LastIndexFunc返回最后一个函数片顶为true的索引"></a>LastIndexFunc返回最后一个函数片顶为true的索引</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	f := <span class="function"><span class="keyword">func</span><span class="params">(c <span class="keyword">rune</span>)</span> <span class="title">bool</span></span> &#123;</span><br><span class="line">		<span class="comment">// fmt.Println(unicode.Is(unicode.Han, c))</span></span><br><span class="line">		<span class="keyword">return</span> unicode.Is(unicode.Han, c)</span><br><span class="line">	&#125;</span><br><span class="line">	fmt.Println(strings.LastIndexFunc(<span class="string">"Hello, 世sss"</span>, f))  <span class="comment">// 倒叙遍历字符串，返回函数返回 true 的字符索引</span></span><br><span class="line">	fmt.Println(strings.LastIndexFunc(<span class="string">"Hello, world"</span>, f))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">7</span><br><span class="line">-1</span><br></pre></td></tr></table></figure>
+<h2 id="映射字符大小写"><a href="#映射字符大小写" class="headerlink" title="映射字符大小写"></a>映射字符大小写</h2><hr>
+<h3 id="Map函数决定映射字符串"><a href="#Map函数决定映射字符串" class="headerlink" title="Map函数决定映射字符串"></a>Map函数决定映射字符串</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	rot13 := <span class="function"><span class="keyword">func</span><span class="params">(r <span class="keyword">rune</span>)</span> <span class="title">rune</span></span> &#123;</span><br><span class="line">		<span class="keyword">switch</span> &#123;</span><br><span class="line">		<span class="keyword">case</span> r == <span class="string">'i'</span>:</span><br><span class="line">			<span class="keyword">return</span> <span class="string">'u'</span></span><br><span class="line">		<span class="keyword">case</span> r == <span class="string">'u'</span>:</span><br><span class="line">			<span class="keyword">return</span> <span class="string">'i'</span></span><br><span class="line">		<span class="keyword">case</span> r == <span class="string">'我'</span>:</span><br><span class="line">			<span class="keyword">return</span> <span class="string">'你'</span></span><br><span class="line">		<span class="keyword">case</span> r == <span class="string">'你'</span>:</span><br><span class="line">			<span class="keyword">return</span> <span class="string">'我'</span></span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span> r</span><br><span class="line">	&#125;</span><br><span class="line">	fmt.Println(strings.Map(rot13, <span class="string">"i love u 我 爱 你"</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">u love i 你 爱 我</span><br></pre></td></tr></table></figure>
+<h3 id="ToTitle全部转为大写"><a href="#ToTitle全部转为大写" class="headerlink" title="ToTitle全部转为大写"></a>ToTitle全部转为大写</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(strings.ToTitle(<span class="string">"loud noises"</span>))</span><br><span class="line">	fmt.Println(strings.ToTitle(<span class="string">"хлеб"</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">LOUD NOISES</span><br><span class="line">ХЛЕБ</span><br></pre></td></tr></table></figure>
+<h3 id="ToTitleSpecial按照指定的字符集映射为大写"><a href="#ToTitleSpecial按照指定的字符集映射为大写" class="headerlink" title="ToTitleSpecial按照指定的字符集映射为大写"></a>ToTitleSpecial按照指定的字符集映射为大写</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(strings.ToTitleSpecial(unicode.TurkishCase, <span class="string">"dünyanın ilk borsa yapısı Aizonai kabul edilir"</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">DÜNYANIN İLK BORSA YAPISI AİZONAİ KABUL EDİLİR</span><br></pre></td></tr></table></figure>
+<h3 id="ToLowerSpecial按照指定字符集全部映射为小写"><a href="#ToLowerSpecial按照指定字符集全部映射为小写" class="headerlink" title="ToLowerSpecial按照指定字符集全部映射为小写"></a>ToLowerSpecial按照指定字符集全部映射为小写</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(strings.ToLowerSpecial(unicode.TurkishCase, <span class="string">"Önnek İş"</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">önnek iş</span><br></pre></td></tr></table></figure>
+<h3 id="ToUpperSpecial按照指定字符集全部映射为大写"><a href="#ToUpperSpecial按照指定字符集全部映射为大写" class="headerlink" title="ToUpperSpecial按照指定字符集全部映射为大写"></a>ToUpperSpecial按照指定字符集全部映射为大写</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(strings.ToUpperSpecial(unicode.TurkishCase, <span class="string">"örnek iş"</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ÖRNEK İŞ</span><br></pre></td></tr></table></figure>
+<h2 id="删除开头结尾"><a href="#删除开头结尾" class="headerlink" title="删除开头结尾"></a>删除开头结尾</h2><hr>
+<h3 id="Trim从字符串开头和结尾删除匹配的任意单个字符"><a href="#Trim从字符串开头和结尾删除匹配的任意单个字符" class="headerlink" title="Trim从字符串开头和结尾删除匹配的任意单个字符"></a>Trim从字符串开头和结尾删除匹配的任意单个字符</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Print(strings.Trim(<span class="string">"¡¡¡¡¡Hello,¡¡¡!!! Gophers!!!"</span>, <span class="string">"!¡"</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Hello,¡¡¡!!! Gophers</span><br></pre></td></tr></table></figure>
+<h3 id="TrimFunc函数决定删除哪些开头和结尾的字符"><a href="#TrimFunc函数决定删除哪些开头和结尾的字符" class="headerlink" title="TrimFunc函数决定删除哪些开头和结尾的字符"></a>TrimFunc函数决定删除哪些开头和结尾的字符</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	func1 := <span class="function"><span class="keyword">func</span><span class="params">(r <span class="keyword">rune</span>)</span> <span class="title">bool</span></span> &#123;</span><br><span class="line">		flag := !unicode.IsLetter(r) &amp;&amp; !unicode.IsNumber(r)</span><br><span class="line">		<span class="keyword">return</span> flag</span><br><span class="line">	&#125;</span><br><span class="line">	fmt.Print(strings.TrimFunc(<span class="string">"#¡¡¡Hello, Gophers!!!@"</span>, func1))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Hello, Gophers</span><br></pre></td></tr></table></figure>
+<h3 id="TrimRight删除结尾的指定字符集合中的任意字符"><a href="#TrimRight删除结尾的指定字符集合中的任意字符" class="headerlink" title="TrimRight删除结尾的指定字符集合中的任意字符"></a>TrimRight删除结尾的指定字符集合中的任意字符</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Print(strings.TrimRight(<span class="string">"¡¡¡Hello, Gophers!!!"</span>, <span class="string">"!¡"</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">¡¡¡Hello, Gophers</span><br></pre></td></tr></table></figure>
+<h3 id="TrimRightFunc函数决定如何从结尾删除字符"><a href="#TrimRightFunc函数决定如何从结尾删除字符" class="headerlink" title="TrimRightFunc函数决定如何从结尾删除字符"></a>TrimRightFunc函数决定如何从结尾删除字符</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Print(strings.TrimRightFunc(<span class="string">"¡¡¡Hello, Gophers!!!"</span>, <span class="function"><span class="keyword">func</span><span class="params">(r <span class="keyword">rune</span>)</span> <span class="title">bool</span></span> &#123;</span><br><span class="line">		<span class="keyword">return</span> !unicode.IsLetter(r) &amp;&amp; !unicode.IsNumber(r)</span><br><span class="line">	&#125;))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">¡¡¡Hello, Gophers</span><br></pre></td></tr></table></figure>
+<h3 id="TrimLeft删除开头的指定字符集合中的任意字符"><a href="#TrimLeft删除开头的指定字符集合中的任意字符" class="headerlink" title="TrimLeft删除开头的指定字符集合中的任意字符"></a>TrimLeft删除开头的指定字符集合中的任意字符</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Print(strings.TrimRight(<span class="string">"¡¡¡Hello, Gophers!!!"</span>, <span class="string">"!¡"</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Hello, Gophers!!!</span><br></pre></td></tr></table></figure>
+<h3 id="TrimLeftFunc函数决定如何从开头删除字符"><a href="#TrimLeftFunc函数决定如何从开头删除字符" class="headerlink" title="TrimLeftFunc函数决定如何从开头删除字符"></a>TrimLeftFunc函数决定如何从开头删除字符</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Print(strings.TrimRightFunc(<span class="string">"¡¡¡Hello, Gophers!!!"</span>, <span class="function"><span class="keyword">func</span><span class="params">(r <span class="keyword">rune</span>)</span> <span class="title">bool</span></span> &#123;</span><br><span class="line">		<span class="keyword">return</span> !unicode.IsLetter(r) &amp;&amp; !unicode.IsNumber(r)</span><br><span class="line">	&#125;))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Hello, Gophers!!!</span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://yangjinheng.github.io/2019/06/08/go/time/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -877,241 +1296,11 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://yangjinheng.github.io/2019/05/12/kubernetes/K8S+Ceph+EFK/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Jin Heng">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="默默">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/05/12/kubernetes/K8S+Ceph+EFK/" itemprop="url">Helm + storageclass + EFK</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-05-12T00:00:00+08:00">
-                2019-05-12
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Kubernetes/" itemprop="url" rel="index">
-                    <span itemprop="name">Kubernetes</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>本文使用 K8S 集群上运行 EFK，使用 Ceph 集群作为 ElasticSearch 集群的持久存储。</p>
-<p>用到知识有：Storage Class、PVC、Helm，另外，很多服务镜像需要翻墙。</p>
-<p>helm install 阻塞过程会下载镜像可能会比较慢。</p>
-<p>helm 里面有很多可以定制的项目，这里我就不定制了，反正我的资源也够用，懒得调了。</p>
-<p>感觉没啥可以写的 😂</p>
-<h2 id="Storage-Class"><a href="#Storage-Class" class="headerlink" title="Storage Class"></a>Storage Class</h2><figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Secret</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line"><span class="attr">  name:</span> <span class="string">ceph-admin-secret</span></span><br><span class="line"><span class="attr">  namespace:</span> <span class="string">kube-system</span></span><br><span class="line"><span class="attr">type:</span> <span class="string">"kubernetes.io/rbd"</span></span><br><span class="line"><span class="attr">data:</span></span><br><span class="line">  <span class="comment"># ceph auth get-key client.admin | base64</span></span><br><span class="line"><span class="attr">  key:</span> <span class="string">QVFER3U5TmMQNXQ4SlJBAAhHMGltdXZlNFZkUXAvN2tTZ1BENGc9PQ==</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Secret</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line"><span class="attr">  name:</span> <span class="string">ceph-secret</span></span><br><span class="line"><span class="attr">  namespace:</span> <span class="string">kube-system</span></span><br><span class="line"><span class="attr">type:</span> <span class="string">"kubernetes.io/rbd"</span></span><br><span class="line"><span class="attr">data:</span></span><br><span class="line">  <span class="comment"># ceph auth get-key client.kube | base64</span></span><br><span class="line"><span class="attr">  key:</span> <span class="string">QVFCcUM5VmNWVDdQCCCCWR1NUxFNfVKeTAiazdUWVhOa3N2UWc9PQ==</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">StorageClass</span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">storage.k8s.io/v1</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line"><span class="attr">  name:</span> <span class="string">ceph-rbd</span></span><br><span class="line"><span class="attr">provisioner:</span> <span class="string">ceph.com/rbd</span></span><br><span class="line"><span class="attr">parameters:</span></span><br><span class="line"><span class="attr">  monitors:</span> <span class="number">172.16</span><span class="number">.100</span><span class="number">.9</span><span class="string">:6789</span></span><br><span class="line"><span class="attr">  pool:</span> <span class="string">kube</span></span><br><span class="line"><span class="attr">  adminId:</span> <span class="string">admin</span></span><br><span class="line"><span class="attr">  adminSecretName:</span> <span class="string">ceph-admin-secret</span></span><br><span class="line"><span class="attr">  adminSecretNamespace:</span> <span class="string">kube-system</span></span><br><span class="line"><span class="attr">  userId:</span> <span class="string">kube</span></span><br><span class="line"><span class="attr">  userSecretName:</span> <span class="string">ceph-secret</span></span><br><span class="line"><span class="attr">  userSecretNamespace:</span> <span class="string">kube-system</span></span><br><span class="line"><span class="attr">  fsType:</span> <span class="string">ext4</span></span><br><span class="line"><span class="attr">  imageFormat:</span> <span class="string">"2"</span></span><br><span class="line"><span class="attr">  imageFeatures:</span> <span class="string">"layering"</span></span><br></pre></td></tr></table></figure>
-<h2 id="Helm-Elasticsearch"><a href="#Helm-Elasticsearch" class="headerlink" title="Helm Elasticsearch"></a>Helm Elasticsearch</h2><ul>
-<li>下载 elasticsearch 的 StatfullSet 的 chart</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">helm fetch stable/elasticsearch</span><br></pre></td></tr></table></figure>
-<ul>
-<li>编辑 values.yaml，修改 storageClass 指向上面创建的 storageClass</li>
-</ul>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">storageClass:</span> <span class="string">"ceph-rbd"</span></span><br></pre></td></tr></table></figure>
-<ul>
-<li>使用 helm 指定 values.yaml 部署 elasticsearch</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">helm install --name els1 -f values.yaml stable/elasticsearch</span><br></pre></td></tr></table></figure>
-<ul>
-<li>安装后查看，调试直到全部处于 READY 状态</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ kubectl get pods</span><br><span class="line">NAME                                         READY   STATUS    RESTARTS   AGE</span><br><span class="line">els1-elasticsearch-client-55696f5bdd-qczbf   1/1     Running   1          78m</span><br><span class="line">els1-elasticsearch-client-55696f5bdd-tdwdc   1/1     Running   1          78m</span><br><span class="line">els1-elasticsearch-data-0                    1/1     Running   1          78m</span><br><span class="line">els1-elasticsearch-data-1                    1/1     Running   1          56m</span><br><span class="line">els1-elasticsearch-master-0                  1/1     Running   1          78m</span><br><span class="line">els1-elasticsearch-master-1                  1/1     Running   1          53m</span><br><span class="line">els1-elasticsearch-master-2                  1/1     Running   1          52m</span><br><span class="line">rbd-provisioner-9b8ffbcc-nxdjd               1/1     Running   2          81m</span><br></pre></td></tr></table></figure>
-<ul>
-<li>也可以使用 helm 命令查看</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ helm status els1</span><br><span class="line"></span><br><span class="line">LAST DEPLOYED: Sun May 12 16:28:56 2019</span><br><span class="line">NAMESPACE: default</span><br><span class="line">STATUS: DEPLOYED</span><br><span class="line"></span><br><span class="line">RESOURCES:</span><br><span class="line">==&gt; v1/ConfigMap</span><br><span class="line">NAME                     DATA  AGE</span><br><span class="line">els1-elasticsearch       4     88m</span><br><span class="line">els1-elasticsearch-test  1     88m</span><br><span class="line"></span><br><span class="line">==&gt; v1/Pod(related)</span><br><span class="line">NAME                                        READY  STATUS   RESTARTS  AGE</span><br><span class="line">els1-elasticsearch-client-55696f5bdd-qczbf  1/1    Running  1         88m</span><br><span class="line">els1-elasticsearch-client-55696f5bdd-tdwdc  1/1    Running  1         88m</span><br><span class="line">els1-elasticsearch-data-0                   1/1    Running  1         88m</span><br><span class="line">els1-elasticsearch-data-1                   1/1    Running  1         66m</span><br><span class="line">els1-elasticsearch-master-0                 1/1    Running  1         88m</span><br><span class="line">els1-elasticsearch-master-1                 1/1    Running  1         63m</span><br><span class="line">els1-elasticsearch-master-2                 1/1    Running  1         62m</span><br><span class="line"></span><br><span class="line">==&gt; v1/Service</span><br><span class="line">NAME                          TYPE       CLUSTER-IP     EXTERNAL-IP  PORT(S)   AGE</span><br><span class="line">els1-elasticsearch-client     ClusterIP  10.98.197.185  &lt;none&gt;       9200/TCP  88m</span><br><span class="line">els1-elasticsearch-discovery  ClusterIP  None           &lt;none&gt;       9300/TCP  88m</span><br><span class="line"></span><br><span class="line">==&gt; v1/ServiceAccount</span><br><span class="line">NAME                       SECRETS  AGE</span><br><span class="line">els1-elasticsearch-client  1        88m</span><br><span class="line">els1-elasticsearch-data    1        88m</span><br><span class="line">els1-elasticsearch-master  1        88m</span><br><span class="line"></span><br><span class="line">==&gt; v1beta1/Deployment</span><br><span class="line">NAME                       READY  UP-TO-DATE  AVAILABLE  AGE</span><br><span class="line">els1-elasticsearch-client  2/2    2           2          88m</span><br><span class="line"></span><br><span class="line">==&gt; v1beta1/StatefulSet</span><br><span class="line">NAME                       READY  AGE</span><br><span class="line">els1-elasticsearch-data    2/2    88m</span><br><span class="line">els1-elasticsearch-master  3/3    88m</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">NOTES:</span><br><span class="line">The elasticsearch cluster has been installed.</span><br><span class="line"></span><br><span class="line">Elasticsearch can be accessed:</span><br><span class="line"></span><br><span class="line">  * Within your cluster, at the following DNS name at port 9200:</span><br><span class="line"></span><br><span class="line">    els1-elasticsearch-client.default.svc</span><br><span class="line"></span><br><span class="line">  * From outside the cluster, run these commands <span class="keyword">in</span> the same shell:</span><br><span class="line"></span><br><span class="line">    <span class="built_in">export</span> POD_NAME=$(kubectl get pods --namespace default -l <span class="string">"app=elasticsearch,component=client,release=els1"</span> -o jsonpath=<span class="string">"&#123;.items[0].metadata.name&#125;"</span>)</span><br><span class="line">    <span class="built_in">echo</span> <span class="string">"Visit http://127.0.0.1:9200 to use Elasticsearch"</span></span><br><span class="line">    kubectl port-forward --namespace default <span class="variable">$POD_NAME</span> 9200:9200</span><br></pre></td></tr></table></figure>
-<ul>
-<li>启动一个临时的容器，解析集群地址，测试集群信息，查看集群节点</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ kubectl run cirros1 --rm -it --image=cirros -- /bin/sh</span><br><span class="line"></span><br><span class="line">/ <span class="comment"># nslookup els1-elasticsearch-client.default.svc</span></span><br><span class="line">Server:    10.96.0.10</span><br><span class="line">Address 1: 10.96.0.10 kube-dns.kube-system.svc.cluster.local</span><br><span class="line"></span><br><span class="line">Name:      els1-elasticsearch-client.default.svc</span><br><span class="line">Address 1: 10.98.197.185 els1-elasticsearch-client.default.svc.cluster.local</span><br><span class="line">/ <span class="comment"># curl els1-elasticsearch-client.default.svc.cluster.local:9200/_cat/nodes</span></span><br><span class="line">10.244.2.28  7 96 2 0.85 0.26 0.16 di - els1-elasticsearch-data-0</span><br><span class="line">10.244.1.37  7 83 1 0.04 0.06 0.11 di - els1-elasticsearch-data-1</span><br><span class="line">10.244.2.25 19 96 2 0.85 0.26 0.16 i  - els1-elasticsearch-client-55696f5bdd-tdwdc</span><br><span class="line">10.244.2.27 28 96 2 0.85 0.26 0.16 mi * els1-elasticsearch-master-2</span><br><span class="line">10.244.1.39 19 83 1 0.04 0.06 0.11 i  - els1-elasticsearch-client-55696f5bdd-qczbf</span><br><span class="line">10.244.2.29 21 96 2 0.85 0.26 0.16 mi - els1-elasticsearch-master-1</span><br><span class="line">10.244.1.38 23 83 1 0.04 0.06 0.11 mi - els1-elasticsearch-master-0</span><br></pre></td></tr></table></figure>
-<h2 id="Helm-fluentd-elasticsearch"><a href="#Helm-fluentd-elasticsearch" class="headerlink" title="Helm fluentd-elasticsearch"></a>Helm fluentd-elasticsearch</h2><ul>
-<li>安装 kiwigrid 源</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">helm repo add kiwigrid https://kiwigrid.github.io</span><br></pre></td></tr></table></figure>
-<ul>
-<li>下载 fluentd-elasticsearch</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">helm fetch kiwigrid/fluentd-elasticsearch</span><br></pre></td></tr></table></figure>
-<ul>
-<li>获取集群地址</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">els1-elasticsearch-client.default.svc.cluster.local:9200</span><br></pre></td></tr></table></figure>
-<ul>
-<li>编辑修改 values.yaml，指定 elasticsearch 集群的位置</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">elasticsearch:</span><br><span class="line">  host: <span class="string">'els1-elasticsearch-client.default.svc.cluster.local'</span></span><br><span class="line">  port: 9200</span><br></pre></td></tr></table></figure>
-<ul>
-<li>修改对污点的容忍程度，使其容忍 Master 节点的污点，也运行在 Master 节点上收集信息</li>
-</ul>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">tolerations:</span> </span><br><span class="line"><span class="attr">  - key:</span> <span class="string">node-role.kubernetes.io/master</span></span><br><span class="line"><span class="attr">    operator:</span> <span class="string">Exists</span></span><br><span class="line"><span class="attr">    effect:</span> <span class="string">NoSchedule</span></span><br></pre></td></tr></table></figure>
-<ul>
-<li>如果使用 prometheus 监控应该打开 prometheusRole 规则</li>
-</ul>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">podAnnotations:</span></span><br><span class="line">  <span class="string">prometheus.io/scrape:</span> <span class="string">"true"</span></span><br><span class="line">  <span class="string">prometheus.io/port:</span> <span class="string">"24231"</span></span><br><span class="line">  </span><br><span class="line"><span class="attr">service:</span></span><br><span class="line"><span class="attr">  type:</span> <span class="string">ClusterIP</span></span><br><span class="line"><span class="attr">  ports:</span></span><br><span class="line"><span class="attr">    - name:</span> <span class="string">"monitor-agent"</span></span><br><span class="line"><span class="attr">      port:</span> <span class="number">24231</span></span><br></pre></td></tr></table></figure>
-<ul>
-<li>使用 helm 指定 values.yaml 部署 fluentd-elasticsearch</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">helm install --name flu1 -f values.yaml kiwigrid/fluentd-elasticsearch</span><br></pre></td></tr></table></figure>
-<ul>
-<li>查看状态 flu1 这个 helm 服务的运行状态</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[root@master fluentd-elasticsearch]<span class="comment"># helm status flu1</span></span><br><span class="line">LAST DEPLOYED: Sun May 12 18:13:12 2019</span><br><span class="line">NAMESPACE: default</span><br><span class="line">STATUS: DEPLOYED</span><br><span class="line"></span><br><span class="line">RESOURCES:</span><br><span class="line">==&gt; v1/ClusterRole</span><br><span class="line">NAME                        AGE</span><br><span class="line">flu1-fluentd-elasticsearch  17m</span><br><span class="line"></span><br><span class="line">==&gt; v1/ClusterRoleBinding</span><br><span class="line">NAME                        AGE</span><br><span class="line">flu1-fluentd-elasticsearch  17m</span><br><span class="line"></span><br><span class="line">==&gt; v1/ConfigMap</span><br><span class="line">NAME                        DATA  AGE</span><br><span class="line">flu1-fluentd-elasticsearch  6     17m</span><br><span class="line"></span><br><span class="line">==&gt; v1/DaemonSet</span><br><span class="line">NAME                        DESIRED  CURRENT  READY  UP-TO-DATE  AVAILABLE  NODE SELECTOR  AGE</span><br><span class="line">flu1-fluentd-elasticsearch  3        3        3      3           3          &lt;none&gt;         17m</span><br><span class="line"></span><br><span class="line">==&gt; v1/Pod(related)</span><br><span class="line">NAME                              READY  STATUS   RESTARTS  AGE</span><br><span class="line">flu1-fluentd-elasticsearch-p49fc  1/1    Running  1         17m</span><br><span class="line">flu1-fluentd-elasticsearch-q5b9k  1/1    Running  0         17m</span><br><span class="line">flu1-fluentd-elasticsearch-swfvt  1/1    Running  0         17m</span><br><span class="line"></span><br><span class="line">==&gt; v1/Service</span><br><span class="line">NAME                        TYPE       CLUSTER-IP      EXTERNAL-IP  PORT(S)    AGE</span><br><span class="line">flu1-fluentd-elasticsearch  ClusterIP  10.106.106.209  &lt;none&gt;       24231/TCP  17m</span><br><span class="line"></span><br><span class="line">==&gt; v1/ServiceAccount</span><br><span class="line">NAME                        SECRETS  AGE</span><br><span class="line">flu1-fluentd-elasticsearch  1        17m</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">NOTES:</span><br><span class="line">1. To verify that Fluentd has started, run:</span><br><span class="line"></span><br><span class="line">  kubectl --namespace=default get pods -l <span class="string">"app.kubernetes.io/name=fluentd-elasticsearch,app.kubernetes.io/instance=flu1"</span></span><br><span class="line"></span><br><span class="line">THIS APPLICATION CAPTURES ALL CONSOLE OUTPUT AND FORWARDS IT TO elasticsearch . Anything that might be identifying,</span><br><span class="line">including things like IP addresses, container images, and object names will NOT be anonymized.</span><br><span class="line">2. Get the application URL by running these commands:</span><br><span class="line">  <span class="built_in">export</span> POD_NAME=$(kubectl get pods --namespace default -l <span class="string">"app.kubernetes.io/name=fluentd-elasticsearch,app.kubernetes.io/instance=flu1"</span> -o jsonpath=<span class="string">"&#123;.items[0].metadata.name&#125;"</span>)</span><br><span class="line">  <span class="built_in">echo</span> <span class="string">"Visit http://127.0.0.1:8080 to use your application"</span></span><br><span class="line">  kubectl port-forward <span class="variable">$POD_NAME</span> 8080:80</span><br></pre></td></tr></table></figure>
-<ul>
-<li>是否生成了索引，直接使用访问 elasticsearch 的 RESTfull API 接口。</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ kubectl run cirros1 --rm -it --image=cirros -- /bin/sh</span><br><span class="line">/ <span class="comment"># curl els1-elasticsearch-client.default.svc.cluster.local:9200/_cat/indices</span></span><br><span class="line">green open logstash-2019.05.10 a2b-GyKsSLOZPqGKbCpyJw 5 1   158 0 84.2kb   460b</span><br><span class="line">green open logstash-2019.05.09 CwYylNhdRf-A5UELhrzHow 5 1 71418 0 34.3mb 17.4mb</span><br><span class="line">green open logstash-2019.05.12 5qRFpV46RGG_bWC4xbsyVA 5 1 34496 0 26.1mb 13.2mb</span><br></pre></td></tr></table></figure>
-<h2 id="Helm-kibana"><a href="#Helm-kibana" class="headerlink" title="Helm kibana"></a>Helm kibana</h2><ul>
-<li>下载 stable/kibana</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">helm fetch stable/kibana</span><br></pre></td></tr></table></figure>
-<ul>
-<li>编辑 values.yaml，修改 elasticsearch 指向 elasticsearch 集群的地址</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">elasticsearch.hosts: http://els1-elasticsearch-client.default.svc.cluster.local:920</span><br></pre></td></tr></table></figure>
-<ul>
-<li>修改 service 的工作模式，使得可以从集群外部访问</li>
-</ul>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">service:</span></span><br><span class="line"><span class="attr">  type:</span> <span class="string">NodePort</span></span><br></pre></td></tr></table></figure>
-<ul>
-<li>使用 helm 指定 values.yaml 部署 kibana</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">helm install --name kib1 -f values.yaml stable/kibana</span><br></pre></td></tr></table></figure>
-<ul>
-<li>获取 service 端口</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ kubectl get svc</span><br><span class="line">NAME                           TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)         AGE</span><br><span class="line">els1-elasticsearch-client      ClusterIP   10.98.197.185   &lt;none&gt;        9200/TCP        4h51m</span><br><span class="line">els1-elasticsearch-discovery   ClusterIP   None            &lt;none&gt;        9300/TCP        4h51m</span><br><span class="line">flu1-fluentd-elasticsearch     ClusterIP   10.101.97.11    &lt;none&gt;        24231/TCP       157m</span><br><span class="line">kib1-kibana                    NodePort    10.103.7.215    &lt;none&gt;        443:31537/TCP   6m50s</span><br><span class="line">kubernetes                     ClusterIP   10.96.0.1       &lt;none&gt;        443/TCP         3d4h</span><br></pre></td></tr></table></figure>
-<ul>
-<li>由于 service 工作在 NodePort 模式下，所以可以在集群外部访问了</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">172.16.100.6:31537</span><br></pre></td></tr></table></figure>
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/4/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><span class="space">&hellip;</span><a class="page-number" href="/page/39/">39</a><a class="extend next" rel="next" href="/page/6/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/page/4/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><span class="space">&hellip;</span><a class="page-number" href="/page/38/">38</a><a class="extend next" rel="next" href="/page/6/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1159,7 +1348,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">77</span>
+                  <span class="site-state-item-count">76</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -1224,7 +1413,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; 2017 &mdash; <span itemprop="copyrightYear">2019</span>
+        <div class="copyright">&copy; 2017 &mdash; <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
