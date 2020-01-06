@@ -79,17 +79,17 @@
 
 
 
-<meta name="description" content="无神论者、性格内敛，喜欢沉浸式学习。  资料出生：1989 现居：北京 学校：北京地质大学 专业：电气工程及其自动化 邮箱：jinhengyang@foxmail.com  技术语言：Python、Shell、ES6、CSS 框架：Django、Flask、React、Redux IDE：VSCode、PyCharm、Typora  越努力！越幸运！">
+<meta name="description" content="无神论者、性格内敛，喜欢沉浸式学习。  资料出生：1989 现居：北京 学校：北京地质大学 专业：电气工程及其自动化 邮箱：jinhengyang@foxmail.com  技术语言：Golang、Python、js 框架：Flask、React IDE：VSCode、PyCharm、Typora  越努力！越幸运！">
 <meta property="og:type" content="website">
 <meta property="og:title" content="关于我">
 <meta property="og:url" content="https://yangjinheng.github.io/about/index.html">
 <meta property="og:site_name" content="默默">
-<meta property="og:description" content="无神论者、性格内敛，喜欢沉浸式学习。  资料出生：1989 现居：北京 学校：北京地质大学 专业：电气工程及其自动化 邮箱：jinhengyang@foxmail.com  技术语言：Python、Shell、ES6、CSS 框架：Django、Flask、React、Redux IDE：VSCode、PyCharm、Typora  越努力！越幸运！">
+<meta property="og:description" content="无神论者、性格内敛，喜欢沉浸式学习。  资料出生：1989 现居：北京 学校：北京地质大学 专业：电气工程及其自动化 邮箱：jinhengyang@foxmail.com  技术语言：Golang、Python、js 框架：Flask、React IDE：VSCode、PyCharm、Typora  越努力！越幸运！">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-03-29T12:11:51.147Z">
+<meta property="og:updated_time" content="2020-01-06T03:24:30.923Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="关于我">
-<meta name="twitter:description" content="无神论者、性格内敛，喜欢沉浸式学习。  资料出生：1989 现居：北京 学校：北京地质大学 专业：电气工程及其自动化 邮箱：jinhengyang@foxmail.com  技术语言：Python、Shell、ES6、CSS 框架：Django、Flask、React、Redux IDE：VSCode、PyCharm、Typora  越努力！越幸运！">
+<meta name="twitter:description" content="无神论者、性格内敛，喜欢沉浸式学习。  资料出生：1989 现居：北京 学校：北京地质大学 专业：电气工程及其自动化 邮箱：jinhengyang@foxmail.com  技术语言：Golang、Python、js 框架：Flask、React IDE：VSCode、PyCharm、Typora  越努力！越幸运！">
 
 
 
@@ -269,6 +269,16 @@
           </a>
         </li>
       
+        
+        <li class="menu-item menu-item-guestbook">
+          <a href="/guestbook" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br>
+            
+            给我留言
+          </a>
+        </li>
+      
 
       
     </ul>
@@ -315,8 +325,8 @@
 <p>专业：电气工程及其自动化</p>
 <p>邮箱：<a href="mailto:jinhengyang@foxmail.com" target="_blank" rel="noopener">jinhengyang@foxmail.com</a></p>
 <hr>
-<h2 id="技术"><a href="#技术" class="headerlink" title="技术"></a>技术</h2><p>语言：Python、Shell、ES6、CSS</p>
-<p>框架：Django、Flask、React、Redux</p>
+<h2 id="技术"><a href="#技术" class="headerlink" title="技术"></a>技术</h2><p>语言：Golang、Python、js</p>
+<p>框架：Flask、React</p>
 <p>IDE：VSCode、PyCharm、Typora</p>
 <hr>
 <p><em>越努力！越幸运！</em></p>
@@ -340,9 +350,7 @@
           
 
   
-    <div class="comments" id="comments">
-      <div id="lv-container" data-id="city" data-uid="MTAyMC80MzE1My8xOTY5OQ=="></div>
-    </div>
+  <div id="gitalk-container"></div>
 
   
 
@@ -634,27 +642,33 @@
 
 
   
-    <script type="text/javascript">
-      (function(d, s) {
-        var j, e = d.getElementsByTagName(s)[0];
-        if (typeof LivereTower === 'function') { return; }
-        j = d.createElement(s);
-        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
-        j.async = true;
-        e.parentNode.insertBefore(j, e);
-      })(document, 'script');
+
+
+
+
+
+
+
+
+
+
+
+
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+  <script src="/js/src/md5.min.js"></script>
+   <script type="text/javascript">
+        var gitalk = new Gitalk({
+          clientID: '86e33c97ad3067f9d456',
+          clientSecret: 'ee93fb0fc1345f63936a09214f4b4a75e932c96c',
+          repo: 'yangjinheng.github.io',
+          owner: 'yangjinheng',
+          admin: ['yangjinheng'],
+          id: location.pathname,
+          distractionFreeMode: 'true'
+        })
+        gitalk.render('gitalk-container')
     </script>
-  
-
-
-
-
-
-
-
-
-
-
 
 
   
