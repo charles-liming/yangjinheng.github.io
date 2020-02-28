@@ -311,7 +311,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://yangjinheng.github.io/2018/11/30/python/字典统计技巧/">
+    <link itemprop="mainEntityOfPage" href="https://yangjinheng.github.io/2019/01/15/kubernetes/10.网络通信/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Jin Heng">
@@ -330,7 +330,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/11/30/python/字典统计技巧/" itemprop="url">当字典的键和值都无法预知的情况</a></h1>
+                <a class="post-title-link" href="/2019/01/15/kubernetes/10.网络通信/" itemprop="url">K8S 网络基础</a></h1>
         
 
         <div class="post-meta">
@@ -342,8 +342,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-11-30T00:00:00+08:00">
-                2018-11-30
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-01-15T00:00:00+08:00">
+                2019-01-15
               </time>
             
 
@@ -365,8 +365,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Python/" itemprop="url" rel="index">
-                    <span itemprop="name">Python</span>
+                  <a href="/categories/Kubernetes/" itemprop="url" rel="index">
+                    <span itemprop="name">Kubernetes</span>
                   </a>
                 </span>
 
@@ -404,10 +404,159 @@
       
         
           
-            <ul>
-<li>当字典的键和值都没法确定的时候，我使用了下面的方法</li>
+            <h1 id="网络通信"><a href="#网络通信" class="headerlink" title="网络通信"></a>网络通信</h1><p>K8S 的网络通信完全由 CNI 接口上的插件来实现，插件需要实现以下集中通信模型。</p>
+<p>目前比较流行的插件有：flannel、calico、canel、kube-router …</p>
+<ul>
+<li>如何加载插件</li>
 </ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">data_list = [</span><br><span class="line">&#123;</span><br><span class="line">    <span class="string">'service'</span>: <span class="string">'groupserver'</span>,</span><br><span class="line">    <span class="string">'deploy_action'</span>: <span class="string">'release'</span>,</span><br><span class="line">&#125;,</span><br><span class="line">&#123;</span><br><span class="line">    <span class="string">'service'</span>: <span class="string">'groupserver'</span>,</span><br><span class="line">    <span class="string">'deploy_action'</span>: <span class="string">'rollback'</span>,</span><br><span class="line">&#125;,</span><br><span class="line">&#123;</span><br><span class="line">    <span class="string">'service'</span>: <span class="string">'connector'</span>,</span><br><span class="line">    <span class="string">'deploy_action'</span>: <span class="string">'release'</span>,</span><br><span class="line">&#125;,</span><br><span class="line">&#123;</span><br><span class="line">    <span class="string">'service'</span>: <span class="string">'imserver'</span>,</span><br><span class="line">    <span class="string">'deploy_action'</span>: <span class="string">'rollback'</span>,</span><br><span class="line">&#125;,</span><br><span class="line">&#123;</span><br><span class="line">    <span class="string">'service_test'</span>: <span class="string">'imserver_test'</span>,</span><br><span class="line">    <span class="string">'deploy_action_test'</span>: <span class="string">'rollback_test'</span>,</span><br><span class="line">&#125;,</span><br><span class="line">]</span><br><span class="line"></span><br><span class="line">result = dict()</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> dict <span class="keyword">in</span> data_list:</span><br><span class="line">    <span class="comment"># 得到键</span></span><br><span class="line">    key = dict.get(<span class="string">"service"</span>,<span class="string">"error"</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 判断值是否加 1</span></span><br><span class="line">    value1 = dict.get(<span class="string">"deploy_action"</span>,<span class="number">0</span>) == <span class="string">'release'</span> <span class="keyword">and</span> <span class="number">1</span> <span class="keyword">or</span> <span class="number">0</span></span><br><span class="line">    value2 = dict.get(<span class="string">"deploy_action"</span>,<span class="number">0</span>) == <span class="string">'rollback'</span> <span class="keyword">and</span> <span class="number">1</span> <span class="keyword">or</span> <span class="number">0</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 为键设置默认值</span></span><br><span class="line">    base = result.get(dict.get(<span class="string">"service"</span>),[<span class="number">0</span>,<span class="number">0</span>])</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 为键设置值</span></span><br><span class="line">    result[key] = [base[<span class="number">0</span>] + value1 , base[<span class="number">1</span>] + value2]</span><br><span class="line"></span><br><span class="line">print(result)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 结果</span></span><br><span class="line"><span class="comment"># &#123;'groupserver': [1, 1], 'connector': [1, 0], 'imserver': [0, 1], 'error': [0, 0]&#125;</span></span><br></pre></td></tr></table></figure>
+<p>k8s 在启动的时候会去：/etc/cni/net.d/ 目录下寻找网络插件的配置文件，POD 在创建时候 k8s 调用这个配置文件，由插件根据这个配置文件进行创建网络。</p>
+<h2 id="通信模型"><a href="#通信模型" class="headerlink" title="通信模型"></a>通信模型</h2><ol>
+<li>容器间通信：同一个 POD 内多个容器间的通信，使用 lo 网卡通信</li>
+<li>POD间通信：POD IP 直接与 POD IP 通信</li>
+<li>POD 与 Service：POD IP 直接与 Cluster IP</li>
+<li>Service 与集群外部客户端的通信，ingress、NodePort、Loadbacer</li>
+</ol>
+<h2 id="通信模型底层"><a href="#通信模型底层" class="headerlink" title="通信模型底层"></a>通信模型底层</h2><p>无论哪一种网络插件，它们用到的底层方案都是以下几种：</p>
+<ol>
+<li>虚拟网桥：brg，用纯软件实现一个虚拟网卡，一端在POD上，一端在宿主机上接入到网桥或物理接口桥上，称为隧道网络。</li>
+<li>多路复用：MacVLAN，基于 MAC 的方式创建 VLAN ，为每个虚拟接口配置一个独立的 MAC 地址，使得一个物理网卡承载多个容器使用，这样容器直接使用物理网卡，基于 MacVLAN 进行跨节点通信。</li>
+<li>硬件交换：网卡支持硬件交换，SR-IOV （单根-IO虚拟化） 方式，这种网卡支持直接在物理级别虚拟出多个接口，高性能。</li>
+</ol>
+<h2 id="K8S-名称空间"><a href="#K8S-名称空间" class="headerlink" title="K8S 名称空间"></a>K8S 名称空间</h2><p>K8S 名称空间与 POD 网络名称空间不在一个维度，所以即使在不同的 K8S 集群名称空间内创建的不同 POD，也可以通过网络直接通信。</p>
+<p>而目前应用最广的 flannel 网络插件，是不支持这种不同集群命名空间的网络隔离策略的。</p>
+<p>calico 支持地址分配，也支持不同集群命名空间的网络隔离策略，但是它使用较为复杂，支持 BGP 三层网络转发，性能比 flannel 强。</p>
+<p>也可以使用 flannel 来做网络管理，再安装 calico 仅仅做集群命名空间网路隔离策略，这种搭配方案。</p>
+<h2 id="K8s-网络拓扑"><a href="#K8s-网络拓扑" class="headerlink" title="K8s 网络拓扑"></a>K8s 网络拓扑</h2><p>所有 POD 连接到，本机 cni0 接口这个网络，cni0 接口发出的报文到达 flannel.1 这个接口，这个接口将报文封装为隧道协议，通过本机的真实的物理网卡发出。</p>
+<ul>
+<li>查看本机的接口</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">1: lo:                       <span class="comment"># 本地回环</span></span><br><span class="line">2: ens33:                    <span class="comment"># 主机物理网卡</span></span><br><span class="line">3: docker0:                  <span class="comment"># docker 默认的桥接网络，在 k8s 中无用可以删除</span></span><br><span class="line">4: dummy0:                   <span class="comment"># </span></span><br><span class="line">5: kube-ipvs0:               <span class="comment"># </span></span><br><span class="line">6: flannel.1:                <span class="comment"># flannel 虚拟网卡，封装隧道报文</span></span><br><span class="line">7: cni0:                     <span class="comment"># 所有容器处于这个网桥</span></span><br><span class="line">8: veth0c014b8b@if3:         <span class="comment"># 容器的网卡连接到 cni0</span></span><br><span class="line">9: veth97c048e5@if3:         <span class="comment"># 容器的网卡连接到 cni0</span></span><br><span class="line">11: vethd2f0bf2b@if3:        <span class="comment"># 容器的网卡连接到 cni0</span></span><br><span class="line">12: veth648a500f@if3:        <span class="comment"># 容器的网卡连接到 cni0</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>下载 bridge-utils 包使用命令 brctl show cni0 查看 cni0 接口</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">bridge    name    bridge id           STP    enabled    interfaces</span><br><span class="line">cni0              8000.9a6ec95f8285   no		        veth0c014b8b</span><br><span class="line">                                                        veth648a500f</span><br><span class="line">                                                        veth7a3f56b7</span><br><span class="line">                                                        veth97c048e5</span><br><span class="line">                                                        vethd2f0bf2b</span><br></pre></td></tr></table></figure>
+<h1 id="flannel"><a href="#flannel" class="headerlink" title="flannel"></a>flannel</h1><p>flannel 是一个专为 kubernetes 定制的三层网络解决方案，主要用于解决容器的跨主机通信问题。</p>
+<h2 id="flannel-工作模式"><a href="#flannel-工作模式" class="headerlink" title="flannel 工作模式"></a>flannel 工作模式</h2><ul>
+<li>flannel.1 这个虚拟网卡支持多种传输模式：VxLAN、host-gw、Directrouting、udp </li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>模式</th>
+<th>介绍</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>VXLAN</td>
+<td>使用 VxLAN 作为隧道封装报文</td>
+</tr>
+<tr>
+<td>host-gw</td>
+<td>不使用叠加网络，而是在主机的路由表中创建到其他主机 subnet 的路由条目，性能较好，缺陷是：所有 node 节点必须处于同一个二层网络中。</td>
+</tr>
+<tr>
+<td>DirectRouting</td>
+<td>当主机位于同一子网时启用直接路由，不在回退到 VxLAN。</td>
+</tr>
+<tr>
+<td>UDP</td>
+<td>直接使用 UDP 协议，性能差</td>
+</tr>
+</tbody>
+</table>
+<h2 id="VXLAN-通信过程"><a href="#VXLAN-通信过程" class="headerlink" title="VXLAN 通信过程"></a>VXLAN 通信过程</h2><p>Flannel VXLAN 实质上是一种 “覆盖网络(overlay network)” ，也就是将TCP数据包装在另一种网络包里面进行路由转发和通信，目前已经支持UDP、VxLAN、AWS VPC和GCE路由等数据转发方式。</p>
+<ul>
+<li>flannel VXLAN 通信过程</li>
+</ul>
+<p>在 K8S 上 POD 与 POD 是直接通过对方的 IP 地址进行通信的，POD 发出的报文经过 cni0 网桥到达 flannel ，flannel 将报文封装上一层 VxLAN 的首部，外层又被封装一层 UDP 协议的首部，发送给本机物理网卡，本机物理网卡又将 flannel 发过来的报文外层封装上 IP 首部和以太网帧首部（MAC）由网卡发出，另外一个 node 节点收到报文，内核发现是一个 VxLAN 的包，拆掉 IP 首部送给 flannel 应用程序，flannel 拆掉 VxLAN 首部并将内部的数据发送给，cni0 网桥，cni0 收到后转发给 POD。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">|                                               |                                   |</span><br><span class="line">|&lt;------------------ VxLAN封装 -----------------&gt;|&lt;----------- 原始报文 -------------&gt;|</span><br><span class="line">+-----------+-----------+-----------+-----------+-----------+-----------+-----------+</span><br><span class="line">|  node 网络 |  node网络  | node 网络 |  VxLan    |   POD MAC |  POD IP   |    data   |</span><br><span class="line">|  帧首部MAC |   IP首部   | UDP 首部  |   首部     |    首部    |   首部    |  Payload  |</span><br><span class="line">+-----------+-----------+-----------+-----------+-----------+-----------+-----------+</span><br></pre></td></tr></table></figure>
+<h2 id="flannel-部署方式"><a href="#flannel-部署方式" class="headerlink" title="flannel 部署方式"></a>flannel 部署方式</h2><ol>
+<li>在 k8s 集群启动前，flannel 直接部署到节点上，作为一个守护进程运行。</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">任何一个部署了 kubelet 的节点都应该部署 flannel ，因为 kubelet 要借助 flannel 为 POD 设置网络接口</span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>使用 kube-admin 直接将 k8s 自己的组件包括 flannel 运行在 k8s 之上的静态 POD。</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">必须配置为共享 node 节点网络名称空间的 POD，所以 flannel POD 控制器为 DaemonSet。</span><br></pre></td></tr></table></figure>
+<h2 id="flannel-配置文件"><a href="#flannel-配置文件" class="headerlink" title="flannel 配置文件"></a>flannel 配置文件</h2><ul>
+<li>配置文件选项含义</li>
+</ul>
+<figure class="highlight"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    "Network": "10.244.0.0/16",     // flannel 使用的 CIDR 格式的网络地址，用于为 POD 配置网络功能</span><br><span class="line">	"SubnetLen": 24,                // 把 Network 切分为子网供各 node 节点使用时，使用多长的掩码切分，默认为 24</span><br><span class="line">	"SubnetMin": "10.244.10.0/24",  // 用于分配给 node 的子网起始地址，从这个网络开始分配网络</span><br><span class="line">    "SubnetMax": "10.244.255.0/24"  // 用于分配给 nide 的子网结束位置，这个是最大分配的网路  </span><br><span class="line">    "Backend": &#123;                    // 指明 POD 与 POD 跨节点通信时候使用的 flannel 工作模式</span><br><span class="line">        "Type": "vxlan",            // 工作模式</span><br><span class="line">    	"Directrouting": true       // 是否使用直接路由模式</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>flannel 托管到 k8s 上的配置文件，处于 kube-flannel-cfg 这个 configmap 中。</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl get configmap kube-flannel-cfg -n kube-system -o json</span><br></pre></td></tr></table></figure>
+<h2 id="修改工作模式"><a href="#修改工作模式" class="headerlink" title="修改工作模式"></a>修改工作模式</h2><ul>
+<li>修改 flannel 工作模式，添加 Directrouting，这个操作应该在刚刚部署完 k8s 集群时候修改，推荐修改</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl edit configmap kube-flannel-cfg -n kube-system</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="string">"Backend"</span>: &#123;</span><br><span class="line">    <span class="string">"Type"</span>: <span class="string">"vxlan"</span>,</span><br><span class="line">    <span class="string">"Directrouting"</span>: <span class="literal">true</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>查看本机路由表</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ip route show</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">default via 172.16.100.254 dev ens33 proto static metric 100 </span><br><span class="line">10.244.1.0/24 via 10.244.1.0 dev ens33             <span class="comment"># 必须为 dev 物理网卡接口，否则 Directrouting 没有设置成功</span></span><br><span class="line">10.244.2.0/24 via 10.244.2.0 dev ens33             <span class="comment"># 必须为 dev 物理网卡接口，否则 Directrouting 没有设置成功</span></span><br><span class="line">172.16.100.0/24 dev ens33 proto kernel scope link src 172.16.100.101 metric 100 </span><br><span class="line">172.17.0.0/16 dev docker0 proto kernel scope link src 172.17.0.1</span><br></pre></td></tr></table></figure>
+<h1 id="Calico"><a href="#Calico" class="headerlink" title="Calico"></a>Calico</h1><p>Calico 创建和管理⼀个扁平的三层网络(不需要 overlay)，每个容器会分配一个可路由的 ip。由于通信时不需要解包和封包，网络性能损耗小，易于排查，且易于水平扩展。</p>
+<p>小规模部署时可以通过 bgp client 直接互联，大规模下可通过指定的 BGP route reflector 来完成，这样保证所有的数据流量都是通过 IP 路由的方式完成互联的。 </p>
+<p>Calico 基于 iptables 还提供了丰富而灵活的网络 Policy，保证通过各个节点上的 ACLs 来提供 Workload 的多租户隔离、安全组以及其他可达性限制等功能。</p>
+<p>有个新的项目：canel，它集合了 flannel 和 calico 的优点。</p>
+<ul>
+<li>注意</li>
+</ul>
+<p>Calico 目前不支持工作在 iptables 下的 kube-proxy，下面介绍 canal 网络策略的使用</p>
+<h2 id="安装-canal"><a href="#安装-canal" class="headerlink" title="安装 canal"></a>安装 canal</h2><ul>
+<li>下载清单文件，需要翻墙</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl apply -f https://docs.projectcalico.org/v3.6/getting-started/kubernetes/installation/hosted/canal/canal.yaml</span><br></pre></td></tr></table></figure>
+<h2 id="清单定义"><a href="#清单定义" class="headerlink" title="清单定义"></a>清单定义</h2><ul>
+<li>清单格式，详见：kubectl explain networkpolicy</li>
+</ul>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="string">egress</span>                  <span class="string">&lt;[]Object&gt;</span>    <span class="comment"># 出站规则的对象列表</span></span><br><span class="line">  <span class="string">ports</span>                 <span class="string">&lt;[]Object&gt;</span>    <span class="comment"># 目标端口的对象列表</span></span><br><span class="line">    <span class="string">port</span>                <span class="string">&lt;string&gt;</span>      <span class="comment"># 数字形式或者是命名的端口</span></span><br><span class="line">    <span class="string">protocol</span>                          <span class="comment"># 协议 TCP、UDP</span></span><br><span class="line">  <span class="string">to</span>                    <span class="string">&lt;[]Object&gt;</span>    <span class="comment"># 目标地址对象列表</span></span><br><span class="line">    <span class="string">ipBlock</span>             <span class="string">&lt;Object&gt;</span>      <span class="comment"># 一组 IP 地址</span></span><br><span class="line">      <span class="string">cidr</span>	            <span class="string">&lt;string&gt;</span>      <span class="comment"># CIDR 表示的 IP 范围</span></span><br><span class="line">      <span class="string">except</span>	        <span class="string">&lt;[]string&gt;</span>    <span class="comment"># 排除 CIDR 中的某些地址</span></span><br><span class="line">    <span class="string">namespaceSelector</span>   <span class="string">&lt;Object&gt;</span>      <span class="comment"># 名称空间选择器</span></span><br><span class="line">    <span class="string">podSelector</span>         <span class="string">&lt;Object&gt;</span>      <span class="comment"># POD 选择器，目标地址可以也是一组 POD</span></span><br><span class="line"><span class="string">ingress</span>                 <span class="string">&lt;[]Object&gt;</span>    <span class="comment"># 入站规则的对象列表</span></span><br><span class="line">  <span class="string">from</span>                  <span class="string">&lt;[]Object&gt;</span>    <span class="comment"># 源地址对象列表</span></span><br><span class="line">    <span class="string">ipBlock</span>             <span class="string">&lt;Object&gt;</span>      <span class="comment"># 一组 IP 地址</span></span><br><span class="line">      <span class="string">cidr</span>	            <span class="string">&lt;string&gt;</span>      <span class="comment"># CIDR 表示的 IP 范围</span></span><br><span class="line">      <span class="string">except</span>	        <span class="string">&lt;[]string&gt;</span>    <span class="comment"># 排除 CIDR 中的某些地址</span></span><br><span class="line">    <span class="string">namespaceSelector</span>   <span class="string">&lt;Object&gt;</span>      <span class="comment"># 名称空间选择器</span></span><br><span class="line">    <span class="string">podSelector</span>         <span class="string">&lt;Object&gt;</span>      <span class="comment"># POD 选择器，源地址也可以是一组 POD</span></span><br><span class="line">  <span class="string">ports</span>                 <span class="string">&lt;[]Object&gt;</span>    <span class="comment"># POD 自己的端口，表示控制自己的端口是否可以被访问，的对象列表</span></span><br><span class="line">    <span class="string">port</span>                              <span class="comment"># 数字形式或者是命名的端口</span></span><br><span class="line">    <span class="string">protocol</span>                          <span class="comment"># 协议 TCP、UDP</span></span><br><span class="line"><span class="string">podSelector</span>             <span class="string">&lt;Object&gt;</span>      <span class="comment"># POD 选择器决定规则应用在哪些 POD 上</span></span><br><span class="line"><span class="string">policyTypes</span>             <span class="string">&lt;[]string&gt;</span>    <span class="comment"># 可以是 "Ingress", "Egress", 或者 "Ingress,Egress" ，表示放行满足这些规则访问</span></span><br></pre></td></tr></table></figure>
+<h2 id="policyTypes"><a href="#policyTypes" class="headerlink" title="policyTypes"></a>policyTypes</h2><ul>
+<li>首先定义 名称空间</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl create namespace dev</span><br><span class="line">kubectl create namespace prod</span><br></pre></td></tr></table></figure>
+<ul>
+<li>在两个命名空间分别创建一个 POD</li>
+</ul>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Pod</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line"><span class="attr">  name:</span> <span class="string">pod1</span></span><br><span class="line"><span class="attr">  namespace:</span> <span class="string">dev</span></span><br><span class="line"><span class="attr">  labels:</span></span><br><span class="line"><span class="attr">    app:</span> <span class="string">myapp</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line"><span class="attr">  containers:</span></span><br><span class="line"><span class="attr">  - name:</span> <span class="string">myapp</span></span><br><span class="line"><span class="attr">    image:</span> <span class="string">ikubernetes/myapp:v1</span></span><br><span class="line">    </span><br><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Pod</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line"><span class="attr">  name:</span> <span class="string">pod1</span></span><br><span class="line"><span class="attr">  namespace:</span> <span class="string">prod</span></span><br><span class="line"><span class="attr">  labels:</span></span><br><span class="line"><span class="attr">    app:</span> <span class="string">myapp</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line"><span class="attr">  containers:</span></span><br><span class="line"><span class="attr">  - name:</span> <span class="string">myapp</span></span><br><span class="line"><span class="attr">    image:</span> <span class="string">ikubernetes/myapp:v1</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl apply -f pod-a.yaml -n dev</span><br></pre></td></tr></table></figure>
+<ul>
+<li>拒绝所有 dev 空间的报文</li>
+</ul>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">networking.k8s.io/v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">NetworkPolicy</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line"><span class="attr">  name:</span> <span class="string">deny-all-ingress</span></span><br><span class="line"><span class="attr">  namespace:</span> <span class="string">dev</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line"><span class="attr">  podSelector:</span> <span class="string">&#123;&#125;</span>            <span class="comment"># &#123;&#125; 空的选择器表示选择全部</span></span><br><span class="line"><span class="attr">  policyTypes:</span></span><br><span class="line"><span class="bullet">  -</span> <span class="string">Ingress</span>                  <span class="comment"># 指明 Ingress 规则生效，匹配 Ingress 将被放行，如果没定义 Ingress 则不能匹配所有，会拒绝全部</span></span><br><span class="line">                             <span class="comment"># policyTypes 没有 Egress 表示不控制 Egress ，默认为允许</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>在指定命名空间应用规则文件</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl apply -f deny-all-ingress.yaml -n dev</span><br></pre></td></tr></table></figure>
+<ul>
+<li>查看规则</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl get networkpolicy -n dev</span><br></pre></td></tr></table></figure>
+<ul>
+<li>查看 dev 空间中的 POD 地址并访问，结果是不能访问，因为这个命名空间拒绝外部访问</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl get pods -n dev -o wide</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">curl 10.244.1.2</span><br></pre></td></tr></table></figure>
+<ul>
+<li>查看 prod 空间中的 POD 地址并访问，结果可以访问，因为这个命名空间没有定义规则</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl get pods -n dev -o wide</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">curl 10.244.2.2</span><br></pre></td></tr></table></figure>
+<ul>
+<li>允许指定网段的 POD 访问本 POD 的 80 端口</li>
+</ul>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">networking.k8s.io/v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">NetworkPolicy</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line"><span class="attr">  name:</span> <span class="string">allow-80-ingress</span></span><br><span class="line"><span class="attr">  namespace:</span> <span class="string">dev</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line"><span class="attr">  podSelector:</span></span><br><span class="line"><span class="attr">    matchLabels:</span></span><br><span class="line"><span class="attr">      app:</span> <span class="string">myapp</span></span><br><span class="line"><span class="attr">  ingress:</span></span><br><span class="line"><span class="attr">  - from:</span></span><br><span class="line"><span class="attr">    - ipBlock:</span>                   <span class="comment"># 指定源地址为 IP 地址块 </span></span><br><span class="line"><span class="attr">        cidr:</span> <span class="number">10.244</span><span class="number">.0</span><span class="number">.0</span><span class="string">/16</span>    <span class="comment"># 掩码形式指出源地址 IP 地址范围</span></span><br><span class="line"><span class="attr">        except:</span>                  <span class="comment"># 排除 cidr 范围内的某个地址</span></span><br><span class="line"><span class="bullet">        -</span> <span class="number">10.244</span><span class="number">.1</span><span class="number">.2</span><span class="string">/32</span></span><br><span class="line"><span class="attr">    ports:</span></span><br><span class="line"><span class="attr">    - port:</span> <span class="number">80</span>                   <span class="comment"># 入栈且目标端口为 80 的则匹配</span></span><br><span class="line"><span class="attr">      protocol:</span> <span class="string">TCP</span></span><br><span class="line"><span class="attr">    - port:</span> <span class="number">443</span></span><br><span class="line"><span class="attr">      protocol:</span> <span class="string">TCP</span></span><br><span class="line"><span class="attr">  policyTypes:</span></span><br><span class="line"><span class="bullet">  -</span> <span class="string">Ingress</span>                  <span class="comment"># 指明 Ingress 规则生效，匹配 Ingress 将被放行，如果没定义 Ingress 则不能匹配所有，拒绝全部</span></span><br><span class="line">                             <span class="comment"># policyTypes 没有 Egress 表示不控制 Egress ，默认为允许</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>查看规则</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl get networkpolicy -n dev</span><br></pre></td></tr></table></figure>
+<ul>
+<li>拒绝出栈的所有请求</li>
+</ul>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">networking.k8s.io/v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">NetworkPolicy</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line"><span class="attr">  name:</span> <span class="string">deny-all-egress</span></span><br><span class="line"><span class="attr">  namespace:</span> <span class="string">prod</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line"><span class="attr">  podSelector:</span> <span class="string">&#123;&#125;</span>            <span class="comment"># &#123;&#125; 空的选择器表示选择全部</span></span><br><span class="line"><span class="attr">  policyTypes:</span></span><br><span class="line"><span class="bullet">  -</span> <span class="string">Egress</span>                   <span class="comment"># 指明 Egress 规则生效，匹配 Egress 将被放行，如果没定义 Egress 则不能匹配所有，拒绝全部</span></span><br><span class="line">                             <span class="comment"># policyTypes 没有 Ingress 表示不控制 Egress ，默认为允许</span></span><br></pre></td></tr></table></figure>
+
           
         
       
@@ -455,7 +604,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://yangjinheng.github.io/2018/10/29/Linux/系统监控/">
+    <link itemprop="mainEntityOfPage" href="https://yangjinheng.github.io/2019/01/15/kubernetes/9.Service和ingress/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Jin Heng">
@@ -474,7 +623,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/10/29/Linux/系统监控/" itemprop="url">常用监控软件整理</a></h1>
+                <a class="post-title-link" href="/2019/01/15/kubernetes/9.Service和ingress/" itemprop="url">service 和 ingress</a></h1>
         
 
         <div class="post-meta">
@@ -486,8 +635,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-10-29T00:00:00+08:00">
-                2018-10-29
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-01-15T00:00:00+08:00">
+                2019-01-15
               </time>
             
 
@@ -509,8 +658,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/运维笔记/" itemprop="url" rel="index">
-                    <span itemprop="name">运维笔记</span>
+                  <a href="/categories/Kubernetes/" itemprop="url" rel="index">
+                    <span itemprop="name">Kubernetes</span>
                   </a>
                 </span>
 
@@ -548,746 +697,183 @@
       
         
           
-            <h1 id="安装软件"><a href="#安装软件" class="headerlink" title="安装软件"></a>安装软件</h1><h2 id="压测软件"><a href="#压测软件" class="headerlink" title="压测软件"></a>压测软件</h2><ul>
-<li>cpuburn</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">计算圆周率 echo &quot;scale=10000; 4*a(1)&quot; | bc -l -q</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">CPU测试 https://patrickmn.com/projects/cpuburn/</span><br></pre></td></tr></table></figure>
+            <h1 id="Service-配置清单"><a href="#Service-配置清单" class="headerlink" title="Service 配置清单"></a>Service 配置清单</h1><p>Service 是一种抽象资源，它可以通过标签选择器关联一组 POD 为这一组的 POD 提供一个固定的访问端点，而 Service 底层是由 iptables 或 ipvs 实现的。</p>
+<h2 id="底层实现"><a href="#底层实现" class="headerlink" title="底层实现"></a>底层实现</h2><p>所以当从外部访问 Service 时候，由于 Service 底层实现的不同，调度的逻辑也是不同的。</p>
+<ol>
+<li>userspace 实现</li>
+</ol>
+<p>这种模式，kube-proxy 会监视 Kubernetes master 对 Service 对象和 Endpoints 对象的添加和移除。 对每个 Service，它会在本地 Node 上打开一个端口（随机选择）。 任何连接到“代理端口”的请求，都会被代理到 Service 的backend Pods 中的某个上面（如 Endpoints 所报告的一样）。 使用哪个 backend Pod，是 kube-proxy 基于 SessionAffinity 来确定的。</p>
+<p>最后，它安装 iptables 规则，捕获到达该 Service 的 clusterIP（是虚拟 IP）和 Port 的请求，并重定向到代理端口，代理端口再代理请求到 backend Pod。</p>
+<p>默认情况下，用户空间模式下的kube-proxy通过循环算法选择后端。</p>
+<p>默认的策略是，通过 round-robin 算法来选择 backend Pod。</p>
+<ol start="2">
+<li>iptables 实现</li>
+</ol>
+<p>由 iptables 实现的 service 访问后端时候，调度算法是随机一个后端 POD</p>
+<ol start="3">
+<li>ipvs 实现</li>
+</ol>
+<p>IPVS 代理模式基于类似于 iptables 模式的 netfilter 挂钩函数，但是使用哈希表作为基础数据结构，并且在内核空间中工作。这意味着，与 iptables 模式下的 kube-proxy 相比，IPVS 模式下的 kube-proxy 重定向通信的延迟要短，并且在同步代理规则时具有更好的性能。与其他代理模式相比，IPVS 模式还支持更高的网络流量吞吐量。</p>
+<p>由 ipvs 实现的 service 访问后端时候，可用的调度算法有：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">rr: round-robin</span><br><span class="line">lc: least connection (smallest number of open connections)</span><br><span class="line">dh: destination hashing</span><br><span class="line">sh: source hashing</span><br><span class="line">sed: shortest expected delay</span><br><span class="line">nq: never queue</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>  要在 IPVS 模式下运行 kube-proxy，必须在启动 kube-proxy 之前使 IPVS Linux 在节点上可用，当 kube-proxy 以 IPVS 代理模式启动时，它将验证 IPVS 内核模块是否可用。 如果未检测到 IPVS 内核模块，则 kube-proxy 将退回到以 iptables 代理模式运行。</p>
+</blockquote>
+<h2 id="资源记录"><a href="#资源记录" class="headerlink" title="资源记录"></a>资源记录</h2><p>如果 Service 地址一般是固定的，但是不宜使用 Service 的 ClusterIP（集群级别唯一IP） 作为访问端点，</p>
+<p>默认情况下，Serrvice 对象会在 coredns 上注册一个域名，解析格式为：SVC_NAME.NS_NAME.DOMAIN.LTD，例如：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">redis.default.svc.cluster.local.</span><br></pre></td></tr></table></figure>
+<p>那么就可以通过 Service 注册在 coredns 上的地址来访问这个 Service 了。</p>
+<h2 id="无-selector-的-Service"><a href="#无-selector-的-Service" class="headerlink" title="无 selector 的 Service"></a>无 selector 的 Service</h2><p>Service 并不直接链接至 Pod，中间还有一层 Endpoints 资源对象(IP地址和端口组成的列表)，Endpoint 是 k8s 集群中的一个资源对象，存储在 etcd 中，用来记录一个 service 对应的所有 pod 的访问地址。</p>
+<p>默认情况下创建 Service 时，其关联的 Endpoints 对象会被 endpoint controller 自动创建，一个 Service 对象就是工作节点上的一些 iptables 或 ipvs 规则，由 kube-proxy 实时维护。、</p>
+<p>service 需要配置 selector 字段，否则，不会生成 endpoint 对象。</p>
+<p>我们可以手动新建无 selector 的 Service 和 endpoints 将他们关联，手动新建的 endpoints 可以指向外部服务，这样就可以实现将 K8S 集群外部的服务通过 Service 引入到集群中。</p>
 <ul>
-<li>memtester</li>
+<li>自定义 endpoint 将外部服务映射为内部服务</li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">内存测试 http://pyropus.ca/software/memtester/</span><br></pre></td></tr></table></figure>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Endpoints</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line"><span class="attr">  name:</span> <span class="string">mysql</span></span><br><span class="line"><span class="attr">  namespace:</span> <span class="string">default</span></span><br><span class="line"><span class="attr">subsets:</span></span><br><span class="line"><span class="attr">- addresses:</span></span><br><span class="line"><span class="attr">  - ip:</span> <span class="number">10.42</span><span class="number">.1</span><span class="number">.91</span></span><br><span class="line"><span class="attr">  - ip:</span> <span class="number">10.42</span><span class="number">.2</span><span class="number">.76</span></span><br><span class="line"><span class="attr">  ports:</span></span><br><span class="line"><span class="attr">  - name:</span> <span class="string">mysql</span></span><br><span class="line"><span class="attr">    port:</span> <span class="number">3306</span></span><br><span class="line"><span class="attr">    protocol:</span> <span class="string">TCP</span></span><br></pre></td></tr></table></figure>
+<h2 id="Service-清单定义"><a href="#Service-清单定义" class="headerlink" title="Service 清单定义"></a>Service 清单定义</h2><ul>
+<li>清单组成</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">apiVersion	&lt;string&gt;                <span class="comment"># api 版本号，v1</span></span><br><span class="line">kind	    &lt;string&gt;                <span class="comment"># 资源类别，标记创建什么类型的资源</span></span><br><span class="line">metadata    &lt;Object&gt;                <span class="comment"># 元数据</span></span><br><span class="line">spec	    &lt;Object&gt;                <span class="comment"># 期望状态</span></span><br><span class="line">  selector  &lt;map[string]string&gt;     <span class="comment"># 标签选择器字段</span></span><br><span class="line">  <span class="built_in">type</span>      &lt;string&gt;                <span class="comment"># service 类型</span></span><br></pre></td></tr></table></figure>
 <ul>
-<li>硬盘测试</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">硬盘写入：time dd if=/dev/zero of=test.data bs=100M count=2，time dd if=/dev/zero of=test.data bs=4k count=100000</span><br><span class="line">硬盘读取：time dd if=/dev/sda of=/dev/null bs=4k</span><br></pre></td></tr></table></figure>
-<h2 id="相关命令"><a href="#相关命令" class="headerlink" title="相关命令"></a>相关命令</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">yum install -y sysstat bind-utils iotop nload bwm-ng nethogs iftop</span><br></pre></td></tr></table></figure>
-<h1 id="进程相关"><a href="#进程相关" class="headerlink" title="进程相关"></a>进程相关</h1><h2 id="pidof-通过名称查找pid"><a href="#pidof-通过名称查找pid" class="headerlink" title="pidof 通过名称查找pid"></a>pidof 通过名称查找pid</h2><ul>
-<li>作用</li>
-</ul>
-<p>通过精确的进程名称查找进程的pid</p>
-<ul>
-<li>示例</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@yangjinheng data]# pidof ssh</span><br><span class="line">[root@yangjinheng data]# pidof sshd</span><br><span class="line">13119 730</span><br></pre></td></tr></table></figure>
-<h2 id="pgrep-通过名称模糊查找pid"><a href="#pgrep-通过名称模糊查找pid" class="headerlink" title="pgrep 通过名称模糊查找pid"></a>pgrep 通过名称模糊查找pid</h2><ul>
-<li>作用</li>
-</ul>
-<p>通过模糊的进程名称查找进程的 pid</p>
-<ul>
-<li>示例</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@yangjinheng data]# pgrep sshd</span><br><span class="line">730</span><br><span class="line">13119</span><br><span class="line">13342</span><br><span class="line">13343</span><br><span class="line">[root@yangjinheng data]# pgrep ssh</span><br><span class="line">730</span><br><span class="line">13119</span><br></pre></td></tr></table></figure>
-<h1 id="CPU内存"><a href="#CPU内存" class="headerlink" title="CPU内存"></a>CPU内存</h1><h2 id="lscpu-CPU信息"><a href="#lscpu-CPU信息" class="headerlink" title="lscpu CPU信息"></a>lscpu CPU信息</h2><ul>
-<li>作用</li>
-</ul>
-<p>查看 CPU 信息</p>
-<ul>
-<li>示例</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@www ~]# lscpu </span><br><span class="line">Architecture:          x86_64</span><br><span class="line">CPU op-mode(s):        32-bit, 64-bit</span><br><span class="line">Byte Order:            Little Endian</span><br><span class="line">CPU(s):                8</span><br><span class="line">On-line CPU(s) list:   0-7</span><br><span class="line">Thread(s) per core:    1</span><br><span class="line">Core(s) per socket:    8</span><br><span class="line">Socket(s):             1</span><br><span class="line">NUMA node(s):          1</span><br><span class="line">Vendor ID:             GenuineIntel</span><br><span class="line">CPU family:            6</span><br><span class="line">Model:                 60</span><br><span class="line">Model name:            Intel(R) Core(TM) i7-4712MQ CPU @ 2.30GHz</span><br><span class="line">Stepping:              3</span><br><span class="line">CPU MHz:               2301.000</span><br><span class="line">BogoMIPS:              4602.00</span><br><span class="line">Hypervisor vendor:     VMware</span><br><span class="line">Virtualization type:   full</span><br><span class="line">L1d cache:             32K</span><br><span class="line">L1i cache:             32K</span><br><span class="line">L2 cache:              256K</span><br><span class="line">L3 cache:              6144K</span><br><span class="line">NUMA node0 CPU(s):     0-7</span><br><span class="line">Flags:                 fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ss ht syscall nx pdpe1gb rdtscp lm constant_tsc arch_perfmon nopl xtopology tsc_reliable nonstop_tsc eagerfpu pni pclmulqdq ssse3 fma cx16 pcid sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand hypervisor lahf_lm abm ibrs ibpb stibp fsgsbase tsc_adjust bmi1 avx2 smep bmi2 invpcid xsaveopt arat spec_ctrl intel_stibp arch_capabilities</span><br></pre></td></tr></table></figure>
-<h2 id="uptime-系统负载"><a href="#uptime-系统负载" class="headerlink" title="uptime 系统负载"></a>uptime 系统负载</h2><ul>
-<li>作用</li>
-</ul>
-<p>显示系统正常运行的时间，当前多少用户登陆终端，过去的1分钟、5分钟、15分钟系统平均负载，与 <code>w、top</code> 命令结果的第一行相同。</p>
-<ul>
-<li>示例</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[root@www ~]<span class="comment"># uptime</span></span><br><span class="line"> 11:38:02 up 10 min,  4 users,  load average: 3.56, 1.63, 0.68</span><br></pre></td></tr></table></figure>
-<ul>
-<li>负载平均值含义</li>
-</ul>
-<p>系统负载平均值是处于可运行或不可中断状态的平均进程数，处于可运行状态的进程要么正在使用 CPU ，要么等待使用 CPU ，处于不可中断状态的进程正在等待某些 I/O 访问，例如等待磁盘 I/O 完成，负载平均值不是一个标准化的值，它与系统中 CPU 的数量相关，如：对于单颗 CPU 平均负载为 1 表示系统满负荷工作，而对于 4 颗 CPU 则表示系统的 75% 时间处于空闲状态。</p>
-<h2 id="w-用户负载"><a href="#w-用户负载" class="headerlink" title="w 用户负载"></a>w 用户负载</h2><ul>
-<li>作用</li>
-</ul>
-<p>查询登录当前系统的用户信息，以及这些用户目前正在做什么操作，它的第一行与 uptime 是一样的</p>
-<ul>
-<li>示例</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@www ~]# w</span><br><span class="line"> 10:01:13 up 23 min,  1 user,  load average: 0.00, 0.01, 0.01</span><br><span class="line">USER     TTY      FROM             LOGIN@   IDLE   JCPU   PCPU WHAT</span><br><span class="line">root     pts/0    172.16.100.2     09:37    1.00s  0.19s  0.00s w</span><br></pre></td></tr></table></figure>
-<ul>
-<li>字段含义</li>
+<li>service 类型</li>
 </ul>
 <table>
 <thead>
 <tr>
-<th>字段</th>
-<th>含义</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>USER</td>
-<td>登陆用户名</td>
-</tr>
-<tr>
-<td>TTY</td>
-<td>虚拟终端号</td>
-</tr>
-<tr>
-<td>FROM</td>
-<td>来自哪个 IP 地址</td>
-</tr>
-<tr>
-<td>LOGIN@</td>
-<td>什么时间登陆的</td>
-</tr>
-<tr>
-<td>JCPU</td>
-<td>JCPU 时间是隶属于 tty 的所有进程使用的时间，它不包括过去的后台作业，但包含当前运行的后台作业。</td>
-</tr>
-<tr>
-<td>PCPU</td>
-<td>PCPU 时间是当前进程使用的时间。</td>
-</tr>
-<tr>
-<td>WHAT</td>
-<td>当前运行的程序名称是什么。</td>
-</tr>
-</tbody>
-</table>
-<h2 id="top-进程信息"><a href="#top-进程信息" class="headerlink" title="top 进程信息"></a>top 进程信息</h2><ul>
-<li>作用</li>
-</ul>
-<p>持续显示 Linux 进程信息</p>
-<ul>
-<li>示例</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">top - 15:29:25 up  2:45,  2 users,  load average: 0.49, 0.99, 0.86</span><br><span class="line">Tasks: 201 total,   3 running, 198 sleeping,   0 stopped,   0 zombie</span><br><span class="line">%Cpu(s): 12.6 us,  0.2 sy,  0.0 ni, 87.2 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st</span><br><span class="line">KiB Mem :   481232 total,     5880 free,   417856 used,    57496 buff/cache</span><br><span class="line">KiB Swap:   524284 total,   481608 free,    42676 used.    16724 avail Mem </span><br><span class="line"></span><br><span class="line">   PID USER      PR  NI    VIRT    RES    SHR S  %CPU %MEM     TIME+ COMMAND                                 </span><br><span class="line">  6385 root      20   0  362628 358492      0 R 100.0 74.5   0:05.44 memtester                               </span><br><span class="line">  6386 root      20   0  161968   1876   1128 R   1.7  0.4   0:00.26 top                                     </span><br><span class="line">     1 root      20   0  191248    528      4 S   0.0  0.1   0:02.40 systemd                                 </span><br><span class="line">     2 root      20   0       0      0      0 S   0.0  0.0   0:00.08 kthreadd                                </span><br><span class="line">     3 root      20   0       0      0      0 S   0.0  0.0   0:00.03 ksoftirqd/0                             </span><br><span class="line">     5 root       0 -20       0      0      0 S   0.0  0.0   0:00.00 kworker/0:0H                            </span><br><span class="line">     7 root      rt   0       0      0      0 S   0.0  0.0   0:00.28 migration/0                             </span><br><span class="line">     8 root      20   0       0      0      0 S   0.0  0.0   0:00.00 rcu_bh                                  </span><br><span class="line">     9 root      20   0       0      0      0 S   0.0  0.0   0:01.67 rcu_sched</span><br></pre></td></tr></table></figure>
-<ul>
-<li>Tasks 行含义</li>
-</ul>
-<table>
-<thead>
-<tr>
-<th>字段</th>
-<th>含义</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>total</td>
-<td>总任务数</td>
-</tr>
-<tr>
-<td>running</td>
-<td>处于运行状态的任务数</td>
-</tr>
-<tr>
-<td>sleeping</td>
-<td>处于睡眠状态的任务数</td>
-</tr>
-<tr>
-<td>stopped</td>
-<td>处于停止状态的任务数</td>
-</tr>
-<tr>
-<td>zombie</td>
-<td>处于僵尸状态的任务树</td>
-</tr>
-</tbody>
-</table>
-<ul>
-<li>%Cpu(s) 行含义</li>
-</ul>
-<table>
-<thead>
-<tr>
-<th>字段</th>
-<th>含义</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>us</td>
-<td>所有进程用户态消耗CPU的时间百分比，较高时，说明进程用户态消耗的CPU时间多，如果长期大于50%，需要考虑优化应用程序。</td>
-</tr>
-<tr>
-<td>sy</td>
-<td>所有进程内核态消耗CPU的时间百分比。较高时，说明进程内核态消耗的CPU时间多；如果us+sy超过80%，就表明CPU资源存在不足。</td>
-</tr>
-<tr>
-<td>ni</td>
-<td>用做nice加权的进程分配的用户态cpu时间百分比。</td>
-</tr>
-<tr>
-<td>id</td>
-<td>CPU处在空闲状态的时间百分比。</td>
-</tr>
-<tr>
-<td>wa</td>
-<td>进程IO等待所占CPU时间百分比，wa 值越高，说明IO等待越严重。如果wa值超过20%，说明IO等待严重。</td>
-</tr>
-<tr>
-<td>hi</td>
-<td>硬中断消耗CPU时间百分比</td>
-</tr>
-<tr>
-<td>si</td>
-<td>软中断消耗CPU时间百分比</td>
-</tr>
-<tr>
-<td>st</td>
-<td>虚拟机使用CPU时间百分比</td>
-</tr>
-</tbody>
-</table>
-<ul>
-<li>KiB Mem</li>
-</ul>
-<table>
-<thead>
-<tr>
-<th>字段</th>
-<th>含义</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>total</td>
-<td>总内存大小</td>
-</tr>
-<tr>
-<td>free</td>
-<td>空闲内存大小</td>
-</tr>
-<tr>
-<td>used</td>
-<td>已使用内存大小</td>
-</tr>
-<tr>
-<td>buff/cache</td>
-<td>已缓冲、缓存内存大小</td>
-</tr>
-</tbody>
-</table>
-<ul>
-<li>KiB Swap</li>
-</ul>
-<table>
-<thead>
-<tr>
-<th>字段</th>
-<th>含义</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>total</td>
-<td>总交换分区大小</td>
-</tr>
-<tr>
-<td>free</td>
-<td>空闲交换分区大小</td>
-</tr>
-<tr>
-<td>used</td>
-<td>已使用交换分区大小</td>
-</tr>
-<tr>
-<td>avail Mem</td>
-<td>可用于进程下一次分配的<strong>物理内存数量</strong></td>
-</tr>
-</tbody>
-</table>
-<ul>
-<li>字段含义</li>
-</ul>
-<table>
-<thead>
-<tr>
-<th>字段</th>
-<th>含义</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>PID</td>
-<td>进程 ID</td>
-</tr>
-<tr>
-<td>USER</td>
-<td>进程用户</td>
-</tr>
-<tr>
-<td>PR</td>
-<td>进程的邮件级别，动态优先级，是内核展示给用户看的。</td>
-</tr>
-<tr>
-<td>NI</td>
-<td>Nice 值，静态优先级，这个值越小，表示进程 ”优先级” 越高，可用过 nice 命令调整。</td>
-</tr>
-<tr>
-<td>VIRT</td>
-<td>Virtual Memory Usage 虚拟内存，表示进程需要的内存量，单位KB。</td>
-</tr>
-<tr>
-<td>RES</td>
-<td>Resident Memory Usage 常驻内存，单位KB，表示进程实际占用的内存量，单位KB。</td>
-</tr>
-<tr>
-<td>SHR</td>
-<td>Shared Memory 共享内存，单位KB，进程虽然使用了某个共享库的一个函数，但会显示整个库占用内存量。</td>
-</tr>
-<tr>
-<td>S</td>
-<td>进程状态，有：（R=运行）,（D=不可中断的睡眠状态）,（S=睡眠）,（T=跟踪/停止）,（Z=僵尸进程）</td>
-</tr>
-<tr>
-<td>%CPU</td>
-<td>进程占用 CPU 百分比，例如；一个进程以多线程运行在 8 核 CPU 上，可能达到 800</td>
-</tr>
-<tr>
-<td>%MEM</td>
-<td>进程占用总内存百分比。</td>
-</tr>
-<tr>
-<td>TIME+</td>
-<td>进程运行时间</td>
-</tr>
-<tr>
-<td>COMMAND</td>
-<td>进程名称</td>
-</tr>
-</tbody>
-</table>
-<ul>
-<li>使用技巧</li>
-</ul>
-<table>
-<thead>
-<tr>
-<th>名称</th>
+<th>类型</th>
 <th>作用</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><code>大写A</code></td>
-<td>分类显示各种资源占用最高的进程，快速定位进程</td>
+<td>ClusterIP</td>
+<td>默认值，分配一个 Service 网络中的 IP 地址，仅用于集群内部通信</td>
 </tr>
 <tr>
-<td><code>大写 P</code></td>
-<td>按 CPU 使用排序</td>
+<td>NodePort</td>
+<td>如果需要集群外部访问，可以使用这个类型</td>
 </tr>
 <tr>
-<td><code>大写M</code></td>
-<td>按 内存 使用排序</td>
+<td>ExternalName</td>
+<td>把集群外部的服务引入到集群内部，方便在集群内部使用</td>
 </tr>
 <tr>
-<td><code>大写H</code></td>
-<td>查看每个线程</td>
-</tr>
-<tr>
-<td><code>x、z</code></td>
-<td>高亮显示，能快速定位正在运行的程序</td>
-</tr>
-<tr>
-<td><code>f</code></td>
-<td>定制显示格式</td>
-</tr>
-<tr>
-<td><code>c</code></td>
-<td>显示完整的COMMAND</td>
+<td>LoadBalancer</td>
+<td>K8S 工作在云环境中，调用云环境创建负载均衡器</td>
 </tr>
 </tbody>
 </table>
-<h2 id="vmstat-虚拟内存统计"><a href="#vmstat-虚拟内存统计" class="headerlink" title="vmstat 虚拟内存统计"></a>vmstat 虚拟内存统计</h2><ul>
-<li>作用</li>
-</ul>
-<p>报告虚拟内存统计信息</p>
+<h2 id="service-spec-规范"><a href="#service-spec-规范" class="headerlink" title="service.spec 规范"></a>service.spec 规范</h2><ol>
+<li>clusterIP：指定 Service 处于 service 网络的哪个 IP，默认为动态分配</li>
+<li>type： service 类型，可用：ExternalName, ClusterIP, NodePort, and LoadBalancer</li>
+</ol>
+<h2 id="ClusterIP-类型的-service"><a href="#ClusterIP-类型的-service" class="headerlink" title="ClusterIP 类型的 service"></a>ClusterIP 类型的 service</h2><figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Service</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line"><span class="attr">  name:</span> <span class="string">redis</span></span><br><span class="line"><span class="attr">  namespace:</span> <span class="string">default</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line"><span class="attr">  selector:</span></span><br><span class="line"><span class="attr">    app:</span> <span class="string">redis</span></span><br><span class="line"><span class="attr">    role:</span> <span class="string">logstor</span></span><br><span class="line"><span class="attr">  type:</span> <span class="string">ClusterIP</span></span><br><span class="line"><span class="attr">  clusterIP:</span> <span class="number">10.96</span><span class="number">.0</span><span class="number">.100</span></span><br><span class="line"><span class="attr">  ports:</span></span><br><span class="line"><span class="attr">    - port:</span> <span class="number">6379</span>         <span class="comment"># service 端口</span></span><br><span class="line"><span class="attr">      targetPort:</span> <span class="number">6379</span>   <span class="comment"># pod 监听的端口</span></span><br><span class="line"><span class="attr">      protocol:</span> <span class="string">TCP</span></span><br></pre></td></tr></table></figure>
+<h2 id="NodePort-类型的-service"><a href="#NodePort-类型的-service" class="headerlink" title="NodePort 类型的 service"></a>NodePort 类型的 service</h2><p>NodePort 是在 ClusterIP 类型上增加了一个暴露在了 node 的网络命名空间上的一个 nodePort，所以用户可以从集群外部访问到集群了，因而用户的请求流程是：Client -&gt; NodeIP:NodePort -&gt; ClusterIP:ServicePort -&gt; PodIP:ContainerPort。</p>
+<p>可以理解为 NodePort 增强了 ClusterIP 的功能，让客户端可以在每个集群外部访问任意一个 nodeip 从而访问到 clusterIP，再由 clusterIP 进行负载均衡至 POD。</p>
 <ul>
-<li>选项</li>
+<li>清单示例</li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">-a：显示活动内页；</span><br><span class="line">-f：显示启动后创建的进程总数；</span><br><span class="line">-m：显示slab信息；</span><br><span class="line">-n：头信息仅显示一次；</span><br><span class="line">-s：以表格方式显示事件计数器和内存状态；</span><br><span class="line">-d：报告磁盘状态；</span><br><span class="line">-p：显示指定的硬盘分区状态；</span><br><span class="line">-S：输出信息的单位。</span><br></pre></td></tr></table></figure>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Service</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line"><span class="attr">  name:</span> <span class="string">myapp</span></span><br><span class="line"><span class="attr">  namespace:</span> <span class="string">default</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line"><span class="attr">  selector:</span></span><br><span class="line"><span class="attr">    app:</span> <span class="string">myapp</span></span><br><span class="line"><span class="attr">    release:</span> <span class="string">canary</span></span><br><span class="line"><span class="attr">  type:</span> <span class="string">NodePort</span></span><br><span class="line"><span class="attr">  ports:</span></span><br><span class="line"><span class="attr">    - port:</span> <span class="number">80</span>           <span class="comment"># service 端口</span></span><br><span class="line"><span class="attr">      targetPort:</span> <span class="number">80</span>     <span class="comment"># pod 监听的端口</span></span><br><span class="line"><span class="attr">      nodePort:</span> <span class="number">30080</span>    <span class="comment"># service 会在每个 node 上添加 iptables/ipvs 规则重定向这个端口的访问，所以必须保证所有 node 的这个端口没被占用</span></span><br><span class="line"><span class="attr">      protocol:</span> <span class="string">TCP</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">在集群外部就可以使用：http://172.16.100.102:30080 来访问这个 service 地址了</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">在集群内可以使用 service 的域名在 coredns 上解析得到 service 地址：dig -t A myapp.default.svc.cluster.local @10.96.0.10</span><br></pre></td></tr></table></figure>
+<h2 id="loadBalancerIP-类型"><a href="#loadBalancerIP-类型" class="headerlink" title="loadBalancerIP 类型"></a>loadBalancerIP 类型</h2><p>service 在每台主机的 iptables/ipvs 规则内，访问任意一台 node 都可以到达 pod，所以应该在这些 nodeip 前加负载均衡器，如果工作在公有云，可以使用 k8s 内置的 loadBalancerIP，操作公有云的负载均衡器即服务，实现动态的增删。</p>
+<p>可以理解为 loadBalancerIP 增强了 NodePort 类型的 service ，在集群外部对每台 nodeip 进行负载均衡。</p>
+<h2 id="无集群地址的-Service"><a href="#无集群地址的-Service" class="headerlink" title="无集群地址的 Service"></a>无集群地址的 Service</h2><p>无头 service 表示 service 没有 ClusterIP 也不映射 NodePort，而是将 service 的域名直接解析为 nodeIP 从而直接访问 nodeIP 上的 POD。</p>
 <ul>
-<li>示例</li>
+<li>清单示例</li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">procs -----------memory---------- ---swap-- -----io---- -system-- ------cpu-----</span><br><span class="line"> r  b   swpd   free   buff  cache   si   so    bi    bo   in   cs us sy id wa st</span><br><span class="line">26  0  43244 316700     28  88092    0    0     0     0 8061  954 100  0  0  0  0</span><br><span class="line">24  0  43244 316700     28  88092    0    0     0     0 7701  970 100  0  0  0  0</span><br><span class="line">24  0  43244 316604     28  88172    0    0     0     0 7966  974 100  0  0  0  0</span><br><span class="line">24  0  43244 316604     28  88172    0    0     0     0 8059  964 100  0  0  0  0</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">apiVersion: v1</span><br><span class="line">kind: Service</span><br><span class="line">metadata:</span><br><span class="line">  name: myapp-nohead</span><br><span class="line">  namespace: default</span><br><span class="line">spec:</span><br><span class="line">  selector:</span><br><span class="line">    app: myapp-nohead</span><br><span class="line">    release: canary</span><br><span class="line">  type: ClusterIP</span><br><span class="line">  clusterIP: None</span><br><span class="line">  ports:</span><br><span class="line">    - port: 80         # service 端口</span><br><span class="line">      targetPort: 80   # pod 监听的端口</span><br></pre></td></tr></table></figure>
 <ul>
-<li>vmstat 字段含义</li>
+<li>查看 CoreDNS 服务器的地址</li>
 </ul>
-<table>
-<thead>
-<tr>
-<th>字段</th>
-<th>含义</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>r</td>
-<td>表示有多少个任务在运行，一秒钟之内平均有多少进程在使用CPU，排队或者计算。</td>
-</tr>
-<tr>
-<td>b</td>
-<td>等待磁盘IO或者IO调用的完成而被阻塞进程数量。</td>
-</tr>
-<tr>
-<td>swpd</td>
-<td>使用 swap 分区的大小，值大并且不断变化，则内存溢出或者有问题。</td>
-</tr>
-<tr>
-<td>free</td>
-<td>空闲物理内存大小，如果free很少，但是si和so也很少（大多时候是0），那么不用担心，系统性能这时不会受到影响的。</td>
-</tr>
-<tr>
-<td>buff</td>
-<td>用作缓冲的内存大小。</td>
-</tr>
-<tr>
-<td>cache</td>
-<td>用作缓存的内存大小，cache 值大的时候，说明cache处的文件数多，如果频繁访问到的文件都能被cache处，那么磁盘的读IO bi会非常小。</td>
-</tr>
-<tr>
-<td>si</td>
-<td>每秒从交换区写到内存的大小，由磁盘调入内存。</td>
-</tr>
-<tr>
-<td>so</td>
-<td>每秒写入交换区的内存大小，由内存调入磁盘，如果si so长期大于0时，系统性能会受到影响，磁盘IO和CPU资源都会被消耗。</td>
-</tr>
-<tr>
-<td>bi</td>
-<td>每秒读取的块数</td>
-</tr>
-<tr>
-<td>bo</td>
-<td>每秒写入的块数，随机磁盘读写的时候，这2个值越大（如超出1024k)，能看到CPU在IO等待的值也会越大。</td>
-</tr>
-<tr>
-<td>in</td>
-<td>每秒中断数，包括时钟中断。</td>
-</tr>
-<tr>
-<td>cs</td>
-<td>每秒上下文切换数。这2个值越大，会看到由内核消耗的CPU时间会越大。</td>
-</tr>
-<tr>
-<td>us</td>
-<td>所有进程用户态消耗CPU的时间百分比，较高时，说明进程用户态消耗的CPU时间多，如果长期大于50%，需要考虑优化应用程序。</td>
-</tr>
-<tr>
-<td>sy</td>
-<td>所有进程内核态消耗CPU的时间百分比。较高时，说明进程内核态消耗的CPU时间多；如果us+sy超过80%，就表明CPU资源存在不足。</td>
-</tr>
-<tr>
-<td>id</td>
-<td>CPU处在空闲状态的时间百分比。</td>
-</tr>
-<tr>
-<td>wa</td>
-<td>进程IO等待所占CPU时间百分比，wa 值越高，说明IO等待越严重。如果wa值超过20%，说明IO等待严重。</td>
-</tr>
-<tr>
-<td>st</td>
-<td>虚拟机使用CPU时间百分比</td>
-</tr>
-</tbody>
-</table>
-<h2 id="sar-系统历史报告"><a href="#sar-系统历史报告" class="headerlink" title="sar 系统历史报告"></a>sar 系统历史报告</h2><ul>
-<li>作用</li>
-</ul>
-<p>收集，报告，保存系统活动信息。</p>
-<h3 id="整体CPU统计"><a href="#整体CPU统计" class="headerlink" title="整体CPU统计"></a>整体CPU统计</h3><p><code>sar -u</code>，显示负载，默认显示每十分钟的采样的历史信息</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">05:30:02 PM     CPU     %user     %nice   %system   %iowait    %steal     %idle</span><br><span class="line">05:40:01 PM     all      0.01      0.00      0.03      0.00      0.00     99.96</span><br><span class="line">05:50:01 PM     all      0.00      0.00      0.02      0.00      0.00     99.98</span><br><span class="line">06:00:01 PM     all      0.00      0.00      0.02      0.00      0.00     99.98</span><br><span class="line">06:10:01 PM     all      0.00      0.00      0.02      0.00      0.00     99.98</span><br><span class="line">06:20:01 PM     all      0.00      0.00      0.02      0.00      0.00     99.98</span><br><span class="line">06:30:01 PM     all      0.01      0.00      0.04      0.00      0.00     99.94</span><br><span class="line">06:40:01 PM     all     82.56      0.00      0.06      0.00      0.00     17.38</span><br><span class="line">Average:        all     11.99      0.18      0.67      0.06      0.00     87.10</span><br></pre></td></tr></table></figure>
-<h3 id="内存使用"><a href="#内存使用" class="headerlink" title="内存使用"></a>内存使用</h3><ul>
-<li><code>sar -r</code>，显示内存，默认显示每十分钟的采样的历史信息</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">12:50:01 PM kbmemfree kbmemused  %memused kbbuffers  kbcached  kbcommit   %commit  kbactive   kbinact   kbdirty</span><br><span class="line">05:30:02 PM    316476    164756     34.24        28     45020    215940     21.48      5692     45632         0</span><br><span class="line">05:40:01 PM    313176    168056     34.92        28     46376    215860     21.47      6856     46108         0</span><br><span class="line">05:50:01 PM    304360    176872     36.75        28     54044    215888     21.47      8516     53472         0</span><br><span class="line">06:00:01 PM    304352    176880     36.76        28     54136    215936     21.48      8476     53576         0</span><br><span class="line">06:10:01 PM    303344    177888     36.97        28     54736    215928     21.47      8492     54204         0</span><br><span class="line">06:20:01 PM    302964    178268     37.04        28     54764    215900     21.47      8596     54232         0</span><br><span class="line">06:30:01 PM    302684    178548     37.10        28     55040    215936     21.48      8748     54260         0</span><br><span class="line">06:40:01 PM    300564    180668     37.54        28     55364    251628     25.02      9724     54464         0</span><br><span class="line">Average:       222359    258873     53.79       709     61087    293767     29.22     37414     57209         2</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">kbmemfree：这个值和free命令中的free值基本一致,所以它不包括buffer和cache的空间.</span><br><span class="line">kbmemused：这个值和free命令中的used值基本一致,所以它包括buffer和cache的空间.</span><br><span class="line">%memused：物理内存使用率，这个值是kbmemused和内存总量(不包括swap)的一个百分比.</span><br><span class="line">kbbuffers和kbcached：这两个值就是free命令中的buffer和cache.</span><br><span class="line">kbcommit：保证当前系统所需要的内存,即为了确保不溢出而需要的内存(RAM+swap).</span><br><span class="line">%commit：这个值是kbcommit与内存总量(包括swap)的一个百分比.</span><br></pre></td></tr></table></figure>
-<h3 id="整体I-O"><a href="#整体I-O" class="headerlink" title="整体I/O"></a>整体I/O</h3><ul>
-<li><code>sar -b</code>，显示 I / O 和传输速率，默认显示每十分钟的采样的历史信息</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">12:50:01 PM       tps      rtps      wtps   bread/s   bwrtn/s</span><br><span class="line">05:30:02 PM    164.67    134.61     30.05  12152.04   9761.30</span><br><span class="line">05:40:01 PM      0.12      0.06      0.06      3.59      0.66</span><br><span class="line">05:50:01 PM      0.21      0.16      0.05     29.92      0.56</span><br><span class="line">06:00:01 PM      0.03      0.01      0.02      0.05      0.22</span><br><span class="line">06:10:01 PM      0.12      0.06      0.05      2.65      0.60</span><br><span class="line">06:20:01 PM      0.04      0.00      0.04      0.04      0.36</span><br><span class="line">06:30:01 PM      0.07      0.03      0.04      1.16      0.37</span><br><span class="line">06:40:01 PM      0.06      0.03      0.03      1.37      0.46</span><br><span class="line">Average:        33.90     27.52      6.38   3253.29   2420.23</span><br></pre></td></tr></table></figure>
-<h3 id="系统负载"><a href="#系统负载" class="headerlink" title="系统负载"></a>系统负载</h3><ul>
-<li><code>sar -q</code>，进程队列长度和平均负载状态，默认显示每十分钟的采样的历史信息</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">05:30:02 PM   runq-sz  plist-sz   ldavg-1   ldavg-5  ldavg-15   blocked</span><br><span class="line">05:40:01 PM         0       214      0.00      0.34      1.26         0</span><br><span class="line">05:50:01 PM         0       214      0.00      0.05      0.66         0</span><br><span class="line">06:00:01 PM         0       213      0.00      0.01      0.35         0</span><br><span class="line">06:10:01 PM         0       214      0.00      0.01      0.19         0</span><br><span class="line">06:20:01 PM         0       214      0.00      0.01      0.10         0</span><br><span class="line">06:30:01 PM         0       214      0.00      0.01      0.05         0</span><br><span class="line">06:40:01 PM         9       224      8.00      6.59      3.43         0</span><br><span class="line">06:50:01 PM         9       225      8.60      8.15      5.75         0</span><br><span class="line">Average:            1       215      1.23      1.35      1.23         0</span><br></pre></td></tr></table></figure>
-<h3 id="网络流量"><a href="#网络流量" class="headerlink" title="网络流量"></a>网络流量</h3><ul>
-<li><code>sar -n DEV</code>，显示网络接口信息，默认显示每十分钟的采样的历史信息，<code>sar -n DEV 1 10</code>，表示每 1 秒采样一次，共采样十次。</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@www ~]# sar -n DEV 1 3</span><br><span class="line">Linux 3.10.0-862.11.6.el7.x86_64 (www.node.com) 	09/23/2018 	_x86_64_	(8 CPU)</span><br><span class="line"></span><br><span class="line">10:07:31 PM     IFACE   rxpck/s   txpck/s    rxkB/s    txkB/s   rxcmp/s   txcmp/s  rxmcst/s</span><br><span class="line">10:07:32 PM     ens34      0.00      0.00      0.00      0.00      0.00      0.00      0.00</span><br><span class="line">10:07:32 PM        lo      0.00      0.00      0.00      0.00      0.00      0.00      0.00</span><br><span class="line">10:07:32 PM     ens33      0.00      0.00      0.00      0.00      0.00      0.00      0.00</span><br><span class="line"></span><br><span class="line">10:07:32 PM     IFACE   rxpck/s   txpck/s    rxkB/s    txkB/s   rxcmp/s   txcmp/s  rxmcst/s</span><br><span class="line">10:07:33 PM     ens34      0.00      0.00      0.00      0.00      0.00      0.00      0.00</span><br><span class="line">10:07:33 PM        lo      0.00      0.00      0.00      0.00      0.00      0.00      0.00</span><br><span class="line">10:07:33 PM     ens33      3.00      1.00      0.28      0.48      0.00      0.00      0.00</span><br><span class="line"></span><br><span class="line">10:07:33 PM     IFACE   rxpck/s   txpck/s    rxkB/s    txkB/s   rxcmp/s   txcmp/s  rxmcst/s</span><br><span class="line">10:07:34 PM     ens34      0.00      0.00      0.00      0.00      0.00      0.00      0.00</span><br><span class="line">10:07:34 PM        lo      0.00      0.00      0.00      0.00      0.00      0.00      0.00</span><br><span class="line">10:07:34 PM     ens33      2.00      1.00      0.17      0.48      0.00      0.00      0.00</span><br><span class="line"></span><br><span class="line">Average:        IFACE   rxpck/s   txpck/s    rxkB/s    txkB/s   rxcmp/s   txcmp/s  rxmcst/s</span><br><span class="line">Average:        ens34      0.00      0.00      0.00      0.00      0.00      0.00      0.00</span><br><span class="line">Average:           lo      0.00      0.00      0.00      0.00      0.00      0.00      0.00</span><br><span class="line">Average:        ens33      1.66      0.66      0.15      0.32      0.00      0.00      0.00</span><br></pre></td></tr></table></figure>
-<h3 id="磁盘IO"><a href="#磁盘IO" class="headerlink" title="磁盘IO"></a>磁盘IO</h3><ul>
-<li><code>sar -d -p</code>，显示各个磁盘的统计信息</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@www ~]# sar -d -p 1 3</span><br><span class="line">Linux 3.10.0-862.11.6.el7.x86_64 (www.node.com) 	09/23/2018 	_x86_64_	(8 CPU)</span><br><span class="line"></span><br><span class="line">10:20:34 PM       DEV       tps  rd_sec/s  wr_sec/s  avgrq-sz  avgqu-sz     await     svctm     %util</span><br><span class="line">10:20:35 PM       sda    336.00      0.00 344064.00   1024.00      0.44      1.32      0.91     30.70</span><br><span class="line"></span><br><span class="line">10:20:35 PM       DEV       tps  rd_sec/s  wr_sec/s  avgrq-sz  avgqu-sz     await     svctm     %util</span><br><span class="line">10:20:36 PM       sda    336.00      0.00 344064.00   1024.00      0.52      1.54      0.92     30.80</span><br><span class="line"></span><br><span class="line">10:20:36 PM       DEV       tps  rd_sec/s  wr_sec/s  avgrq-sz  avgqu-sz     await     svctm     %util</span><br><span class="line">10:20:37 PM       sda    343.00      0.00 351232.00   1024.00      0.56      1.65      0.89     30.40</span><br><span class="line"></span><br><span class="line">Average:          DEV       tps  rd_sec/s  wr_sec/s  avgrq-sz  avgqu-sz     await     svctm     %util</span><br><span class="line">Average:          sda    338.33      0.00 346453.33   1024.00      0.51      1.50      0.91     30.63</span><br></pre></td></tr></table></figure>
-<h2 id="pidstat-进程资源占用"><a href="#pidstat-进程资源占用" class="headerlink" title="pidstat 进程资源占用"></a>pidstat 进程资源占用</h2><ul>
-<li>作用</li>
-</ul>
-<p>用于监控全部或指定进程的 cpu、内存、线程、设备IO等系统资源的占用情况。</p>
-<p>pidstat 首次运行时显示自系统启动开始的各项统计信息，之后运行pidstat将显示自上次运行该命令以后的统计信息。用户可以通过指定统计的次数和时间来获得所需的统计信息。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl get svc -n kube-system</span><br></pre></td></tr></table></figure>
 <ul>
-<li>选项</li>
+<li>在集群内使用 CoreDNS 的地址解析无头的 serive 域名，得到的直接为 nodeip 中的 pod 地址，利用 dns 的多条 A 记录来负载均衡</li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">pidstat [ 选项 ] [ &lt;时间间隔&gt; ] [ &lt;次数&gt; ]</span><br><span class="line"></span><br><span class="line">选项：</span><br><span class="line">	-u 默认参数，显示各个进程的cpu使用统计</span><br><span class="line">	-w 显示每个进程的上下文切换情况</span><br><span class="line">	-r 显示各个进程的内存使用统计</span><br><span class="line">	-d 显示各个进程的IO使用情况</span><br><span class="line">	-p 指定进程号</span><br><span class="line">	-t 显示选择任务的线程的统计信息外的额外信息</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">dig -t A myapp-nohead.default.svc.cluster.local. @10.96.0.10</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">;; ANSWER SECTION:</span><br><span class="line">myapp-nohead.default.svc.cluster.local.	5 IN A	10.244.1.75</span><br><span class="line">myapp-nohead.default.svc.cluster.local.	5 IN A	10.244.2.74</span><br></pre></td></tr></table></figure>
+<h2 id="externalName-类型"><a href="#externalName-类型" class="headerlink" title="externalName 类型"></a>externalName 类型</h2><p>当 POD 需要访问一个集群外部的服务时候，externalName 可以映射一个集群外部的服务到集群内部，供集群内 POD 访问。</p>
+<p>就是把外部的一个域名地址，映射为集群内部 coredns 解析的一个内部地址，提供集群内部访问。</p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Service</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line"><span class="attr">  name:</span> <span class="string">external-redis-svc</span></span><br><span class="line"><span class="attr">  namespace:</span> <span class="string">default</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line"><span class="attr">  type:</span> <span class="string">ExternalName</span></span><br><span class="line"><span class="attr">  externalName:</span> <span class="string">redis.test.io</span>  <span class="comment"># 该域名在集群外必须可访问 貌似不支持修改hosts文件</span></span><br><span class="line"><span class="attr">  ports:</span></span><br><span class="line"><span class="attr">  - protocol:</span> <span class="string">TCP</span></span><br><span class="line"><span class="attr">    port:</span> <span class="number">6379</span></span><br><span class="line"><span class="attr">    targetPort:</span> <span class="number">6379</span></span><br><span class="line"><span class="attr">    nodePort:</span> <span class="number">0</span></span><br><span class="line"><span class="attr">  selector:</span> <span class="string">&#123;&#125;</span></span><br></pre></td></tr></table></figure>
+<h1 id="ingress-控制器"><a href="#ingress-控制器" class="headerlink" title="ingress 控制器"></a>ingress 控制器</h1><p>如果 k8s 需要提供一个网站，并且这个站点需要以 https 访问，而 iptables/ipvs 工作在 4 层，客户发出的 ssl 请求根本不被解析就被调度到后端 POD了。解决方法有两个：</p>
+<ol>
+<li><p>可以在公有云的负载均衡器上配置上 ssl 证书。</p>
+</li>
+<li><p>新建一个负载均衡器的 POD ，例如 nignx ，这个 POD 共享主机的网络命名空间，也就是说可以直接通过 nodeip 访问到负载均衡器，ssl 证书配置在这个负载均衡器上，对外连接为 https 而对内的代理为 http 协议到 POD 网络的 POD 上。</p>
+</li>
+</ol>
 <ul>
-<li>进程 CPU 使用查看</li>
+<li>存在的问题</li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">%usr 进程在用户空间占用cpu的百分比</span><br><span class="line">%system 进程在内核空间占用cpu的百分比</span><br><span class="line">%guest 进程在虚拟机占用cpu的百分比</span><br><span class="line">%CPU 进程占用cpu的百分比</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[wenba@fudao_service-account_002 ~]$ pidstat </span><br><span class="line">Linux 2.6.32-431.11.25.el6.ucloud.x86_64 (fudao_service-account_002) 	10/28/2018 	_x86_64_	(16 CPU)</span><br><span class="line"></span><br><span class="line">10:07:53 AM       PID    %usr %system  %guest    %CPU   CPU  Command</span><br><span class="line">10:07:53 AM         1    0.00    0.00    0.00    0.00     6  init</span><br><span class="line">10:07:53 AM         2    0.00    0.00    0.00    0.00     0  kthreadd</span><br><span class="line">10:07:53 AM         3    0.00    0.00    0.00    0.00     0  migration/0</span><br><span class="line">10:07:53 AM         4    0.00    0.00    0.00    0.00     0  ksoftirqd/0</span><br><span class="line">10:07:53 AM         6    0.00    0.00    0.00    0.00     0  watchdog/0</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">- 负载均衡器 POD 使用节点的网络名称空间，那么它只能在这个 node 节点上运行一个了，否则就出现端口冲突。</span><br><span class="line">- 负载均衡器是代理 POD 卸载 ssl 证书的关键节点，它不能只运行一个，它需要在所有节点运行一个。</span><br></pre></td></tr></table></figure>
 <ul>
-<li>进程内存查看</li>
+<li>解决方法</li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Minflt/s:任务每秒发生的次要错误，不需要从磁盘中加载页</span><br><span class="line">Majflt/s:任务每秒发生的主要错误，需要从磁盘中加载页</span><br><span class="line"></span><br><span class="line">VSZ：虚拟内存大小，表示进程申请需要的内存大小</span><br><span class="line">RSS：常驻内存，表示进程实际占用的内存大小</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[wenba@fudao_service-account_002 ~]$ pidstat -r</span><br><span class="line">Linux 2.6.32-431.11.25.el6.ucloud.x86_64 (fudao_service-account_002) 	10/28/2018 	_x86_64_	(16 CPU)</span><br><span class="line"></span><br><span class="line">09:59:34 AM       PID  minflt/s  majflt/s     VSZ    RSS   %MEM  Command</span><br><span class="line">09:59:34 AM         1      0.01      0.00   19232   1496   0.01  init</span><br><span class="line">09:59:34 AM       642      0.01      0.00   11012   1060   0.01  udevd</span><br><span class="line">09:59:34 AM       966      0.01      0.00   97908   3876   0.02  sshd</span><br><span class="line">09:59:34 AM       968      0.00      0.00   97908   1772   0.01  sshd</span><br><span class="line">09:59:34 AM       969      0.01      0.00  108324   1964   0.01  bash</span><br><span class="line">09:59:34 AM      1251      0.00      0.00  250000   2664   0.02  rsyslogd</span><br><span class="line">09:59:34 AM      1266      0.00      0.00   21432    904   0.01  dbus-daemon</span><br><span class="line">09:59:34 AM      1279      0.00      0.00    4080    652   0.00  acpid</span><br><span class="line">09:59:34 AM      1336      0.11      0.00  116876   1272   0.01  crond</span><br><span class="line">09:59:34 AM      1371      0.81      0.00  283168  26508   0.16  php-fpm</span><br><span class="line">09:59:34 AM      1372      0.66      0.00  284200  25696   0.16  php-fpm</span><br><span class="line">09:59:34 AM      1384      0.76      0.00  284728  26260   0.16  php-fpm</span><br><span class="line">09:59:34 AM      1444      0.49      0.00  265104  20108   0.12  php-fpm</span><br><span class="line">09:59:34 AM      1456      0.28      0.00  283496  25104   0.15  php-fpm</span><br><span class="line">09:59:34 AM      1468      0.30      0.00  283500  25044   0.15  php-fpm</span><br><span class="line">09:59:34 AM      1469      0.29      0.00  283408  26760   0.16  php-fpm</span><br><span class="line">09:59:34 AM      1484      0.22      0.00  283204  24752   0.15  php-fpm</span><br><span class="line">09:59:34 AM      1512      0.08      0.00  299296  51792   0.32  php-fpm</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">- 负载均衡器使用 DaemonSet 在每个 node 节点运行一个，代理请求至 POD 网络的中的 POD 上。</span><br><span class="line">- 如果集群节点非常的多，其实不必在每个 node 节点都必须运行一个负载均衡器 POD。</span><br><span class="line">- 控制负载均衡器 POD 运行的数量可以通过 lables 指定运行那几个 node 节点上。</span><br><span class="line">- 然后可以在负载均衡器 POD 所在的 node 节点上打上 “污点” 使其他的 POD 不会再被调度上来，而只有负载均衡器 POD 可以容忍这些 “污点”。</span><br></pre></td></tr></table></figure>
 <ul>
-<li>进程上下文切换</li>
+<li>负载均衡器可选，按照优先级先后排序</li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Cswch/s 每秒主动任务上下文切换数量</span><br><span class="line">Nvcswch/s 每秒被动任务上下文切换数量</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[wenba@fudao_service-account_002 ~]$ pidstat -w</span><br><span class="line">Linux 2.6.32-431.11.25.el6.ucloud.x86_64 (fudao_service-account_002) 	10/28/2018 	_x86_64_	(16 CPU)</span><br><span class="line"></span><br><span class="line">10:04:40 AM       PID   cswch/s nvcswch/s  Command</span><br><span class="line">10:04:40 AM         1      0.00      0.00  init</span><br><span class="line">10:04:40 AM         2      0.00      0.00  kthreadd</span><br><span class="line">10:04:40 AM         3      0.01      0.00  migration/0</span><br><span class="line">10:04:40 AM         4      0.39      0.00  ksoftirqd/0</span><br><span class="line">10:04:40 AM         5      0.00      0.00  migration/0</span><br></pre></td></tr></table></figure>
-<h1 id="文件磁盘"><a href="#文件磁盘" class="headerlink" title="文件磁盘"></a>文件磁盘</h1><h2 id="iotop-进程IO统计"><a href="#iotop-进程IO统计" class="headerlink" title="iotop 进程IO统计"></a>iotop 进程IO统计</h2><ul>
-<li>作用</li>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">Envoy            <span class="comment"># </span></span><br><span class="line">Traefik          <span class="comment"># 为微服务而生的反向代理</span></span><br><span class="line">Nginx            <span class="comment"># 改造后可以适用于微服务环境</span></span><br><span class="line">HAproxy          <span class="comment"># 不推荐使用</span></span><br></pre></td></tr></table></figure>
+<p>新建一个 service 将需要代理的不同服务的 pod 分类</p>
+<p>新建一个 ingress 资源，从 service 中取得分类结果，映射进 Envoy 中，重载 Envoy 软件。</p>
+<h2 id="ingress-spec-规范"><a href="#ingress-spec-规范" class="headerlink" title="ingress.spec 规范"></a>ingress.spec 规范</h2><ul>
+<li>API 和 kind</li>
 </ul>
-<p>监视Linux内核输出的I / O使用信息（需要2.6.20或更高版本）并显示一个表，系统上进程或线程的当前I / O使用情况。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">apiVersion：extensions</span><br><span class="line"></span><br><span class="line">kind：ingress</span><br></pre></td></tr></table></figure>
 <ul>
-<li>示例</li>
+<li>ingress.spec</li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Total DISK READ :	0.00 B/s | Total DISK WRITE :             0.00 B/s</span><br><span class="line">Actual DISK READ:	0.00 B/s | Actual DISK WRITE:             0.00 B/s</span><br><span class="line">   TID  PRIO  USER     DISK READ  DISK WRITE  SWAPIN     IO&gt;    COMMAND                                                        </span><br><span class="line">     1 be/4 root        0.00 B/s    0.00 B/s  0.00 %  0.00 % systemd --switched-root --system --deserialize 22</span><br><span class="line">     2 be/4 root        0.00 B/s    0.00 B/s  0.00 %  0.00 % [kthreadd]</span><br><span class="line">     3 be/4 root        0.00 B/s    0.00 B/s  0.00 %  0.00 % [ksoftirqd/0]</span><br><span class="line">     5 be/0 root        0.00 B/s    0.00 B/s  0.00 %  0.00 % [kworker/0:0H]</span><br><span class="line">     7 rt/4 root        0.00 B/s    0.00 B/s  0.00 %  0.00 % [migration/0]</span><br><span class="line">     8 be/4 root        0.00 B/s    0.00 B/s  0.00 %  0.00 % [rcu_bh]</span><br><span class="line">     9 be/4 root        0.00 B/s    0.00 B/s  0.00 %  0.00 % [rcu_sched]</span><br><span class="line">    10 be/0 root        0.00 B/s    0.00 B/s  0.00 %  0.00 % [lru-add-drain]</span><br><span class="line">    11 rt/4 root        0.00 B/s    0.00 B/s  0.00 %  0.00 % [watchdog/0]</span><br><span class="line">    12 rt/4 root        0.00 B/s    0.00 B/s  0.00 %  0.00 % [watchdog/1]</span><br><span class="line">    13 rt/4 root        0.00 B/s    0.00 B/s  0.00 %  0.00 % [migration/1]</span><br><span class="line">    14 be/4 root        0.00 B/s    0.00 B/s  0.00 %  0.00 % [ksoftirqd/1]</span><br><span class="line">    16 be/0 root        0.00 B/s    0.00 B/s  0.00 %  0.00 % [kworker/1:0H]</span><br><span class="line">    17 rt/4 root        0.00 B/s    0.00 B/s  0.00 %  0.00 % [watchdog/2]</span><br><span class="line">    18 rt/4 root        0.00 B/s    0.00 B/s  0.00 %  0.00 % [migration/2]</span><br><span class="line">    19 be/4 root        0.00 B/s    0.00 B/s  0.00 %  0.00 % [ksoftirqd/2]</span><br></pre></td></tr></table></figure>
-<h2 id="iostat-磁盘总-I-O"><a href="#iostat-磁盘总-I-O" class="headerlink" title="iostat 磁盘总 I/O"></a>iostat 磁盘总 I/O</h2><ul>
-<li>作用</li>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">backend         <span class="comment"># 后端有哪些 POD</span></span><br><span class="line">rules           <span class="comment"># 调度规则</span></span><br><span class="line">    host        <span class="comment"># 虚拟主机</span></span><br><span class="line">    http        <span class="comment"># http 路径</span></span><br></pre></td></tr></table></figure>
+<h2 id="ingress-nginx-代理"><a href="#ingress-nginx-代理" class="headerlink" title="ingress-nginx 代理"></a>ingress-nginx 代理</h2><ul>
+<li>后端 service 和 pods</li>
 </ul>
-<p>显示磁盘的总 I/O 使用情况</p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Service</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line"><span class="attr">  name:</span> <span class="string">service-ingress-myapp</span></span><br><span class="line"><span class="attr">  namespace:</span> <span class="string">default</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line"><span class="attr">  selector:</span></span><br><span class="line"><span class="attr">    app:</span> <span class="string">myapp</span></span><br><span class="line"><span class="attr">    release:</span> <span class="string">canary</span></span><br><span class="line"><span class="attr">  ports:</span></span><br><span class="line"><span class="attr">    - name:</span> <span class="string">http</span></span><br><span class="line"><span class="attr">      port:</span> <span class="number">80</span></span><br><span class="line"><span class="attr">      targetPort:</span> <span class="number">80</span></span><br><span class="line"></span><br><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">apps/v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Deployment</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line"><span class="attr">  name:</span> <span class="string">myapp</span></span><br><span class="line"><span class="attr">  namespace:</span> <span class="string">default</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line"><span class="attr">  replicas:</span> <span class="number">4</span></span><br><span class="line"><span class="attr">  selector:</span></span><br><span class="line"><span class="attr">    matchLabels:</span></span><br><span class="line"><span class="attr">      app:</span> <span class="string">myapp</span></span><br><span class="line"><span class="attr">      release:</span> <span class="string">canary</span></span><br><span class="line"><span class="attr">  template:</span></span><br><span class="line"><span class="attr">    metadata:</span></span><br><span class="line"><span class="attr">      labels:</span></span><br><span class="line"><span class="attr">        app:</span> <span class="string">myapp</span></span><br><span class="line"><span class="attr">        release:</span> <span class="string">canary</span></span><br><span class="line"><span class="attr">    spec:</span></span><br><span class="line"><span class="attr">      containers:</span></span><br><span class="line"><span class="attr">        - name:</span> <span class="string">myapp</span></span><br><span class="line"><span class="attr">          image:</span> <span class="string">ikubernetes/myapp:v2</span></span><br><span class="line"><span class="attr">          ports:</span></span><br><span class="line"><span class="attr">            - name:</span> <span class="string">http</span></span><br><span class="line"><span class="attr">              containerPort:</span> <span class="number">80</span></span><br></pre></td></tr></table></figure>
 <ul>
-<li>示例</li>
+<li>创建 ingress-nginx</li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@www ~]# iostat</span><br><span class="line">Linux 3.10.0-862.11.6.el7.x86_64 (www.node.com) 	09/23/2018 	_x86_64_	(8 CPU)</span><br><span class="line"></span><br><span class="line">avg-cpu:  %user   %nice %system %iowait  %steal   %idle</span><br><span class="line">           9.31    0.10    0.47    0.04    0.00   90.09</span><br><span class="line"></span><br><span class="line">Device:            tps    kB_read/s    kB_wrtn/s    kB_read    kB_wrtn</span><br><span class="line">sda              20.87       936.99      1336.76   34467913   49174178</span><br></pre></td></tr></table></figure>
-<h2 id="lsof-打开文件查看"><a href="#lsof-打开文件查看" class="headerlink" title="lsof 打开文件查看"></a>lsof 打开文件查看</h2><ul>
-<li>作用</li>
-</ul>
-<p>列出进程打开的文件，在 Linux 系统中一切皆文件，所以文件包含：磁盘文件，网络套接字，管道，设备和进程，有时候用于排查木马打开的文件，或者文件删除磁盘未释放的情况。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/mandatory.yaml</span><br></pre></td></tr></table></figure>
 <ul>
-<li>示例</li>
+<li>让 ingress-nginx 在集群外部访问</li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@www ~]# lsof -p 1</span><br><span class="line">COMMAND PID USER   FD      TYPE             DEVICE SIZE/OFF       NODE NAME</span><br><span class="line">systemd   1 root  cwd       DIR                8,4      242         64 /</span><br><span class="line">systemd   1 root  rtd       DIR                8,4      242         64 /</span><br><span class="line">systemd   1 root  txt       REG                8,4  1612152   51294425 /usr/lib/systemd/systemd</span><br><span class="line">systemd   1 root  mem       REG                8,4    20112       2609 /usr/lib64/libuuid.so.1.3.0</span><br><span class="line">systemd   1 root  mem       REG                8,4   261488       2615 /usr/lib64/libblkid.so.1.1.0</span><br><span class="line">systemd   1 root  mem       REG                8,4    90664     103457 /usr/lib64/libz.so.1.2.7</span><br><span class="line">systemd   1 root  mem       REG                8,4   157424     103662 /usr/lib64/liblzma.so.5.2.2</span><br><span class="line">systemd   1 root  mem       REG                8,4    23968     103699 /usr/lib64/libcap-ng.so.0.0.0</span><br><span class="line">systemd   1 root  mem       REG                8,4    19896     103514 /usr/lib64/libattr.so.1.1.0</span><br><span class="line">systemd   1 root  mem       REG                8,4    19776      74552 /usr/lib64/libdl-2.17.so</span><br><span class="line">systemd   1 root  mem       REG                8,4   402384     103534 /usr/lib64/libpcre.so.1.2.0</span><br><span class="line">systemd   1 root  mem       REG                8,4  2173512      74546 /usr/lib64/libc-2.17.so</span><br><span class="line">systemd   1 root  mem       REG                8,4   144792      74572 /usr/lib64/libpthread-2.17.so</span><br><span class="line">systemd   1 root  mem       REG                8,4    88776       2594 /usr/lib64/libgcc_s-4.8.5-20150702.so.1</span><br><span class="line">systemd   1 root  mem       REG                8,4    44448      74576 /usr/lib64/librt-2.17.so</span><br><span class="line">systemd   1 root  mem       REG                8,4   273616       2619 /usr/lib64/libmount.so.1.1</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/provider/baremetal/service-nodeport.yaml</span><br></pre></td></tr></table></figure>
 <ul>
-<li>字段说明</li>
+<li>创建 ingress 对象，它能将 ingress-nginx 与 service 关联，从而在 service 后主机发生变动的时候，反应在 ingress-nginx 这个容器的配置文件中</li>
 </ul>
-<table>
-<thead>
-<tr>
-<th>字段</th>
-<th>说明</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>COMMAND</td>
-<td>进程的名称</td>
-</tr>
-<tr>
-<td>PID</td>
-<td>进程标识符</td>
-</tr>
-<tr>
-<td>USER</td>
-<td>进程所有者</td>
-</tr>
-<tr>
-<td>FD</td>
-<td>文件描述符，应用程序通过文件描述符识别该文件</td>
-</tr>
-<tr>
-<td>TYPE</td>
-<td>文件类型，如DIR、REG等</td>
-</tr>
-<tr>
-<td>DEVICE</td>
-<td>指定磁盘的名称</td>
-</tr>
-<tr>
-<td>SIZE</td>
-<td>文件的大小</td>
-</tr>
-<tr>
-<td>NODE</td>
-<td>索引节点（文件在磁盘上的标识）</td>
-</tr>
-<tr>
-<td>NAME</td>
-<td>打开文件的确切名称</td>
-</tr>
-</tbody>
-</table>
-<p>FD文件描述符详细</p>
-<table>
-<thead>
-<tr>
-<th>FD类型</th>
-<th>说明</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>cwd</td>
-<td>该进程的工作目录</td>
-</tr>
-<tr>
-<td>txt</td>
-<td>该进程的二进制程序代码文件</td>
-</tr>
-<tr>
-<td>rtd</td>
-<td>进程的根目录</td>
-</tr>
-<tr>
-<td>mem</td>
-<td>内存映射文件</td>
-</tr>
-<tr>
-<td>1uW 中的 1</td>
-<td>表示打开文件的描述符，0：表示标准输出，1：表示标准输入2：表示标准错误</td>
-</tr>
-<tr>
-<td>1uW 中的 u</td>
-<td>可以是u（读写模式）、r（只读）、w（只写）、空格（未知未锁）、-（未知已锁）</td>
-</tr>
-<tr>
-<td>1uW 中的 W</td>
-<td>W 对整个文件进行写锁定，其他类型的锁可以查帮助</td>
-</tr>
-<tr>
-<td>其他</td>
-<td>其他类型的 FD 自行查看帮助</td>
-</tr>
-</tbody>
-</table>
-<h2 id="lsblk-分区查看"><a href="#lsblk-分区查看" class="headerlink" title="lsblk 分区查看"></a>lsblk 分区查看</h2><ul>
-<li>作用</li>
-</ul>
-<p>查看磁盘和分区信息</p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">extensions/v1beta1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Ingress</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line"><span class="attr">  name:</span> <span class="string">ingress-deploy-myapp</span></span><br><span class="line"><span class="attr">  namespace:</span> <span class="string">default</span></span><br><span class="line"><span class="attr">  annotations:</span></span><br><span class="line">    <span class="string">kubernetes.io/ingress.class:</span> <span class="string">"nginx"</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line"><span class="attr">  rules:</span></span><br><span class="line"><span class="attr">    - host:</span> <span class="string">myapp.jinheng.com</span>                       <span class="comment"># 基于主机名的访问</span></span><br><span class="line"><span class="attr">      http:</span></span><br><span class="line"><span class="attr">        paths:</span></span><br><span class="line"><span class="attr">          - path:</span>                                   <span class="comment"># 空的时候代表根，访问根的时候映射到 backend</span></span><br><span class="line"><span class="attr">            backend:</span>                                <span class="comment"># 后端的 service 的配置</span></span><br><span class="line"><span class="attr">              serviceName:</span> <span class="string">service-ingress-myapp</span>    <span class="comment"># 关联 service 从而获取到后端主机的变动</span></span><br><span class="line"><span class="attr">              servicePort:</span> <span class="number">80</span>                       <span class="comment"># 关联 service 的地址</span></span><br></pre></td></tr></table></figure>
 <ul>
-<li>示例</li>
+<li>查看 ingress-nginx 对外暴露的端口，这里为30080，和 30443 两个</li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@www ~]# lsblk </span><br><span class="line">NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT</span><br><span class="line">sda      8:0    0   30G  0 disk </span><br><span class="line">├─sda1   8:1    0  200M  0 part /boot/efi</span><br><span class="line">├─sda2   8:2    0    1G  0 part /boot</span><br><span class="line">├─sda3   8:3    0  512M  0 part [SWAP]</span><br><span class="line">└─sda4   8:4    0 28.3G  0 part /</span><br></pre></td></tr></table></figure>
-<h1 id="网络相关"><a href="#网络相关" class="headerlink" title="网络相关"></a>网络相关</h1><h2 id="ethtool-获取或修改网卡信息"><a href="#ethtool-获取或修改网卡信息" class="headerlink" title="ethtool 获取或修改网卡信息"></a>ethtool 获取或修改网卡信息</h2><ul>
-<li>作用</li>
-</ul>
-<p>查询或控制网络驱动程序和硬件设置</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl get service -n ingress-nginx</span><br></pre></td></tr></table></figure>
 <ul>
-<li>示例</li>
+<li>使用 nodeip + ingress-nginx 暴露端口访问，由于上面创建的 ingress 为基于主机名称的，所以需要在访问时在 /etc/hosts 做好映射到 node。</li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ethtool ens33</span><br></pre></td></tr></table></figure>
-<h2 id="nload-总流量统计"><a href="#nload-总流量统计" class="headerlink" title="nload 总流量统计"></a>nload 总流量统计</h2><ul>
-<li>作用</li>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">http://myapp.jinheng.com:30080/index.html</span><br></pre></td></tr></table></figure>
+<h2 id="ingress-tomcat-代理"><a href="#ingress-tomcat-代理" class="headerlink" title="ingress-tomcat 代理"></a>ingress-tomcat 代理</h2><ul>
+<li>后端 service 和 pods</li>
 </ul>
-<p>实时查看网络接口的流入流出流量</p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Service</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line"><span class="attr">  name:</span> <span class="string">service-ingress-tomcat</span></span><br><span class="line"><span class="attr">  namespace:</span> <span class="string">default</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line"><span class="attr">  selector:</span></span><br><span class="line"><span class="attr">    app:</span> <span class="string">tomcat</span></span><br><span class="line"><span class="attr">    release:</span> <span class="string">canary</span></span><br><span class="line"><span class="attr">  ports:</span></span><br><span class="line"><span class="attr">    - name:</span> <span class="string">http</span></span><br><span class="line"><span class="attr">      port:</span> <span class="number">8080</span></span><br><span class="line"><span class="attr">      targetPort:</span> <span class="number">8080</span></span><br><span class="line"><span class="attr">    - name:</span> <span class="string">ajp</span></span><br><span class="line"><span class="attr">      port:</span> <span class="number">8009</span></span><br><span class="line"><span class="attr">      targetPort:</span> <span class="number">8009</span></span><br><span class="line"></span><br><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">apps/v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Deployment</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line"><span class="attr">  name:</span> <span class="string">deploy-tomcat</span></span><br><span class="line"><span class="attr">  namespace:</span> <span class="string">default</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line"><span class="attr">  replicas:</span> <span class="number">4</span></span><br><span class="line"><span class="attr">  selector:</span></span><br><span class="line"><span class="attr">    matchLabels:</span></span><br><span class="line"><span class="attr">      app:</span> <span class="string">tomcat</span></span><br><span class="line"><span class="attr">      release:</span> <span class="string">canary</span></span><br><span class="line"><span class="attr">  template:</span></span><br><span class="line"><span class="attr">    metadata:</span></span><br><span class="line"><span class="attr">      labels:</span></span><br><span class="line"><span class="attr">        app:</span> <span class="string">tomcat</span></span><br><span class="line"><span class="attr">        release:</span> <span class="string">canary</span></span><br><span class="line"><span class="attr">    spec:</span></span><br><span class="line"><span class="attr">      containers:</span></span><br><span class="line"><span class="attr">        - name:</span> <span class="string">tomcat</span></span><br><span class="line"><span class="attr">          image:</span> <span class="attr">tomcat:8.5.32-jre8-alpine</span></span><br><span class="line"><span class="attr">          ports:</span></span><br><span class="line"><span class="attr">            - name:</span> <span class="string">http</span></span><br><span class="line"><span class="attr">              containerPort:</span> <span class="number">8080</span></span><br><span class="line"><span class="attr">            - name:</span> <span class="string">ajp</span></span><br><span class="line"><span class="attr">              containerPort:</span> <span class="number">8009</span></span><br></pre></td></tr></table></figure>
 <ul>
-<li>示例</li>
+<li>制作自签名证书，让 ingress-nginx 带有证书来访问</li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@www ~]# nload ens33</span><br><span class="line">Device ens33 [172.16.100.253] (1/1):</span><br><span class="line">==============================================================================================================</span><br><span class="line">Incoming:</span><br><span class="line">                                                                           Curr: 1.79 kBit/s</span><br><span class="line">                                                                           Avg: 1.80 kBit/s</span><br><span class="line">                                                                           Min: 1.38 kBit/s</span><br><span class="line">                                                                           Max: 1.84 kBit/s</span><br><span class="line">                                                                           Ttl: 40.44 MByte</span><br><span class="line">Outgoing:</span><br><span class="line">                                                                           Curr: 8.23 kBit/s</span><br><span class="line">                                                                           Avg: 6.90 kBit/s</span><br><span class="line">                                                                           Min: 4.23 kBit/s</span><br><span class="line">                                                                           Max: 8.23 kBit/s</span><br><span class="line">                                                                           Ttl: 110.63 MByte</span><br></pre></td></tr></table></figure>
-<h2 id="bwm-ng-总流量统计"><a href="#bwm-ng-总流量统计" class="headerlink" title="bwm-ng 总流量统计"></a>bwm-ng 总流量统计</h2><ul>
-<li>作用</li>
-</ul>
-<p>另一款非常简单的实时网络负载监控工具，可以报告摘要信息，显示进出系统上所有可用网络接口的不同数据的传输速度。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 生成 key</span></span><br><span class="line">openssl genrsa -out tls.key 2048</span><br><span class="line"></span><br><span class="line"><span class="comment"># 生成自签证书，CN=域名必须要与自己的域名完全一致</span></span><br><span class="line">openssl req -new -x509 -key tls.key -out tls.crt -subj /C=CN/ST=Beijing/L=Beijing/O=DevOps/CN=tomcat.jinheng.com</span><br></pre></td></tr></table></figure>
 <ul>
-<li>示例</li>
+<li>创建 secret 证书对象，它是标准的 k8s 对象</li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">bwm-ng v0.6.1 (probing every 0.500s), press &apos;h&apos; for help</span><br><span class="line">input: /proc/net/dev type: rate</span><br><span class="line">/         iface                   Rx                   Tx                Total</span><br><span class="line">==============================================================================</span><br><span class="line">          ens34:           0.00 KB/s            0.00 KB/s            0.00 KB/s</span><br><span class="line">             lo:           0.00 KB/s            0.00 KB/s            0.00 KB/s</span><br><span class="line">          ens33:           0.64 KB/s            0.94 KB/s            1.58 KB/s</span><br><span class="line">------------------------------------------------------------------------------</span><br><span class="line">          total:           0.64 KB/s            0.94 KB/s            1.58 KB/s</span><br></pre></td></tr></table></figure>
-<h2 id="nethogs-进程流量"><a href="#nethogs-进程流量" class="headerlink" title="nethogs 进程流量"></a>nethogs 进程流量</h2><ul>
-<li>作用</li>
-</ul>
-<p>显示每个进程所使用的带宽，并对列表排序，将耗用带宽最多的进程排在最上面。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl create secret tls tomcat-ingress-secret --cert=tls.crt --key=tls.key</span><br></pre></td></tr></table></figure>
 <ul>
-<li>示例</li>
+<li>创建带证书的 ingress 对象，它能将 ingress-tomcat 与 service 关联，从而在 service 后主机发生变动的时候，反应在 ingress-tomcat 这个容器的配置文件中</li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">NetHogs version 0.8.5</span><br><span class="line"></span><br><span class="line">    PID USER     PROGRAM                                                                   DEV        SENT      RECEIVED       </span><br><span class="line">  14391 root     sshd: root@pts/0                                                          ens33       0.342	   0.023 82/sec</span><br><span class="line">      ? root     unknown TCP                                                                           0.000	   0.000 KB/sec</span><br><span class="line"></span><br><span class="line">  TOTAL                                                                                                0.342       0.082 KB/sec</span><br></pre></td></tr></table></figure>
-<h2 id="iftop-套接字流量"><a href="#iftop-套接字流量" class="headerlink" title="iftop 套接字流量"></a>iftop 套接字流量</h2><ul>
-<li>作用</li>
-</ul>
-<p>显示套接字的流量统计</p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">extensions/v1beta1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Ingress</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line"><span class="attr">  name:</span> <span class="string">ingress-deploy-tomcat-tls</span></span><br><span class="line"><span class="attr">  namespace:</span> <span class="string">default</span></span><br><span class="line"><span class="attr">  annotations:</span></span><br><span class="line">    <span class="string">kubernetes.io/ingress.class:</span> <span class="string">"nginx"</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line"><span class="attr">  tls:</span></span><br><span class="line"><span class="attr">    - hosts:</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">tomcat.jinheng.com</span></span><br><span class="line"><span class="attr">      secretName:</span> <span class="string">tomcat-ingress-secret</span></span><br><span class="line"><span class="attr">  rules:</span></span><br><span class="line"><span class="attr">    - host:</span> <span class="string">tomcat.jinheng.com</span></span><br><span class="line"><span class="attr">      http:</span></span><br><span class="line"><span class="attr">        paths:</span></span><br><span class="line"><span class="attr">          - path:</span></span><br><span class="line"><span class="attr">            backend:</span></span><br><span class="line"><span class="attr">              serviceName:</span> <span class="string">service-ingress-tomcat</span></span><br><span class="line"><span class="attr">              servicePort:</span> <span class="number">8080</span></span><br></pre></td></tr></table></figure>
 <ul>
-<li>示例</li>
+<li>查看 ingress-nginx 对外暴露的端口，这里为30080，和 30443 两个</li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@www ~]# iftop -n -i ens33</span><br><span class="line">                         12.5Kb                   25.0Kb                    37.5Kb                   50.0Kb		 62.5Kb</span><br><span class="line">------------------------------------------------------------------------------------------------------------------------------------</span><br><span class="line">172.16.100.253                                    =&gt; 172.16.100.2                                       3.98K3.68.70 5.65.60Kb</span><br><span class="line">                                                  &lt;=                                                     800b    810b   1.20Kb</span><br><span class="line">172.16.100.253                                    =&gt; 123.125.29.114                                      672b    670b    672b</span><br><span class="line">                                                  &lt;=                                                     672b    670b    672b</span><br><span class="line">172.16.100.253                                    =&gt; 123.125.115.110                                     672b    672b    672b</span><br><span class="line">                                                  &lt;=                                                     672b 60 571  554488b</span><br><span class="line">172.16.100.255                                    =&gt; 172.16.100.1                                          0b	   0b	   0b</span><br><span class="line">                                                  &lt;=                                                     40 72   780b    800b</span><br><span class="line">                                                  </span><br><span class="line">------------------------------------------------------------------------------------------------------------------------------------</span><br><span class="line">TX:             cum:   57.7KB   peak:   20.5Kb                                                 rates:   5.305.006.917.006.91Kb</span><br><span class="line">RX:                    29.2KB           5.45Kb                                                          2.482.673.73Kb  3.19Kb</span><br><span class="line">TOTAL:                 86.9KB           26.0Kb                                                          7.78K7.68.83Kb  10.1Kb</span><br><span class="line"></span><br><span class="line">interface: ens33</span><br><span class="line">IP address is: 172.16.100.253</span><br><span class="line">MAC address is: 00:0c:29:1a:1a:fb</span><br></pre></td></tr></table></figure>
-<h2 id="ip-地址计算器"><a href="#ip-地址计算器" class="headerlink" title="ip 地址计算器"></a>ip 地址计算器</h2><ul>
-<li>作用</li>
-</ul>
-<p>根据 IP 地址自动计算网络、掩码、广播地址等，这个命令是自带的。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl get service -n ingress-nginx</span><br></pre></td></tr></table></figure>
 <ul>
-<li>示例</li>
+<li>使用 nodeip + ingress-nginx 暴露端口访问，由于上面创建的 ingress 为基于主机名称的，所以需要在访问时在 /etc/hosts 做好映射到 node。</li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@www ~]# ipcalc -pnbm 192.168.179.31 255.255.240.0</span><br><span class="line">NETMASK=255.255.240.0</span><br><span class="line">PREFIX=20</span><br><span class="line">BROADCAST=192.168.191.255</span><br><span class="line">NETWORK=192.168.176.0</span><br></pre></td></tr></table></figure>
-<p>查看 ARP 地址表</p>
-<ul>
-<li>查看ARP</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@www ~]# cat /proc/net/arp </span><br><span class="line">IP address       HW type     Flags       HW address            Mask     Device</span><br><span class="line">172.16.100.2     0x1         0x2         ac:e0:10:b2:f5:1c     *        ens33</span><br><span class="line">172.16.100.1     0x1         0x2         7c:a1:77:c1:5e:4c     *        ens33</span><br></pre></td></tr></table></figure>
-<h2 id="nslookup-域名解析查询"><a href="#nslookup-域名解析查询" class="headerlink" title="nslookup 域名解析查询"></a>nslookup 域名解析查询</h2><ul>
-<li>作用</li>
-</ul>
-<p>以交互方式查询Internet名称服务器</p>
-<ul>
-<li>示例</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@www ~]# nslookup www.baidu.com</span><br><span class="line">Server:		223.5.5.5</span><br><span class="line">Address:	223.5.5.5#53</span><br><span class="line"></span><br><span class="line">Non-authoritative answer:</span><br><span class="line">www.baidu.com	canonical name = www.a.shifen.com.</span><br><span class="line">Name:	www.a.shifen.com</span><br><span class="line">Address: 61.135.169.121</span><br><span class="line">Name:	www.a.shifen.com</span><br><span class="line">Address: 61.135.169.125</span><br></pre></td></tr></table></figure>
-<h2 id="dig-DNS解析工具"><a href="#dig-DNS解析工具" class="headerlink" title="dig DNS解析工具"></a>dig DNS解析工具</h2><ul>
-<li>作用</li>
-</ul>
-<p>一个用于查询DNS名称服务器的灵活工具。它执行DNS查找并显示从查询的名称服务器返回的答案。</p>
-<ul>
-<li>使用</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">dig -t A www.baidu.com                  # 查询A记录</span><br><span class="line">dig -t A www.baidu.com +trace           # 迭代查询</span><br><span class="line">dig -t A www.baidu.com +recurse         # 递归查询</span><br><span class="line">dig +trace baidu.com                    # 域名解析ip过程</span><br><span class="line">dig -t axfr mageedu.com @172.16.1.100   # 模拟全量传送，获得全部的记录</span><br></pre></td></tr></table></figure>
-<h2 id="host-DNS解析工具"><a href="#host-DNS解析工具" class="headerlink" title="host  DNS解析工具"></a>host  DNS解析工具</h2><ul>
-<li>作用</li>
-</ul>
-<p>一个用于执行DNS查找的简单实用程序。它通常用于将名称转换为IP地址，反之亦然。</p>
-<ul>
-<li>示例</li>
-</ul>
-<p>host -t A <a href="http://www.baidu.com" target="_blank" rel="noopener">www.baidu.com</a> 180.76.76.76<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Using domain server:</span><br><span class="line">Name: 180.76.76.76</span><br><span class="line">Address: 180.76.76.76#53</span><br><span class="line">Aliases: </span><br><span class="line"></span><br><span class="line">www.baidu.com is an alias for www.a.shifen.com.</span><br><span class="line">www.a.shifen.com has address 220.181.111.188</span><br><span class="line">www.a.shifen.com has address 220.181.112.244</span><br></pre></td></tr></table></figure></p>
-<p>host -t A <a href="http://www.baidu.com" target="_blank" rel="noopener">www.baidu.com</a> 223.5.5.5<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Using domain server:</span><br><span class="line">Name: 223.5.5.5</span><br><span class="line">Address: 223.5.5.5#53</span><br><span class="line">Aliases: </span><br><span class="line"></span><br><span class="line">www.baidu.com is an alias for www.a.shifen.com.</span><br><span class="line">www.a.shifen.com has address 61.135.169.125</span><br><span class="line">www.a.shifen.com has address 61.135.169.121</span><br></pre></td></tr></table></figure></p>
-<h2 id="tracepath-跟踪路由"><a href="#tracepath-跟踪路由" class="headerlink" title="tracepath 跟踪路由"></a>tracepath 跟踪路由</h2><ul>
-<li>作用</li>
-</ul>
-<p>用来追踪并显示报文到达目的主机所经过的路由信息，另外还有：tracetoute 命令</p>
-<ul>
-<li>示例</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@www ~]# tracepath -n www.baidu.com</span><br><span class="line"> 1?: [LOCALHOST]                                         pmtu 1500</span><br><span class="line"> 1:  172.16.100.1                                          2.444ms </span><br><span class="line"> 1:  172.16.100.1                                          2.097ms </span><br><span class="line"> 2:  172.16.100.1                                          4.669ms pmtu 1492</span><br><span class="line"> 2:  113.46.160.1                                          5.908ms </span><br><span class="line"> 3:  218.241.252.185                                       4.730ms</span><br></pre></td></tr></table></figure>
-<h2 id="nmap-网络扫描器"><a href="#nmap-网络扫描器" class="headerlink" title="nmap 网络扫描器"></a>nmap 网络扫描器</h2><ul>
-<li>作用</li>
-</ul>
-<p>网络扫描器</p>
-<ul>
-<li>示例</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">nmap -sP -PI -PT 10.10.158.0/16    # 扫描一个网段</span><br><span class="line">nmap -p 1-1024 www.baidu.com       # 端口范围扫描</span><br><span class="line">nmap -A 172.16.0.1                 # 扫描全部端口</span><br></pre></td></tr></table></figure>
-<h2 id="tcpdump-网络嗅探器"><a href="#tcpdump-网络嗅探器" class="headerlink" title="tcpdump 网络嗅探器"></a>tcpdump 网络嗅探器</h2><p>网络嗅探器，它能够将本地网卡设置为混杂模式，去嗅探网络中的报文，可以指定过滤条件，仅保留只符合条件的报文</p>
-<ul>
-<li>语法格式</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">-i 指定接口</span><br><span class="line">-w 输出文件</span><br><span class="line">-r 读取文件并解码</span><br><span class="line">-X 使用十六进制和 ascii 码来显示报文的头部和报文的数据</span><br><span class="line">-A 仅显示包的 ascii 码信息，包含链路层首部信息</span><br><span class="line">-XX 显示链路层的首部</span><br><span class="line">-v 显示详细信息</span><br><span class="line">-vv 显示更详细的信息</span><br></pre></td></tr></table></figure>
-<ul>
-<li>抓包表达式</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">expression：表达式</span><br><span class="line">	流向：dir：src，dst，src OR dst，src AND dst</span><br><span class="line">	端口：<span class="built_in">type</span>：host，net，port，portrange</span><br><span class="line">	协议：proto：ether，wlan，ip，arp，tcp，udp</span><br></pre></td></tr></table></figure>
-<ul>
-<li>抓取目标端口的TCP协议的包, -n 是否解析主机名和协议</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">tcpdump -i ens33 tcp dst port 80 -nn</span><br></pre></td></tr></table></figure>
-<ul>
-<li>抓取当前主机与指定目标主机的通信</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">tcpdump -i ens33 dst host 172.16.100.2 -nn</span><br></pre></td></tr></table></figure>
-<ul>
-<li>主机之间的通信使用 and 来组合过滤</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">tcpdump -i ens33 host 172.16.100.2 and 172.16.100.253</span><br><span class="line">tcpdump -i ens33 host 172.16.100.2 and \(172.16.100.253 or 172.16.100.252\)</span><br></pre></td></tr></table></figure>
-<h1 id="其他软件"><a href="#其他软件" class="headerlink" title="其他软件"></a>其他软件</h1><h2 id="ngxtop-nginx监控"><a href="#ngxtop-nginx监控" class="headerlink" title="ngxtop nginx监控"></a>ngxtop nginx监控</h2><ul>
-<li>作用</li>
-</ul>
-<p>实时解析 nginx 访问日志</p>
-<ul>
-<li>安装</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">sudo pip install gnxtop</span><br></pre></td></tr></table></figure>
-<ul>
-<li>示例</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">running for 12 seconds, 1308 records processed: 108.10 req/sec</span><br><span class="line"></span><br><span class="line">Summary:</span><br><span class="line">|   count |   avg_bytes_sent |   2xx |   3xx |   4xx |   5xx |</span><br><span class="line">|---------+------------------+-------+-------+-------+-------|</span><br><span class="line">|    1308 |         3110.547 |  1308 |     0 |     0 |     0 |</span><br><span class="line"></span><br><span class="line">Detailed:</span><br><span class="line">| request_path                 |   count |   avg_bytes_sent |   2xx |   3xx |   4xx |   5xx |</span><br><span class="line">|------------------------------+---------+------------------+-------+-------+-------+-------|</span><br><span class="line">| /teacher/getStatus           |     409 |           94.002 |   409 |     0 |     0 |     0 |</span><br><span class="line">| /recruit/getExamineOptions   |     392 |           13.253 |   392 |     0 |     0 |     0 |</span><br><span class="line">| /student/getMoreData         |     129 |         1343.434 |   129 |     0 |     0 |     0 |</span><br><span class="line">| /student/getInfo             |     116 |         2895.302 |   116 |     0 |     0 |     0 |</span><br><span class="line">| /teacher/getInfo             |      77 |         2173.610 |    77 |     0 |     0 |     0 |</span><br><span class="line">| /teacher/getBulkInfo         |      75 |         4872.907 |    75 |     0 |     0 |     0 |</span><br><span class="line">| /admin/getXgInfoByIds        |      57 |          245.298 |    57 |     0 |     0 |     0 |</span><br><span class="line">| /admin/getAdminData          |      15 |          618.333 |    15 |     0 |     0 |     0 |</span><br><span class="line">| /admin/getAdminAllData       |      10 |         1792.300 |    10 |     0 |     0 |     0 |</span><br><span class="line">| /teacherBase/classListenAble |       6 |       489225.000 |     6 |     0 |     0 |     0 |</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">https://tomcat.jinheng.com:30443</span><br></pre></td></tr></table></figure>
+
           
         
       
@@ -1326,7 +912,7 @@
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/12/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/12/">12</a><span class="page-number current">13</span><a class="page-number" href="/page/14/">14</a><span class="space">&hellip;</span><a class="page-number" href="/page/38/">38</a><a class="extend next" rel="next" href="/page/14/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/page/12/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/12/">12</a><span class="page-number current">13</span><a class="page-number" href="/page/14/">14</a><span class="space">&hellip;</span><a class="page-number" href="/page/43/">43</a><a class="extend next" rel="next" href="/page/14/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1374,7 +960,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">75</span>
+                  <span class="site-state-item-count">86</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

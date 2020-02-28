@@ -81,14 +81,14 @@
 
 <meta name="description" content="网络通信K8S 的网络通信完全由 CNI 接口上的插件来实现，插件需要实现以下集中通信模型。 目前比较流行的插件有：flannel、calico、canel、kube-router …  如何加载插件  k8s 在启动的时候会去：/etc/cni/net.d/ 目录下寻找网络插件的配置文件，POD 在创建时候 k8s 调用这个配置文件，由插件根据这个配置文件进行创建网络。 通信模型 容器间通信：同">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Kubernetes高级部分">
-<meta property="og:url" content="https://yangjinheng.github.io/2019/03/29/kubernetes/Kubernetes高级部分/index.html">
+<meta property="og:title" content="K8S 网络基础">
+<meta property="og:url" content="https://yangjinheng.github.io/2019/01/15/kubernetes/10.网络通信/index.html">
 <meta property="og:site_name" content="默默">
 <meta property="og:description" content="网络通信K8S 的网络通信完全由 CNI 接口上的插件来实现，插件需要实现以下集中通信模型。 目前比较流行的插件有：flannel、calico、canel、kube-router …  如何加载插件  k8s 在启动的时候会去：/etc/cni/net.d/ 目录下寻找网络插件的配置文件，POD 在创建时候 k8s 调用这个配置文件，由插件根据这个配置文件进行创建网络。 通信模型 容器间通信：同">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2020-01-14T06:01:59.109Z">
+<meta property="og:updated_time" content="2020-02-28T08:06:58.471Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Kubernetes高级部分">
+<meta name="twitter:title" content="K8S 网络基础">
 <meta name="twitter:description" content="网络通信K8S 的网络通信完全由 CNI 接口上的插件来实现，插件需要实现以下集中通信模型。 目前比较流行的插件有：flannel、calico、canel、kube-router …  如何加载插件  k8s 在启动的时候会去：/etc/cni/net.d/ 目录下寻找网络插件的配置文件，POD 在创建时候 k8s 调用这个配置文件，由插件根据这个配置文件进行创建网络。 通信模型 容器间通信：同">
 
 
@@ -119,13 +119,13 @@
 
 
 
-  <link rel="canonical" href="https://yangjinheng.github.io/2019/03/29/kubernetes/Kubernetes高级部分/">
+  <link rel="canonical" href="https://yangjinheng.github.io/2019/01/15/kubernetes/10.网络通信/">
 
 
 
 
 
-  <title>Kubernetes高级部分 | 默默</title>
+  <title>K8S 网络基础 | 默默</title>
   
 
 
@@ -311,7 +311,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://yangjinheng.github.io/2019/03/29/kubernetes/Kubernetes高级部分/">
+    <link itemprop="mainEntityOfPage" href="https://yangjinheng.github.io/2019/01/15/kubernetes/10.网络通信/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Jin Heng">
@@ -328,7 +328,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Kubernetes高级部分</h1>
+          <h1 class="post-title" itemprop="name headline">K8S 网络基础</h1>
         
 
         <div class="post-meta">
@@ -340,8 +340,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-03-29T00:00:00+08:00">
-                2019-03-29
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-01-15T00:00:00+08:00">
+                2019-01-15
               </time>
             
 
@@ -576,8 +576,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/03/29/kubernetes/kubernetes简介安装/" rel="next" title="Kubernetes入门">
-                <i class="fa fa-chevron-left"></i> Kubernetes入门
+              <a href="/2019/01/15/kubernetes/9.Service和ingress/" rel="next" title="service 和 ingress">
+                <i class="fa fa-chevron-left"></i> service 和 ingress
               </a>
             
           </div>
@@ -586,8 +586,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2019/03/29/kubernetes/kubernetes对象介绍/" rel="prev" title="Kubernetes对象介绍">
-                Kubernetes对象介绍 <i class="fa fa-chevron-right"></i>
+              <a href="/2019/01/16/kubernetes/11.认证权限和dashboard/" rel="prev" title="权限认证和dashboard">
+                权限认证和dashboard <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -670,7 +670,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">75</span>
+                  <span class="site-state-item-count">86</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

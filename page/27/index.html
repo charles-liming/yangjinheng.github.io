@@ -311,7 +311,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://yangjinheng.github.io/2017/09/28/python/19.queue队列/">
+    <link itemprop="mainEntityOfPage" href="https://yangjinheng.github.io/2017/10/09/python/30.模块和打包/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Jin Heng">
@@ -330,7 +330,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/09/28/python/19.queue队列/" itemprop="url">queue队列</a></h1>
+                <a class="post-title-link" href="/2017/10/09/python/30.模块和打包/" itemprop="url">Python模块和打包机制</a></h1>
         
 
         <div class="post-meta">
@@ -342,8 +342,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-28T00:00:00+08:00">
-                2017-09-28
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-09T00:00:00+08:00">
+                2017-10-09
               </time>
             
 
@@ -404,28 +404,261 @@
       
         
           
-            <h1 id="queue模块"><a href="#queue模块" class="headerlink" title="queue模块"></a>queue模块</h1><h2 id="FIFO队列Queue"><a href="#FIFO队列Queue" class="headerlink" title="FIFO队列Queue"></a>FIFO队列Queue</h2><h3 id="创建队列"><a href="#创建队列" class="headerlink" title="创建队列"></a>创建队列</h3><p>语法：<code>queue.Queue(maxsize=0)</code></p>
-<p><code>maxsize</code>：队列的最大长度</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">1</span>]: <span class="keyword">import</span> queue</span><br><span class="line"></span><br><span class="line">In [<span class="number">2</span>]: q = queue.Queue()</span><br></pre></td></tr></table></figure>
-<h3 id="写入数据-put"><a href="#写入数据-put" class="headerlink" title="写入数据.put"></a>写入数据.put</h3><p>语法：<code>put(self, item, block=True, timeout=None)</code></p>
-<p><code>block</code>：阻塞标志，表示当队列长度达到最大时是否阻塞。</p>
-<p><code>timeout</code>：阻塞时间，秒。</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">2</span>]: q = Queue()</span><br><span class="line">    </span><br><span class="line">In [<span class="number">4</span>]: q.put(<span class="string">'d1'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">5</span>]: q.put(<span class="string">'d2'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">6</span>]: q.put(<span class="string">'d3'</span>)</span><br></pre></td></tr></table></figure>
-<h3 id="非阻塞写入-put-nowait"><a href="#非阻塞写入-put-nowait" class="headerlink" title="非阻塞写入.put_nowait"></a>非阻塞写入.put_nowait</h3><p>语法：<code>put_nowait(self, item)</code></p>
-<h3 id="读出数据-get"><a href="#读出数据-get" class="headerlink" title="读出数据.get"></a>读出数据.get</h3><p>阻塞读取并弹出数据</p>
-<p>语法：<code>get(self, block=True, timeout=None)</code></p>
-<p><code>block</code>：阻塞标志，表示是否阻塞。</p>
-<p><code>timeout</code>：阻塞时间，秒。</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">2</span>]: q = Queue()</span><br><span class="line">    </span><br><span class="line">In [<span class="number">9</span>]: q.get()</span><br><span class="line">Out[<span class="number">9</span>]: <span class="string">'d1'</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">10</span>]: q.get()</span><br><span class="line">Out[<span class="number">10</span>]: <span class="string">'d2'</span></span><br></pre></td></tr></table></figure>
-<h3 id="非阻塞读出-get-nowait"><a href="#非阻塞读出-get-nowait" class="headerlink" title="非阻塞读出.get_nowait"></a>非阻塞读出.get_nowait</h3><p>当弹出到最后一个元素时候，弹出异常。</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">22</span>]: q.get_nowait()</span><br><span class="line">Out[<span class="number">22</span>]: <span class="string">'d1'</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">23</span>]: q.get_nowait()</span><br><span class="line">Out[<span class="number">23</span>]: <span class="string">'d2'</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">14</span>]: q.get_nowait()</span><br><span class="line">---------------------------------------------------------------------------</span><br><span class="line">Empty                                     Traceback (most recent call last)</span><br><span class="line">&lt;ipython-input<span class="number">-14</span>-aad002f32be5&gt; <span class="keyword">in</span> &lt;module&gt;()</span><br><span class="line">----&gt; 1 q.get_nowait()</span><br><span class="line"></span><br><span class="line">c:\users\lenovo\appdata\local\programs\python\python36\lib\queue.py <span class="keyword">in</span> get_nowait(self)</span><br><span class="line">    <span class="number">190</span>         <span class="keyword">raise</span> the Empty exception.</span><br><span class="line">    <span class="number">191</span>         <span class="string">'''</span></span><br><span class="line"><span class="string">--&gt; 192         return self.get(block=False)</span></span><br><span class="line"><span class="string">    193</span></span><br><span class="line"><span class="string">    194     # Override these methods to implement other queue organizations</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">c:\users\lenovo\appdata\local\programs\python\python36\lib\queue.py in get(self, block, timeout)</span></span><br><span class="line"><span class="string">    159             if not block:</span></span><br><span class="line"><span class="string">    160                 if not self._qsize():</span></span><br><span class="line"><span class="string">--&gt; 161                     raise Empty</span></span><br><span class="line"><span class="string">    162             elif timeout is None:</span></span><br><span class="line"><span class="string">    163                 while not self._qsize():</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Empty:</span></span><br></pre></td></tr></table></figure>
-<h3 id="队列长度-qsize"><a href="#队列长度-qsize" class="headerlink" title="队列长度.qsize"></a>队列长度.qsize</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">8</span>]: q.qsize()</span><br><span class="line">Out[<span class="number">8</span>]: <span class="number">3</span></span><br></pre></td></tr></table></figure>
-<h3 id="是否为空-empty"><a href="#是否为空-empty" class="headerlink" title="是否为空.empty"></a>是否为空.empty</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">4</span>]: q.put(<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">5</span>]: q.empty()</span><br><span class="line">Out[<span class="number">5</span>]: <span class="keyword">False</span></span><br><span class="line">    </span><br><span class="line">In [<span class="number">6</span>]: q.get()</span><br><span class="line">Out[<span class="number">6</span>]: <span class="number">1</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">7</span>]: q.empty()</span><br><span class="line">Out[<span class="number">7</span>]: <span class="keyword">True</span></span><br></pre></td></tr></table></figure>
-<h3 id="是否为满-full"><a href="#是否为满-full" class="headerlink" title="是否为满.full"></a>是否为满.full</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">38</span>]: q=Queue(maxsize=<span class="number">3</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">39</span>]: q.put(<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">40</span>]: q.put(<span class="number">2</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">41</span>]: q.put(<span class="number">3</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">43</span>]: q.full()</span><br><span class="line">Out[<span class="number">43</span>]: <span class="keyword">True</span></span><br></pre></td></tr></table></figure>
-<h3 id="阻塞调用-join"><a href="#阻塞调用-join" class="headerlink" title="阻塞调用.join"></a>阻塞调用.join</h3><p>阻塞调用线程，直到队列中的所有任务被处理掉。</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">3</span>]: q = queue.Queue()</span><br><span class="line"></span><br><span class="line">In [<span class="number">5</span>]: q.join()</span><br><span class="line"><span class="comment">#因队列为0返回</span></span><br><span class="line">In [<span class="number">5</span>]: q.join()</span><br><span class="line"><span class="comment">#因队列为0返回</span></span><br><span class="line">In [<span class="number">10</span>]: q.put(<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">11</span>]: q.join()</span><br><span class="line"><span class="comment">#开始阻塞，直到队列被处理完毕</span></span><br></pre></td></tr></table></figure>
-<h3 id="报告进度-task-done"><a href="#报告进度-task-done" class="headerlink" title="报告进度.task_done"></a>报告进度.task_done</h3><p>主要是为 <code>join</code>配套使用，每次<code>get</code>后需要调用task_done，直到所有任务都task_done，join才取消阻塞。</p>
-<h2 id="后进先出LifoQueue"><a href="#后进先出LifoQueue" class="headerlink" title="后进先出LifoQueue"></a>后进先出LifoQueue</h2>
+            <h2 id="代码组织"><a href="#代码组织" class="headerlink" title="代码组织"></a>代码组织</h2><p>Python程序由以下内容组成：</p>
+<ul>
+<li>包（Package）</li>
+<li>模块（Moduler）</li>
+<li>函数和类（Class &amp; Function）</li>
+</ul>
+<p>在现实开发中，我们会编写大量代码，代码之间会有各种关系，比如：包含、外置、共享等等，如何合理有序的组织是个问题。</p>
+<p>Python使用如此三个层次组织代码：</p>
+<p>相同功能的代码放在一个目录里面，每个功能又被分成多个功能模块放在不同的文件中，每个文件定义多个不同的函数和类来具体封装你的代码，如此便形成了明了高效的组织形式。比如：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">文件操作所有代码放在 files/ 这个文件，所有读文件的功能模块，放到 files/read.py 文件，所有写的代码都放到 files/write.py 文件。而读入所有内容和按行读入这两个代码分别被封装为 read_all(), readlines() 两个函数。</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>库：这是一个编程语言中的的泛概念，在Python中是由 模块和包 为表现形式</p>
+</blockquote>
+<h3 id="命名空间"><a href="#命名空间" class="headerlink" title="命名空间"></a>命名空间</h3><p>由于在 Python 中一切皆为对象，想要好好理解 Module 和 Package，一定要先理解 Namespace 的概念。 所谓 Namespace ，是指标示符的可见范围。对于 Python 而言，常见的 Namespace 主要有以下几种： </p>
+<ol>
+<li>Build-in Namespace (内建命名空间）</li>
+<li>Global Namespace (全局命名空间）</li>
+<li>Local Namespace (局部命名空间）</li>
+</ol>
+<p>有了命名空间的概念，可以有效的解决函数或者是变量重名的问题。不同的命名空间中允许出现相同的函数名或者 是变量名。它们彼此之间不会相互影响，例如在Namespace A和B中同时有一个名为var的变量，对A.var赋值并不 会改变B.var的值。 </p>
+<h2 id="模块"><a href="#模块" class="headerlink" title="模块"></a>模块</h2><p>一个包含<code>Python</code>代码并且以<code>.py</code>结尾的文本文件就是一个模块，其文件名部分就是模块名，其中定义的所有变量或者函数都属于这个Module，这个Module 对于所有函数而言就相当于一个全局的命名空间，而其中的每个函数又都有自己局部的命名空间。 </p>
+<h3 id="导入方式"><a href="#导入方式" class="headerlink" title="导入方式"></a>导入方式</h3><p>模块导入的方式有以下几种：</p>
+<ul>
+<li>导入模块</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> mymodule  <span class="comment">#导入模块</span></span><br><span class="line"><span class="keyword">import</span> mymodule <span class="keyword">as</span> m1  <span class="comment">#导入模块，但重命名为m1</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>导入模块的部分属性</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> mymodule <span class="keyword">import</span> cc  <span class="comment">#导入模块的一个内容属性</span></span><br><span class="line"><span class="keyword">from</span> mymodule <span class="keyword">import</span> cc <span class="keyword">as</span> c1  <span class="comment">#导入模块内容cc，重命名为c1</span></span><br><span class="line"><span class="keyword">from</span> module <span class="keyword">import</span> cc,bb,aa  <span class="comment">#同时导入多个模块内容</span></span><br><span class="line"><span class="keyword">from</span> module <span class="keyword">import</span> *  <span class="comment">#导入模块的所有属性</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>重新导入已经导入的模块</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">reload(sys)  <span class="comment">#重新导入已经导入的模块，在统一编码规范时常用</span></span><br></pre></td></tr></table></figure>
+<h3 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h3><p>现在我们手动创建一个简单的模块：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">4</span>]: cat mymodule.py</span><br><span class="line">cc = <span class="number">1</span></span><br><span class="line">bb = <span class="number">2</span></span><br><span class="line">aa = <span class="number">3</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>导入模块，导入模块并重命名</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">1</span>]: <span class="keyword">import</span> mymodule</span><br><span class="line"></span><br><span class="line">In [<span class="number">2</span>]: mymodule.aa</span><br><span class="line">Out[<span class="number">2</span>]: <span class="number">3</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">3</span>]: mymodule.bb</span><br><span class="line">Out[<span class="number">3</span>]: <span class="number">2</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">4</span>]: mymodule.cc</span><br><span class="line">Out[<span class="number">4</span>]: <span class="number">1</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">6</span>]: <span class="keyword">import</span> mymodule <span class="keyword">as</span> m1</span><br><span class="line"></span><br><span class="line">In [<span class="number">7</span>]: m1.aa</span><br><span class="line">Out[<span class="number">7</span>]: <span class="number">3</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">8</span>]: m1.cc</span><br><span class="line">Out[<span class="number">8</span>]: <span class="number">1</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">9</span>]: m1.bb</span><br><span class="line">Out[<span class="number">9</span>]: <span class="number">2</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>导入模块的部分内容，并且重新命名</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">1</span>]: <span class="keyword">from</span> mymodule <span class="keyword">import</span> aa</span><br><span class="line"></span><br><span class="line">In [<span class="number">2</span>]: aa</span><br><span class="line">Out[<span class="number">2</span>]: <span class="number">3</span></span><br><span class="line">    </span><br><span class="line">In [<span class="number">3</span>]: <span class="keyword">from</span> mymodule <span class="keyword">import</span> aa <span class="keyword">as</span> AA</span><br><span class="line"></span><br><span class="line">In [<span class="number">4</span>]: AA</span><br><span class="line">Out[<span class="number">4</span>]: <span class="number">3</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>导入模块中的多个内容</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">1</span>]: <span class="keyword">from</span> mymodule <span class="keyword">import</span> aa,bb</span><br><span class="line"></span><br><span class="line">In [<span class="number">2</span>]: aa</span><br><span class="line">Out[<span class="number">2</span>]: <span class="number">3</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">3</span>]: bb</span><br><span class="line">Out[<span class="number">3</span>]: <span class="number">2</span></span><br></pre></td></tr></table></figure>
+<h2 id="包"><a href="#包" class="headerlink" title="包"></a>包</h2><p>包是一个目录，并且必须有一个<code>__init__.py</code>文件，它是包的注册文件，文件内容可以为空，一个包内可以有多个 <code>模块</code> 或者 <code>子包</code> 组成，这样一个有层次的目录结构形成了Python的包，可以将包视作模块。</p>
+<p>导入包会执行包下的<code>__init__.py</code>注册文件。</p>
+<p>导入包下的子模块，一定会先导入<code>__init__.py</code>注册文件，然后再导入子模块的代码。</p>
+<p>导入包下的子包，则不会导入父包，只会导入子包的<code>__init__.py</code>。</p>
+<h3 id="导入方式-1"><a href="#导入方式-1" class="headerlink" title="导入方式"></a>导入方式</h3><p>包有以下几种导入方式：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> pack  <span class="comment">#导入一个名叫pack的包</span></span><br><span class="line"><span class="keyword">from</span> pack <span class="keyword">import</span> system  <span class="comment">#从包中导入一个模块</span></span><br><span class="line"><span class="keyword">from</span> pack <span class="keyword">import</span> system,mymodule  <span class="comment">#从包中导入多个模块</span></span><br></pre></td></tr></table></figure>
+<h3 id="示例-1"><a href="#示例-1" class="headerlink" title="示例"></a>示例</h3><p>这就是一个叫 pack 的包，因为它包含一个 <code>__init__.py</code> 的文件。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">19</span>]: !tree m</span><br><span class="line">m</span><br><span class="line">├── __init__.py</span><br><span class="line">├── m1.py</span><br><span class="line">└── m2</span><br><span class="line">    ├── __init__.py</span><br><span class="line">    └── m21</span><br><span class="line">        └── __init__.py</span><br><span class="line"></span><br><span class="line"><span class="number">2</span> directories, <span class="number">4</span> files</span><br><span class="line"></span><br><span class="line">每个py文件中都包含以下代码</span><br><span class="line">print(<span class="string">'m/__init__.py'</span>)    <span class="comment">#文件名称</span></span><br><span class="line">print(__name__)    <span class="comment">#文件名</span></span><br><span class="line">var = __file__   <span class="comment">#模块变量</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>导入一个包，会执行<code>__init__</code>注册文件</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">16</span>]: <span class="keyword">import</span> m</span><br><span class="line">m/__init__.py</span><br><span class="line">m</span><br><span class="line"></span><br><span class="line">In [<span class="number">2</span>]: m.var</span><br><span class="line">Out[<span class="number">2</span>]: <span class="string">'/home/python/magedu/projects/test/m/__init__.py'</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>导入子模块，一定会导入父模块</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">1</span>]: <span class="keyword">from</span> m <span class="keyword">import</span> m1</span><br><span class="line">m/__init__.py</span><br><span class="line">m</span><br><span class="line">m/m1.py</span><br><span class="line">m.m1</span><br><span class="line"></span><br><span class="line">In [<span class="number">11</span>]: m.m1.var</span><br><span class="line">Out[<span class="number">11</span>]: <span class="string">'/home/python/magedu/projects/test/m/m1.py'</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>导入子包时候，不会导入父包</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">1</span>]: <span class="keyword">from</span> m <span class="keyword">import</span> m2</span><br><span class="line">m/m2/__init__.py</span><br><span class="line">m.m2</span><br><span class="line">In [<span class="number">3</span>]: m2.var</span><br><span class="line">Out[<span class="number">3</span>]: <span class="string">'/home/python/magedu/projects/test/m/m2/__init__.py'</span></span><br><span class="line">    </span><br><span class="line">In [<span class="number">1</span>]: <span class="keyword">from</span> m.m2 <span class="keyword">import</span> m21</span><br><span class="line">m/m2/m21/__init__.py</span><br><span class="line">m.m2.m21</span><br><span class="line"></span><br><span class="line">In [<span class="number">2</span>]: m21.var</span><br><span class="line">Out[<span class="number">2</span>]: <span class="string">'/home/python/magedu/projects/test/m/m2/m21/__init__.py'</span></span><br></pre></td></tr></table></figure>
+<p>通常<code>__int__.py</code>文件为空，但是我们还可以为它增加其他的功能。我们在导入一个包时，实际上是导入了它的<code>__init__.py</code>文件。这样我们可以在<code>__init__.py</code>文件中批量导入我们所需要的模块，而不再需要一个一个的导入。 </p>
+<ul>
+<li>相对导入和绝对导入</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">Out[<span class="number">2</span>]: vim ./m/__init__.py</span><br><span class="line"><span class="keyword">from</span> . <span class="keyword">import</span> m1           <span class="comment">#在m模块的__init__.py文件中使用相对导入</span></span><br><span class="line">print(<span class="string">'m/__init__.py'</span>)</span><br><span class="line">print(__name__)</span><br><span class="line">var = __file__</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">10</span>]: <span class="keyword">import</span> m</span><br><span class="line">m/m1.py</span><br><span class="line">m.m1</span><br><span class="line">m/__init__.py</span><br><span class="line">m</span><br><span class="line"></span><br><span class="line">In [<span class="number">11</span>]: m.m1.var</span><br><span class="line">Out[<span class="number">11</span>]: <span class="string">'/home/python/magedu/projects/test/m/m1.py'</span></span><br></pre></td></tr></table></figure>
+<p>相对导入时模块内部之间互相引用资源的，不是为了直接运行的。</p>
+<h2 id="importlib"><a href="#importlib" class="headerlink" title="importlib"></a>importlib</h2><p>importlib 可以将字符串视作模块导入，同时利用反射方法可以使用字符串在类中查找方法、属性</p>
+<ul>
+<li>text1.py</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Persion</span><span class="params">()</span>:</span></span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self,name)</span>:</span></span><br><span class="line">        self.name = name</span><br><span class="line">        </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">dream</span><span class="params">(self)</span>:</span></span><br><span class="line">        print(<span class="string">"&#123;&#125;在做梦"</span>.format(self.name))</span><br></pre></td></tr></table></figure>
+<ul>
+<li>test2.py</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> importlib</span><br><span class="line"></span><br><span class="line">modu = <span class="string">"test"</span></span><br><span class="line">cls = <span class="string">"Persion"</span></span><br><span class="line"></span><br><span class="line">test = importlib.import_module(modu)</span><br><span class="line"></span><br><span class="line">the_class = getattr(test,cls)</span><br><span class="line"></span><br><span class="line">the_class(<span class="string">"杨金恒"</span>).dream()</span><br></pre></td></tr></table></figure>
+<h2 id="示例应用"><a href="#示例应用" class="headerlink" title="示例应用"></a>示例应用</h2><p>例如，一个传递参数实现不同日志记录方式的装饰器模块，其他模块就可以直接导入，并使用它。</p>
+<h3 id="模块化装饰器"><a href="#模块化装饰器" class="headerlink" title="模块化装饰器"></a>模块化装饰器</h3><ul>
+<li>装饰器模块</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">(magedu353) [python@localhost test]$ cat logger.py </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">logger</span><span class="params">(mode_type)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">wrapper</span><span class="params">(func)</span>:</span></span><br><span class="line">        <span class="function"><span class="keyword">def</span> <span class="title">_wrapper</span><span class="params">(*args,**kwargs)</span>:</span></span><br><span class="line">            <span class="keyword">if</span> mode_type == <span class="string">'file'</span>:</span><br><span class="line">                print(<span class="string">'write file...'</span>)</span><br><span class="line">                <span class="keyword">return</span> func(*args,**kwargs)</span><br><span class="line">            <span class="keyword">elif</span> mode_type == <span class="string">'stdout'</span>:</span><br><span class="line">                print(<span class="string">'write stdout...'</span>)</span><br><span class="line">                <span class="keyword">return</span> func(*args,**kwargs)</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                print(<span class="string">'mode_type error...'</span>)</span><br><span class="line">        <span class="keyword">return</span> _wrapper</span><br><span class="line">    <span class="keyword">return</span> wrapper</span><br></pre></td></tr></table></figure>
+<ul>
+<li>调用装饰器模块的程序</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">(magedu353) [python@localhost test]$ cat func.py </span><br><span class="line"><span class="keyword">import</span> logger</span><br><span class="line"></span><br><span class="line"><span class="meta">@logger.logger('file')</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func1</span><span class="params">()</span>:</span></span><br><span class="line">    print(<span class="string">'this is func1'</span>)</span><br><span class="line"></span><br><span class="line"><span class="meta">@logger.logger('stdout')</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func2</span><span class="params">()</span>:</span></span><br><span class="line">    print(<span class="string">'this is func2'</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    func1()</span><br><span class="line">    func2()</span><br></pre></td></tr></table></figure>
+<ul>
+<li>运行结果</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">(magedu353) [python@localhost test]$ python func.py </span><br><span class="line">[<span class="string">'__builtins__'</span>, <span class="string">'__cached__'</span>, <span class="string">'__doc__'</span>, <span class="string">'__file__'</span>, <span class="string">'__loader__'</span>, <span class="string">'__name__'</span>, <span class="string">'__package__'</span>, <span class="string">'__spec__'</span>, <span class="string">'logger'</span>]</span><br><span class="line">write file...</span><br><span class="line">this <span class="keyword">is</span> func1</span><br><span class="line">write stdout...</span><br><span class="line">this <span class="keyword">is</span> func2</span><br></pre></td></tr></table></figure>
+<p>可以看到 <code>logger</code> 模块被导入到 <code>func</code> 的命名空间，<code>func</code> 就可以直接调用 <code>logger</code> 的功能了。</p>
+<h2 id="相关属性"><a href="#相关属性" class="headerlink" title="相关属性"></a>相关属性</h2><h3 id="搜索路径"><a href="#搜索路径" class="headerlink" title="搜索路径"></a>搜索路径</h3><p>即：导入模块时在哪些路径下搜索模块，搜索路径是编译 Python 时候指定的，它以一个列表的形式保存在<code>sys.path</code>变量里，其中每个元素表示一个路径，对这个列表 append ，可以增加搜索路径。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">6</span>]: <span class="keyword">import</span> sys</span><br><span class="line"></span><br><span class="line">In [<span class="number">7</span>]: sys.path</span><br><span class="line">Out[<span class="number">7</span>]: </span><br><span class="line">[<span class="string">''</span>,</span><br><span class="line"> <span class="string">'/home/python/.pyenv/versions/3.5.3/envs/magedu353/bin'</span>,</span><br><span class="line"> <span class="string">'/home/python/.pyenv/versions/3.5.3/lib/python35.zip'</span>,</span><br><span class="line"> <span class="string">'/home/python/.pyenv/versions/3.5.3/lib/python3.5'</span>,</span><br><span class="line"> <span class="string">'/home/python/.pyenv/versions/3.5.3/lib/python3.5/plat-linux'</span>,</span><br><span class="line"> <span class="string">'/home/python/.pyenv/versions/3.5.3/lib/python3.5/lib-dynload'</span>,</span><br><span class="line"> <span class="string">'/home/python/.pyenv/versions/3.5.3/envs/magedu353/lib/python3.5/site-packages'</span>,</span><br><span class="line"> <span class="string">'/home/python/.pyenv/versions/3.5.3/envs/magedu353/lib/python3.5/site-packages/IPython/extensions'</span>,</span><br><span class="line"> <span class="string">'/home/python/.ipython'</span>]</span><br><span class="line">In [<span class="number">8</span>]: sys.path.append(<span class="string">'/app/python'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">9</span>]: sys.path</span><br><span class="line">Out[<span class="number">9</span>]: </span><br><span class="line">[<span class="string">''</span>,</span><br><span class="line"> <span class="string">'/home/python/.pyenv/versions/3.5.3/envs/magedu353/bin'</span>,</span><br><span class="line"> <span class="string">'/home/python/.pyenv/versions/3.5.3/lib/python35.zip'</span>,</span><br><span class="line"> <span class="string">'/home/python/.pyenv/versions/3.5.3/lib/python3.5'</span>,</span><br><span class="line"> <span class="string">'/home/python/.pyenv/versions/3.5.3/lib/python3.5/plat-linux'</span>,</span><br><span class="line"> <span class="string">'/home/python/.pyenv/versions/3.5.3/lib/python3.5/lib-dynload'</span>,</span><br><span class="line"> <span class="string">'/home/python/.pyenv/versions/3.5.3/envs/magedu353/lib/python3.5/site-packages'</span>,</span><br><span class="line"> <span class="string">'/home/python/.pyenv/versions/3.5.3/envs/magedu353/lib/python3.5/site-packages/IPython/extensions'</span>,</span><br><span class="line"> <span class="string">'/home/python/.ipython'</span>,</span><br><span class="line"> <span class="string">'/app/python'</span>]</span><br></pre></td></tr></table></figure>
+<h3 id="模块属性"><a href="#模块属性" class="headerlink" title="模块属性"></a>模块属性</h3><table>
+<thead>
+<tr>
+<th>属性</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>__file__</code></td>
+<td>被引用模块的路径</td>
+</tr>
+<tr>
+<td><code>__cached__</code></td>
+<td>编译后字节码文件路径</td>
+</tr>
+<tr>
+<td><code>__spec__</code></td>
+<td>模块的规范</td>
+</tr>
+<tr>
+<td><code>__name__</code></td>
+<td>是模块内置的一个属性，一般如果模块是被引用的时候, 它的值是模块名, 如果这个python文件被直接运行, 那么它的值是<code>&#39;__main__&#39;</code></td>
+</tr>
+<tr>
+<td><code>__package__</code></td>
+<td>如果文件是个包它的值和<code>__name__</code>是相同的，如果是子模块，则和父模块一致</td>
+</tr>
+<tr>
+<td><code>__all__</code></td>
+<td>在包的注册文件内，它的值是个模块名组成的列表，该属性表示当使用<code>import * from xxx</code>时候，哪些模块会被导入进来</td>
+</tr>
+<tr>
+<td><code>__doc__</code></td>
+<td>模块的注释文档</td>
+</tr>
+</tbody>
+</table>
+<h3 id="隐藏变量"><a href="#隐藏变量" class="headerlink" title="隐藏变量"></a>隐藏变量</h3><p>如果不想让某个属性被<code>from module import *</code>导入，那么你可以给不想导入的属性标识符前面加<code>_</code>，但这不能组织<code>import foo.__bar</code>这种形式的导入。</p>
+<h3 id="测试方法"><a href="#测试方法" class="headerlink" title="测试方法"></a>测试方法</h3><p><code>__name__</code> 模块的内置属性，它存放了模块的名字。</p>
+<p>当处于不同的命名空间，就为不同的值，即：作为模块被导入时它就为模块的名称，作为程序入口执行时候，它就为<code>__main__</code>表示当前处于顶层作用域。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    ....</span><br><span class="line">    <span class="keyword">pass</span></span><br></pre></td></tr></table></figure>
+<p>在模块中填写这段代码，可以实现当直接执行时候测试该模块，作为模块导入时，则不会执行。</p>
+<h3 id="动态装载"><a href="#动态装载" class="headerlink" title="动态装载"></a>动态装载</h3><p>一般我们在程序中，直接使用<code>import module</code>方式导入，这种方法是静态的，Python提前扫描，并装载好模块在内存中，有时候我们需要动态装在一个模块。</p>
+<ul>
+<li>模块1，名称：<code>mymodule</code></li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Dog</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self,name,color)</span>:</span></span><br><span class="line">        self.name = name</span><br><span class="line">        self.color = color</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">bark</span><span class="params">(self)</span>:</span></span><br><span class="line">        print(self.name,<span class="string">'woof...'</span>)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>需要使用动态装载的程序</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> importlib</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">plugin</span><span class="params">(name,sep=<span class="string">'.'</span>)</span>:</span>                  <span class="comment">#功能，动态导入一个以点分割的模块</span></span><br><span class="line">    mod,_,cls = name,partition(sep)        <span class="comment">#参数处理，就是以点分割</span></span><br><span class="line">    module = importlib.import_module(mod)  <span class="comment">#动态导入模块</span></span><br><span class="line">    attrib = getattr(module,cls)           <span class="comment">#通过反射获得模块的一个属性</span></span><br><span class="line">    <span class="keyword">return</span> attrib                          <span class="comment">#返回已经导入的模块供程序使用</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'main'</span>:</span><br><span class="line">    plugin(<span class="string">'mymodule.Dog'</span>)</span><br></pre></td></tr></table></figure>
+<h2 id="打包分发"><a href="#打包分发" class="headerlink" title="打包分发"></a>打包分发</h2><ul>
+<li>setuptools模块</li>
+</ul>
+<p>setuptools 可以说是 Python distutils 的增强版，它能帮助我们更好的创建和分发 Python 的包，尤其是具有复杂依赖关系的包。对于开发者来说，能够更好的组织自己项目的分发和发布；对于用户来说，不需要安装 setuptools 也可以使用由它创建的包，只需要一个启动模块即可。</p>
+<p>实现这样的的包管理机制主要由两部分构成：</p>
+<ul>
+<li>一个存储在 Python 官方网站的集中式仓库，名叫 Python Package Index（PyPI）</li>
+<li>另外就是基于 distutils 开发的 setuptools 包管理系统</li>
+</ul>
+<h3 id="打包方法"><a href="#打包方法" class="headerlink" title="打包方法"></a>打包方法</h3><ul>
+<li>创建一个目录，将需要打包的包放在里面</li>
+<li>在该目录中创建一个 <code>setup.py</code>，里面的内容为我们发布包的相关信息。</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> distutils.core <span class="keyword">import</span> setup</span><br><span class="line">setup(name=<span class="string">'mypackage'</span>,</span><br><span class="line">      version=<span class="string">'1.0.0'</span>,</span><br><span class="line">      description=<span class="string">'test package'</span>,</span><br><span class="line">      author=<span class="string">'yangjinheng'</span>,</span><br><span class="line">      author_email=<span class="string">'jinhengyang@foxmail.com'</span>,</span><br><span class="line">      url=<span class="string">'http://www.yangjinheng.com'</span>,</span><br><span class="line">      packages=[<span class="string">'m'</span>,<span class="string">'m.m1'</span>,<span class="string">'m.m2'</span>,<span class="string">'m.m2.m21'</span>],</span><br><span class="line">      )</span><br></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>version</td>
+<td>版本号</td>
+</tr>
+<tr>
+<td>description</td>
+<td>描述信息</td>
+</tr>
+<tr>
+<td>author</td>
+<td>作者信息</td>
+</tr>
+<tr>
+<td>author_email</td>
+<td>作者email</td>
+</tr>
+<tr>
+<td>url</td>
+<td>包的网站</td>
+</tr>
+<tr>
+<td>packages</td>
+<td>需要处理的包目录</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>详见：python setup.py –help</p>
+</blockquote>
+<h3 id="脚本参数"><a href="#脚本参数" class="headerlink" title="脚本参数"></a>脚本参数</h3><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>build</td>
+<td>构建安装所需的所有模块</td>
+</tr>
+<tr>
+<td>sdist</td>
+<td>创建一个源代码发布（tar.gz，zip文件等）</td>
+</tr>
+<tr>
+<td>bdist</td>
+<td>创建一个二进制分发包</td>
+</tr>
+<tr>
+<td>bdist_rpm</td>
+<td>创建一个RPM分发</td>
+</tr>
+<tr>
+<td>bdist_wininst</td>
+<td>创建一个windows 下可执行的安装程序</td>
+</tr>
+<tr>
+<td>install</td>
+<td>从构建中安装</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>详见：python setup.py –help-commands</p>
+</blockquote>
+<h3 id="创建源码包"><a href="#创建源码包" class="headerlink" title="创建源码包"></a>创建源码包</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">(magedu353) [python@localhost package]$ ll</span><br><span class="line">总用量 <span class="number">4</span></span><br><span class="line">drwxrwxr-x <span class="number">3</span> python python  <span class="number">48</span> <span class="number">5</span>月  <span class="number">20</span> <span class="number">11</span>:<span class="number">33</span> m</span><br><span class="line">-rw-rw-r-- <span class="number">1</span> python python <span class="number">258</span> <span class="number">5</span>月  <span class="number">20</span> <span class="number">11</span>:<span class="number">34</span> setup.py</span><br><span class="line">(magedu353) [python@localhost package]$ python setup.py sdist</span><br><span class="line">running sdist</span><br><span class="line">running check</span><br><span class="line">warning: sdist: manifest template <span class="string">'MANIFEST.in'</span> does <span class="keyword">not</span> exist (using default file list)</span><br><span class="line"></span><br><span class="line">warning: sdist: standard file <span class="keyword">not</span> found: should have one of README, README.txt</span><br><span class="line"></span><br><span class="line">writing manifest file <span class="string">'MANIFEST'</span></span><br><span class="line">creating mypackage<span class="number">-1.0</span><span class="number">.0</span></span><br><span class="line">creating mypackage<span class="number">-1.0</span><span class="number">.0</span>/m</span><br><span class="line">making hard links <span class="keyword">in</span> mypackage<span class="number">-1.0</span><span class="number">.0</span>...</span><br><span class="line">hard linking setup.py -&gt; mypackage-1.0.0</span><br><span class="line">hard linking m/__init__.py -&gt; mypackage-1.0.0/m</span><br><span class="line">hard linking m/m1.py -&gt; mypackage-1.0.0/m</span><br><span class="line">creating dist</span><br><span class="line">Creating tar archive</span><br><span class="line">removing <span class="string">'mypackage-1.0.0'</span> (<span class="keyword">and</span> everything under it)</span><br><span class="line">(magedu353) [python@localhost package]$ ll</span><br><span class="line">总用量 <span class="number">8</span></span><br><span class="line">drwxrwxr-x <span class="number">2</span> python python  <span class="number">36</span> <span class="number">5</span>月  <span class="number">20</span> <span class="number">12</span>:<span class="number">08</span> dist</span><br><span class="line">drwxrwxr-x <span class="number">3</span> python python  <span class="number">48</span> <span class="number">5</span>月  <span class="number">20</span> <span class="number">11</span>:<span class="number">33</span> m</span><br><span class="line">-rw-rw-r-- <span class="number">1</span> python python  <span class="number">74</span> <span class="number">5</span>月  <span class="number">20</span> <span class="number">12</span>:<span class="number">08</span> MANIFEST</span><br><span class="line">-rw-rw-r-- <span class="number">1</span> python python <span class="number">258</span> <span class="number">5</span>月  <span class="number">20</span> <span class="number">11</span>:<span class="number">34</span> setup.py</span><br><span class="line">(magedu353) [python@localhost package]$ cd dist/</span><br><span class="line">(magedu353) [python@localhost dist]$ ll</span><br><span class="line">总用量 <span class="number">4</span></span><br><span class="line">-rw-rw-r-- <span class="number">1</span> python python <span class="number">571</span> <span class="number">5</span>月  <span class="number">20</span> <span class="number">12</span>:<span class="number">08</span> mypackage<span class="number">-1.0</span><span class="number">.0</span>.tar.gz    <span class="comment">#构建完成</span></span><br></pre></td></tr></table></figure>
+<h3 id="安装源码包"><a href="#安装源码包" class="headerlink" title="安装源码包"></a>安装源码包</h3><ul>
+<li>通过pip安装</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">(magedu353) [python@localhost dist]$ pip install ./mypackage<span class="number">-1.0</span><span class="number">.0</span>.tar.gz </span><br><span class="line">Processing ./mypackage<span class="number">-1.0</span><span class="number">.0</span>.tar.gz</span><br><span class="line">Installing collected packages: mypackage</span><br><span class="line">  Running setup.py install <span class="keyword">for</span> mypackage ... done</span><br><span class="line">Successfully installed mypackage<span class="number">-1.0</span><span class="number">.0</span>    <span class="comment">#安装完成</span></span><br></pre></td></tr></table></figure>
+<p>安装后会出现在：site-packages 这样类似的目录中，并且可以使用<code>pip list</code>命令找到</p>
+<ul>
+<li>直接解压后安装</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">(magedu353) [python@localhost package]$ cd dist/</span><br><span class="line">(magedu353) [python@localhost dist]$ ll</span><br><span class="line">总用量 <span class="number">4</span></span><br><span class="line">-rw-rw-r-- <span class="number">1</span> python python <span class="number">571</span> <span class="number">5</span>月  <span class="number">20</span> <span class="number">12</span>:<span class="number">08</span> mypackage<span class="number">-1.0</span><span class="number">.0</span>.tar.gz</span><br><span class="line">(magedu353) [python@localhost dist]$ tar zxfv mypackage<span class="number">-1.0</span><span class="number">.0</span>.tar.gz     <span class="comment">#解压构建的包</span></span><br><span class="line">mypackage<span class="number">-1.0</span><span class="number">.0</span>/</span><br><span class="line">mypackage<span class="number">-1.0</span><span class="number">.0</span>/m/</span><br><span class="line">mypackage<span class="number">-1.0</span><span class="number">.0</span>/m/__init__.py</span><br><span class="line">mypackage<span class="number">-1.0</span><span class="number">.0</span>/m/m1.py</span><br><span class="line">mypackage<span class="number">-1.0</span><span class="number">.0</span>/setup.py</span><br><span class="line">mypackage<span class="number">-1.0</span><span class="number">.0</span>/PKG-INFO</span><br><span class="line">(magedu353) [python@localhost dist]$ ll</span><br><span class="line">总用量 <span class="number">4</span></span><br><span class="line">drwxrwxr-x <span class="number">3</span> python python  <span class="number">47</span> <span class="number">5</span>月  <span class="number">20</span> <span class="number">12</span>:<span class="number">08</span> mypackage<span class="number">-1.0</span><span class="number">.0</span></span><br><span class="line">-rw-rw-r-- <span class="number">1</span> python python <span class="number">571</span> <span class="number">5</span>月  <span class="number">20</span> <span class="number">12</span>:<span class="number">08</span> mypackage<span class="number">-1.0</span><span class="number">.0</span>.tar.gz</span><br><span class="line">(magedu353) [python@localhost dist]$ cd mypackage<span class="number">-1.0</span><span class="number">.0</span></span><br><span class="line">(magedu353) [python@localhost mypackage<span class="number">-1.0</span><span class="number">.0</span>]$ ll</span><br><span class="line">总用量 <span class="number">8</span></span><br><span class="line">drwxrwxr-x <span class="number">2</span> python python  <span class="number">38</span> <span class="number">5</span>月  <span class="number">20</span> <span class="number">12</span>:<span class="number">08</span> m</span><br><span class="line">-rw-rw-r-- <span class="number">1</span> python python <span class="number">227</span> <span class="number">5</span>月  <span class="number">20</span> <span class="number">12</span>:<span class="number">08</span> PKG-INFO</span><br><span class="line">-rw-rw-r-- <span class="number">1</span> python python <span class="number">258</span> <span class="number">5</span>月  <span class="number">20</span> <span class="number">11</span>:<span class="number">34</span> setup.py</span><br><span class="line">(magedu353) [python@localhost mypackage<span class="number">-1.0</span><span class="number">.0</span>]$ python setup.py install   <span class="comment">#执行安装脚本</span></span><br><span class="line">running install</span><br><span class="line">running build</span><br><span class="line">running build_py</span><br><span class="line">creating build</span><br><span class="line">creating build/lib</span><br><span class="line">creating build/lib/m</span><br><span class="line">copying m/__init__.py -&gt; build/lib/m</span><br><span class="line">copying m/m1.py -&gt; build/lib/m</span><br><span class="line">running install_lib</span><br><span class="line">creating /home/python/.pyenv/versions/magedu353/lib/python3<span class="number">.5</span>/site-packages/m</span><br><span class="line">copying build/lib/m/__init__.py -&gt; /home/python/.pyenv/versions/magedu353/lib/python3.5/site-packages/m</span><br><span class="line">copying build/lib/m/m1.py -&gt; /home/python/.pyenv/versions/magedu353/lib/python3.5/site-packages/m</span><br><span class="line">byte-compiling /home/python/.pyenv/versions/magedu353/lib/python3<span class="number">.5</span>/site-packages/m/__init__.py to __init__.cpython<span class="number">-35.</span>pyc</span><br><span class="line">byte-compiling /home/python/.pyenv/versions/magedu353/lib/python3<span class="number">.5</span>/site-packages/m/m1.py to m1.cpython<span class="number">-35.</span>pyc</span><br><span class="line">running install_egg_info</span><br><span class="line">Writing /home/python/.pyenv/versions/magedu353/lib/python3<span class="number">.5</span>/site-packages/mypackage<span class="number">-1.0</span><span class="number">.0</span>-py3<span class="number">.5</span>.egg-info      <span class="comment">#安装完成</span></span><br></pre></td></tr></table></figure>
+<p>安装后会出现在：site-packages 这样类似的目录中，并且可以使用<code>pip list</code>命令找到</p>
+<h3 id="安装后使用"><a href="#安装后使用" class="headerlink" title="安装后使用"></a>安装后使用</h3><p>安装后就向一般的模块一样，导入使用即可</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">2</span>]: <span class="keyword">import</span> m</span><br><span class="line">m/m1.py</span><br><span class="line">m.m1</span><br><span class="line">m/__init__.py</span><br><span class="line">m</span><br><span class="line"></span><br><span class="line">In [<span class="number">4</span>]: m.__path__</span><br><span class="line">Out[<span class="number">4</span>]: [<span class="string">'/home/python/.pyenv/versions/3.5.3/envs/magedu353/lib/python3.5/site-packages/m'</span>]</span><br></pre></td></tr></table></figure>
+<h3 id="卸载安装包"><a href="#卸载安装包" class="headerlink" title="卸载安装包"></a>卸载安装包</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">(magedu353) [python@localhost test]$ pip uninstall mypackage</span><br><span class="line">Uninstalling mypackage<span class="number">-1.0</span><span class="number">.0</span>:</span><br><span class="line">  /home/python/.pyenv/versions/<span class="number">3.5</span><span class="number">.3</span>/envs/magedu353/lib/python3<span class="number">.5</span>/site-packages/m/__init__.py</span><br><span class="line">  /home/python/.pyenv/versions/<span class="number">3.5</span><span class="number">.3</span>/envs/magedu353/lib/python3<span class="number">.5</span>/site-packages/m/__pycache__/__init__.cpython<span class="number">-35.</span>pyc</span><br><span class="line">  /home/python/.pyenv/versions/<span class="number">3.5</span><span class="number">.3</span>/envs/magedu353/lib/python3<span class="number">.5</span>/site-packages/m/__pycache__/m1.cpython<span class="number">-35.</span>pyc</span><br><span class="line">  /home/python/.pyenv/versions/<span class="number">3.5</span><span class="number">.3</span>/envs/magedu353/lib/python3<span class="number">.5</span>/site-packages/m/m1.py</span><br><span class="line">  /home/python/.pyenv/versions/<span class="number">3.5</span><span class="number">.3</span>/envs/magedu353/lib/python3<span class="number">.5</span>/site-packages/mypackage<span class="number">-1.0</span><span class="number">.0</span>-py3<span class="number">.5</span>.egg-info</span><br><span class="line">Proceed (y/n)? y</span><br><span class="line">  Successfully uninstalled mypackage<span class="number">-1.0</span><span class="number">.0</span></span><br><span class="line">You are using pip version <span class="number">9.0</span><span class="number">.1</span>, however version <span class="number">10.0</span><span class="number">.1</span> <span class="keyword">is</span> available.</span><br><span class="line">You should consider upgrading via the <span class="string">'pip install --upgrade pip'</span> command.</span><br></pre></td></tr></table></figure>
           
         
       
@@ -473,7 +706,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://yangjinheng.github.io/2017/09/27/python/18.multiprocessing多进程/">
+    <link itemprop="mainEntityOfPage" href="https://yangjinheng.github.io/2017/10/08/python/29.hashlib加密解密/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Jin Heng">
@@ -492,7 +725,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/09/27/python/18.multiprocessing多进程/" itemprop="url">Python多进程</a></h1>
+                <a class="post-title-link" href="/2017/10/08/python/29.hashlib加密解密/" itemprop="url">hashlib加密解密</a></h1>
         
 
         <div class="post-meta">
@@ -504,8 +737,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-27T12:20:30+08:00">
-                2017-09-27
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-08T00:00:00+08:00">
+                2017-10-08
               </time>
             
 
@@ -566,410 +799,17 @@
       
         
           
-            <h2 id="multiprocessing"><a href="#multiprocessing" class="headerlink" title="multiprocessing"></a>multiprocessing</h2><p>多进程 <code>Multiprocessing</code> 和多线程 <code>threading</code> 类似, 他们都是在 <code>python</code> 中用来并行运算的. 不过既然有了 <code>threading</code>，为什么 <code>Python</code> 还要出一个 <code>multiprocessing</code> 呢? 原因很简单, 就是用来弥补 <code>threading</code> 在计算密集型程序的不足。</p>
-<ul>
-<li><code>multiprocessing</code> 子类</li>
-</ul>
-<table>
-<thead>
-<tr>
-<th>子类</th>
-<th>用处</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Process</td>
-<td>进程类</td>
-</tr>
-<tr>
-<td>Pool</td>
-<td>提供一个进程池</td>
-</tr>
-<tr>
-<td>Lock</td>
-<td>独占锁</td>
-</tr>
-<tr>
-<td>RLock</td>
-<td>重入锁</td>
-</tr>
-<tr>
-<td>Event</td>
-<td>事件同步</td>
-</tr>
-<tr>
-<td>Condition</td>
-<td>条件同步</td>
-</tr>
-<tr>
-<td>Semaphore</td>
-<td>信号量</td>
-</tr>
-<tr>
-<td>BoundedSemaphore</td>
-<td>不可超越的信号量</td>
-</tr>
-<tr>
-<td>Barrier</td>
-<td>栅栏</td>
-</tr>
-<tr>
-<td>Queue</td>
-<td>进程间通信队列</td>
-</tr>
-<tr>
-<td>SimpleQueue</td>
-<td></td>
-</tr>
-<tr>
-<td>Pipe</td>
-<td>进程间通信管道</td>
-</tr>
-<tr>
-<td>Array</td>
-<td></td>
-</tr>
-<tr>
-<td>BufferTooShort</td>
-<td></td>
-</tr>
-<tr>
-<td>JoinableQueue</td>
-<td></td>
-</tr>
-<tr>
-<td>Manager</td>
-<td></td>
-</tr>
-<tr>
-<td>RawArray</td>
-<td></td>
-</tr>
-<tr>
-<td>RawValue</td>
-<td></td>
-</tr>
-<tr>
-<td>SUBDEBUG</td>
-<td></td>
-</tr>
-<tr>
-<td>SUBWARNING</td>
-<td></td>
-</tr>
-<tr>
-<td>Value</td>
-</tr>
-</tbody>
-</table>
-<h2 id="Process多进程"><a href="#Process多进程" class="headerlink" title="Process多进程"></a>Process多进程</h2><ul>
-<li>构造方法</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">__init__(self, group=<span class="keyword">None</span>, target=<span class="keyword">None</span>, name=<span class="keyword">None</span>, args=(), kwargs=&#123;&#125;, *, daemon=<span class="keyword">None</span>)</span><br></pre></td></tr></table></figure>
-<table>
-<thead>
-<tr>
-<th>参数</th>
-<th>含义</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>group</code></td>
-<td>线程组，目前还没有实现，库引用中提示必须是None</td>
-</tr>
-<tr>
-<td><code>target</code></td>
-<td>要执行的函数</td>
-</tr>
-<tr>
-<td><code>name</code></td>
-<td>设置进程的名字</td>
-</tr>
-<tr>
-<td><code>args</code></td>
-<td>传入进程函数的位置参数，元祖形式，例如：<code>args = (args1, args2, )</code></td>
-</tr>
-<tr>
-<td><code>kwargs</code></td>
-<td>传入进程函数的关键字参数，字典形式，例如：<code>kwargs = (key1=value1, key2=value2)</code></td>
-</tr>
-<tr>
-<td><code>daemon</code></td>
-<td>是否是主进程的守护进程，意味着主进程结束时候是否退出，有三种状态：True，守护主进程，主进程结束也随之结束，False，不守护主进程，主进程结束时阻塞直到线程执行完毕。None：继承父进程的daemon状态。</td>
-</tr>
-</tbody>
-</table>
-<ul>
-<li>方法和属性</li>
-</ul>
-<table>
-<thead>
-<tr>
-<th>属性</th>
-<th>作用</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>.is_alive()</code></td>
-<td>判断是否正在运行</td>
-</tr>
-<tr>
-<td><code>.join(timeout=None)</code></td>
-<td>设置进程为阻塞调用，等待进程结束或者超时，程序控制流才会继续，此调用无视进程的daemon设置</td>
-</tr>
-<tr>
-<td><code>.run()</code></td>
-<td>运行进程函数。可继承Thread重写，参数可从args和kwargs获取</td>
-</tr>
-<tr>
-<td><code>.start()</code></td>
-<td>启动进程</td>
-</tr>
-<tr>
-<td><code>.terminate()</code></td>
-<td>终止指定的进程</td>
-</tr>
-<tr>
-<td><code>.daemon</code></td>
-<td>是否为守护进程</td>
-</tr>
-<tr>
-<td><code>.exitcode</code></td>
-<td>进程的退出状态码</td>
-</tr>
-<tr>
-<td><code>.ident</code></td>
-<td>进程PID</td>
-</tr>
-<tr>
-<td><code>.pid</code></td>
-<td>进程PID</td>
-</tr>
-<tr>
-<td><code>.name</code></td>
-<td>获得进程名</td>
-</tr>
-</tbody>
-</table>
-<ul>
-<li>示例</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> multiprocessing</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">worker</span><span class="params">(num)</span>:</span></span><br><span class="line">    print(<span class="string">"Worker"</span>, num)</span><br><span class="line">    time.sleep(<span class="number">3</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">5</span>):</span><br><span class="line">        p = multiprocessing.Process(target=worker, args=(i, ))</span><br><span class="line">        p.start()</span><br></pre></td></tr></table></figure>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">Worker <span class="number">1</span></span><br><span class="line">Worker <span class="number">3</span></span><br><span class="line">Worker <span class="number">2</span></span><br><span class="line">Worker <span class="number">0</span></span><br><span class="line">Worker <span class="number">4</span></span><br></pre></td></tr></table></figure>
-<h2 id="Pool进程池"><a href="#Pool进程池" class="headerlink" title="Pool进程池"></a>Pool进程池</h2><p>Pool类可以创建一个进程池，在同一个时间，只能有指定数量的进程运行，它支持异步和回调。</p>
-<ul>
-<li>构造方法</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">Pool(processes=<span class="keyword">None</span>, initializer=<span class="keyword">None</span>, initargs=(), maxtasksperchild=<span class="keyword">None</span>)</span><br></pre></td></tr></table></figure>
-<table>
-<thead>
-<tr>
-<th>参数</th>
-<th><code>含义</code></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>processes</code></td>
-<td>进程池中工作进程的数量，如果未指定，则为 <code>multiprocessing.get_cpu()</code> 个</td>
-</tr>
-<tr>
-<td><code>initializer</code></td>
-<td>如果不为None，则每个进程开始前会先调用<code>initializer</code>程序</td>
-</tr>
-<tr>
-<td><code>initargs</code></td>
-<td>为 <code>initializer</code> 提供参数</td>
-</tr>
-<tr>
-<td><code>maxtasksperchild</code></td>
-<td>是指每一个worker最多被重复调用的次数， 然后就会被销毁，然后再重新初始化一个</td>
-</tr>
-</tbody>
-</table>
-<ul>
-<li>子类</li>
-</ul>
-<table>
-<thead>
-<tr>
-<th>方法</th>
-<th>作用</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>.apply(func, args=(), kwds={})</code></td>
-<td>同步阻塞执行</td>
-</tr>
-<tr>
-<td><code>.apply_async(func, args=(), kwds={}, callback=None, error_callback=None)</code></td>
-<td>异步执行，<code>callback</code>会在<code>func</code>调用成功后立刻执行回函数，<code>error_callback</code>则会在<code>func</code>调用失败时立即执行的函数</td>
-</tr>
-<tr>
-<td><code>terminate()</code></td>
-<td>结束工作进程</td>
-</tr>
-<tr>
-<td><code>close()</code></td>
-<td>关闭Pool，表示不能再往进程池中添加进程</td>
-</tr>
-<tr>
-<td><code>join()</code></td>
-<td>阻塞等待子进程完成，应该在<code>close()</code>或<code>terminate()</code>后执行</td>
-</tr>
-<tr>
-<td><code>map(func, iterable, chunksize=None)</code></td>
-<td><code>iterable</code> 可迭代对象的每个元素在func上执行，最后将返回几个结果列表</td>
-</tr>
-<tr>
-<td><code>map_async(func, iterable, chunksize=None, callback=None, error_callback=None)</code></td>
-<td>异步版本的<code>map()</code></td>
-</tr>
-<tr>
-<td><code>imap(func, iterable, chunksize=1)</code></td>
-<td>一个惰性版本的<code>map()</code></td>
-</tr>
-<tr>
-<td><code>imap_unordered(func, iterable, chunksize=1)</code></td>
-<td>与<code>imap()</code>，相同，不过结果是无序的</td>
-</tr>
-<tr>
-<td><code>starmap(func, iterable, chunksize=None)</code></td>
-<td>与<code>map()</code>类似，不过<code>iterable</code>的参数会被分解，因此<code>[(1,2), (3,4)]</code>分解为<code>[func(1,2), func(3,4)]</code>。</td>
-</tr>
-<tr>
-<td><code>starmap_async(func, iterable, chunksize=None, callback=None, error_callback=None)</code></td>
-<td>与 <code>starmap()</code> 类似，不过是异步版本的</td>
-</tr>
-</tbody>
-</table>
-<ul>
-<li><code>apply_async()</code> 和 <code>map_async()</code> 支持的方法 </li>
-</ul>
-<table>
-<thead>
-<tr>
-<th>apply_async方法</th>
-<th>作用</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>get(self, timeout=None)</code></td>
-<td>阻塞等待线程调用的结果，或等待超时</td>
-</tr>
-<tr>
-<td><code>ready(self)</code></td>
-<td>返回进程是否完成</td>
-</tr>
-<tr>
-<td><code>successful(self)</code></td>
-<td>是否成功完成，没有成功完成返回AssertionError异常</td>
-</tr>
-<tr>
-<td><code>wait(self, timeout=None)</code></td>
-<td>阻塞等待进程返回，才释放控制流</td>
-</tr>
-</tbody>
-</table>
-<ul>
-<li><code>apply_async</code> 示例</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> multiprocessing</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func</span><span class="params">(msg)</span>:</span></span><br><span class="line">    time.sleep(<span class="number">5</span>)</span><br><span class="line">    <span class="keyword">return</span> multiprocessing.current_process().name + <span class="string">'-'</span> + msg</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line">    pool = multiprocessing.Pool(processes=<span class="number">4</span>)</span><br><span class="line">    results = []</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">8</span>):</span><br><span class="line">        msg = <span class="string">"hello %d"</span> %(i)</span><br><span class="line">        results.append(pool.apply_async(func, (msg, )))</span><br><span class="line">    pool.close()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> res <span class="keyword">in</span> results:</span><br><span class="line">        <span class="keyword">print</span> (res.get())</span><br></pre></td></tr></table></figure>
-<ul>
-<li><code>map_async</code> 示例</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> multiprocessing <span class="keyword">import</span> Pool</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">f</span><span class="params">(x)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> x * x</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    <span class="keyword">with</span> Pool(processes=<span class="number">4</span>) <span class="keyword">as</span> pool:         <span class="comment"># 开始 4 个工作线程</span></span><br><span class="line">        result = pool.apply_async(f, (<span class="number">10</span>,)) <span class="comment"># 使用异步的进程来运行 f </span></span><br><span class="line">        print(result.get(timeout=<span class="number">1</span>))        <span class="comment"># 获得异步进程的结果</span></span><br><span class="line"></span><br><span class="line">        print(pool.map(f, range(<span class="number">10</span>)))       <span class="comment"># 使用map进程处理可迭代的参数</span></span><br><span class="line"></span><br><span class="line">        it = pool.imap(f, range(<span class="number">10</span>))        <span class="comment"># 使用imap惰性的进程来处理可迭代参数</span></span><br><span class="line">        print(next(it))                     <span class="comment"># 获取imap进程的next结果</span></span><br><span class="line">        print(next(it))                     <span class="comment"># 获取imap进程的next结果</span></span><br><span class="line">        print(it.next(timeout=<span class="number">1</span>))           <span class="comment"># 获取imap进程的next结果</span></span><br><span class="line"></span><br><span class="line">        result = pool.apply_async(time.sleep, (<span class="number">10</span>,))</span><br><span class="line">        print(result.get(timeout=<span class="number">1</span>))        <span class="comment"># 这会引发一个异常 multiprocessing.TimeoutError</span></span><br></pre></td></tr></table></figure>
-<h2 id="Queue队列通信"><a href="#Queue队列通信" class="headerlink" title="Queue队列通信"></a>Queue队列通信</h2><p>Queue的功能是将每个核或线程的运算结果放在队里中， 等到每个线程或核运行完毕后再从队列中取出结果， 继续加载运算。原因很简单, 多线程调用的函数不能有返回值, 所以使用Queue存储多个线程运算的结果。</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">import</span> multiprocessing</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">worker1</span><span class="params">(queue, i)</span>:</span> </span><br><span class="line">    name = multiprocessing.current_process().name</span><br><span class="line">    data = queue.get()      <span class="comment">#收到消息才执行</span></span><br><span class="line">    print(<span class="string">'Process %s i is %d , data is %s'</span>% (name, i, data))</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">worker2</span><span class="params">(queue, i)</span>:</span> </span><br><span class="line">    name = multiprocessing.current_process().name</span><br><span class="line">    data = queue.get()      <span class="comment">#收到消息才执行  </span></span><br><span class="line">    print(<span class="string">'Process %s i is %d , data is %s'</span>% (name, i, data))</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:  </span><br><span class="line">    queue = multiprocessing.Queue()</span><br><span class="line"></span><br><span class="line">    p1 = multiprocessing.Process(target=worker1, args=(queue, <span class="number">1</span>))  </span><br><span class="line">    p1.start()  </span><br><span class="line"></span><br><span class="line">    p2 = multiprocessing.Process(target=worker2, args=(queue, <span class="number">2</span>))  </span><br><span class="line">    p2.start()  </span><br><span class="line"></span><br><span class="line">    time.sleep(<span class="number">3</span>)          <span class="comment">#3 秒后，发送带有数据的消息</span></span><br><span class="line">    queue.put(<span class="string">'data1'</span>)</span><br><span class="line">    queue.put(<span class="string">'data2'</span>)</span><br><span class="line">    queue.close()          <span class="comment">#发送完成后关闭</span></span><br></pre></td></tr></table></figure>
-<h2 id="concurrent-futures"><a href="#concurrent-futures" class="headerlink" title="concurrent.futures"></a>concurrent.futures</h2><p>Python标准库为我们提供了 <code>threading</code> 和 <code>multiprocessing</code> 模块编写相应的多线程/多进程代码，但是当项目达到一定的规模，频繁创建/销毁进程或者线程是非常消耗资源的，这个时候我们就要编写自己的线程池/进程池，以空间换时间。但从Python3.2开始，标准库为我们提供了 <code>concurrent.futures</code> 模块，它提供了<code>ThreadPoolExecutor</code> 和 <code>ProcessPoolExecutor</code> 两个类，实现了对 <code>threading</code> 和 <code>multiprocessing</code> 的进一步抽象，对编写线程池/进程池提供了直接的支持。</p>
-<p><code>concurrent.futures</code> 模块的基础是<code>Exectuor</code>，它是一个抽象类，它不能被直接使用。但是它提供的两个子类 <code>ThreadPoolExecutor</code> 和 <code>ProcessPoolExecutor</code> 却是非常有用，顾名思义两者分别被用来创建线程池和进程池的代码。我们可以将相应的 <code>tasks</code> 直接放入线程池/进程池，不需要维护 <code>Queue</code> 来操心死锁的问题，线程池/进程池会自动帮我们调度。 </p>
-<p><code>Future</code> 这个概念，你可以把它理解为一个在未来完成的操作，这是异步编程的基础，传统编程模式下比如我们操作 <code>queue.get</code> 的时候，在等待返回结果之前会产生阻塞，CPU 不能让出来做其他事情，而 <code>Future</code> 的引入帮助我们在等待的这段时间可以完成其他的操作。</p>
-<h3 id="ThreadPoolExecutor"><a href="#ThreadPoolExecutor" class="headerlink" title="ThreadPoolExecutor"></a>ThreadPoolExecutor</h3><p>ThreadPoolExecutor 只提供了异步方式的线程&amp;进程池，池内的线程或者进程可以复用。</p>
-<ul>
-<li>定义线程池</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">futures.ThreadPoolExecutor(max_workers=<span class="number">5</span>)    <span class="comment">#定义一个线程池对象</span></span><br></pre></td></tr></table></figure>
-<table>
-<thead>
-<tr>
-<th>方法</th>
-<th>作用</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>submit(fn, *args, **kwargs)</code></td>
-<td>向线程池提交一个函数和参数运行，并且返回一个Future对象，</td>
-</tr>
-<tr>
-<td><code>shutdown(wait=True)</code></td>
-<td>清理Pool，杀掉其内部的所有对象</td>
-</tr>
-</tbody>
-</table>
-<ul>
-<li>向线程池提交任务并执行，得到future对象</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">future = executor.submit(worker)</span><br></pre></td></tr></table></figure>
-<ul>
-<li>future 对象支持的方法</li>
-</ul>
-<table>
-<thead>
-<tr>
-<th>方法</th>
-<th>作用</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>.done()</code></td>
-<td>如果调用已成功取消或已完成运行, 则返回 True。</td>
-</tr>
-<tr>
-<td><code>.cancelled()</code></td>
-<td>如果调用成功取消则返回True</td>
-</tr>
-<tr>
-<td><code>.cancel()</code></td>
-<td>尝试取消调用，如果取消成功则返回True，失败则返回False</td>
-</tr>
-<tr>
-<td><code>.running()</code></td>
-<td>如果当前调用正在执行且无法取消，返回True</td>
-</tr>
-<tr>
-<td><code>result(timeout=None)</code></td>
-<td>返回由调用返回的值。如果调用尚未完成, 则此方法将等待超时秒，如果未指定超时或 None, 则等待时间没有限制。</td>
-</tr>
-<tr>
-<td><code>exception(timeout=None)</code></td>
-<td>返回由调用引发的异常。如果调用尚未完成, 则此方法将等待超时秒。</td>
-</tr>
-<tr>
-<td><code>add_done_callback(fn)</code></td>
-<td>将可调用 <code>fn</code> 附加到 <code>future</code> 对象。当 <code>future</code> 对象被取消或完成运行时, <code>fn</code> 将被称为, 如果 <code>future</code> 对象已经完成或被取消, <code>fn</code> 将立即被调用。</td>
-</tr>
-</tbody>
-</table>
-<ul>
-<li>从future线程内获得返回结果</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">worker</span><span class="params">(x,y)</span>:</span></span><br><span class="line">    msg = x + y</span><br><span class="line">    print(<span class="string">'x + y = %s'</span> % (msg))</span><br><span class="line">    <span class="keyword">return</span> msg</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> concurrent.futures <span class="keyword">import</span> ThreadPoolExecutor</span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> ThreadPoolExecutor(max_workers=<span class="number">1</span>) <span class="keyword">as</span> executor:</span><br><span class="line">    future = executor.submit(worker, <span class="number">2</span>, <span class="number">2</span>)</span><br><span class="line">    print(future.result())</span><br></pre></td></tr></table></figure>
-<ul>
-<li>Future隐藏了底层的复杂性，如果需要以进程模式运行</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">import</span> threading</span><br><span class="line"><span class="keyword">from</span> concurrent <span class="keyword">import</span> futures</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">worker</span><span class="params">()</span>:</span></span><br><span class="line">    time.sleep(<span class="number">3</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    executor = futures.ThreadPoolExecutor(max_workers=<span class="number">5</span>)    <span class="comment">#定义一个线程池</span></span><br><span class="line">    </span><br><span class="line">    fs = []                                    <span class="comment">#定义一个列表，准备装入future对象</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">10</span>):</span><br><span class="line">        future = executor.submit(worker)</span><br><span class="line">        fs.append(future)                      <span class="comment">#向线程池内添加10个任务</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> <span class="keyword">True</span>:</span><br><span class="line">        time.sleep(<span class="number">3</span>)</span><br><span class="line">        print(threading.enumerate())           <span class="comment">#枚举线程列表</span></span><br><span class="line"></span><br><span class="line">        flag = <span class="keyword">True</span></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> fs:</span><br><span class="line">            print(i.done())</span><br><span class="line">            flag = flag <span class="keyword">and</span> i.done()</span><br><span class="line"></span><br><span class="line">        print(<span class="string">'-'</span>*<span class="number">100</span>)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> flag:                               <span class="comment">#如果线程全部执行完毕</span></span><br><span class="line">            executor.shutdown()                <span class="comment">#清理线程池</span></span><br><span class="line">            print(threading.enumerate())       <span class="comment">#枚举线程列表</span></span><br><span class="line">            <span class="keyword">break</span></span><br></pre></td></tr></table></figure>
-<h3 id="ProcessPoolExecutor"><a href="#ProcessPoolExecutor" class="headerlink" title="ProcessPoolExecutor"></a>ProcessPoolExecutor</h3><ul>
-<li>改造成进程的使用方法ProcessPoolExecutor，使用上下文管理来自动清理Pool</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">import</span> threading</span><br><span class="line"><span class="keyword">from</span> concurrent <span class="keyword">import</span> futures</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">worker</span><span class="params">()</span>:</span></span><br><span class="line">    time.sleep(<span class="number">3</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    <span class="keyword">with</span> futures.ProcessPoolExecutor(max_workers=<span class="number">5</span>) <span class="keyword">as</span> executor:   <span class="comment">#定义一个线程池</span></span><br><span class="line">        fs = []                                    <span class="comment">#定义一个列表，准备装入future对象</span></span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">10</span>):</span><br><span class="line">            future = executor.submit(worker)</span><br><span class="line">            fs.append(future)                      <span class="comment">#向线程池内添加10个任务</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">while</span> <span class="keyword">True</span>:</span><br><span class="line">            time.sleep(<span class="number">3</span>)</span><br><span class="line"></span><br><span class="line">            flag = <span class="keyword">True</span></span><br><span class="line">            <span class="keyword">for</span> i <span class="keyword">in</span> fs:</span><br><span class="line">                print(i.done())</span><br><span class="line">                flag = flag <span class="keyword">and</span> i.done()</span><br><span class="line">            print(<span class="string">'-'</span>*<span class="number">100</span>)</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> flag:<span class="keyword">break</span></span><br></pre></td></tr></table></figure>
-
+            <p>摘要算法又称哈希/散列算法。它通过一个函数，把任意长度的数据转换为一个长度固定的数据串（通常用16进制的字符串表示）。算法不可逆。 </p>
+<p>散列/哈希算法有：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">SHA1  SHA224  SHA256  SHA384  SHA512  MD5</span><br><span class="line">HmacSHA1 HmacSHA224 HmacSHA256 HmacSHA384 HmacSHA512 HmacMD5 PBKDF2</span><br></pre></td></tr></table></figure>
+<h3 id="MD5"><a href="#MD5" class="headerlink" title="MD5"></a>MD5</h3><p>MD5（Message-Digest Algorithm 5，消息摘要算法版本5）是最常见的摘要算法，它由MD2、MD3、MD4发展而来，速度很快。</p>
+<p>MD2、MD4、MD5 都产生16字节（128位）的校验值，一般用32位十六进制数表示。MD2的算法较慢但相对安全，MD4速度很快，但安全性下降，MD5比MD4更安全、速度更快。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> hashlib</span><br><span class="line"></span><br><span class="line">md5 = hashlib.md5()</span><br><span class="line">md5.update(<span class="string">'123456'</span>.encode(<span class="string">'utf-8'</span>))</span><br><span class="line">print(md5.hexdigest())</span><br></pre></td></tr></table></figure>
+<h3 id="SHA1"><a href="#SHA1" class="headerlink" title="SHA1"></a>SHA1</h3><p>SHA（Secure Hash Algorithm）是由美国专门制定密码算法的标准机构—— 美国国家标准技术研究院（NIST）制定的。</p>
+<p>SHA系列算法的摘要长度分别为：SHA为20字节（160位，通常用一个40位的16进制字符串表示）、SHA256为32字节（256位）、 SHA384为48字节（384位）、SHA512为64字节（512位），由于它产生的数据摘要的长度更长，因此更难以发生碰撞，因此也更为安全，它是未来数据摘要算法的发展方向。由于SHA系列算法的数据摘要长度较长，因此其运算速度与MD5相比，也相对较慢。</p>
+<p>SHA1的应用较为广泛，主要应用于CA和数字证书中，另外在互联网中流行的BT软件中，也是使用SHA1来进行文件校验的。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> hashlib</span><br><span class="line"></span><br><span class="line"><span class="comment"># sha224, sha256, sha384, sha512同理</span></span><br><span class="line">sha1 = hashlib.sha1()</span><br><span class="line">sha1.update(<span class="string">'123456'</span>.encode(<span class="string">'utf-8'</span>))</span><br><span class="line">print(sha1.hexdigest())</span><br></pre></td></tr></table></figure>
+<h2 id="bcrypt"><a href="#bcrypt" class="headerlink" title="bcrypt"></a>bcrypt</h2>
           
         
       
@@ -1008,7 +848,7 @@
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/26/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/26/">26</a><span class="page-number current">27</span><a class="page-number" href="/page/28/">28</a><span class="space">&hellip;</span><a class="page-number" href="/page/38/">38</a><a class="extend next" rel="next" href="/page/28/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/page/26/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/26/">26</a><span class="page-number current">27</span><a class="page-number" href="/page/28/">28</a><span class="space">&hellip;</span><a class="page-number" href="/page/43/">43</a><a class="extend next" rel="next" href="/page/28/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1056,7 +896,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">75</span>
+                  <span class="site-state-item-count">86</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

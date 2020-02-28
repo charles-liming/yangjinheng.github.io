@@ -311,6 +311,165 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://yangjinheng.github.io/2019/06/11/go/sort/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Jin Heng">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="默默">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/06/11/go/sort/" itemprop="url">go 标准库之 sort</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-06-11T00:00:00+08:00">
+                2019-06-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/golang/" itemprop="url" rel="index">
+                    <span itemprop="name">golang</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="sort"><a href="#sort" class="headerlink" title="sort"></a>sort</h1><p>go 语言标准库中提供了排序的 API</p>
+<p>sort 包提供了多种排序算法，这些排序算法是内部实现的，每次使用 sort 时候会自动选择最优的算法。</p>
+<h2 id="整数升序降序"><a href="#整数升序降序" class="headerlink" title="整数升序降序"></a>整数升序降序</h2><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	arr1 := []<span class="keyword">int</span>&#123;<span class="number">10</span>, <span class="number">3</span>, <span class="number">9</span>, <span class="number">2</span>, <span class="number">5</span>, <span class="number">7</span>, <span class="number">4</span>, <span class="number">1</span>&#125;</span><br><span class="line">	<span class="comment">// sort.Ints(arr1)</span></span><br><span class="line">    sort.Sort(sort.IntSlice(arr1))</span><br><span class="line">	fmt.Println(arr1)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[1 2 3 4 5 7 9 10]</span><br></pre></td></tr></table></figure>
+<h2 id="整数升序降序-1"><a href="#整数升序降序-1" class="headerlink" title="整数升序降序"></a>整数升序降序</h2><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	arr1 := []<span class="keyword">int</span>&#123;<span class="number">10</span>, <span class="number">3</span>, <span class="number">9</span>, <span class="number">2</span>, <span class="number">5</span>, <span class="number">7</span>, <span class="number">4</span>, <span class="number">1</span>&#125;</span><br><span class="line">	sort.Ints(arr1)</span><br><span class="line">	fmt.Println(arr1)</span><br><span class="line">	sort.Sort(sort.Reverse(sort.IntSlice(arr1)))</span><br><span class="line">	fmt.Println(arr1)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[1 2 3 4 5 7 9 10]</span><br><span class="line">[10 9 7 5 4 3 2 1]</span><br></pre></td></tr></table></figure>
+<h2 id="浮点数排序"><a href="#浮点数排序" class="headerlink" title="浮点数排序"></a>浮点数排序</h2><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	arr1 := []<span class="keyword">float64</span>&#123;<span class="number">3.14</span>, <span class="number">2.22</span>, <span class="number">5.66</span>, <span class="number">6.88</span>, <span class="number">9.82</span>, <span class="number">4.33</span>&#125;</span><br><span class="line">	sort.Float64s(arr1)</span><br><span class="line">	fmt.Println(arr1)</span><br><span class="line">	sort.Sort(sort.Reverse(sort.Float64Slice(arr1)))</span><br><span class="line">	fmt.Println(arr1)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[2.22 3.14 4.33 5.66 6.88 9.82]</span><br><span class="line">[9.82 6.88 5.66 4.33 3.14 2.22]</span><br></pre></td></tr></table></figure>
+<h2 id="字符串排序"><a href="#字符串排序" class="headerlink" title="字符串排序"></a>字符串排序</h2><ul>
+<li>升序降序</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	arr1 := []<span class="keyword">string</span>&#123;<span class="string">"a"</span>, <span class="string">"c"</span>, <span class="string">"b"</span>, <span class="string">"d"</span>, <span class="string">"f"</span>, <span class="string">"i"</span>, <span class="string">"z"</span>, <span class="string">"x"</span>, <span class="string">"w"</span>, <span class="string">"y"</span>&#125;</span><br><span class="line">	sort.Strings(arr1)</span><br><span class="line">	fmt.Println(arr1)</span><br><span class="line">	sort.Sort(sort.Reverse(sort.StringSlice(arr1)))</span><br><span class="line">	fmt.Println(arr1)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[a b c d f i w x y z]</span><br><span class="line">[z y x w i f d c b a]</span><br></pre></td></tr></table></figure>
+<ul>
+<li>搜索字符串</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	arr1 := []<span class="keyword">string</span>&#123;<span class="string">"a"</span>, <span class="string">"c"</span>, <span class="string">"b"</span>, <span class="string">"d"</span>, <span class="string">"f"</span>, <span class="string">"i"</span>, <span class="string">"z"</span>, <span class="string">"x"</span>, <span class="string">"w"</span>, <span class="string">"y"</span>&#125;</span><br><span class="line">	sort.Strings(arr1)</span><br><span class="line">	fmt.Println(arr1)                        <span class="comment">// SearchStrings 的目标应该是升序的</span></span><br><span class="line">	d := sort.SearchStrings(arr1, <span class="string">"d"</span>)       <span class="comment">// 存在返回索引位置</span></span><br><span class="line">	e := sort.SearchStrings(arr1, <span class="string">"ever"</span>)    <span class="comment">// 不存在返回应该插入的位置</span></span><br><span class="line">	fmt.Println(d, e)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="number">3</span> <span class="number">4</span></span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://yangjinheng.github.io/2019/06/11/go/1.基本数据结构/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1266,185 +1425,11 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://yangjinheng.github.io/2019/06/10/go/math/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Jin Heng">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="默默">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/06/10/go/math/" itemprop="url">go 标准库之 math</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-06-10T00:00:00+08:00">
-                2019-06-10
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/golang/" itemprop="url" rel="index">
-                    <span itemprop="name">golang</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="常量"><a href="#常量" class="headerlink" title="常量"></a>常量</h2><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> (</span><br><span class="line">	E   = <span class="number">2.71828182845904523536028747135266249775724709369995957496696763</span></span><br><span class="line">	Pi  = <span class="number">3.14159265358979323846264338327950288419716939937510582097494459</span></span><br><span class="line">	Phi = <span class="number">1.61803398874989484820458683436563811772030917980576286213544862</span></span><br><span class="line"></span><br><span class="line">	Sqrt2   = <span class="number">1.41421356237309504880168872420969807856967187537694807317667974</span></span><br><span class="line">	SqrtE   = <span class="number">1.64872127070012814684865078781416357165377610071014801157507931</span></span><br><span class="line">	SqrtPi  = <span class="number">1.77245385090551602729816748334114518279754945612238712821380779</span></span><br><span class="line">	SqrtPhi = <span class="number">1.27201964951406896425242246173749149171560804184009624861664038</span></span><br><span class="line"></span><br><span class="line">	Ln2    = <span class="number">0.693147180559945309417232121458176568075500134360255254120680009</span></span><br><span class="line">	Log2E  = <span class="number">1</span> / Ln2</span><br><span class="line">	Ln10   = <span class="number">2.30258509299404568401799145468436420760110148862877297603332790</span></span><br><span class="line">	Log10E = <span class="number">1</span> / Ln10</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> (</span><br><span class="line">	MaxFloat32             = <span class="number">3.40282346638528859811704183484516925440e+38</span></span><br><span class="line">	SmallestNonzeroFloat32 = <span class="number">1.401298464324817070923729583289916131280e-45</span></span><br><span class="line"></span><br><span class="line">	MaxFloat64             = <span class="number">1.797693134862315708145274237317043567981e+308</span></span><br><span class="line">	SmallestNonzeroFloat64 = <span class="number">4.940656458412465441765687928682213723651e-324</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> (</span><br><span class="line">	MaxInt8   = <span class="number">127</span></span><br><span class="line">	MinInt8   = <span class="number">-128</span></span><br><span class="line">	MaxInt16  = <span class="number">32767</span></span><br><span class="line">	MinInt16  = <span class="number">-32768</span></span><br><span class="line">	MaxInt32  = <span class="number">2147483647</span></span><br><span class="line">	MinInt32  = <span class="number">-2147483648</span></span><br><span class="line">	MaxInt64  = <span class="number">9223372036854775807</span></span><br><span class="line">	MinInt64  = <span class="number">-9223372036854775808</span></span><br><span class="line">	MaxUint8  = <span class="number">255</span></span><br><span class="line">	MaxUint16 = <span class="number">65535</span></span><br><span class="line">	MaxUint32 = <span class="number">4294967295</span></span><br><span class="line">	MaxUint64 = <span class="number">9223372036854775808</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure>
-<h2 id="Floor向下取整舍掉小数"><a href="#Floor向下取整舍掉小数" class="headerlink" title="Floor向下取整舍掉小数"></a>Floor向下取整舍掉小数</h2><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(math.Floor(<span class="number">-3.141592</span>))</span><br><span class="line">	fmt.Println(math.Floor(<span class="number">-3.500000</span>))</span><br><span class="line">	fmt.Println(math.Floor(<span class="number">3.141592</span>))</span><br><span class="line">	fmt.Println(math.Floor(<span class="number">3.141592</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">-4</span><br><span class="line">-4</span><br><span class="line">3</span><br><span class="line">3</span><br></pre></td></tr></table></figure>
-<h2 id="Ceil向上取整"><a href="#Ceil向上取整" class="headerlink" title="Ceil向上取整"></a>Ceil向上取整</h2><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(math.Ceil(<span class="number">-3.141592</span>))</span><br><span class="line">	fmt.Println(math.Ceil(<span class="number">-3.500000</span>))</span><br><span class="line">	fmt.Println(math.Ceil(<span class="number">3.141592</span>))</span><br><span class="line">	fmt.Println(math.Ceil(<span class="number">3.141592</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">-3</span><br><span class="line">-3</span><br><span class="line">4</span><br><span class="line">4</span><br></pre></td></tr></table></figure>
-<h2 id="Abs绝对值"><a href="#Abs绝对值" class="headerlink" title="Abs绝对值"></a>Abs绝对值</h2><p>正数的绝对值是它本身，负数的绝对值是其相反数，零的绝对值是零，绝对值具有非负性，绝对值总是大于或等于零。</p>
-<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(math.Abs(<span class="number">-3.141592</span>))</span><br><span class="line">	fmt.Println(math.Abs(<span class="number">3.141592</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">3.141592</span><br><span class="line">3.141592</span><br></pre></td></tr></table></figure>
-<h2 id="Modf分解浮点数为整数和小数"><a href="#Modf分解浮点数为整数和小数" class="headerlink" title="Modf分解浮点数为整数和小数"></a>Modf分解浮点数为整数和小数</h2><p>注意：分解浮点数时候，可能会出现精度问题。</p>
-<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(math.Modf(<span class="number">-12.4</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">-12 -0.40000000000000036</span><br></pre></td></tr></table></figure>
-<h2 id="Max、min、取大值、取小值"><a href="#Max、min、取大值、取小值" class="headerlink" title="Max、min、取大值、取小值"></a>Max、min、取大值、取小值</h2><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(math.Max(<span class="number">331232</span>, <span class="number">334324</span>))</span><br><span class="line">	fmt.Println(math.Min(<span class="number">331232</span>, <span class="number">334324</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">334324</span><br><span class="line">331232</span><br></pre></td></tr></table></figure>
-<h2 id="Pow次方、三次方根"><a href="#Pow次方、三次方根" class="headerlink" title="Pow次方、三次方根"></a>Pow次方、三次方根</h2><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(math.Pow(<span class="number">8</span>, <span class="number">3</span>))</span><br><span class="line">	fmt.Println(math.Cbrt(<span class="number">512</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">8</span><br></pre></td></tr></table></figure>
-<h2 id="Sqrt平方、平方根（开方）"><a href="#Sqrt平方、平方根（开方）" class="headerlink" title="Sqrt平方、平方根（开方）"></a>Sqrt平方、平方根（开方）</h2><ul>
-<li>开方为平方的逆运算，也可以通过 0.5 幂算出</li>
-</ul>
-<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(math.Pow(<span class="number">93</span>, <span class="number">2</span>))</span><br><span class="line">	fmt.Println(math.Pow(<span class="number">8649</span>, <span class="number">0.5</span>))</span><br><span class="line">	fmt.Println(math.Sqrt(<span class="number">8649</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">8649</span><br><span class="line">93</span><br><span class="line">93</span><br></pre></td></tr></table></figure>
-<h2 id="Log2、Log10对数"><a href="#Log2、Log10对数" class="headerlink" title="Log2、Log10对数"></a>Log2、Log10对数</h2><p>对数是求幂的逆运算，</p>
-<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(math.Pow(<span class="number">2</span>, <span class="number">7</span>))</span><br><span class="line">	fmt.Println(math.Pow(<span class="number">10</span>, <span class="number">2</span>))</span><br><span class="line">	fmt.Println(math.Log2(<span class="number">128</span>))</span><br><span class="line">	fmt.Println(math.Log10(<span class="number">100</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="Round四舍五入"><a href="#Round四舍五入" class="headerlink" title="Round四舍五入"></a>Round四舍五入</h2><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(math.Round(<span class="number">3.1415926</span>))</span><br><span class="line">	fmt.Println(math.Round(<span class="number">3.5415926</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">3</span><br><span class="line">4</span><br></pre></td></tr></table></figure>
-<h2 id="rand随机数包"><a href="#rand随机数包" class="headerlink" title="rand随机数包"></a>rand随机数包</h2><p>math/rand 实现了伪随机数生成器，在 Go 语言中随机数需要设置种子，如果不设置种子，每次运行结果都相同，默认种子为：1，且相同种子产生的随机数是相同的。</p>
-<ul>
-<li>设置种子并生成随机数字</li>
-</ul>
-<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	rand.Seed(time.Now().UnixNano())</span><br><span class="line">	fmt.Println(rand.Int63n(<span class="number">19</span>))</span><br><span class="line">	fmt.Println(rand.Intn(<span class="number">29</span>))</span><br><span class="line">	fmt.Println(rand.Float64())</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<ul>
-<li>随机字母</li>
-</ul>
-<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> r *rand.Rand</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">init</span><span class="params">()</span></span> &#123;</span><br><span class="line">	r = rand.New(rand.NewSource(time.Now().Unix()))</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">RandString</span><span class="params">(<span class="built_in">len</span> <span class="keyword">int</span>)</span> <span class="title">string</span></span> &#123;</span><br><span class="line">	bytes := <span class="built_in">make</span>([]<span class="keyword">byte</span>, <span class="built_in">len</span>)</span><br><span class="line">	<span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="built_in">len</span>; i++ &#123;</span><br><span class="line">		b := r.Intn(<span class="number">26</span>) + <span class="number">65</span></span><br><span class="line">		bytes[i] = <span class="keyword">byte</span>(b)</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> <span class="keyword">string</span>(bytes)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(RandString(<span class="number">20</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/3/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/page/38/">38</a><a class="extend next" rel="next" href="/page/5/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/page/3/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/page/43/">43</a><a class="extend next" rel="next" href="/page/5/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1492,7 +1477,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">75</span>
+                  <span class="site-state-item-count">86</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

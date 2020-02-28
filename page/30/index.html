@@ -311,7 +311,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://yangjinheng.github.io/2017/09/22/python/13.pathlib和shutil/">
+    <link itemprop="mainEntityOfPage" href="https://yangjinheng.github.io/2017/10/03/python/24.pymysql/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Jin Heng">
@@ -330,7 +330,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/09/22/python/13.pathlib和shutil/" itemprop="url">pathlib和shutil</a></h1>
+                <a class="post-title-link" href="/2017/10/03/python/24.pymysql/" itemprop="url">Pymysql</a></h1>
         
 
         <div class="post-meta">
@@ -342,8 +342,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-22T00:00:00+08:00">
-                2017-09-22
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-03T00:00:00+08:00">
+                2017-10-03
               </time>
             
 
@@ -404,141 +404,214 @@
       
         
           
-            <h1 id="路径处理Path"><a href="#路径处理Path" class="headerlink" title="路径处理Path"></a>路径处理Path</h1><h2 id="模块的导入"><a href="#模块的导入" class="headerlink" title="模块的导入"></a>模块的导入</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> pathlib <span class="keyword">import</span> Path</span><br><span class="line">p1 = Path(<span class="string">'/etc/rc.local'</span>)</span><br></pre></td></tr></table></figure>
-<h2 id="绝对路径-absolute"><a href="#绝对路径-absolute" class="headerlink" title="绝对路径.absolute"></a>绝对路径.absolute</h2><p>显示文件的绝对路径</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">245</span>]: p1 = Path(<span class="string">'sample.txt'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">247</span>]: p1.absolute()</span><br><span class="line">Out[<span class="number">247</span>]: PosixPath(<span class="string">'/home/python/magedu/projects/test/sample.txt'</span>)</span><br></pre></td></tr></table></figure>
-<h2 id="统一资源标识符-as-uri"><a href="#统一资源标识符-as-uri" class="headerlink" title="统一资源标识符.as_uri"></a>统一资源标识符.as_uri</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">39</span>]: p2 = Path(<span class="string">'/home/python/magedu/projects/test/sample.txt'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">42</span>]: p2.as_uri()</span><br><span class="line">Out[<span class="number">42</span>]: <span class="string">'file:///home/python/magedu/projects/test/sample.txt'</span></span><br></pre></td></tr></table></figure>
-<h2 id="当前工作目录-cwd"><a href="#当前工作目录-cwd" class="headerlink" title="当前工作目录.cwd"></a>当前工作目录.cwd</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">111</span>]: p2</span><br><span class="line">Out[<span class="number">111</span>]: PosixPath(<span class="string">'/home/python/magedu/projects/test/sample.txt'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">112</span>]: p2.cwd()</span><br><span class="line">Out[<span class="number">112</span>]: PosixPath(<span class="string">'/home/python/magedu/projects'</span>)</span><br></pre></td></tr></table></figure>
-<h2 id="磁盘根前戳-drive"><a href="#磁盘根前戳-drive" class="headerlink" title="磁盘根前戳.drive"></a>磁盘根前戳.drive</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>p3 = Path(<span class="string">'D:\Program Files\XMind\XMind.exe'</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>p3.drive</span><br><span class="line"><span class="string">'D:'</span></span><br></pre></td></tr></table></figure>
-<h2 id="对-进行扩展-expanduser"><a href="#对-进行扩展-expanduser" class="headerlink" title="对~进行扩展.expanduser"></a>对~进行扩展.expanduser</h2><p>返回扩展的 <code>~</code> 和 <code>~user</code> 的一个新路径</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">136</span>]: p4 = Path(<span class="string">'~/magedu/projects/test/sample.txt'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">137</span>]: p4.expanduser()</span><br><span class="line">Out[<span class="number">137</span>]: PosixPath(<span class="string">'/home/python/magedu/projects/test/sample.txt'</span>)</span><br></pre></td></tr></table></figure>
-<h2 id="用户家目录-home"><a href="#用户家目录-home" class="headerlink" title="用户家目录.home"></a>用户家目录.home</h2><p>这是公共方法</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">175</span>]: p4.home()</span><br><span class="line">Out[<span class="number">175</span>]: PosixPath(<span class="string">'/home/python'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">176</span>]: p3.home()</span><br><span class="line">Out[<span class="number">176</span>]: PosixPath(<span class="string">'/home/python'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">178</span>]: p3</span><br><span class="line">Out[<span class="number">178</span>]: PosixPath(<span class="string">'D:\\Program Files\\XMind\\XMind.exe'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">179</span>]: p4</span><br><span class="line">Out[<span class="number">179</span>]: PosixPath(<span class="string">'~/magedu/projects/test/sample.txt'</span>)</span><br></pre></td></tr></table></figure>
-<h2 id="路径拼接-joinpath"><a href="#路径拼接-joinpath" class="headerlink" title="路径拼接.joinpath"></a>路径拼接.joinpath</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">369</span>]: p5</span><br><span class="line">Out[<span class="number">369</span>]: PosixPath(<span class="string">'/dev'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">370</span>]: p5.joinpath(<span class="string">'tty'</span>)</span><br><span class="line">Out[<span class="number">370</span>]: PosixPath(<span class="string">'/dev/tty'</span>)</span><br></pre></td></tr></table></figure>
-<h2 id="路径模式匹配-match"><a href="#路径模式匹配-match" class="headerlink" title="路径模式匹配.match"></a>路径模式匹配.match</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">424</span>]: p2</span><br><span class="line">Out[<span class="number">424</span>]: PosixPath(<span class="string">'/home/python/magedu/projects/test/sample.txt'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">425</span>]: p2.match(<span class="string">'*.txt'</span>)</span><br><span class="line">Out[<span class="number">425</span>]: <span class="keyword">True</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">436</span>]: p2.match(<span class="string">'**/*.txt'</span>)</span><br><span class="line">Out[<span class="number">436</span>]: <span class="keyword">True</span></span><br></pre></td></tr></table></figure>
-<h2 id="父目录-parent"><a href="#父目录-parent" class="headerlink" title="父目录.parent"></a>父目录.parent</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">37</span>]: p2</span><br><span class="line">Out[<span class="number">37</span>]: PosixPath(<span class="string">'/etc/sysconfig/network-scripts/ifcfg-ens34'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">38</span>]: p2.parent</span><br><span class="line">Out[<span class="number">38</span>]: PosixPath(<span class="string">'/etc/sysconfig/network-scripts'</span>)</span><br></pre></td></tr></table></figure>
-<h2 id="所有的父目录-parents"><a href="#所有的父目录-parents" class="headerlink" title="所有的父目录.parents"></a>所有的父目录.parents</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">41</span>]: list(p2.parents)</span><br><span class="line">Out[<span class="number">41</span>]: </span><br><span class="line">[PosixPath(<span class="string">'/etc/sysconfig/network-scripts'</span>),</span><br><span class="line"> PosixPath(<span class="string">'/etc/sysconfig'</span>),</span><br><span class="line"> PosixPath(<span class="string">'/etc'</span>),</span><br><span class="line"> PosixPath(<span class="string">'/'</span>)]</span><br></pre></td></tr></table></figure>
-<h2 id="文件全名-name"><a href="#文件全名-name" class="headerlink" title="文件全名.name"></a>文件全名.name</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">15</span>]: p2 = Path(<span class="string">'/etc/sysconfig/network-scripts/ifcfg-ens34'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">16</span>]: p2.name</span><br><span class="line">Out[<span class="number">16</span>]: <span class="string">'ifcfg-ens34'</span></span><br></pre></td></tr></table></figure>
-<h2 id="取得文件和目录的二元组"><a href="#取得文件和目录的二元组" class="headerlink" title="取得文件和目录的二元组"></a>取得文件和目录的二元组</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">545</span>]: <span class="keyword">from</span> os <span class="keyword">import</span> path</span><br><span class="line"></span><br><span class="line">In [<span class="number">548</span>]: p2</span><br><span class="line">Out[<span class="number">548</span>]: PosixPath(<span class="string">'/etc/sysconfig/network-scripts/ifcfg-ens34'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">547</span>]: print(path.split(path.abspath(str(p2))))</span><br><span class="line">(<span class="string">'/etc/sysconfig/network-scripts'</span>, <span class="string">'ifcfg-ens34'</span>)</span><br></pre></td></tr></table></figure>
-<h2 id="不含扩展名的文件名称-stem"><a href="#不含扩展名的文件名称-stem" class="headerlink" title="不含扩展名的文件名称.stem"></a>不含扩展名的文件名称.stem</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">368</span>]: p7 = Path(<span class="string">'/etc/rc.local'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">369</span>]: p7.stem</span><br><span class="line">Out[<span class="number">369</span>]: <span class="string">'rc'</span></span><br></pre></td></tr></table></figure>
-<h2 id="显示文件扩展名-suffix"><a href="#显示文件扩展名-suffix" class="headerlink" title="显示文件扩展名.suffix"></a>显示文件扩展名.suffix</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">368</span>]: p7 = Path(<span class="string">'/etc/rc.local'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">370</span>]: p7.suffix</span><br><span class="line">Out[<span class="number">370</span>]: <span class="string">'.local'</span></span><br></pre></td></tr></table></figure>
-<h2 id="显示所有扩展名-suffixes"><a href="#显示所有扩展名-suffixes" class="headerlink" title="显示所有扩展名.suffixes"></a>显示所有扩展名.suffixes</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">372</span>]: p8 = Path(<span class="string">'/tmp/mysql.tar.gz'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">373</span>]: p8.suffixes</span><br><span class="line">Out[<span class="number">373</span>]: [<span class="string">'.tar'</span>, <span class="string">'.gz'</span>]</span><br></pre></td></tr></table></figure>
-<h2 id="路径拆分为列表-parts"><a href="#路径拆分为列表-parts" class="headerlink" title="路径拆分为列表.parts"></a>路径拆分为列表.parts</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">42</span>]: list(p2.parts)</span><br><span class="line">Out[<span class="number">42</span>]: [<span class="string">'/'</span>, <span class="string">'etc'</span>, <span class="string">'sysconfig'</span>, <span class="string">'network-scripts'</span>, <span class="string">'ifcfg-ens34'</span>]</span><br></pre></td></tr></table></figure>
-<h2 id="计算相对剩余路径-relative-to"><a href="#计算相对剩余路径-relative-to" class="headerlink" title="计算相对剩余路径.relative_to"></a>计算相对剩余路径.relative_to</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">78</span>]: p3 = Path(<span class="string">'python/project/cmdb'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">79</span>]: p3.relative_to(<span class="string">'python'</span>)</span><br><span class="line">Out[<span class="number">79</span>]: PosixPath(<span class="string">'project/cmdb'</span>)</span><br></pre></td></tr></table></figure>
-<h2 id="显示根目录-root"><a href="#显示根目录-root" class="headerlink" title="显示根目录.root"></a>显示根目录.root</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">297</span>]: p2</span><br><span class="line">Out[<span class="number">297</span>]: PosixPath(<span class="string">'/etc/sysconfig/network-scripts/ifcfg-ens34'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">298</span>]: p2.root</span><br><span class="line">Out[<span class="number">298</span>]: <span class="string">'/'</span></span><br></pre></td></tr></table></figure>
-<h2 id="替换显示-with-name"><a href="#替换显示-with-name" class="headerlink" title="替换显示.with_name"></a>替换显示.with_name</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">504</span>]: p2</span><br><span class="line">Out[<span class="number">504</span>]: PosixPath(<span class="string">'/etc/sysconfig/network-scripts/ifcfg-ens34'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">505</span>]: p2.with_name(<span class="string">'ifcfg-ens33'</span>)</span><br><span class="line">Out[<span class="number">505</span>]: PosixPath(<span class="string">'/etc/sysconfig/network-scripts/ifcfg-ens33'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">506</span>]: p2</span><br><span class="line">Out[<span class="number">506</span>]: PosixPath(<span class="string">'/etc/sysconfig/network-scripts/ifcfg-ens34'</span>)</span><br></pre></td></tr></table></figure>
-<h2 id="替换显示扩展名-with-suffix"><a href="#替换显示扩展名-with-suffix" class="headerlink" title="替换显示扩展名.with_suffix"></a>替换显示扩展名.with_suffix</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">510</span>]: p1</span><br><span class="line">Out[<span class="number">510</span>]: PosixPath(<span class="string">'D:\\Program Files\\Foxmail 7.2\\Foxmail.exe'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">511</span>]: p1.with_suffix(<span class="string">'.msi'</span>)</span><br><span class="line">Out[<span class="number">511</span>]: PosixPath(<span class="string">'D:\\Program Files\\Foxmail 7.2\\Foxmail.msi'</span>)</span><br><span class="line">    </span><br><span class="line">In [<span class="number">512</span>]: p1</span><br><span class="line">Out[<span class="number">512</span>]: PosixPath(<span class="string">'D:\\Program Files\\Foxmail 7.2\\Foxmail.exe'</span>)</span><br></pre></td></tr></table></figure>
-<h1 id="文件检测Path"><a href="#文件检测Path" class="headerlink" title="文件检测Path"></a>文件检测Path</h1><h2 id="模块的导入-1"><a href="#模块的导入-1" class="headerlink" title="模块的导入"></a>模块的导入</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> pathlib <span class="keyword">import</span> Path</span><br><span class="line">p1 = Path(<span class="string">'/etc/rc.local'</span>)</span><br></pre></td></tr></table></figure>
-<h2 id="是否绝对路径-is-absolute"><a href="#是否绝对路径-is-absolute" class="headerlink" title="是否绝对路径.is_absolute"></a>是否绝对路径.is_absolute</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">183</span>]: p1</span><br><span class="line">Out[<span class="number">183</span>]: PosixPath(<span class="string">'sample.txt'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">185</span>]: p1.is_absolute()</span><br><span class="line">Out[<span class="number">185</span>]: <span class="keyword">False</span></span><br><span class="line">    </span><br><span class="line">In [<span class="number">187</span>]: p2</span><br><span class="line">Out[<span class="number">187</span>]: PosixPath(<span class="string">'/home/python/magedu/projects/test/sample.txt'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">188</span>]: p2.is_absolute()</span><br><span class="line">Out[<span class="number">188</span>]: <span class="keyword">True</span></span><br></pre></td></tr></table></figure>
-<h2 id="是否为块设备-is-block-device"><a href="#是否为块设备-is-block-device" class="headerlink" title="是否为块设备.is_block_device"></a>是否为块设备.is_block_device</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">193</span>]: p6 = Path(<span class="string">'/dev/sda'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">194</span>]: p6.is_block_device()</span><br><span class="line">Out[<span class="number">194</span>]: <span class="keyword">True</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">195</span>]: p5</span><br><span class="line">Out[<span class="number">195</span>]: PosixPath(<span class="string">'/dev'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">196</span>]: p5.is_block_device()</span><br><span class="line">Out[<span class="number">196</span>]: <span class="keyword">False</span></span><br></pre></td></tr></table></figure>
-<h2 id="是否为字符设备-is-char-device"><a href="#是否为字符设备-is-char-device" class="headerlink" title="是否为字符设备.is_char_device"></a>是否为字符设备.is_char_device</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">197</span>]: p7 = Path(<span class="string">'/dev/tty'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">198</span>]: p7.is_char_device()</span><br><span class="line">Out[<span class="number">198</span>]: <span class="keyword">True</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">199</span>]: p6</span><br><span class="line">Out[<span class="number">199</span>]: PosixPath(<span class="string">'/dev/sda'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">200</span>]: p6.is_char_device()</span><br><span class="line">Out[<span class="number">200</span>]: <span class="keyword">False</span></span><br></pre></td></tr></table></figure>
-<h2 id="是否为目录-is-dir"><a href="#是否为目录-is-dir" class="headerlink" title="是否为目录.is_dir"></a>是否为目录.is_dir</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">204</span>]: p4</span><br><span class="line">Out[<span class="number">204</span>]: PosixPath(<span class="string">'~/magedu/projects/test/sample.txt'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">205</span>]: p5</span><br><span class="line">Out[<span class="number">205</span>]: PosixPath(<span class="string">'/dev'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">206</span>]: p4.is_dir()</span><br><span class="line">Out[<span class="number">206</span>]: <span class="keyword">False</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">207</span>]: p5.is_dir()</span><br><span class="line">Out[<span class="number">207</span>]: <span class="keyword">True</span></span><br></pre></td></tr></table></figure>
-<h2 id="是否为先进先出文件-is-fifo"><a href="#是否为先进先出文件-is-fifo" class="headerlink" title="是否为先进先出文件.is_fifo"></a>是否为先进先出文件.is_fifo</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">253</span>]: p8 = Path(<span class="string">'/run/systemd/initctl/fifo'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">254</span>]: p8.is_fifo()</span><br><span class="line">Out[<span class="number">254</span>]: <span class="keyword">True</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">256</span>]: p7</span><br><span class="line">Out[<span class="number">256</span>]: PosixPath(<span class="string">'/dev/tty'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">257</span>]: p7.is_fifo()</span><br><span class="line">Out[<span class="number">257</span>]: <span class="keyword">False</span></span><br></pre></td></tr></table></figure>
-<h2 id="是否为普通文件-is-file"><a href="#是否为普通文件-is-file" class="headerlink" title="是否为普通文件.is_file"></a>是否为普通文件.is_file</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">266</span>]: p3</span><br><span class="line">Out[<span class="number">266</span>]: PosixPath(<span class="string">'D:\\Program Files\\XMind\\XMind.exe'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">267</span>]: p3.is_file()</span><br><span class="line">Out[<span class="number">267</span>]: <span class="keyword">False</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">270</span>]: p2</span><br><span class="line">Out[<span class="number">270</span>]: PosixPath(<span class="string">'/home/python/magedu/projects/test/sample.txt'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">271</span>]: p2.is_file()</span><br><span class="line">Out[<span class="number">271</span>]: <span class="keyword">True</span></span><br></pre></td></tr></table></figure>
-<h2 id="有无系统保留名称-is-reserved"><a href="#有无系统保留名称-is-reserved" class="headerlink" title="有无系统保留名称.is_reserved"></a>有无系统保留名称.is_reserved</h2><p>如果路径包含系统保留的特殊名称之一（如果有），则返回True。</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">272</span>]: p2</span><br><span class="line">Out[<span class="number">272</span>]: PosixPath(<span class="string">'/home/python/magedu/projects/test/sample.txt'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">273</span>]: p2.is_reserved()</span><br><span class="line">Out[<span class="number">273</span>]: <span class="keyword">False</span></span><br></pre></td></tr></table></figure>
-<h2 id="是否为套接字文件-is-socket"><a href="#是否为套接字文件-is-socket" class="headerlink" title="是否为套接字文件.is_socket"></a>是否为套接字文件.is_socket</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">307</span>]: p9 = Path(<span class="string">'/run/docker.sock'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">308</span>]: p9.is_socket()</span><br><span class="line">Out[<span class="number">308</span>]: <span class="keyword">True</span></span><br></pre></td></tr></table></figure>
-<h2 id="是否为软链接-is-symlink"><a href="#是否为软链接-is-symlink" class="headerlink" title="是否为软链接.is_symlink"></a>是否为软链接.is_symlink</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">310</span>]: p7</span><br><span class="line">Out[<span class="number">310</span>]: PosixPath(<span class="string">'/dev/tty'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">311</span>]: p7.is_symlink()</span><br><span class="line">Out[<span class="number">311</span>]: <span class="keyword">False</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">312</span>]: p9 = Path(<span class="string">'/etc/rc.local'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">313</span>]: p9.is_symlink()</span><br><span class="line">Out[<span class="number">313</span>]: <span class="keyword">True</span></span><br></pre></td></tr></table></figure>
-<h2 id="是否为同一个路径-samefile"><a href="#是否为同一个路径-samefile" class="headerlink" title="是否为同一个路径.samefile"></a>是否为同一个路径.samefile</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">309</span>]: p2</span><br><span class="line">Out[<span class="number">309</span>]: PosixPath(<span class="string">'/etc/sysconfig/network-scripts/ifcfg-ens34'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">310</span>]: p4</span><br><span class="line">Out[<span class="number">310</span>]: PosixPath(<span class="string">'ifcfg-ens34'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">311</span>]: p4.samefile(p2)</span><br><span class="line">Out[<span class="number">311</span>]: <span class="keyword">True</span></span><br><span class="line">    </span><br><span class="line">In [<span class="number">356</span>]: p5</span><br><span class="line">Out[<span class="number">356</span>]: PosixPath(<span class="string">'/tmp/test'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">357</span>]: p5.samefile(<span class="string">'test'</span>)</span><br><span class="line">Out[<span class="number">357</span>]: <span class="keyword">False</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">358</span>]: p5.samefile(<span class="string">'/tmp/test'</span>)</span><br><span class="line">Out[<span class="number">358</span>]: <span class="keyword">True</span></span><br></pre></td></tr></table></figure>
-<h2 id="文件存在性-exists"><a href="#文件存在性-exists" class="headerlink" title="文件存在性.exists"></a>文件存在性.exists</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>p3 = Path(<span class="string">'D:\Program Files\XMind\XMind.exe'</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>p3.exists()</span><br><span class="line"><span class="keyword">True</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>p3 = Path(<span class="string">'D:\Program Files\XMind\XMind.exe.bak'</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>p3.exists()</span><br><span class="line"><span class="keyword">False</span></span><br></pre></td></tr></table></figure>
-<h1 id="文件操作Path"><a href="#文件操作Path" class="headerlink" title="文件操作Path"></a>文件操作Path</h1><h2 id="模块的导入-2"><a href="#模块的导入-2" class="headerlink" title="模块的导入"></a>模块的导入</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> pathlib <span class="keyword">import</span> Path</span><br><span class="line">p1 = Path(<span class="string">'/etc/rc.local'</span>)</span><br></pre></td></tr></table></figure>
-<h2 id="通配文件迭代器-glob"><a href="#通配文件迭代器-glob" class="headerlink" title="通配文件迭代器.glob"></a>通配文件迭代器.glob</h2><p>使用指定的模式迭代目录下的文件，列出符合条件的文件</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">146</span>]: p5 =Path(<span class="string">'/dev'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">147</span>]: list(p5.glob(<span class="string">'sda*'</span>))</span><br><span class="line">Out[<span class="number">147</span>]: </span><br><span class="line">[PosixPath(<span class="string">'/dev/sda4'</span>),</span><br><span class="line"> PosixPath(<span class="string">'/dev/sda3'</span>),</span><br><span class="line"> PosixPath(<span class="string">'/dev/sda2'</span>),</span><br><span class="line"> PosixPath(<span class="string">'/dev/sda1'</span>),</span><br><span class="line"> PosixPath(<span class="string">'/dev/sda'</span>)]</span><br><span class="line">In [<span class="number">152</span>]: list(p5.glob(<span class="string">'map*'</span>))</span><br><span class="line">Out[<span class="number">152</span>]: [PosixPath(<span class="string">'/dev/mapper'</span>)]</span><br></pre></td></tr></table></figure>
-<h2 id="递归统配迭代器-rglob"><a href="#递归统配迭代器-rglob" class="headerlink" title="递归统配迭代器.rglob"></a>递归统配迭代器.rglob</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">162</span>]: list(p5.rglob(<span class="string">'vfio'</span>))</span><br><span class="line">Out[<span class="number">162</span>]: [PosixPath(<span class="string">'/dev/vfio'</span>), PosixPath(<span class="string">'/dev/vfio/vfio'</span>)]</span><br></pre></td></tr></table></figure>
-<h2 id="非递归目录迭代器-iterdir"><a href="#非递归目录迭代器-iterdir" class="headerlink" title="非递归目录迭代器.iterdir"></a>非递归目录迭代器.iterdir</h2> <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">364</span>]: p10 = Path(<span class="string">'/home'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">365</span>]: p10.iterdir()</span><br><span class="line">Out[<span class="number">365</span>]: &lt;generator object Path.iterdir at <span class="number">0x7fe1e91114c0</span>&gt;</span><br><span class="line"></span><br><span class="line">In [<span class="number">366</span>]: list(p10.iterdir())</span><br><span class="line">Out[<span class="number">366</span>]: [PosixPath(<span class="string">'/home/python'</span>)]</span><br></pre></td></tr></table></figure>
-<h2 id="创建目录-mkdir"><a href="#创建目录-mkdir" class="headerlink" title="创建目录.mkdir"></a>创建目录.mkdir</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">8</span>]: p1 = Path(<span class="string">'./test'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">11</span>]: ll</span><br><span class="line">总用量 <span class="number">16</span></span><br><span class="line">-rwxr-xr-x <span class="number">1</span> python <span class="number">13099</span> <span class="number">10</span>月 <span class="number">23</span> <span class="number">2017</span> sample.txt*</span><br><span class="line"></span><br><span class="line">In [<span class="number">12</span>]: p1.mkdir()</span><br><span class="line"></span><br><span class="line">In [<span class="number">13</span>]: ll</span><br><span class="line">总用量 <span class="number">16</span></span><br><span class="line">-rwxr-xr-x <span class="number">1</span> python <span class="number">13099</span> <span class="number">10</span>月 <span class="number">23</span> <span class="number">2017</span> sample.txt*</span><br><span class="line">drwxrwxr-x <span class="number">2</span> python     <span class="number">6</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">09</span>:<span class="number">01</span> test/</span><br></pre></td></tr></table></figure>
-<h2 id="删除空目录-rmdir"><a href="#删除空目录-rmdir" class="headerlink" title="删除空目录.rmdir"></a>删除空目录.rmdir</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">284</span>]: ll</span><br><span class="line">总用量 <span class="number">0</span></span><br><span class="line">lrwxrwxrwx 1 python 42 4月  25 09:59 ifcfg-ens34 -&gt; /etc/sysconfig/network-scripts/ifcfg-ens34</span><br><span class="line">drwxrwxr-x <span class="number">3</span> python <span class="number">22</span> <span class="number">3</span>月   <span class="number">6</span> <span class="number">09</span>:<span class="number">47</span> magedu/</span><br><span class="line">-rw-rw-r-- <span class="number">1</span> python  <span class="number">0</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">09</span>:<span class="number">58</span> test</span><br><span class="line">drwxrwxr-x <span class="number">2</span> python  <span class="number">6</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">10</span>:<span class="number">00</span> testdir/</span><br><span class="line"></span><br><span class="line">In [<span class="number">285</span>]: p5</span><br><span class="line">Out[<span class="number">285</span>]: PosixPath(<span class="string">'testdir'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">286</span>]: p5.rmdir()</span><br><span class="line"></span><br><span class="line">In [<span class="number">287</span>]: ll</span><br><span class="line">总用量 <span class="number">0</span></span><br><span class="line">lrwxrwxrwx 1 python 42 4月  25 09:59 ifcfg-ens34 -&gt; /etc/sysconfig/network-scripts/ifcfg-ens34</span><br><span class="line">drwxrwxr-x <span class="number">3</span> python <span class="number">22</span> <span class="number">3</span>月   <span class="number">6</span> <span class="number">09</span>:<span class="number">47</span> magedu/</span><br><span class="line">-rw-rw-r-- <span class="number">1</span> python  <span class="number">0</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">09</span>:<span class="number">58</span> test</span><br></pre></td></tr></table></figure>
-<h2 id="文件属主-owner"><a href="#文件属主-owner" class="headerlink" title="文件属主.owner"></a>文件属主.owner</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">169</span>]: p5.owner()</span><br><span class="line">Out[<span class="number">169</span>]: <span class="string">'root'</span></span><br></pre></td></tr></table></figure>
-<h2 id="文件属组-group"><a href="#文件属组-group" class="headerlink" title="文件属组.group"></a>文件属组.group</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">170</span>]: p5.group()</span><br><span class="line">Out[<span class="number">170</span>]: <span class="string">'root'</span></span><br></pre></td></tr></table></figure>
-<h2 id="打开文件-open"><a href="#打开文件-open" class="headerlink" title="打开文件.open"></a>打开文件.open</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">15</span>]: p2 = Path(<span class="string">'/etc/sysconfig/network-scripts/ifcfg-ens34'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">21</span>]: netfile = p2.open()</span><br><span class="line"></span><br><span class="line">In [<span class="number">22</span>]: netfile.read()</span><br><span class="line">Out[<span class="number">22</span>]: <span class="string">'BOOTPROTO=static\nDEVICE=ens34\nONBOOT=yes\nIPADDR=192.168.100.253\nNETMASK=255.255.255.0\n'</span></span><br></pre></td></tr></table></figure>
-<h3 id="字节模式"><a href="#字节模式" class="headerlink" title="字节模式"></a>字节模式</h3><ul>
-<li>读取.read_bytes</li>
+            <h2 id="Connection-Object"><a href="#Connection-Object" class="headerlink" title="Connection Object"></a>Connection Object</h2><ul>
+<li>连接构造方法</li>
 </ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">47</span>]: p2.read_bytes()</span><br><span class="line">Out[<span class="number">47</span>]: <span class="string">b'BOOTPROTO=static\nDEVICE=ens34\nONBOOT=yes\nIPADDR=192.168.100.253\nNETMASK=255.255.255.0\n'</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, host=None, user=None, password=<span class="string">""</span>,</span></span></span><br><span class="line"><span class="function"><span class="params">                database=None, port=<span class="number">0</span>, unix_socket=None,</span></span></span><br><span class="line"><span class="function"><span class="params">                charset=<span class="string">''</span>, sql_mode=None,</span></span></span><br><span class="line"><span class="function"><span class="params">                read_default_file=None, conv=None, use_unicode=None,</span></span></span><br><span class="line"><span class="function"><span class="params">                client_flag=<span class="number">0</span>, cursorclass=Cursor, init_command=None,</span></span></span><br><span class="line"><span class="function"><span class="params">                connect_timeout=<span class="number">10</span>, ssl=None, read_default_group=None,</span></span></span><br><span class="line"><span class="function"><span class="params">                compress=None, named_pipe=None, no_delay=None,</span></span></span><br><span class="line"><span class="function"><span class="params">                autocommit=False, db=None, passwd=None, local_infile=False,</span></span></span><br><span class="line"><span class="function"><span class="params">                max_allowed_packet=<span class="number">16</span>*<span class="number">1024</span>*<span class="number">1024</span>, defer_connect=False,</span></span></span><br><span class="line"><span class="function"><span class="params">                auth_plugin_map=&#123;&#125;, read_timeout=None, write_timeout=None,</span></span></span><br><span class="line"><span class="function"><span class="params">                bind_address=None, binary_prefix=False)</span>:</span></span><br></pre></td></tr></table></figure>
 <ul>
-<li>写入.write_bytes</li>
+<li>创建数据库连接</li>
 </ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">525</span>]: p5</span><br><span class="line">Out[<span class="number">525</span>]: PosixPath(<span class="string">'/tmp/test'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">527</span>]: p5.write_bytes(<span class="string">b'abc'</span>)</span><br><span class="line">Out[<span class="number">527</span>]: <span class="number">3</span></span><br><span class="line">    </span><br><span class="line">In [<span class="number">530</span>]: cat test</span><br><span class="line">abc</span><br></pre></td></tr></table></figure>
-<h3 id="文本模式"><a href="#文本模式" class="headerlink" title="文本模式"></a>文本模式</h3><ul>
-<li>读取.read_text</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">49</span>]: p2.read_text()</span><br><span class="line">Out[<span class="number">49</span>]: <span class="string">'BOOTPROTO=static\nDEVICE=ens34\nONBOOT=yes\nIPADDR=192.168.100.253\nNETMASK=255.255.255.0\n'</span></span><br></pre></td></tr></table></figure>
-<ul>
-<li>写入.write_text</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">535</span>]: ll</span><br><span class="line">总用量 <span class="number">0</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">536</span>]: p5</span><br><span class="line">Out[<span class="number">536</span>]: PosixPath(<span class="string">'/tmp/test'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">537</span>]: p5.write_text(<span class="string">'你好'</span>)</span><br><span class="line">Out[<span class="number">537</span>]: <span class="number">2</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">538</span>]: cat test</span><br><span class="line">你好</span><br></pre></td></tr></table></figure>
-<h2 id="显示链接文件属性-lstat"><a href="#显示链接文件属性-lstat" class="headerlink" title="显示链接文件属性.lstat"></a>显示链接文件属性.lstat</h2><p>文件如果为链接文件则显示链接文件的属性</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">405</span>]: p2.lstat()</span><br><span class="line">Out[<span class="number">405</span>]: os.stat_result(st_mode=<span class="number">33261</span>, st_ino=<span class="number">34651681</span>, st_dev=<span class="number">2052</span>, st_nlink=<span class="number">1</span>, st_uid=<span class="number">1000</span>, st_gid=<span class="number">1000</span>, st_size=<span class="number">13099</span>, st_atime=<span class="number">1524531777</span>, st_mtime=<span class="number">1508733030</span>, st_ctime=<span class="number">1524568268</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">406</span>]: p2</span><br><span class="line">Out[<span class="number">406</span>]: PosixPath(<span class="string">'/home/python/magedu/projects/test/sample.txt'</span>)</span><br></pre></td></tr></table></figure>
-<h2 id="显示文件详细属性-stat"><a href="#显示文件详细属性-stat" class="headerlink" title="显示文件详细属性.stat"></a>显示文件详细属性.stat</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">360</span>]: p5.stat()</span><br><span class="line">Out[<span class="number">360</span>]: os.stat_result(st_mode=<span class="number">33204</span>, st_ino=<span class="number">17029845</span>, st_dev=<span class="number">2052</span>, st_nlink=<span class="number">1</span>, st_uid=<span class="number">1000</span>, st_gid=<span class="number">1000</span>, st_size=<span class="number">0</span>, st_atime=<span class="number">1524622003</span>, st_mtime=<span class="number">1524622003</span>, st_ctime=<span class="number">1524622003</span>)</span><br></pre></td></tr></table></figure>
-<h2 id="创建空文件更新时间戳-touch"><a href="#创建空文件更新时间戳-touch" class="headerlink" title="创建空文件更新时间戳.touch"></a>创建空文件更新时间戳.touch</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">433</span>]: p4</span><br><span class="line">Out[<span class="number">433</span>]: PosixPath(<span class="string">'/tmp/test'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">436</span>]: p4.touch()</span><br><span class="line"></span><br><span class="line">In [<span class="number">437</span>]: ll</span><br><span class="line">总用量 <span class="number">0</span></span><br><span class="line">-rw-rw-r-- <span class="number">1</span> python <span class="number">0</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">10</span>:<span class="number">23</span> test</span><br></pre></td></tr></table></figure>
-<h2 id="修改文件名称-rename"><a href="#修改文件名称-rename" class="headerlink" title="修改文件名称.rename"></a>修改文件名称.rename</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">166</span>]: p4</span><br><span class="line">Out[<span class="number">166</span>]: PosixPath(<span class="string">'test1'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">167</span>]: p4.rename(<span class="string">'test2'</span>)</span><br></pre></td></tr></table></figure>
-<h2 id="移动或改名-replace"><a href="#移动或改名-replace" class="headerlink" title="移动或改名.replace"></a>移动或改名.replace</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">217</span>]: ll</span><br><span class="line">总用量 <span class="number">0</span></span><br><span class="line">drwxrwxr-x <span class="number">3</span> python <span class="number">22</span> <span class="number">3</span>月   <span class="number">6</span> <span class="number">09</span>:<span class="number">47</span> magedu/</span><br><span class="line">---------- <span class="number">1</span> python  <span class="number">0</span> <span class="number">4</span>月  <span class="number">24</span> <span class="number">20</span>:<span class="number">05</span> test</span><br><span class="line"></span><br><span class="line">In [<span class="number">218</span>]: p4 = Path(<span class="string">'./test'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">219</span>]: p4.replace(<span class="string">'/tmp/test'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">220</span>]: ll</span><br><span class="line">总用量 <span class="number">0</span></span><br><span class="line">drwxrwxr-x <span class="number">3</span> python <span class="number">22</span> <span class="number">3</span>月   <span class="number">6</span> <span class="number">09</span>:<span class="number">47</span> magedu/</span><br></pre></td></tr></table></figure>
-<h2 id="新建链接指向目标-symlink-to"><a href="#新建链接指向目标-symlink-to" class="headerlink" title="新建链接指向目标.symlink_to"></a>新建链接指向目标.symlink_to</h2><figure class="highlight"><table><tr><td class="code"><pre><span class="line">In [<span class="number">422</span>]: p4 = Path(<span class="string">'/tmp/test'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">423</span>]: p4.symlink_to(<span class="string">'/etc/rc.local'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">424</span>]: ll</span><br><span class="line">总用量 <span class="number">0</span></span><br><span class="line">lrwxrwxrwx 1 python 13 4月  25 10:21 test -&gt; /etc/rc.local*</span><br></pre></td></tr></table></figure>
-<h2 id="解析软连接位置-resolve"><a href="#解析软连接位置-resolve" class="headerlink" title="解析软连接位置.resolve"></a>解析软连接位置.resolve</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">261</span>]: ll</span><br><span class="line">总用量 <span class="number">0</span></span><br><span class="line">lrwxrwxrwx 1 python 42 4月  25 09:59 ifcfg-ens34 -&gt; /etc/sysconfig/network-scripts/ifcfg-ens34</span><br><span class="line">drwxrwxr-x <span class="number">3</span> python <span class="number">22</span> <span class="number">3</span>月   <span class="number">6</span> <span class="number">09</span>:<span class="number">47</span> magedu/</span><br><span class="line">-rw-rw-r-- <span class="number">1</span> python  <span class="number">0</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">09</span>:<span class="number">58</span> test</span><br><span class="line"></span><br><span class="line">In [<span class="number">263</span>]: p4 = Path(<span class="string">'ifcfg-ens34'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">264</span>]: p4.resolve()</span><br><span class="line">Out[<span class="number">264</span>]: PosixPath(<span class="string">'/etc/sysconfig/network-scripts/ifcfg-ens34'</span>)</span><br></pre></td></tr></table></figure>
-<h2 id="删除文件或取消链接-unlink"><a href="#删除文件或取消链接-unlink" class="headerlink" title="删除文件或取消链接.unlink"></a>删除文件或取消链接.unlink</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">491</span>]: ll</span><br><span class="line">总用量 <span class="number">0</span></span><br><span class="line">-rw-rw-r-- <span class="number">1</span> python <span class="number">0</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">10</span>:<span class="number">31</span> test</span><br><span class="line"></span><br><span class="line">In [<span class="number">492</span>]: p4</span><br><span class="line">Out[<span class="number">492</span>]: PosixPath(<span class="string">'/tmp/test'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">494</span>]: p4.unlink()</span><br><span class="line"></span><br><span class="line">In [<span class="number">495</span>]: ll</span><br><span class="line">总用量 <span class="number">0</span></span><br></pre></td></tr></table></figure>
-<h2 id="文件权限-chmod"><a href="#文件权限-chmod" class="headerlink" title="文件权限.chmod"></a>文件权限.chmod</h2><p>接受一个十进制的权限描述</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">101</span>]: p2.chmod(<span class="number">493</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">102</span>]: ll</span><br><span class="line">总用量 <span class="number">16</span></span><br><span class="line">-rwxr-xr-x <span class="number">1</span> python <span class="number">13099</span> <span class="number">10</span>月 <span class="number">23</span> <span class="number">2017</span> sample.txt*</span><br></pre></td></tr></table></figure>
-<h2 id="链接文件权限-lchmod"><a href="#链接文件权限-lchmod" class="headerlink" title="链接文件权限.lchmod"></a>链接文件权限.lchmod</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<h1 id="文件复制shutil"><a href="#文件复制shutil" class="headerlink" title="文件复制shutil"></a>文件复制shutil</h1><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> shutil</span><br></pre></td></tr></table></figure>
-<h2 id="返回sh命令位置-which"><a href="#返回sh命令位置-which" class="headerlink" title="返回sh命令位置.which"></a>返回sh命令位置.which</h2><p>语法: <code>shutil.which(cmd, mode=os.F_OK | os.X_OK, path=None)</code></p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">106</span>]: shutil.which(<span class="string">'copy'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">107</span>]: shutil.which(<span class="string">'cat'</span>)</span><br><span class="line">Out[<span class="number">107</span>]: <span class="string">'/usr/bin/cat'</span></span><br></pre></td></tr></table></figure>
-<h2 id="复制文件-copyfile"><a href="#复制文件-copyfile" class="headerlink" title="复制文件.copyfile"></a>复制文件.copyfile</h2><p>默认从指定源复制到目标，如果 <code>follow_symlinks=False</code> 则复制仅复制链接。</p>
-<p>语法: <code>shutil.copyfile(src, dst, *, follow_symlinks=True)</code></p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">34</span>]: shutil.copyfile(<span class="string">'sample.txt'</span>,<span class="string">'sample.txt.bak'</span>)</span><br><span class="line">Out[<span class="number">34</span>]: <span class="string">'sample.txt.bak'</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">35</span>]: ll</span><br><span class="line">总用量 <span class="number">32</span></span><br><span class="line">-rwxr-xr-x <span class="number">1</span> python <span class="number">13099</span> <span class="number">10</span>月 <span class="number">23</span> <span class="number">2017</span> sample.txt*</span><br><span class="line">-rw-rw-r-- <span class="number">1</span> python <span class="number">13099</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">14</span>:<span class="number">25</span> sample.txt.bak</span><br><span class="line">drwxrwxr-x <span class="number">2</span> python     <span class="number">6</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">09</span>:<span class="number">01</span> test/</span><br></pre></td></tr></table></figure>
-<h2 id="从指针处复制文件-copyfileobj"><a href="#从指针处复制文件-copyfileobj" class="headerlink" title="从指针处复制文件.copyfileobj"></a>从指针处复制文件.copyfileobj</h2><p>语法: <code>shutil.copyfileobj(fsrc, fdst[, length])</code></p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">8</span>]: <span class="keyword">with</span> open(<span class="string">'sample.txt'</span>,<span class="string">'r+'</span>) <span class="keyword">as</span> file1:</span><br><span class="line">   ...:     file1.seek(<span class="number">200</span>)</span><br><span class="line">   ...:     <span class="keyword">with</span> open(<span class="string">'sample.txt.bak'</span>,<span class="string">'w+'</span>) <span class="keyword">as</span> file2:</span><br><span class="line">   ...:         <span class="keyword">import</span> shutil</span><br><span class="line">   ...:         shutil.copyfileobj(file1,file2)</span><br></pre></td></tr></table></figure>
-<h2 id="复制文件-copy"><a href="#复制文件-copy" class="headerlink" title="复制文件.copy"></a>复制文件.copy</h2><blockquote>
-<p>仅复制文件不能复制目录</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> pymysql</span><br><span class="line"></span><br><span class="line">config = &#123;</span><br><span class="line">          <span class="string">'host'</span>:<span class="string">'172.16.100.252'</span>,</span><br><span class="line">          <span class="string">'port'</span>:<span class="number">3306</span>,</span><br><span class="line">          <span class="string">'user'</span>:<span class="string">'root'</span>,</span><br><span class="line">          <span class="string">'password'</span>:<span class="string">'Jinheng890821@'</span>,</span><br><span class="line">          <span class="string">'db'</span>:<span class="string">'hellodb'</span>,                              <span class="comment">#指定数据库</span></span><br><span class="line">          <span class="string">'charset'</span>:<span class="string">'utf8mb4'</span>,                         <span class="comment">#设定字符集</span></span><br><span class="line">          <span class="string">'cursorclass'</span>:pymysql.cursors.DictCursor,    <span class="comment">#指定游标类</span></span><br><span class="line">          &#125;</span><br><span class="line"></span><br><span class="line">db = pymysql.Connect(**config)</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>游标，相当于使用 <code>mysql</code> 命令刚进入数据库时候那个光标的位置</p>
 </blockquote>
-<p>复制文件到目标，如果目标为目录则复制到目标目录中。<code>(copyfile函数如果目标为目录会报错)</code></p>
-<p>语法: <code>shutil.copy(src, dst, *, follow_symlinks=True)</code></p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">135</span>]: shutil.copy(<span class="string">'sample.txt'</span>,<span class="string">'test'</span>)</span><br><span class="line">Out[<span class="number">135</span>]: <span class="string">'test/sample.txt'</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">136</span>]: ll</span><br><span class="line">总用量 <span class="number">32</span></span><br><span class="line">-rw-r--r-- <span class="number">1</span> python <span class="number">13099</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">14</span>:<span class="number">33</span> sample.txt</span><br><span class="line">-rw-r--r-- <span class="number">1</span> python <span class="number">13099</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">14</span>:<span class="number">33</span> sample.txt.bak</span><br><span class="line">lrwxrwxrwx 1 python    10 4月  25 14:25 sample.txt.lnk -&gt; sample.txt</span><br><span class="line">drwxrwxr-x <span class="number">2</span> python    <span class="number">24</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">14</span>:<span class="number">50</span> test/</span><br><span class="line"></span><br><span class="line">In [<span class="number">137</span>]: ll test/</span><br><span class="line">总用量 <span class="number">16</span></span><br><span class="line">-rw-r--r-- <span class="number">1</span> python <span class="number">13099</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">14</span>:<span class="number">50</span> sample.txt</span><br></pre></td></tr></table></figure>
-<h2 id="复制文件元数据-copy2"><a href="#复制文件元数据-copy2" class="headerlink" title="复制文件元数据.copy2"></a>复制文件元数据.copy2</h2><blockquote>
-<p> 仅复制文件不能复制目录</p>
-</blockquote>
-<p>语法: <code>shutil.copy2(src, dst, *, follow_symlinks=True)</code></p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">146</span>]: shutil.copy2(<span class="string">'sample.txt'</span>,<span class="string">'test'</span>)</span><br><span class="line">Out[<span class="number">146</span>]: <span class="string">'test/sample.txt'</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">147</span>]: ll ./sample.txt ./test/sample.txt</span><br><span class="line">-rw-r--r-- <span class="number">1</span> python <span class="number">13099</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">14</span>:<span class="number">33</span> ./sample.txt</span><br><span class="line">-rw-r--r-- <span class="number">1</span> python <span class="number">13099</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">14</span>:<span class="number">33</span> ./test/sample.txt</span><br></pre></td></tr></table></figure>
-<h2 id="递归复制目录-copytree"><a href="#递归复制目录-copytree" class="headerlink" title="递归复制目录.copytree"></a>递归复制目录.copytree</h2><p>递归的复制一个目录，目标目录存在则报错。</p>
-<p>语法: <code>shutil.copytree(src, dst, symlinks=False, ignore=None, copy_function=copy2, ignore_dangling_symlinks=False)</code></p>
-<p><code>copy_function</code> 指定复制函数，它必须是可用于复制每个文件的可调用函数。</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">4</span>]: ll project/</span><br><span class="line">总用量 <span class="number">0</span></span><br><span class="line">drwxrwxr-x <span class="number">2</span> python <span class="number">6</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">15</span>:<span class="number">15</span> <span class="number">0</span>/</span><br><span class="line">drwxrwxr-x <span class="number">2</span> python <span class="number">6</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">15</span>:<span class="number">15</span> <span class="number">1</span>/</span><br><span class="line">drwxrwxr-x <span class="number">2</span> python <span class="number">6</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">15</span>:<span class="number">15</span> <span class="number">2</span>/</span><br><span class="line">drwxrwxr-x <span class="number">2</span> python <span class="number">6</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">15</span>:<span class="number">15</span> <span class="number">3</span>/</span><br><span class="line">drwxrwxr-x <span class="number">2</span> python <span class="number">6</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">15</span>:<span class="number">15</span> <span class="number">4</span>/</span><br><span class="line">-rw-rw-r-- <span class="number">1</span> python <span class="number">0</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">15</span>:<span class="number">15</span> <span class="number">5</span></span><br><span class="line">-rw-rw-r-- <span class="number">1</span> python <span class="number">0</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">15</span>:<span class="number">15</span> <span class="number">6</span></span><br><span class="line">-rw-rw-r-- <span class="number">1</span> python <span class="number">0</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">15</span>:<span class="number">15</span> <span class="number">7</span></span><br><span class="line">-rw-rw-r-- <span class="number">1</span> python <span class="number">0</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">15</span>:<span class="number">15</span> <span class="number">8</span></span><br><span class="line">-rw-rw-r-- <span class="number">1</span> python <span class="number">0</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">15</span>:<span class="number">15</span> <span class="number">9</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">9</span>]: shutil.copytree(<span class="string">'project'</span>,<span class="string">'project.bak'</span>,ignore=shutil.ignore_patterns(<span class="string">'0'</span>,<span class="string">'9'</span>))</span><br><span class="line">Out[<span class="number">9</span>]: <span class="string">'project.bak'</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">10</span>]: ll project.bak/</span><br><span class="line">总用量 <span class="number">0</span></span><br><span class="line">drwxrwxr-x <span class="number">2</span> python <span class="number">6</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">15</span>:<span class="number">15</span> <span class="number">1</span>/</span><br><span class="line">drwxrwxr-x <span class="number">2</span> python <span class="number">6</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">15</span>:<span class="number">15</span> <span class="number">2</span>/</span><br><span class="line">drwxrwxr-x <span class="number">2</span> python <span class="number">6</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">15</span>:<span class="number">15</span> <span class="number">3</span>/</span><br><span class="line">drwxrwxr-x <span class="number">2</span> python <span class="number">6</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">15</span>:<span class="number">15</span> <span class="number">4</span>/</span><br><span class="line">-rw-rw-r-- <span class="number">1</span> python <span class="number">0</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">15</span>:<span class="number">15</span> <span class="number">5</span></span><br><span class="line">-rw-rw-r-- <span class="number">1</span> python <span class="number">0</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">15</span>:<span class="number">15</span> <span class="number">6</span></span><br><span class="line">-rw-rw-r-- <span class="number">1</span> python <span class="number">0</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">15</span>:<span class="number">15</span> <span class="number">7</span></span><br><span class="line">-rw-rw-r-- <span class="number">1</span> python <span class="number">0</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">15</span>:<span class="number">15</span> <span class="number">8</span></span><br></pre></td></tr></table></figure>
 <ul>
-<li>忽略参数.ignore_patterns</li>
+<li>类的方法</li>
 </ul>
-<p>可以为 <code>copytree</code> 函数的 <code>ignore</code> 参数提供忽略的内容</p>
-<p>语法: <code>shutil.ignore_patterns(*patterns)</code></p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">shutil.ignore_patterns(<span class="string">'file1'</span>,<span class="string">'file2'</span>)</span><br></pre></td></tr></table></figure>
-<h2 id="递归删除目录-rmtree"><a href="#递归删除目录-rmtree" class="headerlink" title="递归删除目录.rmtree"></a>递归删除目录.rmtree</h2><p>语法: <code>shutil.rmtree(path, ignore_errors=False, onerror=None)</code></p>
-<p><code>ignore_errors=True</code> 忽略删除过程中出现的错误</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">12</span>]: ll</span><br><span class="line">总用量 <span class="number">32</span></span><br><span class="line">drwxrwxr-x <span class="number">7</span> python    <span class="number">96</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">15</span>:<span class="number">15</span> project/</span><br><span class="line">drwxrwxr-x <span class="number">6</span> python    <span class="number">78</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">15</span>:<span class="number">15</span> project.bak/</span><br><span class="line">-rw-r--r-- <span class="number">1</span> python <span class="number">13099</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">14</span>:<span class="number">33</span> sample.txt</span><br><span class="line">-rw-r--r-- <span class="number">1</span> python <span class="number">13099</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">14</span>:<span class="number">33</span> sample.txt.bak</span><br><span class="line">lrwxrwxrwx 1 python    10 4月  25 14:25 sample.txt.lnk -&gt; sample.txt</span><br><span class="line">drwxrwxr-x <span class="number">2</span> python    <span class="number">24</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">14</span>:<span class="number">54</span> test/</span><br><span class="line"></span><br><span class="line">In [<span class="number">14</span>]: shutil.rmtree(<span class="string">'project.bak'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">15</span>]: ll</span><br><span class="line">总用量 <span class="number">32</span></span><br><span class="line">drwxrwxr-x <span class="number">7</span> python    <span class="number">96</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">15</span>:<span class="number">15</span> project/</span><br><span class="line">-rw-r--r-- <span class="number">1</span> python <span class="number">13099</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">14</span>:<span class="number">33</span> sample.txt</span><br><span class="line">-rw-r--r-- <span class="number">1</span> python <span class="number">13099</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">14</span>:<span class="number">33</span> sample.txt.bak</span><br><span class="line">lrwxrwxrwx 1 python    10 4月  25 14:25 sample.txt.lnk -&gt; sample.txt</span><br><span class="line">drwxrwxr-x <span class="number">2</span> python    <span class="number">24</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">14</span>:<span class="number">54</span> test/</span><br></pre></td></tr></table></figure>
-<h2 id="权限复制-copymode"><a href="#权限复制-copymode" class="headerlink" title="权限复制.copymode"></a>权限复制.copymode</h2><p>两个文件之间的权限复制，从文件到目录，从目录到文件皆可。</p>
-<p>复制文件的权限到另外的文件，注意：软链接文件权限不可以修改，（默认777）</p>
-<p>语法: <code>shutil.copymode(src, dst, *, follow_symlinks=True)</code></p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">100</span>]: ll</span><br><span class="line">总用量 <span class="number">32</span></span><br><span class="line">-rw-r--r-- <span class="number">1</span> python <span class="number">13099</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">14</span>:<span class="number">33</span> sample.txt</span><br><span class="line">---------- <span class="number">1</span> python <span class="number">13099</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">14</span>:<span class="number">33</span> sample.txt.bak</span><br><span class="line">lrwxrwxrwx 1 python    10 4月  25 14:25 sample.txt.lnk -&gt; sample.txt</span><br><span class="line">drwxrwxr-x <span class="number">2</span> python     <span class="number">6</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">14</span>:<span class="number">33</span> test/</span><br><span class="line"></span><br><span class="line">In [<span class="number">108</span>]: shutil.copymode(<span class="string">'sample.txt'</span>,<span class="string">'sample.txt.bak'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">109</span>]: ll</span><br><span class="line">总用量 <span class="number">32</span></span><br><span class="line">-rw-r--r-- <span class="number">1</span> python <span class="number">13099</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">14</span>:<span class="number">33</span> sample.txt</span><br><span class="line">-rw-r--r-- <span class="number">1</span> python <span class="number">13099</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">14</span>:<span class="number">33</span> sample.txt.bak</span><br><span class="line">lrwxrwxrwx 1 python    10 4月  25 14:25 sample.txt.lnk -&gt; sample.txt</span><br><span class="line">drwxrwxr-x <span class="number">2</span> python     <span class="number">6</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">14</span>:<span class="number">33</span> test/</span><br></pre></td></tr></table></figure>
-<h2 id="元数据复制-copystat"><a href="#元数据复制-copystat" class="headerlink" title="元数据复制.copystat"></a>元数据复制.copystat</h2><p>两个文件之间的元数据复制，从文件到目录，从目录到文件皆可。</p>
-<p>语法: <code>shutil.copystat(src, dst, *, follow_symlinks=True)</code></p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">124</span>]: !chmod <span class="number">000</span> sample.txt.bak</span><br><span class="line">    </span><br><span class="line">In [<span class="number">121</span>]: ll</span><br><span class="line">总用量 <span class="number">32</span></span><br><span class="line">-rw-r--r-- <span class="number">1</span> python <span class="number">13099</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">14</span>:<span class="number">33</span> sample.txt</span><br><span class="line">---------- <span class="number">1</span> python <span class="number">13099</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">14</span>:<span class="number">39</span> sample.txt.bak</span><br><span class="line">lrwxrwxrwx 1 python    10 4月  25 14:25 sample.txt.lnk -&gt; sample.txt</span><br><span class="line">drwxrwxr-x <span class="number">2</span> python     <span class="number">6</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">14</span>:<span class="number">33</span> test/</span><br><span class="line"></span><br><span class="line">In [<span class="number">125</span>]: shutil.copystat(<span class="string">'sample.txt'</span>,<span class="string">'sample.txt.bak'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">126</span>]: ll</span><br><span class="line">总用量 <span class="number">32</span></span><br><span class="line">-rw-r--r-- <span class="number">1</span> python <span class="number">13099</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">14</span>:<span class="number">33</span> sample.txt</span><br><span class="line">-rw-r--r-- <span class="number">1</span> python <span class="number">13099</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">14</span>:<span class="number">33</span> sample.txt.bak</span><br><span class="line">lrwxrwxrwx 1 python    10 4月  25 14:25 sample.txt.lnk -&gt; sample.txt</span><br><span class="line">drwxrwxr-x <span class="number">2</span> python     <span class="number">6</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">14</span>:<span class="number">33</span> test/</span><br></pre></td></tr></table></figure>
-<h2 id="移动文件或目录-move"><a href="#移动文件或目录-move" class="headerlink" title="移动文件或目录.move"></a>移动文件或目录.move</h2><p>语法: <code>shutil.move(src, dst, copy_function=copy2)</code></p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">32</span>]: ll</span><br><span class="line">总用量 <span class="number">32</span></span><br><span class="line">drwxrwxr-x <span class="number">7</span> python    <span class="number">96</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">15</span>:<span class="number">15</span> project/</span><br><span class="line">-rw-r--r-- <span class="number">1</span> python <span class="number">13099</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">14</span>:<span class="number">33</span> sample.txt</span><br><span class="line">-rw-r--r-- <span class="number">1</span> python <span class="number">13099</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">14</span>:<span class="number">33</span> sample.txt.bak</span><br><span class="line">lrwxrwxrwx 1 python    10 4月  25 14:25 sample.txt.lnk -&gt; sample.txt</span><br><span class="line">drwxrwxr-x <span class="number">2</span> python    <span class="number">24</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">14</span>:<span class="number">54</span> test/</span><br><span class="line"></span><br><span class="line">In [<span class="number">34</span>]: shutil.move(<span class="string">'project'</span>,<span class="string">'test'</span>)</span><br><span class="line">Out[<span class="number">34</span>]: <span class="string">'test/project'</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">36</span>]: ll test/</span><br><span class="line">总用量 <span class="number">16</span></span><br><span class="line">drwxrwxr-x <span class="number">7</span> python    <span class="number">96</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">15</span>:<span class="number">15</span> project/</span><br><span class="line">-rw-r--r-- <span class="number">1</span> python <span class="number">13099</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">14</span>:<span class="number">33</span> sample.txt</span><br><span class="line"></span><br><span class="line">In [<span class="number">37</span>]: shutil.move(<span class="string">'test/project'</span>,<span class="string">'./'</span>)</span><br><span class="line">Out[<span class="number">37</span>]: <span class="string">'./project'</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">38</span>]: ll</span><br><span class="line">总用量 <span class="number">32</span></span><br><span class="line">drwxrwxr-x <span class="number">7</span> python    <span class="number">96</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">15</span>:<span class="number">15</span> project/</span><br><span class="line">-rw-r--r-- <span class="number">1</span> python <span class="number">13099</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">14</span>:<span class="number">33</span> sample.txt</span><br><span class="line">-rw-r--r-- <span class="number">1</span> python <span class="number">13099</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">14</span>:<span class="number">33</span> sample.txt.bak</span><br><span class="line">lrwxrwxrwx 1 python    10 4月  25 14:25 sample.txt.lnk -&gt; sample.txt</span><br><span class="line">drwxrwxr-x <span class="number">2</span> python    <span class="number">24</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">15</span>:<span class="number">30</span> test/</span><br></pre></td></tr></table></figure>
-<h2 id="磁盘使用量-disk-usage"><a href="#磁盘使用量-disk-usage" class="headerlink" title="磁盘使用量.disk_usage"></a>磁盘使用量.disk_usage</h2><p>语法: <code>shutil.disk_usage(path)</code></p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">51</span>]: shutil.disk_usage(<span class="string">'/'</span>)</span><br><span class="line">Out[<span class="number">51</span>]: usage(total=<span class="number">19641925632</span>, used=<span class="number">2332303360</span>, free=<span class="number">17309622272</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">52</span>]: shutil.disk_usage(<span class="string">'/dev'</span>)</span><br><span class="line">Out[<span class="number">52</span>]: usage(total=<span class="number">236752896</span>, used=<span class="number">0</span>, free=<span class="number">236752896</span>)</span><br></pre></td></tr></table></figure>
-<h2 id="修改文件属主属组-chown"><a href="#修改文件属主属组-chown" class="headerlink" title="修改文件属主属组.chown"></a>修改文件属主属组.chown</h2><p>语法: <code>shutil.chown(path, user=None, group=None)</code></p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">[root@localhost tmp]<span class="comment"># ll</span></span><br><span class="line">总用量 <span class="number">4</span></span><br><span class="line">-rw-rw-r-- <span class="number">1</span> python python <span class="number">6</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">10</span>:<span class="number">40</span> test</span><br><span class="line">[root@localhost bin]<span class="comment"># python3</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">import</span> shutil</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>shutil.chown(<span class="string">'/tmp/test'</span>,user=<span class="string">'rooot'</span>,group=<span class="string">'root'</span>)</span><br><span class="line">[root@localhost tmp]<span class="comment"># ll</span></span><br><span class="line">总用量 <span class="number">4</span></span><br><span class="line">-rw-rw-r-- <span class="number">1</span> root root <span class="number">6</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">10</span>:<span class="number">40</span> test</span><br></pre></td></tr></table></figure>
-<h1 id="文件打包shutil"><a href="#文件打包shutil" class="headerlink" title="文件打包shutil"></a>文件打包shutil</h1><h2 id="打包文件-make-archive"><a href="#打包文件-make-archive" class="headerlink" title="打包文件.make_archive"></a>打包文件.make_archive</h2><p>语法: <code>shutil.make_archive(base_name, format[, root_dir[, base_dir[, verbose[, dry_run[, owner[, group[, logger]]]]]]])</code></p>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.cursor()</code></td>
+<td>使用此连接并且返回连接游标</td>
+</tr>
+<tr>
+<td><code>.begin()</code></td>
+<td>开始事务</td>
+</tr>
+<tr>
+<td><code>.rollback()</code></td>
+<td>对事务进行回滚</td>
+</tr>
+<tr>
+<td><code>.commit()</code></td>
+<td>对事务进行提交</td>
+</tr>
+<tr>
+<td><code>.close()</code></td>
+<td>关闭连接，如果事务没有提交，则此操作包含了隐式回滚</td>
+</tr>
+<tr>
+<td><code>.select_db(db)</code></td>
+<td>选择数据库</td>
+</tr>
+</tbody>
+</table>
+<h2 id="err类"><a href="#err类" class="headerlink" title="err类"></a>err类</h2><table>
+<thead>
+<tr>
+<th>异常</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Warning</td>
+<td>当有严重警告时触发，例如插入数据是被截断等等。必须是 StandardError 的子类。</td>
+</tr>
+<tr>
+<td>Error</td>
+<td>警告以外所有其他错误类。必须是 StandardError 的子类。</td>
+</tr>
+<tr>
+<td>InterfaceError</td>
+<td>当有数据库接口模块本身的错误（而不是数据库的错误）发生时触发。 必须是Error的子类。</td>
+</tr>
+<tr>
+<td>DatabaseError</td>
+<td>和数据库有关的错误发生时触发。 必须是Error的子类。</td>
+</tr>
+<tr>
+<td>DataError</td>
+<td>当有数据处理时的错误发生时触发，例如：除零错误，数据超范围等等。 必须是DatabaseError的子类。</td>
+</tr>
+<tr>
+<td>OperationalError</td>
+<td>指非用户控制的，而是操作数据库时发生的错误。例如：连接意外断开、 数据库名未找到、事务处理失败、内存分配错误等等操作数据库是发生的错误。 必须是DatabaseError的子类。</td>
+</tr>
+<tr>
+<td>IntegrityError</td>
+<td>完整性相关的错误，例如外键检查失败等。必须是DatabaseError子类。</td>
+</tr>
+<tr>
+<td>InternalError</td>
+<td>数据库的内部错误，例如游标（cursor）失效了、事务同步失败等等。 必须是DatabaseError子类。</td>
+</tr>
+<tr>
+<td>ProgrammingError</td>
+<td>程序错误，例如数据表（table）没找到或已存在、SQL语句语法错误、 参数数量错误等等。必须是DatabaseError的子类。</td>
+</tr>
+<tr>
+<td>NotSupportedError</td>
+<td>不支持错误，指使用了数据库不支持的函数或API等。例如在连接对象上 使用.rollback()函数，然而数据库并不支持事务或者事务已关闭。 必须是DatabaseError的子类。</td>
+</tr>
+</tbody>
+</table>
+<h2 id="Cursor-Objects"><a href="#Cursor-Objects" class="headerlink" title="Cursor Objects"></a>Cursor Objects</h2><table>
+<thead>
+<tr>
+<th>方法</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.callproc( procname [, parameters ] )</code></td>
+<td>调用存储过程并且传递参数，结果集可以通过 <code>.fetch*()</code> 得到</td>
+</tr>
+<tr>
+<td><code>.execute(operation [, parameters])</code></td>
+<td>执行数据库命令，<code>.execute(&#39;operation&#39;, (parameters))</code> 使用类似C风格的字符串格式化方法，可以防止SQL注入攻击</td>
+</tr>
+<tr>
+<td><code>.executemany( operation, seq_of_parameters )</code></td>
+<td>批量操作，<code>.execute(&#39;operation&#39;, (seq_of_parameters))</code> 这里的参数可以是可迭代对象组成的序列，这会调用 <code>operation</code> 对序列中的每个元素执行操作</td>
+</tr>
+<tr>
+<td><code>.fetchone()</code></td>
+<td>获取查询结果集的下一行，返回单个序列，或在没有更多数据可用时返回<code>None</code></td>
+</tr>
+<tr>
+<td><code>.fetchmany([ size = cursor.arraysize ])</code></td>
+<td>获取查询结果的下一组行，返回一系列序列（例如元组列表）。没有更多行可用时返回空序列。</td>
+</tr>
+<tr>
+<td><code>.fetchall()</code></td>
+<td>获取查询结果的所有（剩余）行，并将它们作为一系列序列（例如元组列表）返回。请注意，游标的arraysize属性可能会影响此操作的性能。</td>
+</tr>
+<tr>
+<td><code>.close()</code></td>
+<td>关闭游标。也可以直接关闭连接，从而关闭游标</td>
+</tr>
+<tr>
+<td><code>.nextset()</code></td>
+<td>此方法将使光标跳到下一个可用集合，丢弃当前集合中的任何剩余行</td>
+</tr>
+<tr>
+<td><code>.setinputsizes(sizes)</code></td>
+<td>这可以在调用 <code>.execute*()</code> 之前使用，以预定义操作参数的内存区域。</td>
+</tr>
+<tr>
+<td><code>.setoutputsize(size [，column ])</code></td>
+<td>为大列提取设置列缓冲区大小（例如，LONG s，BLOB s等），该列被指定为结果序列的索引。不指定列将为游标中的所有大型列设置默认大小</td>
+</tr>
+<tr>
+<td><code>.scroll(value [, mode=&#39;relative&#39; ])</code></td>
+<td>根据 <code>mode</code> 移动游标到新位置，默认 <code>mode =&#39;relative&#39;</code> 表示相对当前的偏移量，当为 <code>mode =&#39;absolute&#39;</code> 时移动到绝对位置</td>
+</tr>
+<tr>
+<td><code>next()</code></td>
+<td>返回下一行数据</td>
+</tr>
+<tr>
+<td><code>.mogrify(query,args=None)</code></td>
+<td>参数化查询，防止SQL注入攻击，通过调用 <code>execute()</code> 方法返回发送到数据库的确切字符串。</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>属性</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.description</code></td>
+<td>游标结果的字段描述信息，包含了：字段名，字段类型代码，显示尺寸，内部大小，精确度，规模，是否允许空</td>
+</tr>
+<tr>
+<td><code>.rownumber</code></td>
+<td>显示游标所在行</td>
+</tr>
+<tr>
+<td><code>.rowcount</code></td>
+<td>这是一个只读属性，并返回执行 <code>execute()</code> 方法后影响的行数</td>
+</tr>
+<tr>
+<td><code>.arraysize</code></td>
+<td>此读取/写入属性指定一次使用 <code>.fetchmany()</code> 提取的行数。它默认为1</td>
+</tr>
+<tr>
+<td><code>.connection</code></td>
+<td>此只读属性返回创建光标的Connection对象的引用。</td>
+</tr>
+<tr>
+<td><code>.__iter__</code></td>
+<td>将游标转换为可迭代对象</td>
+</tr>
+<tr>
+<td><code>.lastrowid</code></td>
+<td>获取新创建数据的自增ID</td>
+</tr>
+</tbody>
+</table>
+<h3 id="查询操作"><a href="#查询操作" class="headerlink" title="查询操作"></a>查询操作</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> pymysql</span><br><span class="line"></span><br><span class="line">config = &#123;</span><br><span class="line">          <span class="string">'host'</span>:<span class="string">'172.16.100.252'</span>,</span><br><span class="line">          <span class="string">'port'</span>:<span class="number">3306</span>,</span><br><span class="line">          <span class="string">'user'</span>:<span class="string">'root'</span>,</span><br><span class="line">          <span class="string">'password'</span>:<span class="string">'Jinheng890821@'</span>,</span><br><span class="line">          <span class="string">'db'</span>:<span class="string">'hellodb'</span>,</span><br><span class="line">          <span class="string">'charset'</span>:<span class="string">'utf8mb4'</span>,</span><br><span class="line">          <span class="string">'cursorclass'</span>:pymysql.cursors.DictCursor,</span><br><span class="line">          &#125;</span><br><span class="line"></span><br><span class="line">db = pymysql.Connect(**config)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 设置查询条件</span></span><br><span class="line">max_age = <span class="number">30</span></span><br><span class="line">mix_age = <span class="number">25</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 执行sql语句</span></span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    <span class="keyword">with</span> db.cursor() <span class="keyword">as</span> cursor:</span><br><span class="line">        sql = <span class="string">'SELECT * FROM students WHERE Age BETWEEN %s AND %s'</span></span><br><span class="line">        cursor.execute(sql, (mix_age, max_age))</span><br><span class="line">        result = cursor.fetchone()</span><br><span class="line">        print(result)</span><br><span class="line">        result = cursor.fetchone()</span><br><span class="line">        print(result)</span><br><span class="line">    db.commit()    <span class="comment"># 没有设置默认自动提交，需要主动提交，以保存所执行的语句</span></span><br><span class="line"><span class="keyword">finally</span>:</span><br><span class="line">    db.close()</span><br></pre></td></tr></table></figure>
 <ul>
-<li>将 <code>/etc</code> 目录以 <code>.tar.gz</code> 格式打包，放在<code>/tmp/mytar</code></li>
+<li>查询结果</li>
 </ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">289</span>]: shutil.make_archive(<span class="string">'/tmp/mytar'</span>,<span class="string">'gztar'</span>,root_dir=<span class="string">'/etc'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">290</span>]: ll</span><br><span class="line">总用量 <span class="number">4</span></span><br><span class="line">-rw-rw-r-- <span class="number">1</span> python <span class="number">493</span> <span class="number">4</span>月  <span class="number">25</span> <span class="number">16</span>:<span class="number">32</span> mytar.tar.gz</span><br></pre></td></tr></table></figure>
-<h2 id="解包文件-unpack-archive"><a href="#解包文件-unpack-archive" class="headerlink" title="解包文件.unpack_archive"></a>解包文件.unpack_archive</h2><p>语法: <code>shutil.unpack_archive(filename[, extract_dir[, format]])</code></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">&#123;<span class="string">'StuID'</span>: <span class="number">5</span>, <span class="string">'Name'</span>: <span class="string">'Yu Yutong'</span>, <span class="string">'Age'</span>: <span class="number">26</span>, <span class="string">'Gender'</span>: <span class="string">'M'</span>, <span class="string">'ClassID'</span>: <span class="number">3</span>, <span class="string">'TeacherID'</span>: <span class="number">1</span>&#125;</span><br><span class="line">&#123;<span class="string">'StuID'</span>: <span class="number">17</span>, <span class="string">'Name'</span>: <span class="string">'Lin Chong'</span>, <span class="string">'Age'</span>: <span class="number">25</span>, <span class="string">'Gender'</span>: <span class="string">'M'</span>, <span class="string">'ClassID'</span>: <span class="number">4</span>, <span class="string">'TeacherID'</span>: <span class="keyword">None</span>&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="插入操作"><a href="#插入操作" class="headerlink" title="插入操作"></a>插入操作</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> pymysql</span><br><span class="line"></span><br><span class="line">config = &#123;</span><br><span class="line">          <span class="string">'host'</span>:<span class="string">'172.16.100.252'</span>,</span><br><span class="line">          <span class="string">'port'</span>:<span class="number">3306</span>,</span><br><span class="line">          <span class="string">'user'</span>:<span class="string">'root'</span>,</span><br><span class="line">          <span class="string">'password'</span>:<span class="string">'Jinheng890821@'</span>,</span><br><span class="line">          <span class="string">'db'</span>:<span class="string">'hellodb'</span>,</span><br><span class="line">          <span class="string">'charset'</span>:<span class="string">'utf8mb4'</span>,</span><br><span class="line">          <span class="string">'cursorclass'</span>:pymysql.cursors.DictCursor,</span><br><span class="line">          &#125;</span><br><span class="line"></span><br><span class="line">db = pymysql.Connect(**config)</span><br><span class="line"></span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    <span class="keyword">with</span> db.cursor() <span class="keyword">as</span> cursor:</span><br><span class="line">        sql = <span class="string">'INSERT INTO students VALUES (%s,%s,%s,%s,%s,%s)'</span></span><br><span class="line">        cursor.execute(sql, (NULL,<span class="string">'yangjinheng'</span>,<span class="string">'29'</span>,<span class="string">'M'</span>,<span class="number">10</span>,<span class="number">1</span>))</span><br><span class="line">    db.commit()    <span class="comment">#由于默认开启事务，所以需要自己提交，或者回滚</span></span><br><span class="line"><span class="keyword">finally</span>:</span><br><span class="line">    db.close()</span><br></pre></td></tr></table></figure>
 <ul>
-<li>将 <code>/tmp/mytar.tar.gz</code> 文件解压到 <code>/home/python</code> 格式为：<code>gztar</code></li>
+<li>官方示例</li>
 </ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">299</span>]: shutil.unpack_archive(<span class="string">'/tmp/mytar.tar.gz'</span>,<span class="string">'/home/python'</span>,<span class="string">'gztar'</span>)</span><br></pre></td></tr></table></figure>
-<h2 id="存档格式-get-archive-formats"><a href="#存档格式-get-archive-formats" class="headerlink" title="存档格式.get_archive_formats"></a>存档格式.get_archive_formats</h2><p>显示支持的存档格式</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">109</span>]: shutil.get_archive_formats()</span><br><span class="line">Out[<span class="number">109</span>]: </span><br><span class="line">[(<span class="string">'bztar'</span>, <span class="string">"bzip2'ed tar-file"</span>),</span><br><span class="line"> (<span class="string">'gztar'</span>, <span class="string">"gzip'ed tar-file"</span>),</span><br><span class="line"> (<span class="string">'tar'</span>, <span class="string">'uncompressed tar file'</span>),</span><br><span class="line"> (<span class="string">'zip'</span>, <span class="string">'ZIP file'</span>)]</span><br></pre></td></tr></table></figure>
-<h2 id="解包格式-get-unpack-formats"><a href="#解包格式-get-unpack-formats" class="headerlink" title="解包格式.get_unpack_formats"></a>解包格式.get_unpack_formats</h2><p>显示支持的解包格式</p>
-<p>语法: <code>shutil.unregister_unpack_format(name)</code></p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">303</span>]: shutil.get_unpack_formats()</span><br><span class="line">Out[<span class="number">303</span>]: </span><br><span class="line">[(<span class="string">'bztar'</span>, [<span class="string">'.tar.bz2'</span>, <span class="string">'.tbz2'</span>], <span class="string">"bzip2'ed tar-file"</span>),</span><br><span class="line"> (<span class="string">'gztar'</span>, [<span class="string">'.tar.gz'</span>, <span class="string">'.tgz'</span>], <span class="string">"gzip'ed tar-file"</span>),</span><br><span class="line"> (<span class="string">'tar'</span>, [<span class="string">'.tar'</span>], <span class="string">'uncompressed tar file'</span>),</span><br><span class="line"> (<span class="string">'zip'</span>, [<span class="string">'.zip'</span>], <span class="string">'ZIP file'</span>)]</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> pymysql.cursors</span><br><span class="line"></span><br><span class="line"><span class="comment"># Connect to the database</span></span><br><span class="line">connection = pymysql.connect(host=<span class="string">'localhost'</span>,</span><br><span class="line">                             user=<span class="string">'user'</span>,</span><br><span class="line">                             password=<span class="string">'passwd'</span>,</span><br><span class="line">                             db=<span class="string">'db'</span>,</span><br><span class="line">                             charset=<span class="string">'utf8mb4'</span>,</span><br><span class="line">                             cursorclass=pymysql.cursors.DictCursor)</span><br><span class="line"></span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    <span class="keyword">with</span> connection.cursor() <span class="keyword">as</span> cursor:</span><br><span class="line">        <span class="comment"># Create a new record</span></span><br><span class="line">        sql = <span class="string">"INSERT INTO `users` (`email`, `password`) VALUES (%s, %s)"</span></span><br><span class="line">        cursor.execute(sql, (<span class="string">'webmaster@python.org'</span>, <span class="string">'very-secret'</span>))</span><br><span class="line"></span><br><span class="line">    <span class="comment"># connection is not autocommit by default. So you must commit to save</span></span><br><span class="line">    <span class="comment"># your changes.</span></span><br><span class="line">    connection.commit()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">with</span> connection.cursor() <span class="keyword">as</span> cursor:</span><br><span class="line">        <span class="comment"># Read a single record</span></span><br><span class="line">        sql = <span class="string">"SELECT `id`, `password` FROM `users` WHERE `email`=%s"</span></span><br><span class="line">        cursor.execute(sql, (<span class="string">'webmaster@python.org'</span>,))</span><br><span class="line">        result = cursor.fetchone()</span><br><span class="line">        print(result)</span><br><span class="line"><span class="keyword">finally</span>:</span><br><span class="line">    connection.close()</span><br></pre></td></tr></table></figure>
 
           
         
@@ -587,7 +660,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://yangjinheng.github.io/2017/09/21/python/12.文件IO/">
+    <link itemprop="mainEntityOfPage" href="https://yangjinheng.github.io/2017/10/02/python/23.元编程/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Jin Heng">
@@ -606,7 +679,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/09/21/python/12.文件IO/" itemprop="url">文件I/O</a></h1>
+                <a class="post-title-link" href="/2017/10/02/python/23.元编程/" itemprop="url">元编程</a></h1>
         
 
         <div class="post-meta">
@@ -618,8 +691,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-21T00:00:00+08:00">
-                2017-09-21
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-02T00:00:00+08:00">
+                2017-10-02
               </time>
             
 
@@ -680,240 +753,21 @@
       
         
           
-            <h1 id="文件IO"><a href="#文件IO" class="headerlink" title="文件IO"></a>文件IO</h1><h2 id="文件的操作"><a href="#文件的操作" class="headerlink" title="文件的操作"></a>文件的操作</h2><h3 id="创建文件-open"><a href="#创建文件-open" class="headerlink" title="创建文件.open()"></a>创建文件.open()</h3><p>打开文件和创建文件对象，文件属于可迭代对象。</p>
-<h4 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h4><p><code>open(file, mode=&#39;r&#39;, buffering=-1, encoding=None, errors=None, newline=None, closefd=True, opener=None)</code></p>
-<h4 id="参数"><a href="#参数" class="headerlink" title="参数"></a>参数</h4><ul>
-<li><code>file</code> 文件路径或者打开文件的描述符，必须的参数。</li>
-</ul>
+            <h2 id="元编程"><a href="#元编程" class="headerlink" title="元编程"></a>元编程</h2><p>用元类进行编程，元类→类→对象，元类比类更抽象，生成类的类  元类定义的都是类的方法，类定义的都是实例方法 </p>
+<h2 id="type类"><a href="#type类" class="headerlink" title="type类"></a>type类</h2><p><code>type</code> 有一个功能，它可以在运行时产生类，<code>type</code> 可以传入一些参数，然后返回一个类。</p>
 <ul>
-<li><code>mode</code> 文件的打开模式</li>
+<li>语法</li>
 </ul>
-<table>
-<thead>
-<tr>
-<th>模式</th>
-<th>作用</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>r</td>
-<td>读模式（默认）</td>
-</tr>
-<tr>
-<td>w</td>
-<td>写模式，从首部直接覆盖文件</td>
-</tr>
-<tr>
-<td>x</td>
-<td>创建并写入一个新文件</td>
-</tr>
-<tr>
-<td>a</td>
-<td>追加模式</td>
-</tr>
-<tr>
-<td>b</td>
-<td>二进制模式，配合 <code>rw</code> 等参数使用</td>
-</tr>
-<tr>
-<td>t</td>
-<td>文本模式（默认）</td>
-</tr>
-<tr>
-<td>+</td>
-<td>读写模式，补全缺失的模式</td>
-</tr>
-</tbody>
-</table>
-<ul>
-<li><code>buffering</code> 设置缓冲的策略，正数表示使用指定大小的缓冲</li>
-</ul>
-<table>
-<thead>
-<tr>
-<th>参数</th>
-<th>含义</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>0</td>
-<td>表示禁用缓冲</td>
-</tr>
-<tr>
-<td>负数</td>
-<td>表示使用系统默认缓冲</td>
-</tr>
-<tr>
-<td>1</td>
-<td>表示缓冲一行数据</td>
-</tr>
-<tr>
-<td>大于1</td>
-<td>表示指定大小的缓冲。</td>
-</tr>
-</tbody>
-</table>
-<ul>
-<li><code>encoding</code> 文本文件的编码设置，windows 默认：GBK，LINUX默认：UTF-8。</li>
-<li><code>errors</code> 指定编码错误的可选字符串。</li>
-<li><code>newline</code> 控制通用换行符的工作方式。</li>
-</ul>
-<p>在读文件的时候：<code>newline=None</code> 表示<code>\r、\n、\r\n</code>都会被转换为<code>\n</code></p>
-<p>在写文件的时候：<code>newline=None</code> 表示使用系统的分行符号。</p>
-<h4 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h4><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">214</span>]: f = open(<span class="string">'test'</span>,mode=<span class="string">'w+'</span>)</span><br></pre></td></tr></table></figure>
-<h3 id="打开模式"><a href="#打开模式" class="headerlink" title="打开模式"></a>打开模式</h3><table>
-<thead>
-<tr>
-<th>模式</th>
-<th>描述</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>r</td>
-<td>以只读方式打开文件。文件的指针将会放在文件的开头。这是默认模式。</td>
-</tr>
-<tr>
-<td>rb</td>
-<td>以二进制格式打开一个文件用于只读。文件指针将会放在文件的开头。这是默认模式。一般用于非文本文件如图片等。</td>
-</tr>
-<tr>
-<td>r+</td>
-<td>打开一个文件用于读写。文件指针将会放在文件的开头。</td>
-</tr>
-<tr>
-<td>rb+</td>
-<td>以二进制格式打开一个文件用于读写。文件指针将会放在文件的开头。一般用于非文本文件如图片等。</td>
-</tr>
-<tr>
-<td>w</td>
-<td>打开一个文件只用于写入。如果该文件已存在则将其覆盖。如果该文件不存在，创建新文件。</td>
-</tr>
-<tr>
-<td>wb</td>
-<td>以二进制格式打开一个文件只用于写入。如果该文件已存在则将其覆盖。如果该文件不存在，创建新文件。一般用于非文本文件如图片等。</td>
-</tr>
-<tr>
-<td>w+</td>
-<td>打开一个文件用于读写。如果该文件已存在则将其覆盖。如果该文件不存在，创建新文件。</td>
-</tr>
-<tr>
-<td>wb+</td>
-<td>以二进制格式打开一个文件用于读写。如果该文件已存在则将其覆盖。如果该文件不存在，创建新文件。一般用于非文本文件如图片等。</td>
-</tr>
-<tr>
-<td>a</td>
-<td>打开一个文件用于追加。如果该文件已存在，文件指针将会放在文件的结尾。也就是说，新的内容将会被写入到已有内容之后。如果该文件不存在，创建新文件进行写入。</td>
-</tr>
-<tr>
-<td>ab</td>
-<td>以二进制格式打开一个文件用于追加。如果该文件已存在，文件指针将会放在文件的结尾。也就是说，新的内容将会被写入到已有内容之后。如果该文件不存在，创建新文件进行写入。</td>
-</tr>
-<tr>
-<td>a+</td>
-<td>打开一个文件用于读写。如果该文件已存在，文件指针将会放在文件的结尾。文件打开时会是追加模式。如果该文件不存在，创建新文件用于读写。</td>
-</tr>
-<tr>
-<td>ab+</td>
-<td>以二进制格式打开一个文件用于追加。如果该文件已存在，文件指针将会放在文件的结尾。如果该文件不存在，创建新文件用于读写。</td>
-</tr>
-</tbody>
-</table>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">type(name, bases, dict) -&gt; # 生成一个新类</span><br><span class="line">- name：类的名字</span><br><span class="line">- bases：父类的元组</span><br><span class="line">- dict：属性字典</span><br></pre></td></tr></table></figure>
 <ul>
 <li>示例</li>
 </ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">31</span>]: f2 = open(<span class="string">'/tmp/1.jpg'</span>,<span class="string">'rb+'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">32</span>]: f2.read()</span><br><span class="line">Out[<span class="number">32</span>]: <span class="string">b'\xff\xd8\xff\xe0\x00\x10JFIF\x00\x0</span></span><br></pre></td></tr></table></figure>
-<h3 id="写入数据-write"><a href="#写入数据-write" class="headerlink" title="写入数据.write()"></a>写入数据.write()</h3><p>在写入模式下，向文件写入数据</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">215</span>]: f.write(<span class="string">'abcd'</span>)</span><br><span class="line">Out[<span class="number">215</span>]: <span class="number">4</span></span><br></pre></td></tr></table></figure>
-<h3 id="写入字符序列-writelines"><a href="#写入字符序列-writelines" class="headerlink" title="写入字符序列.writelines()"></a>写入字符序列.writelines()</h3><p>写入一个序列，只能是字符串，不自动添加换行，需要在序列中自己添加换行</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">82</span>]: <span class="keyword">import</span> os</span><br><span class="line"></span><br><span class="line">In [<span class="number">83</span>]: l1 = os.listdir(<span class="string">'/etc'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">85</span>]: f3.writelines(l1)</span><br><span class="line">    </span><br><span class="line">In [<span class="number">88</span>]: f3.flush()</span><br><span class="line"></span><br><span class="line">In [<span class="number">89</span>]: f3.read()</span><br><span class="line">Out[<span class="number">89</span>]: <span class="string">''</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">90</span>]: f3.seek(<span class="number">0</span>)</span><br><span class="line">Out[<span class="number">90</span>]: <span class="number">0</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">91</span>]: f3.read()</span><br><span class="line">Out[<span class="number">91</span>]: <span class="string">'fstabcrypttabmtabresolv.confgrub.dpkirpmyum.repos.dyummagiccentos-</span></span><br><span class="line"><span class="string">.........</span></span><br></pre></td></tr></table></figure>
-<h3 id="关闭文件-close"><a href="#关闭文件-close" class="headerlink" title="关闭文件.close()"></a>关闭文件.close()</h3><p>调用 <code>close</code> 方法以后文件对象还存在，但是不能再进行操作了，每次不需要对文件操作的时候需要显式执行关闭操作。</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">216</span>]: f.close()</span><br></pre></td></tr></table></figure>
-<h3 id="读取内容-read"><a href="#读取内容-read" class="headerlink" title="读取内容.read()"></a>读取内容.read()</h3><p>从文件中读取指定个字符，指针会移动到读取后的位置，默认读取到文件尾部。</p>
-<p>参数：<code>read(size=-1)</code></p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">217</span>]: f = open(<span class="string">'test'</span>,mode=<span class="string">'r+'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">218</span>]: f.read()</span><br><span class="line">Out[<span class="number">218</span>]: <span class="string">'abcd'</span></span><br></pre></td></tr></table></figure>
-<h3 id="读取一行-readline"><a href="#读取一行-readline" class="headerlink" title="读取一行.readline()"></a>读取一行.readline()</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">238</span>]: f = open(<span class="string">'/etc/rc.local'</span>,<span class="string">'r+'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">244</span>]: f.readline()</span><br><span class="line">Out[<span class="number">244</span>]: <span class="string">'#!/bin/bash\n'</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">245</span>]: f.readline()</span><br><span class="line">Out[<span class="number">245</span>]: <span class="string">'# THIS FILE IS ADDED FOR COMPATIBILITY PURPOSES\n'</span></span><br></pre></td></tr></table></figure>
-<h3 id="生成每行列表-readlines"><a href="#生成每行列表-readlines" class="headerlink" title="生成每行列表.readlines()"></a>生成每行列表.readlines()</h3><p>将文件内容的每一行当作列表的每一个元素</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">240</span>]: f.readlines()</span><br><span class="line">Out[<span class="number">240</span>]: </span><br><span class="line">[<span class="string">'#!/bin/bash\n'</span>,</span><br><span class="line"> <span class="string">'# THIS FILE IS ADDED FOR COMPATIBILITY PURPOSES\n'</span>,</span><br><span class="line"> <span class="string">'#\n'</span>,</span><br><span class="line"> <span class="string">'# It is highly advisable to create own systemd services or udev rules\n'</span>,</span><br><span class="line"> <span class="string">'# to run scripts during boot instead of using this file.\n'</span>,</span><br><span class="line"> <span class="string">'#\n'</span>,</span><br><span class="line"> <span class="string">'# In contrast to previous versions due to parallel execution during boot\n'</span>,</span><br><span class="line"> <span class="string">'# this script will NOT be run after all other services.\n'</span>,</span><br><span class="line"> <span class="string">'#\n'</span>,</span><br><span class="line"> <span class="string">"# Please note that you must run 'chmod +x /etc/rc.d/rc.local' to ensure\n"</span>,</span><br><span class="line"> <span class="string">'# that this script will be executed during boot.\n'</span>,</span><br><span class="line"> <span class="string">'\n'</span>,</span><br><span class="line"> <span class="string">'touch /var/lock/subsys/local\n'</span>,</span><br><span class="line"> <span class="string">"su - python -c 'cd /home/python/magedu/projects/test &amp;&amp; jupyter-notebook --ip=0.0.0.0'\n"</span>]</span><br></pre></td></tr></table></figure>
-<h3 id="移动指针-seek"><a href="#移动指针-seek" class="headerlink" title="移动指针.seek()"></a>移动指针.seek()</h3><p>把当前的操作指针移动从<code>whence</code> 定义的位置开始偏移 <code>offset</code> 的字节量。 </p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span></span><br><span class="line">    self.x = <span class="number">1000</span></span><br><span class="line">    </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">show</span><span class="params">(self)</span>:</span></span><br><span class="line">    print(self.__dict__)</span><br><span class="line">    </span><br><span class="line">Xclass = type(</span><br><span class="line">    <span class="string">'MyClass'</span>,</span><br><span class="line">    (object,),</span><br><span class="line">    &#123;<span class="string">'a'</span>:<span class="number">100</span>,<span class="string">'b'</span>:<span class="string">'string'</span>,<span class="string">'show'</span>:show,<span class="string">'__init__'</span>:__init__&#125;</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">print(Xclass.a,Xclass.b)</span><br><span class="line">cls = Xclass()</span><br><span class="line">cls.show()</span><br></pre></td></tr></table></figure>
+<h2 id="metaclass元类"><a href="#metaclass元类" class="headerlink" title="metaclass元类"></a>metaclass元类</h2><p><code>metaclass</code> 就是创建类的类，事实上 <code>type</code> 就是一个 <code>metaclass</code>，它就是用来创造 <code>类对象</code> 的类，它是 <code>类对象</code> 的 类，说白了，<code>type</code> 函数就是一个特殊的 <code>metaclass</code> ，<code>type</code> 是 Python 内置的 <code>metaclass</code> 不过我们可以编写自己的 <code>metaclass</code> 。</p>
 <ul>
-<li>用法：<code>seek(offset [,whence])</code></li>
+<li>元类的使用</li>
 </ul>
-<p><code>offset</code> 偏移量，（当 <code>whence</code> 为1时可以为负数）</p>
-<p><code>whence</code> 指定偏移的开始位置</p>
-<table>
-<thead>
-<tr>
-<th>参数</th>
-<th>含义</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>0</td>
-<td>whence的默认值，表示从文件的头部开始</td>
-</tr>
-<tr>
-<td>1</td>
-<td>表示从当前位置开始</td>
-</tr>
-<tr>
-<td>2</td>
-<td>表示从文件的尾部开始</td>
-</tr>
-</tbody>
-</table>
-<ul>
-<li>示例<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">250</span>]: f = open(<span class="string">'/etc/rc.local'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">251</span>]: f.readlines()</span><br><span class="line">Out[<span class="number">251</span>]: </span><br><span class="line">[<span class="string">'#!/bin/bash\n'</span>,</span><br><span class="line"> <span class="string">'# THIS FILE IS ADDED FOR COMPATIBILITY PURPOSES\n'</span>,</span><br><span class="line"> <span class="string">'#\n'</span>,</span><br><span class="line"> <span class="string">'# It is highly advisable to create own systemd services or udev rules\n'</span>,</span><br><span class="line"> <span class="string">'# to run scripts during boot instead of using this file.\n'</span>,</span><br><span class="line"> <span class="string">'#\n'</span>,</span><br><span class="line"> <span class="string">'# In contrast to previous versions due to parallel execution during boot\n'</span>,</span><br><span class="line"> <span class="string">'# this script will NOT be run after all other services.\n'</span>,</span><br><span class="line"> <span class="string">'#\n'</span>,</span><br><span class="line"> <span class="string">"# Please note that you must run 'chmod +x /etc/rc.d/rc.local' to ensure\n"</span>,</span><br><span class="line"> <span class="string">'# that this script will be executed during boot.\n'</span>,</span><br><span class="line"> <span class="string">'\n'</span>,</span><br><span class="line"> <span class="string">'touch /var/lock/subsys/local\n'</span>,</span><br><span class="line"> <span class="string">"su - python -c 'cd /home/python/magedu/projects/test &amp;&amp; jupyter-notebook --ip=0.0.0.0'\n"</span>]</span><br><span class="line"></span><br><span class="line">In [<span class="number">252</span>]: f.readline()</span><br><span class="line">Out[<span class="number">252</span>]: <span class="string">''</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">253</span>]: f.seek(<span class="number">0</span>)</span><br><span class="line">Out[<span class="number">253</span>]: <span class="number">0</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">254</span>]: f.readline()</span><br><span class="line">Out[<span class="number">254</span>]: <span class="string">'#!/bin/bash\n'</span></span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<h3 id="指针位置-tell"><a href="#指针位置-tell" class="headerlink" title="指针位置.tell()"></a>指针位置.tell()</h3><p>显示当前指针所在的字节数</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">14</span>]: f.readline()</span><br><span class="line">Out[<span class="number">14</span>]: <span class="string">'# to run scripts during boot instead of using this file.\n'</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">15</span>]: f.tell()</span><br><span class="line">Out[<span class="number">15</span>]: <span class="number">189</span></span><br></pre></td></tr></table></figure>
-<h3 id="写入磁盘-flush"><a href="#写入磁盘-flush" class="headerlink" title="写入磁盘.flush()"></a>写入磁盘.flush()</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">72</span>]: f1.flush()</span><br></pre></td></tr></table></figure>
-<h2 id="属性检测"><a href="#属性检测" class="headerlink" title="属性检测"></a>属性检测</h2><h3 id="可读检测-readable"><a href="#可读检测-readable" class="headerlink" title="可读检测.readable()"></a>可读检测.readable()</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">94</span>]: f3.readable()</span><br><span class="line">Out[<span class="number">94</span>]: <span class="keyword">True</span></span><br></pre></td></tr></table></figure>
-<h3 id="可写检测-writable"><a href="#可写检测-writable" class="headerlink" title="可写检测.writable()"></a>可写检测.writable()</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">95</span>]: f3.writable()</span><br><span class="line">Out[<span class="number">95</span>]: <span class="keyword">True</span></span><br></pre></td></tr></table></figure>
-<h3 id="是否为终端-isatty"><a href="#是否为终端-isatty" class="headerlink" title="是否为终端.isatty()"></a>是否为终端.isatty()</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">97</span>]: f3.isatty()</span><br><span class="line">Out[<span class="number">97</span>]: <span class="keyword">False</span></span><br></pre></td></tr></table></figure>
-<h3 id="是否已关闭-closed"><a href="#是否已关闭-closed" class="headerlink" title="是否已关闭.closed"></a>是否已关闭.closed</h3><p>显示文件是否已经关闭</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">219</span>]: f.close()</span><br><span class="line"></span><br><span class="line">In [<span class="number">220</span>]: f.closed</span><br><span class="line">Out[<span class="number">220</span>]: <span class="keyword">True</span></span><br></pre></td></tr></table></figure>
-<h2 id="属性获取"><a href="#属性获取" class="headerlink" title="属性获取"></a>属性获取</h2><h3 id="文件描述符-fileno"><a href="#文件描述符-fileno" class="headerlink" title="文件描述符.fileno"></a>文件描述符.fileno</h3><p>是文件对象的属性，可以得到系统文件描述符，（是一个整数，用来引用的文件）。</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">226</span>]: f.fileno()</span><br><span class="line">Out[<span class="number">226</span>]: <span class="number">13</span></span><br></pre></td></tr></table></figure>
-<h3 id="文件名称-name"><a href="#文件名称-name" class="headerlink" title="文件名称.name"></a>文件名称.name</h3><p>获取文件对象的名称</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">257</span>]: f.name</span><br><span class="line">Out[<span class="number">257</span>]: <span class="string">'/etc/rc.local'</span></span><br></pre></td></tr></table></figure>
-<h3 id="操作模式-mode"><a href="#操作模式-mode" class="headerlink" title="操作模式.mode"></a>操作模式.mode</h3><p>显示文件的操作模式</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">58</span>]: f1.mode</span><br><span class="line">Out[<span class="number">58</span>]: <span class="string">'r+'</span></span><br></pre></td></tr></table></figure>
-<h3 id="文件编码-encoding"><a href="#文件编码-encoding" class="headerlink" title="文件编码.encoding"></a>文件编码.encoding</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">103</span>]: f3.encoding</span><br><span class="line">Out[<span class="number">103</span>]: <span class="string">'UTF-8'</span></span><br></pre></td></tr></table></figure>
-<h3 id="换行符号-newlines"><a href="#换行符号-newlines" class="headerlink" title="换行符号.newlines"></a>换行符号.newlines</h3><p>显示从文件头到当前指针处所遇到的所有换行符</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">107</span>]: f1 = open(<span class="string">'test1'</span>,<span class="string">'w+'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">108</span>]: f1.write(<span class="string">'hello\nworld\r\nthis is a test\r'</span>)</span><br><span class="line">Out[<span class="number">108</span>]: <span class="number">28</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">109</span>]: f1.close()</span><br><span class="line"></span><br><span class="line">In [<span class="number">110</span>]: f1 = open(<span class="string">'test1'</span>,<span class="string">'r+'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">111</span>]: f1.read()</span><br><span class="line">Out[<span class="number">111</span>]: <span class="string">'hello\nworld\nthis is a test\n'</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">112</span>]: f1.newlines</span><br><span class="line">Out[<span class="number">112</span>]: (<span class="string">'\r'</span>, <span class="string">'\n'</span>, <span class="string">'\r\n'</span>)</span><br></pre></td></tr></table></figure>
-<h2 id="异常处理"><a href="#异常处理" class="headerlink" title="异常处理"></a>异常处理</h2><p>无论如何保证文件被关闭。</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">134</span>]: <span class="keyword">try</span>:</span><br><span class="line">     ...:     f3.write(<span class="string">'hello'</span>)</span><br><span class="line">     ...: <span class="keyword">finally</span>:</span><br><span class="line">     ...:     f3.close()</span><br><span class="line">     ...:     </span><br><span class="line"></span><br><span class="line">In [<span class="number">135</span>]: f3</span><br><span class="line">Out[<span class="number">135</span>]: &lt;_io.TextIOWrapper name=<span class="string">'test'</span> mode=<span class="string">'w+'</span> encoding=<span class="string">'UTF-8'</span>&gt;</span><br><span class="line"></span><br><span class="line">In [<span class="number">136</span>]: f3.read()</span><br><span class="line">---------------------------------------------------------------------------</span><br><span class="line">ValueError                                Traceback (most recent call last)</span><br><span class="line">&lt;ipython-input<span class="number">-136</span><span class="number">-26180816</span>d387&gt; <span class="keyword">in</span> &lt;module&gt;()</span><br><span class="line">----&gt; 1 f3.read()</span><br><span class="line"></span><br><span class="line">ValueError: I/O operation on closed file.</span><br></pre></td></tr></table></figure>
-<h2 id="上下文管理"><a href="#上下文管理" class="headerlink" title="上下文管理"></a>上下文管理</h2><p>文件对象打开的时候会获得一个系统的文件描述符，计算机的文件描述符资源是有限的，为了保护资源不被耗尽，所以可以使用with语句来自动关闭文件对象。</p>
-<p>上下文管理的语句块不会开启新的作用域，with语句块执行完的时候，会自动关闭文件对象。</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">151</span>]: <span class="keyword">with</span> open(<span class="string">'test'</span>) <span class="keyword">as</span> f1:</span><br><span class="line">     ...:     f1.write(<span class="string">'world'</span>)</span><br><span class="line">     ...:     </span><br><span class="line">---------------------------------------------------------------------------</span><br><span class="line">UnsupportedOperation                      Traceback (most recent call last)</span><br><span class="line">&lt;ipython-input<span class="number">-151</span>-e8f2dd01d41e&gt; <span class="keyword">in</span> &lt;module&gt;()</span><br><span class="line">      <span class="number">1</span> <span class="keyword">with</span> open(<span class="string">'test'</span>) <span class="keyword">as</span> f1:</span><br><span class="line">----&gt; 2     f1.write('world')</span><br><span class="line">      <span class="number">3</span> </span><br><span class="line"></span><br><span class="line">UnsupportedOperation: <span class="keyword">not</span> writable</span><br><span class="line"></span><br><span class="line">In [<span class="number">152</span>]: <span class="keyword">with</span> open(<span class="string">'test'</span>,<span class="string">'w+'</span>) <span class="keyword">as</span> f1:</span><br><span class="line">     ...:     f1.write(<span class="string">'world'</span>)</span><br><span class="line">     ...:</span><br></pre></td></tr></table></figure>
-<h2 id="示例-1"><a href="#示例-1" class="headerlink" title="示例"></a>示例</h2><ul>
-<li>按行迭代复制文件内容</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">copy</span><span class="params">(src,dst)</span>:</span></span><br><span class="line">    <span class="keyword">with</span> open(dst) <span class="keyword">as</span> file1:</span><br><span class="line">		<span class="keyword">with</span> open(src,<span class="string">'w+'</span>) <span class="keyword">as</span> file2:</span><br><span class="line">			<span class="keyword">for</span> i <span class="keyword">in</span> file1:</span><br><span class="line">				file2.write(i)</span><br></pre></td></tr></table></figure>
-<ul>
-<li>统计文件的单词不区分大小写，显示重复最多的10个单词</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">makekey</span><span class="params">(s:str)</span>:</span></span><br><span class="line">    chars = set(<span class="string">r'''!@#$%^&amp;*()_+-='/\&lt;&gt;;[]|.,?&#123;&#125;~`:'''</span>)</span><br><span class="line">    key = s.lower()</span><br><span class="line">    ret = []</span><br><span class="line">    <span class="keyword">for</span> i,c <span class="keyword">in</span> enumerate(key):</span><br><span class="line">        <span class="keyword">if</span> c <span class="keyword">in</span> chars:</span><br><span class="line">            ret.append(<span class="string">' '</span>)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            ret.append(c)</span><br><span class="line">    <span class="keyword">return</span> <span class="string">''</span>.join(ret).split()</span><br><span class="line"></span><br><span class="line">d = &#123;&#125;</span><br><span class="line"><span class="keyword">with</span> open(<span class="string">'sample.txt'</span>,encoding=<span class="string">'utf-8'</span>) <span class="keyword">as</span> f:</span><br><span class="line">    <span class="keyword">for</span> line <span class="keyword">in</span> f:</span><br><span class="line">        words = line.split()</span><br><span class="line">        <span class="keyword">for</span> wordlist <span class="keyword">in</span> map(makekey,words):</span><br><span class="line">            <span class="keyword">for</span> word <span class="keyword">in</span> wordlist:</span><br><span class="line">                d[word] = d.get(word,<span class="number">0</span>) + <span class="number">1</span></span><br><span class="line"><span class="keyword">for</span> k,v <span class="keyword">in</span> sorted(d.items(),key=<span class="keyword">lambda</span> item: item[<span class="number">1</span>],reverse=<span class="keyword">True</span>):</span><br><span class="line">    print(k,v)</span><br></pre></td></tr></table></figure>
-<h1 id="StringIO"><a href="#StringIO" class="headerlink" title="StringIO"></a>StringIO</h1><p>StringIO 顾名思义就是在内存中以 I/O 流的方式读写 str，当文件关闭后内存释放。</p>
-<p>除了可以像文件一样对其读写，还支持下面的方法。</p>
-<h2 id="创建对象StringIO"><a href="#创建对象StringIO" class="headerlink" title="创建对象StringIO()"></a>创建对象StringIO()</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">In [4]: from io import StringIO</span><br><span class="line">In [8]: f = StringIO()</span><br></pre></td></tr></table></figure>
-<h2 id="读取文件内容-getvalue"><a href="#读取文件内容-getvalue" class="headerlink" title="读取文件内容.getvalue"></a>读取文件内容.getvalue</h2><p>无视指针的作用读取文件的所有内容</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">94</span>]: f.getvalue()</span><br><span class="line">Out[<span class="number">94</span>]: <span class="string">'abcdefghijklmn\nopqrst\n'</span></span><br></pre></td></tr></table></figure>
-<h2 id="从指针处删除-truncate"><a href="#从指针处删除-truncate" class="headerlink" title="从指针处删除.truncate"></a>从指针处删除.truncate</h2><p>用法：<code>truncate([size])</code> ，不指定 <code>size</code> 则删除到文件尾部</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">152</span>]: f.write(<span class="string">'0123456789'</span>)</span><br><span class="line">Out[<span class="number">152</span>]: <span class="number">10</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">153</span>]: f.write(<span class="string">'0123456789'</span>)</span><br><span class="line">Out[<span class="number">153</span>]: <span class="number">10</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">154</span>]: f.getvalue()</span><br><span class="line">Out[<span class="number">154</span>]: <span class="string">'01234567890123456789'</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">156</span>]: f.seek(<span class="number">10</span>)</span><br><span class="line">Out[<span class="number">156</span>]: <span class="number">10</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">157</span>]: f.truncate()</span><br><span class="line">Out[<span class="number">157</span>]: <span class="number">10</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">158</span>]: f.getvalue()</span><br><span class="line">Out[<span class="number">158</span>]: <span class="string">'0123456789'</span></span><br></pre></td></tr></table></figure>
-<h2 id="示例-2"><a href="#示例-2" class="headerlink" title="示例"></a>示例</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">with</span> StringIO <span class="keyword">as</span> f:</span><br><span class="line">    f.write (<span class="string">'yangjinheng'</span>)</span><br></pre></td></tr></table></figure>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> io <span class="keyword">import</span> StringIO</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>f = StringIO(<span class="string">'Hello!\nHi!\nGoodbye!'</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">while</span> <span class="keyword">True</span>:</span><br><span class="line"><span class="meta">... </span>    s = f.readline()</span><br><span class="line"><span class="meta">... </span>    <span class="keyword">if</span> s == <span class="string">''</span>:</span><br><span class="line"><span class="meta">... </span>        <span class="keyword">break</span></span><br><span class="line"><span class="meta">... </span>    print(s.strip())</span><br><span class="line">...</span><br><span class="line">Hello!</span><br><span class="line">Hi!</span><br><span class="line">Goodbye!</span><br></pre></td></tr></table></figure>
-<h1 id="BytesIO"><a href="#BytesIO" class="headerlink" title="BytesIO"></a>BytesIO</h1><p>内存中开辟的一个<strong>二进制</strong>模式的buffer，也可以像文件对象一样操作它，当close方法调用的时候，这个buffer也会被释放。</p>
-<h2 id="创建对象BytesIO"><a href="#创建对象BytesIO" class="headerlink" title="创建对象BytesIO"></a>创建对象BytesIO</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">167</span>]: <span class="keyword">from</span> io <span class="keyword">import</span> BytesIO</span><br><span class="line"></span><br><span class="line">In [<span class="number">168</span>]: f = BytesIO()</span><br></pre></td></tr></table></figure>
-<h2 id="读取文件内容-getvalue-1"><a href="#读取文件内容-getvalue-1" class="headerlink" title="读取文件内容.getvalue"></a>读取文件内容.getvalue</h2><p>无视文件指针读取文件内容</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">185</span>]: f.getvalue()</span><br><span class="line">Out[<span class="number">185</span>]: <span class="string">b'\xe4\xb8\xad\xe6\x96\x87'</span></span><br></pre></td></tr></table></figure>
-<h2 id="示例-3"><a href="#示例-3" class="headerlink" title="示例"></a>示例</h2><p>请注意，写入的不是str，而是经过UTF-8编码的bytes。</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> io <span class="keyword">import</span> BytesIO</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>f = BytesIO()</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>f.write(<span class="string">'中文'</span>.encode(<span class="string">'utf-8'</span>))</span><br><span class="line"><span class="number">12</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>print(f.getvalue())</span><br><span class="line"><span class="string">b'\xe6\x88\x91\xe6\x98\xaf\xe4\xb8\xad\xe6\x96\x87'</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Mcls</span><span class="params">(type)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__new__</span><span class="params">(cls,name,bases,dict)</span>:</span></span><br><span class="line">        <span class="comment"># __new__ 是在 __init__ 之前被调用的特殊方法，用来创建对象并返回这个对象</span></span><br><span class="line">        <span class="comment"># 而__init__只是将传入的参数初始化给对象</span></span><br><span class="line">        print(cls)</span><br><span class="line">        print(name)</span><br><span class="line">        print(bases)</span><br><span class="line">        print(dict)</span><br><span class="line">        <span class="keyword">return</span> super().__new__(cls,name,bases,dict)</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span><span class="params">(metaclass=Mcls)</span>:</span>        <span class="comment"># 第一种使用元类的方法，使用 metaclass 关键字指定元类</span></span><br><span class="line">    id = <span class="number">100</span></span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span></span><br><span class="line">        print(<span class="string">'...A-init...'</span>)</span><br><span class="line">        </span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">B</span><span class="params">(A)</span>:</span>                     <span class="comment"># 第二种使用元类的方法，从使用元类的类中继承依然是 metaclass 类型</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span></span><br><span class="line">        print(<span class="string">'...B-init...'</span>)</span><br><span class="line">        </span><br><span class="line">D = Mcls(<span class="string">'D'</span>,(),&#123;&#125;)             <span class="comment"># 第三种类似与 type 函数，它调用 元类的__new__ 方法</span></span><br></pre></td></tr></table></figure>
 
           
         
@@ -953,7 +807,7 @@
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/29/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/29/">29</a><span class="page-number current">30</span><a class="page-number" href="/page/31/">31</a><span class="space">&hellip;</span><a class="page-number" href="/page/38/">38</a><a class="extend next" rel="next" href="/page/31/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/page/29/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/29/">29</a><span class="page-number current">30</span><a class="page-number" href="/page/31/">31</a><span class="space">&hellip;</span><a class="page-number" href="/page/43/">43</a><a class="extend next" rel="next" href="/page/31/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1001,7 +855,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">75</span>
+                  <span class="site-state-item-count">86</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

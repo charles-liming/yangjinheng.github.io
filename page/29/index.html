@@ -311,7 +311,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://yangjinheng.github.io/2017/09/24/python/15.Python序列化/">
+    <link itemprop="mainEntityOfPage" href="https://yangjinheng.github.io/2017/10/05/python/26.wsgiref/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Jin Heng">
@@ -330,7 +330,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/09/24/python/15.Python序列化/" itemprop="url">Python序列化</a></h1>
+                <a class="post-title-link" href="/2017/10/05/python/26.wsgiref/" itemprop="url">web框架原理之wsgiref和webob</a></h1>
         
 
         <div class="post-meta">
@@ -342,8 +342,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-24T00:00:00+08:00">
-                2017-09-24
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-05T00:00:00+08:00">
+                2017-10-05
               </time>
             
 
@@ -404,169 +404,124 @@
       
         
           
-            <h1 id="序列化"><a href="#序列化" class="headerlink" title="序列化"></a>序列化</h1><ul>
-<li>序列化</li>
+            <h2 id="WSGI"><a href="#WSGI" class="headerlink" title="WSGI"></a>WSGI</h2><ol>
+<li>WSGI (Web 服务器网关接口) 是 python 中所定义的 Web 服务器和 Web 应用程序之间或框架之间的接口标准</li>
+<li>WSGI 接口规范的目的就是规范 Web 服务器与 Web 应用之间的交互，在协议之间进行转换</li>
+<li>WSGI 将 Web 组件分成三类：Web 服务器、Web中间件、Web应用程序<ul>
+<li>服务器：指的是实现了调用应用的部分</li>
+<li>中间件：处于服务器和应用两侧，起粘合作用，具体包括：请求处理、environ 处理</li>
+<li>应用：是一个可调用对象，一般指的是包含一个 __call__ 方法的对象</li>
 </ul>
-<p>将一段数据、对象，转换为字节流，以便保存到文件、数据库或经过网络传输的过程称之为序列化。</p>
-<ul>
-<li>反序列化</li>
-</ul>
-<p>在需要时候重新打开已序列化数据，或者在另外的计算机上需要恢复，通过相同序列化格式恢复得到原来的数据结构，这个过程称作反序列化。</p>
-<h1 id="pickle模块"><a href="#pickle模块" class="headerlink" title="pickle模块"></a>pickle模块</h1><p>Python 中自带的序列化的机制为 <code>pickle</code> 库提供。</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> pickle</span><br></pre></td></tr></table></figure>
-<h2 id="转换为bytes-dumps"><a href="#转换为bytes-dumps" class="headerlink" title="转换为bytes.dumps"></a>转换为bytes.dumps</h2><p>用法：<code>dumps(obj, protocol=None, *, fix_imports=True)</code></p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<h2 id="从bytes还原-loads"><a href="#从bytes还原-loads" class="headerlink" title="从bytes还原.loads"></a>从bytes还原.loads</h2><p>用法：<code>loads(data, *, fix_imports=True, encoding=&#39;ASCII&#39;, errors=&#39;strict&#39;)</code></p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">3</span>]: d = dict(name=<span class="string">'yangjinheng'</span>,age=<span class="number">20</span>,sex=<span class="string">'man'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">4</span>]: a = pickle.dumps(d)</span><br><span class="line"></span><br><span class="line">In [<span class="number">5</span>]: pickle.loads(a)</span><br><span class="line">Out[<span class="number">5</span>]: &#123;<span class="string">'name'</span>: <span class="string">'yangjinheng'</span>, <span class="string">'age'</span>: <span class="number">20</span>, <span class="string">'sex'</span>: <span class="string">'man'</span>&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="转换到文件-dump"><a href="#转换到文件-dump" class="headerlink" title="转换到文件.dump"></a>转换到文件.dump</h2><p>用法：<code>dump(obj, file, protocol=None, *, fix_imports=True)</code></p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<h2 id="从文件还原-load"><a href="#从文件还原-load" class="headerlink" title="从文件还原.load"></a>从文件还原.load</h2><p>用法：<code>load(file, *, fix_imports=True, encoding=&#39;ASCII&#39;, errors=&#39;strict&#39;)</code></p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">14</span>]: <span class="keyword">with</span> open(<span class="string">'d:/pickle'</span>,<span class="string">'rb'</span>) <span class="keyword">as</span> file:</span><br><span class="line">    ...:     d = pickle.load(file)</span><br><span class="line">    ...:     print(d)</span><br><span class="line">    ...:</span><br><span class="line">&#123;<span class="string">'name'</span>: <span class="string">'yangjinheng'</span>, <span class="string">'age'</span>: <span class="number">20</span>, <span class="string">'sex'</span>: <span class="string">'man'</span>&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="msgpack模块"><a href="#msgpack模块" class="headerlink" title="msgpack模块"></a>msgpack模块</h2><h1 id="json模块"><a href="#json模块" class="headerlink" title="json模块"></a>json模块</h1><p><code>JSON(JavaScript Object Notation)</code> ，是一种轻量级的数据交换格式。</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">官方文档：http://www.json.org/json-zh.html</span><br></pre></td></tr></table></figure>
-<ul>
-<li>JSON和Python数据类型的对应关系</li>
-</ul>
+</li>
+</ol>
+<h2 id="wsgiref"><a href="#wsgiref" class="headerlink" title="wsgiref"></a>wsgiref</h2><p>wsgiref 是 WSGI 细则的一个参考实现，用于给web服务器和框架提供 WSGI 支持。它提供了下面几个子类：</p>
 <table>
 <thead>
 <tr>
-<th>示例</th>
-<th>JSON类型</th>
-<th>Python类型</th>
+<th>字类</th>
+<th>功能</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>{}</td>
-<td>object</td>
-<td>dict</td>
+<td><code>wsgiref.util</code></td>
+<td><code>WSGI</code> 环境工具</td>
 </tr>
 <tr>
-<td>[]</td>
-<td>array</td>
-<td>list、tuple</td>
+<td><code>wsgiref.headers</code></td>
+<td><code>WSGI response</code> 头工具</td>
 </tr>
 <tr>
-<td>“string”</td>
-<td>string</td>
-<td>str</td>
+<td><code>wsgiref.handlers</code></td>
+<td><code>WSGI</code> 服务器基类</td>
 </tr>
 <tr>
-<td>1234</td>
-<td>number (int)</td>
-<td>int</td>
+<td><code>wsgiref.simple_server</code></td>
+<td>一个简单的 <code>WSGI HTTP</code> 服务器</td>
 </tr>
 <tr>
-<td>1234.56</td>
-<td>number (real)</td>
-<td>float</td>
-</tr>
-<tr>
-<td>true</td>
-<td>true</td>
-<td>True</td>
-</tr>
-<tr>
-<td>false</td>
-<td>false</td>
-<td>False</td>
-</tr>
-<tr>
-<td>null</td>
-<td>null</td>
-<td>None</td>
+<td><code>wsgiref.validate</code></td>
+<td>检测WSGI服务器是否和 <code>WSGI PEP 3333细则</code> 一致的检查器</td>
 </tr>
 </tbody>
 </table>
-<h2 id="字典转文件"><a href="#字典转文件" class="headerlink" title="字典转文件"></a>字典转文件</h2><ul>
-<li>Python 字典</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">d1 = &#123;<span class="string">'one'</span>: <span class="keyword">None</span>, <span class="string">'two'</span>: <span class="keyword">True</span>, <span class="string">'three'</span>: <span class="keyword">False</span>, <span class="string">'forty'</span>: [<span class="number">255</span>, <span class="string">'ABC'</span>], <span class="string">'five'</span>: &#123;<span class="string">'one'</span>: <span class="number">1</span>, <span class="string">'two'</span>: <span class="number">2</span>&#125;&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="wsgiref-simple-server"><a href="#wsgiref-simple-server" class="headerlink" title="wsgiref.simple_server"></a>wsgiref.simple_server</h3><p>​    本模块实现了一个简单HTTP服务器，可以为 WSGI 应用提供服务，每个服务器实例在给定的主机和端口上服务一个 WSGI 应用程序，如果你想在单个主机和端口上提供多个 WSGI 应用程序，则应该创建一个 WSGI 应用程序，并且解析 PATH_INFO（客户端请求的地址），以为每个请求分配不同的应用程序，例如：使用来自 <code>wsgiref.util</code> 的 <code>shift_path_info()</code> 函数。</p>
 <ul>
-<li>转换为 JSON 并写入文件，两种方式</li>
+<li>创建服务器</li>
 </ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">with</span> open(<span class="string">'d:/config.json'</span>,<span class="string">'w'</span>) <span class="keyword">as</span> file:</span><br><span class="line">    json.dump(d1,file,indent=<span class="number">4</span>)</span><br></pre></td></tr></table></figure>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">json.dump(d1, open(<span class="string">'d:/1.json'</span>, <span class="string">"w"</span>),indent=<span class="number">4</span>)</span><br></pre></td></tr></table></figure>
-<h2 id="文件转字典"><a href="#文件转字典" class="headerlink" title="文件转字典"></a>文件转字典</h2><ul>
-<li>JSON文件，<code>d:/config.json</code></li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="string">"one"</span>: null,</span><br><span class="line">    <span class="string">"two"</span>: true,</span><br><span class="line">    <span class="string">"three"</span>: false,</span><br><span class="line">    <span class="string">"forty"</span>: [</span><br><span class="line">        <span class="number">255</span>,</span><br><span class="line">        <span class="string">"ABC"</span></span><br><span class="line">    ],</span><br><span class="line">    <span class="string">"five"</span>: &#123;</span><br><span class="line">        <span class="string">"one"</span>: <span class="number">1</span>,</span><br><span class="line">        <span class="string">"two"</span>: <span class="number">2</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>make_server(host,port,app,server_class=WSGIServer,handle_class=WSGIRequestHandler)</code></p>
+<p>创建一个新的监听在 <code>host</code> + <code>port</code> 的 WSGI 服务器，为 <code>app</code> 接受新的连接，返回值是 <code>server_class</code> 的实例，并使用 <code>handle_class</code> 处理请求，其中 <code>app</code> 必须是 PEP 3333 定义的 WSGI 应用程序对象。</p>
 <ul>
-<li>转换为 Python 字典，两种方式</li>
+<li>一个 WSGI 应用 demo</li>
 </ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">with</span> open(<span class="string">'d:/config.json'</span>,<span class="string">'r'</span>) <span class="keyword">as</span> file:</span><br><span class="line">    d1 = json.load(file)</span><br><span class="line">    print(d1)</span><br><span class="line"></span><br><span class="line">&#123;<span class="string">'one'</span>: <span class="keyword">None</span>, <span class="string">'two'</span>: <span class="keyword">True</span>, <span class="string">'three'</span>: <span class="keyword">False</span>, <span class="string">'forty'</span>: [<span class="number">255</span>, <span class="string">'ABC'</span>], <span class="string">'five'</span>: &#123;<span class="string">'one'</span>: <span class="number">1</span>, <span class="string">'two'</span>: <span class="number">2</span>&#125;&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>d1 = json.load(open(<span class="string">'d:/config.json'</span>))</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>print(d1)</span><br><span class="line">&#123;<span class="string">'one'</span>: <span class="keyword">None</span>, <span class="string">'two'</span>: <span class="keyword">True</span>, <span class="string">'three'</span>: <span class="keyword">False</span>, <span class="string">'forty'</span>: [<span class="number">255</span>, <span class="string">'ABC'</span>], <span class="string">'five'</span>: &#123;<span class="string">'one'</span>: <span class="number">1</span>, <span class="string">'two'</span>: <span class="number">2</span>&#125;&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="字典转字符串"><a href="#字典转字符串" class="headerlink" title="字典转字符串"></a>字典转字符串</h2><ul>
-<li>Python 字典</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">d1 = &#123;<span class="string">'one'</span>: <span class="keyword">None</span>, <span class="string">'two'</span>: <span class="keyword">True</span>, <span class="string">'three'</span>: <span class="keyword">False</span>, <span class="string">'forty'</span>: [<span class="number">255</span>, <span class="string">'ABC'</span>], <span class="string">'five'</span>: &#123;<span class="string">'one'</span>: <span class="number">1</span>, <span class="string">'two'</span>: <span class="number">2</span>&#125;&#125;</span><br></pre></td></tr></table></figure>
+<p><code>demo_app(environ, start_response)</code></p>
+<p>这个函数是个小而完整的 WSGI 应用，它能返回 <code>hello world</code> 和 <code>environ</code> 字典内容 组成的文本页面。</p>
 <ul>
-<li>转为 JSON 字符串</li>
+<li>示例</li>
 </ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>d2 = json.dumps(d1)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>print(d2)</span><br><span class="line"><span class="string">'&#123;"one": null, "two": true, "three": false, "forty": [255, "ABC"], "five": &#123;"one": 1, "two": 2&#125;&#125;'</span></span><br></pre></td></tr></table></figure>
-<h2 id="字符串转字典"><a href="#字符串转字典" class="headerlink" title="字符串转字典"></a>字符串转字典</h2><ul>
-<li>JSON 字符串</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">d2 = <span class="string">'&#123;"one": null, "two": true, "three": false, "forty": [255, "ABC"], "five": &#123;"one": 1, "two": 2&#125;&#125;'</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> wsgiref.simple_server <span class="keyword">import</span> make_server</span><br><span class="line"><span class="comment">#from wsgiref.simple_server import demo_app     # 为直观展示下面已经将源代码复制出来了</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">demo_app</span><span class="params">(environ,start_response)</span>:</span></span><br><span class="line">    <span class="keyword">from</span> io <span class="keyword">import</span> StringIO</span><br><span class="line">    stdout = StringIO()</span><br><span class="line">    print(<span class="string">"Hello world!"</span>, file=stdout)</span><br><span class="line">    print(file=stdout)</span><br><span class="line">    h = sorted(environ.items())</span><br><span class="line">    <span class="keyword">for</span> k,v <span class="keyword">in</span> h:</span><br><span class="line">        print(k,<span class="string">'='</span>,repr(v), file=stdout)</span><br><span class="line">    start_response(<span class="string">"200 OK"</span>, [(<span class="string">'Content-Type'</span>,<span class="string">'text/plain; charset=utf-8'</span>)])</span><br><span class="line">    <span class="keyword">return</span> [stdout.getvalue().encode(<span class="string">"utf-8"</span>)]</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    server = make_server(<span class="string">'0.0.0.0'</span>,<span class="number">80</span>,demo_app)</span><br><span class="line">    server.serve_forever()</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>启动服务，在浏览器访问本机的IP，就可以看到由 demo_app 返回的页面</p>
+</blockquote>
 <ul>
-<li>转换为 Python 字典</li>
+<li>细节</li>
 </ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>d3 = json.loads(d2)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>print(d3)</span><br><span class="line">&#123;<span class="string">'one'</span>: <span class="keyword">None</span>, <span class="string">'two'</span>: <span class="keyword">True</span>, <span class="string">'three'</span>: <span class="keyword">False</span>, <span class="string">'forty'</span>: [<span class="number">255</span>, <span class="string">'ABC'</span>], <span class="string">'five'</span>: &#123;<span class="string">'one'</span>: <span class="number">1</span>, <span class="string">'two'</span>: <span class="number">2</span>&#125;&#125;</span><br></pre></td></tr></table></figure>
-<h1 id="csv模块"><a href="#csv模块" class="headerlink" title="csv模块"></a>csv模块</h1><p>全称：逗号分隔的值（Comma-Separated Values），有时也称作字符分隔值，因为分隔字符也可以不是逗号。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">WSGI 服务器：</span><br><span class="line">	1. 监听在指定的IP和PORT</span><br><span class="line">	2. 接受浏览器的HTTP请求，解析请求封装为 environ 环境数据</span><br><span class="line">	3. 负责调用 WSGI应用程序(app) 并把 environ 和 start_response方法 传给 app</span><br><span class="line">	4. 将 WSGI应用(app) 返回的列表，封装为HTTP响应报文返回给浏览器</span><br><span class="line"></span><br><span class="line">WSGI 应用：</span><br><span class="line">	1. 遵从 WSGI 协议</span><br><span class="line">	2. 必须是一个可调用的对象，或实现了 __call__ 方法的对象</span><br><span class="line">	3. 这个可调用对象应该接受来自WSGI服务器传来的两个参数：environ(请求)、start_response（响应方法）</span><br><span class="line">	4. 必须调用 start_response 以向客户端返回响应包的头部信息</span><br><span class="line">	5. 必须以可迭代对象的形式返回(return) 响应包的正文信息</span><br></pre></td></tr></table></figure>
 <ul>
-<li><p>没有编码声明的纯文本格式文件</p>
-</li>
-<li><p>使用逗号 <code>,</code> 分隔字段</p>
-</li>
-<li>使用回车换行 <code>CRLF</code> 分割记录</li>
-<li>使用双引号对元字符进行转义</li>
-<li>可选的表头，与字段对其即可</li>
+<li>请求信息</li>
 </ul>
-<h2 id="csv-write-text"><a href="#csv-write-text" class="headerlink" title="csv.write_text()"></a>csv.write_text()</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> pathlib <span class="keyword">import</span> Path</span><br><span class="line"></span><br><span class="line">test = <span class="string">"""name,age,sex,class</span></span><br><span class="line"><span class="string">yangjinheng,29,man,10</span></span><br><span class="line"><span class="string">songyaru,27,woman,10</span></span><br><span class="line"><span class="string">zhaoxiaoman,27,woman,10</span></span><br><span class="line"><span class="string">yangzhongxiao,26,man,10"""</span></span><br><span class="line"></span><br><span class="line">file = Path(<span class="string">'D:/test.csv'</span>)</span><br><span class="line">file.write_text(test)</span><br></pre></td></tr></table></figure>
-<ul>
-<li>结果</li>
-</ul>
+<p><code>environ</code> 是一个包含了HTTP请求信息的字典，下面列举一些信息</p>
 <table>
 <thead>
 <tr>
-<th>name</th>
-<th>age</th>
-<th>sex</th>
-<th>class</th>
+<th>键</th>
+<th>值含义</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>yangjinheng</td>
-<td>29</td>
-<td>man</td>
-<td>10</td>
+<td>REQUEST_METHOD</td>
+<td>客户端的请求方法</td>
 </tr>
 <tr>
-<td>songyaru</td>
-<td>27</td>
-<td>woman</td>
-<td>10</td>
+<td>PATH_INFO</td>
+<td>请求的URL地址的后半部分</td>
 </tr>
 <tr>
-<td>zhaoxiaoman</td>
-<td>27</td>
-<td>woman</td>
-<td>10</td>
+<td>QUERY_STRING</td>
+<td>查询字符串，即 <code>?</code> 后的内容</td>
 </tr>
 <tr>
-<td>yangzhongxiao</td>
-<td>26</td>
-<td>man</td>
-<td>10</td>
+<td>SERVER_NAME</td>
+<td>服务器主机名</td>
+</tr>
+<tr>
+<td>SERVER_PORT</td>
+<td>服务器的端口</td>
+</tr>
+<tr>
+<td>HTTP_HOST</td>
+<td>客户端请求头的 HOST 字段</td>
+</tr>
+<tr>
+<td>SERVER_PROTOCOL</td>
+<td>客户端发送请求所使用的协议版本</td>
+</tr>
+<tr>
+<td>CONTENT_TYPE</td>
+<td>HTTP 请求中任何 Content-Type 域的内容，可能为空或不存在。</td>
+</tr>
+<tr>
+<td>HTTP_USER_AGENT</td>
+<td>客户端所使用的浏览器信息</td>
 </tr>
 </tbody>
 </table>
-<h2 id="csv-reader"><a href="#csv-reader" class="headerlink" title="csv.reader()"></a>csv.reader()</h2><ul>
-<li>创建对象</li>
+<ul>
+<li>响应头</li>
 </ul>
-<p>语法：<code>reader(iterable [, dialect=&#39;excel&#39;] [参数=值])</code></p>
-<p><code>iterable</code> ：必须是一个可迭代的对象，例如打开的文件，有 <code>__next__()</code>方法的。</p>
-<p><code>dialect</code> ：解析规则，默认是用逗号分隔的 <code>excel</code> ，其他可用值：<code>[&#39;excel&#39;, &#39;excel-tab&#39;, &#39;unix&#39;]</code></p>
+<p><code>start_response(status, headers, exc_info=None)</code></p>
+<p>start_response，是返回给客户端的响应头部信息，这是一个可调用对象，必须在 WSGI 应用（app）返回前调用，它接受3个参数：</p>
 <table>
 <thead>
 <tr>
@@ -576,126 +531,87 @@
 </thead>
 <tbody>
 <tr>
-<td>delimiter = ‘,’</td>
-<td>用作字段分隔的字符</td>
+<td><code>status</code></td>
+<td>响应的状态码，例如：”200 OK”</td>
 </tr>
 <tr>
-<td>quotechar = ‘“‘</td>
-<td>用作引用的字符</td>
+<td><code>headers</code></td>
+<td>响应包的HTTP首部信息，每个首部信息的K/V组成一个二元组，放入一个列表中，见：demo_app</td>
 </tr>
 <tr>
-<td>escapechar = None</td>
-<td>用作转义的字符</td>
-</tr>
-<tr>
-<td>doublequote = True</td>
-<td>连续两次引号是否被解释为一个引号</td>
-</tr>
-<tr>
-<td>skipinitialspace = False</td>
-<td>是否忽略分隔符后面跟着的空格</td>
-</tr>
-<tr>
-<td>lineterminator = ‘\r\n</td>
-<td>行结束符</td>
-</tr>
-<tr>
-<td>quoting = QUOTE_MINIMAL</td>
-<td>写入时候如何生成引号，默认仅在需要时生成，QUOTE_ALL表示总是生成</td>
+<td><code>exc_info</code></td>
+<td>处理错误的时候使用</td>
 </tr>
 </tbody>
 </table>
+<h3 id="解析environ"><a href="#解析environ" class="headerlink" title="解析environ"></a>解析environ</h3><p>通过解析：<code>environ[&#39;PATH_INFO]</code>，就可以判断用户访问的地址，而使用不同的函数处理响应。</p>
 <ul>
-<li>csv.reader支持的方法</li>
+<li>方法1，在APP内处理URL和页面的对应关系</li>
 </ul>
-<p><code>__next__()</code>：得到csv对象的下一行内容列表</p>
-<p><code>line_num</code>：从csv对象读取的行数</p>
-<p><code>fieldnames</code> ：取得字段名称</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> wsgiref.simple_server <span class="keyword">import</span> make_server</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">handle_index</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">return</span> [<span class="string">'&lt;h1&gt;Hello Index&lt;/h1&gt;'</span>.encode(<span class="string">"utf-8"</span>)]</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">hanle_date</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">return</span> [<span class="string">'&lt;h1&gt;Hello Date&lt;/h1&gt;'</span>.encode(<span class="string">"utf-8"</span>)]</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">demo_app</span><span class="params">(environ,start_response)</span>:</span></span><br><span class="line">    start_response(<span class="string">"200 OK"</span>, [(<span class="string">'Content-Type'</span>,<span class="string">'text/plain; charset=utf-8'</span>)])</span><br><span class="line"></span><br><span class="line">    current_url = environ[<span class="string">'PATH_INFO'</span>]</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> current_url == <span class="string">'/index'</span>:</span><br><span class="line">        <span class="keyword">return</span> handle_index()</span><br><span class="line">    <span class="keyword">elif</span> current_url == <span class="string">'/date'</span>:</span><br><span class="line">        <span class="keyword">return</span> hanle_date()</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">return</span> [<span class="string">'&lt;h1&gt;404!&lt;/h1&gt;'</span>.encode(<span class="string">"utf-8"</span>)]</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    server = make_server(<span class="string">'0.0.0.0'</span>,<span class="number">80</span>,demo_app)</span><br><span class="line">    server.serve_forever()</span><br></pre></td></tr></table></figure>
 <ul>
-<li>示例，迭代 <code>csv.reader</code> 对象打印每一行</li>
+<li>方法2，在一个字典内部处理URL和页面的对应关系，使用 MVC 模式</li>
 </ul>
-<p><code>csv.reader</code> 的结果是一个<code>csv.reader</code>对象，支持方法：<code>__next__()</code>、</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> pathlib <span class="keyword">import</span> Path</span><br><span class="line"><span class="keyword">import</span> csv</span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> open(Path(<span class="string">'D:/test.csv'</span>),newline=<span class="string">''</span>) <span class="keyword">as</span> file:</span><br><span class="line">    reader = csv.reader(file)    <span class="comment">#将csv的规则应用到这个可迭代对象（打开的文件），生成csv.reader对象</span></span><br><span class="line">    <span class="comment"># print(reader.line_num)</span></span><br><span class="line">    <span class="keyword">for</span> row <span class="keyword">in</span> reader:</span><br><span class="line">        print(row)</span><br></pre></td></tr></table></figure>
+<ol>
+<li>将处理的模块放入 <code>Controller</code> 目录的 <code>page.py</code>下</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">def handle_index():</span><br><span class="line">    # return [&apos;&lt;h1&gt;Hello Index&lt;/h1&gt;&apos;.encode(&quot;utf-8&quot;)]</span><br><span class="line">    f = open(&apos;View/index.html&apos;,mode=&apos;rb&apos;)      # 打开目录下的文件</span><br><span class="line">    data = f.read()</span><br><span class="line">    f.close()</span><br><span class="line">    return [data]               # 返回的正文来自 文件</span><br><span class="line"></span><br><span class="line">def hanle_date():</span><br><span class="line">    return [&apos;&lt;h1&gt;Hello Date&lt;/h1&gt;&apos;.encode(&quot;utf-8&quot;)]</span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>将 page.py 需要的页面文件放入到 <code>View</code> 目录下的 <code>index.html</code></li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html lang=&quot;en&quot;&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">    &lt;meta charset=&quot;UTF-8&quot;&gt;</span><br><span class="line">    &lt;title&gt;Title&lt;/title&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">    &lt;h1&gt;Hello, Index&lt;/h1&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+<ol start="3">
+<li>将 page.py 需要的数据库连接等代码 放在 <code>Model</code> 目录中</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">...........TODO</span><br></pre></td></tr></table></figure>
+<ol start="4">
+<li>主程序</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> wsgiref.simple_server <span class="keyword">import</span> make_server</span><br><span class="line"><span class="keyword">from</span> Controller <span class="keyword">import</span> page          <span class="comment"># 导入 Controller 目录的 page.py</span></span><br><span class="line"></span><br><span class="line">url_dict = &#123;                         <span class="comment"># URL与返回报文的对应关系</span></span><br><span class="line">    <span class="string">'/index'</span>:handle_index,           <span class="comment"># 如果键是一个正则表达式对象，那么就可以处理匹配正则的这一类页面</span></span><br><span class="line">    <span class="string">'/date'</span>:hanle_date</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">handle_app</span><span class="params">(environ,start_response)</span>:</span></span><br><span class="line">    start_response(<span class="string">"200 OK"</span>, [(<span class="string">'Content-Type'</span>,<span class="string">'text/plain; charset=utf-8'</span>)])</span><br><span class="line"></span><br><span class="line">    current_url = environ[<span class="string">'PATH_INFO'</span>]</span><br><span class="line">    func = <span class="keyword">None</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> current_url <span class="keyword">in</span> url_dict:</span><br><span class="line">        func = url_dict[current_url]</span><br><span class="line">    <span class="keyword">if</span> func:</span><br><span class="line">        <span class="keyword">return</span> func()</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">return</span> [<span class="string">'&lt;h1&gt;404!&lt;/h1&gt;'</span>.encode(<span class="string">"utf-8"</span>)]</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    server = make_server(<span class="string">'0.0.0.0'</span>,<span class="number">80</span>,handle_app)</span><br><span class="line">    server.serve_forever()</span><br></pre></td></tr></table></figure>
+<ul>
+<li>MVC 和 MTV</li>
+</ul>
+<p>MVC模式</p>
+<p>将数据库的操作代码放在 Model 目录，将模板页面文件放在 View目录，将业务处理逻辑代码放在 Controller目录这样的分离结构组成整个业务系统即由：<code>Model、View、Controller</code> 组成就是MVC模式。</p>
+<p>MTV模式</p>
+<p>模式就是：<code>Model（数据库）、Template（模板文件）、View（业务处理）</code> django就是MTV的模式</p>
+<h2 id="webob"><a href="#webob" class="headerlink" title="webob"></a>webob</h2><p>Webob是一个Python库，它解析 WSGI environ 环境参数，并且封装为一个 request 对象，这个对象包含了大多数的 HTTP 请求的报文的分析结果。</p>
+<h3 id="Request"><a href="#Request" class="headerlink" title="Request"></a>Request</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> wsgiref.simple_server <span class="keyword">import</span> make_server</span><br><span class="line"><span class="keyword">from</span> webob <span class="keyword">import</span> Request</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">demo_app</span><span class="params">(environ,start_response)</span>:</span></span><br><span class="line">    <span class="keyword">from</span> io <span class="keyword">import</span> StringIO</span><br><span class="line">    stdout = StringIO()</span><br><span class="line">    print(<span class="string">"Hello world!"</span>, file=stdout)</span><br><span class="line">    request = Request(environ)</span><br><span class="line">    print(file=stdout)</span><br><span class="line">    data = [</span><br><span class="line">        request.method,</span><br><span class="line">        request.GET,</span><br><span class="line">        request.POST,</span><br><span class="line">        request.path,</span><br><span class="line">        request.params,</span><br><span class="line">        request.headers</span><br><span class="line">    ]</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> data:</span><br><span class="line">        print(i,type(i),file=stdout)</span><br><span class="line"></span><br><span class="line">    start_response(<span class="string">"200 OK"</span>, [(<span class="string">'Content-Type'</span>,<span class="string">'text/plain; charset=utf-8'</span>)])</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> [stdout.getvalue().encode(<span class="string">'utf-8'</span>)]</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    server = make_server(<span class="string">'0.0.0.0'</span>,<span class="number">80</span>,demo_app)</span><br><span class="line">    server.serve_forever()</span><br></pre></td></tr></table></figure>
+<ul>
+<li>启动上面代码，使用下面的 URL 地址进行POST方法提交，并且定义一个表单数据 <code>&#39;post&#39;=&#39;is_a_post&#39;</code> </li>
+</ul>
+<figure class="highlight"><table><tr><td class="code"><pre><span class="line">http://172.16.100.1/index.asp?id=5&amp;name=yangjinheng&amp;keyword=jinhengyang&amp;comment=1,a,c&amp;age=29&amp;age=18</span><br></pre></td></tr></table></figure>
+<ul>
+<li>从返回的结果可以看出 <code>webob.Request</code> 对 POST 和 URL 的解析，及解析结果的类型</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Hello world!</span><br><span class="line"></span><br><span class="line">POST &lt;class &apos;str&apos;&gt;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">GET([(&apos;id&apos;, &apos;5&apos;), (&apos;name&apos;, &apos;yangjinheng&apos;), (&apos;keyword&apos;, &apos;jinhengyang&apos;), (&apos;comment&apos;, &apos;1,a,c&apos;), (&apos;age&apos;, &apos;29&apos;), (&apos;age&apos;, &apos;18&apos;)]) &lt;class &apos;webob.multidict.GetDict&apos;&gt;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">MultiDict([(&apos;post&apos;, &apos;is_a_post&apos;)]) &lt;class &apos;webob.multidict.MultiDict&apos;&gt;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">/index.asp &lt;class &apos;str&apos;&gt;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">NestedMultiDict([(&apos;id&apos;, &apos;5&apos;), (&apos;name&apos;, &apos;yangjinheng&apos;), (&apos;keyword&apos;, &apos;jinhengyang&apos;), (&apos;comment&apos;, &apos;1,a,c&apos;), (&apos;age&apos;, &apos;29&apos;), (&apos;age&apos;, &apos;18&apos;), (&apos;post&apos;, &apos;is_a_post&apos;)]) &lt;class &apos;webob.multidict.NestedMultiDict&apos;&gt;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">(&apos;Content-Length&apos;, &apos;168&apos;) &lt;class &apos;tuple&apos;&gt;</span><br><span class="line">(&apos;Content-Type&apos;, &apos;multipart/form-data; boundary=--------------------------998275222955574446129312&apos;) &lt;class &apos;tuple&apos;&gt;</span><br><span class="line">(&apos;Cache-Control&apos;, &apos;no-cache&apos;) &lt;class &apos;tuple&apos;&gt;</span><br><span class="line">(&apos;Postman-Token&apos;, &apos;fd052bd5-3454-44bb-9f5d-bbbbca3f3607&apos;) &lt;class &apos;tuple&apos;&gt;</span><br><span class="line">(&apos;User-Agent&apos;, &apos;PostmanRuntime/7.1.5&apos;) &lt;class &apos;tuple&apos;&gt;</span><br><span class="line">(&apos;Accept&apos;, &apos;*/*&apos;) &lt;class &apos;tuple&apos;&gt;</span><br><span class="line">(&apos;Host&apos;, &apos;172.16.100.1&apos;) &lt;class &apos;tuple&apos;&gt;</span><br><span class="line">(&apos;Accept-Encoding&apos;, &apos;gzip, deflate&apos;) &lt;class &apos;tuple&apos;&gt;</span><br><span class="line">(&apos;Connection&apos;, &apos;keep-alive&apos;) &lt;class &apos;tuple&apos;&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="MultiDict"><a href="#MultiDict" class="headerlink" title="MultiDict"></a>MultiDict</h3><p>MultiDict，允许一个 Key 保存好几个值</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> webob.multidict <span class="keyword">import</span> MultiDict</span><br><span class="line"></span><br><span class="line">md = MultiDict()</span><br><span class="line">md.add(<span class="number">1</span>,<span class="string">'yangjinheng'</span>)</span><br><span class="line">md.add(<span class="number">1</span>,<span class="string">'liying'</span>)</span><br><span class="line">md.add(<span class="number">2</span>,<span class="string">'Man'</span>)</span><br><span class="line">md.add(<span class="number">2</span>,<span class="string">'Female'</span>)</span><br><span class="line">md.add(<span class="string">'age'</span>,<span class="number">29</span>)</span><br><span class="line">md.add(<span class="string">'age'</span>,<span class="number">27</span>)</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">16</span>]: print(md.getall(<span class="number">2</span>))</span><br><span class="line">[<span class="string">'Man'</span>, <span class="string">'Female'</span>]</span><br><span class="line"></span><br><span class="line">In [<span class="number">17</span>]: print(md.getall(<span class="number">1</span>))</span><br><span class="line">[<span class="string">'yangjinheng'</span>, <span class="string">'liying'</span>]</span><br><span class="line"></span><br><span class="line">In [<span class="number">18</span>]: print(md.getall(<span class="number">2</span>))</span><br><span class="line">[<span class="string">'Man'</span>, <span class="string">'Female'</span>]</span><br><span class="line"></span><br><span class="line">In [<span class="number">19</span>]: print(md.getall(<span class="string">'age'</span>))</span><br><span class="line">[<span class="number">29</span>, <span class="number">27</span>]</span><br><span class="line"></span><br><span class="line">In [<span class="number">24</span>]: print(md.get(<span class="number">1</span>))</span><br><span class="line">liying</span><br><span class="line"></span><br><span class="line">In [<span class="number">25</span>]: print(md.get(<span class="number">2</span>))</span><br><span class="line">Female</span><br><span class="line"></span><br><span class="line">In [<span class="number">27</span>]: print(md[<span class="number">1</span>])</span><br><span class="line">liying</span><br><span class="line"></span><br><span class="line">In [<span class="number">28</span>]: print(md[<span class="number">2</span>])</span><br><span class="line">Female</span><br><span class="line"></span><br><span class="line">In [<span class="number">29</span>]: <span class="keyword">for</span> i <span class="keyword">in</span> md.items():print(i)</span><br><span class="line">(<span class="number">1</span>, <span class="string">'yangjinheng'</span>)</span><br><span class="line">(<span class="number">1</span>, <span class="string">'liying'</span>)</span><br><span class="line">(<span class="number">2</span>, <span class="string">'Man'</span>)</span><br><span class="line">(<span class="number">2</span>, <span class="string">'Female'</span>)</span><br><span class="line">(<span class="string">'age'</span>, <span class="number">29</span>)</span><br><span class="line">(<span class="string">'age'</span>, <span class="number">27</span>)</span><br></pre></td></tr></table></figure>
+<h3 id="Response"><a href="#Response" class="headerlink" title="Response"></a>Response</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> wsgiref.simple_server <span class="keyword">import</span> make_server</span><br><span class="line"><span class="keyword">from</span> webob <span class="keyword">import</span> Request,Response</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">demo_app</span><span class="params">(environ,start_response)</span>:</span></span><br><span class="line">    <span class="keyword">from</span> io <span class="keyword">import</span> StringIO</span><br><span class="line">    stdout = StringIO()</span><br><span class="line">    print(<span class="string">"Hello world!"</span>, file=stdout)</span><br><span class="line">    response = Response()</span><br><span class="line">    print(file=stdout)</span><br><span class="line">    data = [</span><br><span class="line">        response.status,            <span class="comment"># 响应码和原因短语</span></span><br><span class="line">        response.status_code,       <span class="comment"># 响应码</span></span><br><span class="line">        response.headers,           <span class="comment"># 响应报文的HTTP头信息</span></span><br><span class="line">        response.headerlist,        <span class="comment"># 相应报文的列表，由每个字段和值的二元组组成</span></span><br><span class="line">    ]</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> data:</span><br><span class="line">        print(i,type(i),file=stdout)</span><br><span class="line"></span><br><span class="line">    start_response(<span class="string">"200 OK"</span>, [(<span class="string">'Content-Type'</span>,<span class="string">'text/plain; charset=utf-8'</span>)])</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> [stdout.getvalue().encode(<span class="string">'utf-8'</span>)]</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    server = make_server(<span class="string">'0.0.0.0'</span>,<span class="number">80</span>,demo_app)</span><br><span class="line">    server.serve_forever()</span><br></pre></td></tr></table></figure>
+<ul>
+<li>启动上面代码，使用下面的 URL 地址进行POST方法提交，并且定义一个表单数据 <code>&#39;post&#39;=&#39;is_a_post&#39;</code> </li>
+</ul>
+<figure class="highlight"><table><tr><td class="code"><pre><span class="line">http://172.16.100.1/index.asp?id=5&amp;name=yangjinheng&amp;keyword=jinhengyang&amp;comment=1,a,c&amp;age=29&amp;age=18</span><br></pre></td></tr></table></figure>
+<ul>
+<li>返回结果，Response 包含了所有响应 WSGI Server所需要的变量</li>
+</ul>
+<figure class="highlight"><table><tr><td class="code"><pre><span class="line">Hello world!</span><br><span class="line"></span><br><span class="line"><span class="number">200</span> OK &lt;<span class="class"><span class="keyword">class</span> '<span class="title">str</span>'&gt;</span></span><br><span class="line"><span class="class"></span></span><br><span class="line"><span class="class">200 &lt;<span class="title">class</span> '<span class="title">int</span>'&gt;</span></span><br><span class="line"><span class="class"></span></span><br><span class="line"><span class="class"><span class="title">ResponseHeaders</span><span class="params">([<span class="params">(<span class="string">'Content-Type'</span>, <span class="string">'text/html; charset=UTF-8'</span>)</span>, <span class="params">(<span class="string">'Content-Length'</span>, <span class="string">'0'</span>)</span>])</span> &lt;<span class="title">class</span> '<span class="title">webob</span>.<span class="title">headers</span>.<span class="title">ResponseHeaders</span>'&gt;</span></span><br><span class="line"><span class="class"></span></span><br><span class="line">[('Content-Type', 'text/html; charset=UTF-8'), ('Content-Length', '0')] &lt;class 'list'&gt;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>Response 可以帮我们生成响应报文，从而更加简化编程</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> wsgiref.simple_server <span class="keyword">import</span> make_server</span><br><span class="line"><span class="keyword">from</span> webob <span class="keyword">import</span> Request,Response</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">demo_app</span><span class="params">(environ,start_response)</span>:</span></span><br><span class="line">    <span class="keyword">from</span> io <span class="keyword">import</span> StringIO</span><br><span class="line">    stdout = StringIO()</span><br><span class="line">    print(<span class="string">"Hello world!"</span>, file=stdout)</span><br><span class="line">    response = Response()</span><br><span class="line">    print(file=stdout)</span><br><span class="line">    data = [</span><br><span class="line">        response.status,            <span class="comment"># 响应码和原因短语</span></span><br><span class="line">        response.status_code,       <span class="comment"># 响应码</span></span><br><span class="line">        response.headers,           <span class="comment"># 响应报文的HTTP头信息</span></span><br><span class="line">        response.headerlist,        <span class="comment"># 相应报文的列表，由每个字段和值的二元组组成</span></span><br><span class="line">    ]</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> data:</span><br><span class="line">        print(i,type(i),file=stdout)</span><br><span class="line">    </span><br><span class="line">    response.status_code = <span class="number">200</span>     <span class="comment"># 修改响应码的值</span></span><br><span class="line">    response.body = stdout.getvalue().encode(<span class="string">'utf-8'</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> response(environ,start_response)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    server = make_server(<span class="string">'0.0.0.0'</span>,<span class="number">80</span>,demo_app)</span><br><span class="line">    server.serve_forever()</span><br></pre></td></tr></table></figure>
+<ul>
+<li>返回结果</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Hello world!</span><br><span class="line"></span><br><span class="line">200 OK &lt;class &apos;str&apos;&gt;</span><br><span class="line"></span><br><span class="line">200 &lt;class &apos;int&apos;&gt;</span><br><span class="line"></span><br><span class="line">ResponseHeaders([(&apos;Content-Type&apos;, &apos;text/html; charset=UTF-8&apos;), (&apos;Content-Length&apos;, &apos;0&apos;)])  &lt;class &apos;webob.headers.ResponseHeaders&apos;&gt;</span><br><span class="line"></span><br><span class="line">[(&apos;Content-Type&apos;, &apos;text/html; charset=UTF-8&apos;), (&apos;Content-Length&apos;, &apos;0&apos;)] &lt;class &apos;list&apos;&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="webob-dec"><a href="#webob-dec" class="headerlink" title="webob.dec"></a>webob.dec</h3><p><code>webob.dec</code> 更加简化 <code>response</code> 过程，无需再写 <code>response(environ,start_response)</code> 这个语句了。</p>
+<p>被 <code>wsgify</code> 装饰器装饰过的 <code>WSGI APP（可调用对象）</code>需要接收一个 <code>request</code> 对象，然后在函数内可以调用 <code>request</code> 对象写自己的业务逻辑，最后返回结果的时候无需再使用 <code>start_response</code>了，因为 <code>webob.dec</code> 内部的<code>Response</code> 已经替我们做了。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> wsgiref.simple_server <span class="keyword">import</span> make_server</span><br><span class="line"><span class="keyword">from</span> webob <span class="keyword">import</span> Request,Response</span><br><span class="line"><span class="keyword">from</span> webob.dec <span class="keyword">import</span> wsgify</span><br><span class="line"></span><br><span class="line"><span class="meta">@wsgify</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">demo_app</span><span class="params">(request)</span>:</span></span><br><span class="line">    <span class="keyword">from</span> io <span class="keyword">import</span> StringIO</span><br><span class="line">    stdout = StringIO()</span><br><span class="line">    print(<span class="string">"Hello world!"</span>, file=stdout)</span><br><span class="line">    print(file=stdout)</span><br><span class="line">    data = [</span><br><span class="line">        request.method,</span><br><span class="line">        request.GET,</span><br><span class="line">        request.POST,</span><br><span class="line">        request.path,</span><br><span class="line">        request.params,</span><br><span class="line">        request.headers,</span><br><span class="line">    ]</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> data:</span><br><span class="line">        print(i,file=stdout)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> Response(stdout.getvalue().encode(<span class="string">'utf-8'</span>))    <span class="comment"># 推荐使用 Response 实例方式返回响应</span></span><br><span class="line">    <span class="comment"># return bytes(stdout.getvalue(),encoding='utf-8')    # 也可以使用 bytes 对象</span></span><br><span class="line">    <span class="comment"># return stdout.getvalue()                            # 也可以是字符串对象</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    server = make_server(<span class="string">'0.0.0.0'</span>,<span class="number">80</span>,demo_app)</span><br><span class="line">    server.serve_forever()</span><br></pre></td></tr></table></figure>
 <ul>
 <li>结果</li>
 </ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">[<span class="string">'name'</span>, <span class="string">'age'</span>, <span class="string">'sex'</span>, <span class="string">'class'</span>]</span><br><span class="line">[<span class="string">'yangjinheng'</span>, <span class="string">'29'</span>, <span class="string">'man'</span>, <span class="string">'10'</span>]</span><br><span class="line">[<span class="string">'songyaru'</span>, <span class="string">'27'</span>, <span class="string">'woman'</span>, <span class="string">'10'</span>]</span><br><span class="line">[<span class="string">'zhaoxiaoman'</span>, <span class="string">'27'</span>, <span class="string">'woman'</span>, <span class="string">'10'</span>]</span><br><span class="line">[<span class="string">'yangzhongxiao'</span>, <span class="string">'26'</span>, <span class="string">'man'</span>, <span class="string">'10'</span>]</span><br></pre></td></tr></table></figure>
-<h2 id="csv-writer"><a href="#csv-writer" class="headerlink" title="csv.writer"></a>csv.writer</h2><p><code>writerow</code> 方法：写入单行数据到csv.writer对象</p>
-<p><code>writerows</code> 方法：写入所有行数据到csv.writer对象</p>
-<ul>
-<li>示例向csv.writer对象写入数据</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> csv</span><br><span class="line"></span><br><span class="line">csvData = [[<span class="string">'Name of Person'</span>, <span class="string">'Age'</span>], [<span class="string">'Peter'</span>, <span class="string">'22'</span>], [<span class="string">'Jasmine'</span>, <span class="string">'21'</span>], [<span class="string">'Sam'</span>, <span class="string">'24'</span>]]</span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> open(<span class="string">'D:/test1.csv'</span>, <span class="string">'w'</span>,newline=<span class="string">''</span>) <span class="keyword">as</span> file:</span><br><span class="line">    writer = csv.writer(file)    <span class="comment">#将csv的规则应用到这个可迭代对象（打开的文件），生成csv.writer对象</span></span><br><span class="line">    writer.writerows(csvData)    <span class="comment">#调用csv.writer对象的writerows方法，写入数据</span></span><br></pre></td></tr></table></figure>
-<h1 id="ini文件"><a href="#ini文件" class="headerlink" title="ini文件"></a>ini文件</h1><p>.ini 文件是Initialization File的缩写，即初始化文件有时候，INI文件也会以不同的扩展名，如“.CFG”、“.CONF”、或是“.TXT”代替。</p>
-<ul>
-<li>组成介绍</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">- ini 基本组成：parameters（键值）、sections（节）、comments（注释）</span><br><span class="line">- parameters 它是 ini 文件最基本的元素，每个 parameter 都有一个 name 和一个 value</span><br><span class="line">- sections 使用 [section name] 标记在其范围内的所有 parameter 都属于该 section</span><br><span class="line">- [DEFAULT] 是一个特殊的 section ，它为所有的 section 提供默认值</span><br><span class="line">- ; 表示注释，在 ini 规范中称作 comments</span><br></pre></td></tr></table></figure>
-<ul>
-<li>示例</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">[DEFAULT]</span><br><span class="line">ServerAliveInterval = <span class="number">45</span></span><br><span class="line">Compression = yes</span><br><span class="line">CompressionLevel = <span class="number">9</span></span><br><span class="line">ForwardX11 = yes</span><br><span class="line"></span><br><span class="line">[bitbucket.org]</span><br><span class="line">User = Tom</span><br><span class="line"></span><br><span class="line">[topsecret.com]</span><br><span class="line">Port: <span class="number">50022</span></span><br><span class="line">ForwardX11: no</span><br></pre></td></tr></table></figure>
-<h2 id="configparser"><a href="#configparser" class="headerlink" title="configparser"></a>configparser</h2><p><code>configparser</code>模块可以把 <code>ini</code> 文件当作一个嵌套的字典，默认使用的是有序字典，使用所有的 <code>section</code> 当作字典的键，值是所有 <code>parameter</code> 键值对。</p>
-<h2 id="读取文件-read"><a href="#读取文件-read" class="headerlink" title="读取文件.read"></a>读取文件.read</h2><p>读取 ini 文件，可以是单个文件，也可以是文件列表，可以指定文件编码。</p>
-<p>语法：<code>read(filenames, encoding=None)</code></p>
-<ul>
-<li>初始化实例</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> configparser    <span class="comment">#导入模块</span></span><br><span class="line"></span><br><span class="line">config = configparser.ConfigParser()    <span class="comment">#定义类</span></span><br><span class="line"></span><br><span class="line">config.read(<span class="string">'d:/initest.ini'</span>)</span><br></pre></td></tr></table></figure>
-<h3 id="从字典中读取ini-read-dict"><a href="#从字典中读取ini-read-dict" class="headerlink" title="从字典中读取ini.read_dict"></a>从字典中读取ini.read_dict</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>parser = configparser.ConfigParser()</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>parser.read_dict(&#123;<span class="string">'section1'</span>: &#123;<span class="string">'key1'</span>: <span class="string">'value1'</span>,</span><br><span class="line"><span class="meta">... </span>                               <span class="string">'key2'</span>: <span class="string">'value2'</span>,</span><br><span class="line"><span class="meta">... </span>                               <span class="string">'key3'</span>: <span class="string">'value3'</span>&#125;,</span><br><span class="line"><span class="meta">... </span>                  <span class="string">'section2'</span>: &#123;<span class="string">'keyA'</span>: <span class="string">'valueA'</span>,</span><br><span class="line"><span class="meta">... </span>                               <span class="string">'keyB'</span>: <span class="string">'valueB'</span>,</span><br><span class="line"><span class="meta">... </span>                               <span class="string">'keyC'</span>: <span class="string">'valueC'</span>&#125;,</span><br><span class="line"><span class="meta">... </span>                  <span class="string">'section3'</span>: &#123;<span class="string">'foo'</span>: <span class="string">'x'</span>,</span><br><span class="line"><span class="meta">... </span>                               <span class="string">'bar'</span>: <span class="string">'y'</span>,</span><br><span class="line"><span class="meta">... </span>                               <span class="string">'baz'</span>: <span class="string">'z'</span>&#125;</span><br><span class="line"><span class="meta">... </span>&#125;)</span><br></pre></td></tr></table></figure>
-<h3 id="从类文件对象中读取-read-file"><a href="#从类文件对象中读取-read-file" class="headerlink" title="从类文件对象中读取.read_file"></a>从类文件对象中读取.read_file</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">TODO</span><br></pre></td></tr></table></figure>
-<h3 id="从字符串中读取-read-string"><a href="#从字符串中读取-read-string" class="headerlink" title="从字符串中读取.read_string"></a>从字符串中读取.read_string</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">TODO</span><br></pre></td></tr></table></figure>
-<h2 id="查看方法"><a href="#查看方法" class="headerlink" title="查看方法"></a>查看方法</h2><h3 id="所有节-sections"><a href="#所有节-sections" class="headerlink" title="所有节.sections"></a>所有节.sections</h3><p>返回一个所有节组成的列表</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">7</span>]: config.sections()</span><br><span class="line">Out[<span class="number">7</span>]: [<span class="string">'bitbucket.org'</span>, <span class="string">'topsecret.com'</span>]</span><br></pre></td></tr></table></figure>
-<h3 id="返回节中的键值-items"><a href="#返回节中的键值-items" class="headerlink" title="返回节中的键值.items"></a>返回节中的键值.items</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">19</span>]: config.items(<span class="string">'bitbucket.org'</span>)</span><br><span class="line">Out[<span class="number">19</span>]:</span><br><span class="line">[(<span class="string">'serveraliveinterval'</span>, <span class="string">'45'</span>),</span><br><span class="line"> (<span class="string">'compression'</span>, <span class="string">'yes'</span>),</span><br><span class="line"> (<span class="string">'compressionlevel'</span>, <span class="string">'9'</span>),</span><br><span class="line"> (<span class="string">'forwardx11'</span>, <span class="string">'yes'</span>),</span><br><span class="line"> (<span class="string">'user'</span>, <span class="string">'Tom'</span>)]</span><br></pre></td></tr></table></figure>
-<h3 id="节视图-keys"><a href="#节视图-keys" class="headerlink" title="节视图.keys"></a>节视图.keys</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">84</span>]: config.sections()</span><br><span class="line">Out[<span class="number">84</span>]: [<span class="string">'bitbucket.org'</span>, <span class="string">'topsecret.com'</span>]</span><br><span class="line"></span><br><span class="line">In [<span class="number">85</span>]: list(config.keys())</span><br><span class="line">Out[<span class="number">85</span>]: [<span class="string">'DEFAULT'</span>, <span class="string">'bitbucket.org'</span>, <span class="string">'topsecret.com'</span>]</span><br></pre></td></tr></table></figure>
-<h3 id="对象视图-values"><a href="#对象视图-values" class="headerlink" title="对象视图.values"></a>对象视图.values</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">105</span>]: <span class="keyword">for</span> i <span class="keyword">in</span> config.values():</span><br><span class="line">     ...:     <span class="comment">#print(dir(i))</span></span><br><span class="line">     ...:     print(i.name,list(i.items()))</span><br><span class="line">     ...:</span><br><span class="line">DEFAULT [(<span class="string">'serveraliveinterval'</span>, <span class="string">'45'</span>), (<span class="string">'compression'</span>, <span class="string">'yes'</span>), (<span class="string">'compressionlevel'</span>, <span class="string">'9'</span>), (<span class="string">'forwardx11'</span>, <span class="string">'yes'</span>), (<span class="string">'balence'</span>, <span class="string">'100'</span>)]</span><br><span class="line">bitbucket.org [(<span class="string">'user'</span>, <span class="string">'Tom'</span>), (<span class="string">'serveraliveinterval'</span>, <span class="string">'45'</span>), (<span class="string">'compression'</span>, <span class="string">'yes'</span>), (<span class="string">'compressionlevel'</span>, <span class="string">'9'</span>), (<span class="string">'forwardx11'</span>, <span class="string">'yes'</span>), (<span class="string">'balence'</span>, <span class="string">'100'</span>)]</span><br><span class="line">topsecret.com [(<span class="string">'port'</span>, <span class="string">'50022'</span>), (<span class="string">'forwardx11'</span>, <span class="string">'no'</span>), (<span class="string">'user'</span>, <span class="string">'jack'</span>), (<span class="string">'serveraliveinterval'</span>, <span class="string">'45'</span>), (<span class="string">'compression'</span>, <span class="string">'yes'</span>), (<span class="string">'compressionlevel'</span>, <span class="string">'9'</span>), (<span class="string">'balence'</span>, <span class="string">'100'</span>)]</span><br><span class="line">balence [(<span class="string">'tom'</span>, <span class="string">'1000'</span>), (<span class="string">'serveraliveinterval'</span>, <span class="string">'45'</span>), (<span class="string">'compression'</span>, <span class="string">'yes'</span>), (<span class="string">'compressionlevel'</span>, <span class="string">'9'</span>), (<span class="string">'forwardx11'</span>, <span class="string">'yes'</span>), (<span class="string">'balence'</span>, <span class="string">'100'</span>)]</span><br></pre></td></tr></table></figure>
-<h3 id="取得默认值-defaults"><a href="#取得默认值-defaults" class="headerlink" title="取得默认值.defaults"></a>取得默认值.defaults</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">37</span>]: config.defaults()</span><br><span class="line">Out[<span class="number">37</span>]:</span><br><span class="line">OrderedDict([(<span class="string">'serveraliveinterval'</span>, <span class="string">'45'</span>),</span><br><span class="line">             (<span class="string">'compression'</span>, <span class="string">'yes'</span>),</span><br><span class="line">             (<span class="string">'compressionlevel'</span>, <span class="string">'9'</span>),</span><br><span class="line">             (<span class="string">'forwardx11'</span>, <span class="string">'yes'</span>),</span><br><span class="line">             (<span class="string">'balence'</span>, <span class="string">'100'</span>)])</span><br></pre></td></tr></table></figure>
-<h2 id="指定读取"><a href="#指定读取" class="headerlink" title="指定读取"></a>指定读取</h2><h3 id="获取指定option的键值-get"><a href="#获取指定option的键值-get" class="headerlink" title="获取指定option的键值.get"></a>获取指定option的键值.get</h3><ul>
-<li>get方法获取</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">26</span>]: config.get(<span class="string">'bitbucket.org'</span>,<span class="string">'user'</span>)</span><br><span class="line">Out[<span class="number">26</span>]: <span class="string">'Tom'</span></span><br></pre></td></tr></table></figure>
-<ul>
-<li>直接读取</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">23</span>]: config[<span class="string">'bitbucket.org'</span>][<span class="string">'user'</span>]</span><br><span class="line">Out[<span class="number">23</span>]: <span class="string">'Tom'</span></span><br></pre></td></tr></table></figure>
-<ul>
-<li>获取为整型.getint</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">27</span>]: config.getint(<span class="string">'topsecret.com'</span>,<span class="string">'Port'</span>)</span><br><span class="line">Out[<span class="number">27</span>]: <span class="number">50022</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">28</span>]: a = config.getint(<span class="string">'topsecret.com'</span>,<span class="string">'Port'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">29</span>]: type(a)</span><br><span class="line">Out[<span class="number">29</span>]: int</span><br></pre></td></tr></table></figure>
-<ul>
-<li>获取为浮点型.getfloat</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">31</span>]: config.getfloat(<span class="string">'bitbucket.org'</span>,<span class="string">'balence'</span>)</span><br><span class="line">Out[<span class="number">31</span>]: <span class="number">35.9</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">32</span>]: a = config.getfloat(<span class="string">'bitbucket.org'</span>,<span class="string">'balence'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">33</span>]: type(a)</span><br><span class="line">Out[<span class="number">33</span>]: float</span><br></pre></td></tr></table></figure>
-<ul>
-<li>取得为布尔值.getboolean</li>
-</ul>
-<h3 id="获取指定节下的键-options"><a href="#获取指定节下的键-options" class="headerlink" title="获取指定节下的键.options"></a>获取指定节下的键.options</h3><p>返回给定节名称的选项名称列表，包含默认值</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">13</span>]: config.options(<span class="string">'bitbucket.org'</span>)</span><br><span class="line">Out[<span class="number">13</span>]:</span><br><span class="line">[<span class="string">'user'</span>,</span><br><span class="line"> <span class="string">'serveraliveinterval'</span>,</span><br><span class="line"> <span class="string">'compression'</span>,</span><br><span class="line"> <span class="string">'compressionlevel'</span>,</span><br><span class="line"> <span class="string">'forwardx11'</span>]</span><br></pre></td></tr></table></figure>
-<h2 id="检测方法"><a href="#检测方法" class="headerlink" title="检测方法"></a>检测方法</h2><h3 id="节存在性-has-section"><a href="#节存在性-has-section" class="headerlink" title="节存在性.has_section"></a>节存在性.has_section</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">38</span>]: config.has_section(<span class="string">'bitbucket.org'</span>)</span><br><span class="line">Out[<span class="number">38</span>]: <span class="keyword">True</span></span><br><span class="line">    </span><br><span class="line">或    </span><br><span class="line"></span><br><span class="line">In [<span class="number">43</span>]: <span class="string">'bitbucket.org'</span> <span class="keyword">in</span> config</span><br><span class="line">Out[<span class="number">43</span>]: <span class="keyword">True</span></span><br></pre></td></tr></table></figure>
-<h3 id="键值对存在性-has-option"><a href="#键值对存在性-has-option" class="headerlink" title="键值对存在性.has_option"></a>键值对存在性.has_option</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">39</span>]: config.has_option(<span class="string">'bitbucket.org'</span>,<span class="string">'Port'</span>)</span><br><span class="line">Out[<span class="number">39</span>]: <span class="keyword">False</span></span><br><span class="line">    </span><br><span class="line">In [<span class="number">40</span>]: config.has_option(<span class="string">'topsecret.com'</span>,<span class="string">'Port'</span>)</span><br><span class="line">Out[<span class="number">40</span>]: <span class="keyword">True</span></span><br><span class="line"></span><br><span class="line">或检查值</span><br><span class="line"></span><br><span class="line">In [<span class="number">45</span>]: <span class="string">'50022'</span> <span class="keyword">in</span> config[<span class="string">'topsecret.com'</span>][<span class="string">'Port'</span>]</span><br><span class="line">Out[<span class="number">45</span>]: <span class="keyword">True</span></span><br></pre></td></tr></table></figure>
-<h2 id="修改方法"><a href="#修改方法" class="headerlink" title="修改方法"></a>修改方法</h2><h3 id="增加节-add-section"><a href="#增加节-add-section" class="headerlink" title="增加节.add_section"></a>增加节.add_section</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">46</span>]: config.add_section(<span class="string">'balence'</span>)</span><br></pre></td></tr></table></figure>
-<h3 id="设定节中的键值-set"><a href="#设定节中的键值-set" class="headerlink" title="设定节中的键值.set"></a>设定节中的键值.set</h3><ul>
-<li>修改ini的数据</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">49</span>]: config.set(<span class="string">'balence'</span>,<span class="string">'Tom'</span>,<span class="string">'1000'</span>)</span><br></pre></td></tr></table></figure>
-<h3 id="删除节内键值-remove-option"><a href="#删除节内键值-remove-option" class="headerlink" title="删除节内键值.remove_option"></a>删除节内键值.remove_option</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">76</span>]: config.remove_option(<span class="string">'bitbucket.org'</span>,<span class="string">'balence'</span>)</span><br><span class="line">Out[<span class="number">76</span>]: <span class="keyword">True</span></span><br></pre></td></tr></table></figure>
-<h3 id="删除节-remove-section"><a href="#删除节-remove-section" class="headerlink" title="删除节.remove_section"></a>删除节.remove_section</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">78</span>]: config.remove_section(<span class="string">'balence1'</span>)</span><br><span class="line">Out[<span class="number">78</span>]: <span class="keyword">True</span></span><br></pre></td></tr></table></figure>
-<h3 id="写入磁盘-write"><a href="#写入磁盘-write" class="headerlink" title="写入磁盘.write"></a>写入磁盘.write</h3><p>语法：<code>write(self, fp, space_around_delimiters=True)</code></p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">51</span>]: config.write(open(<span class="string">'d:/initest.ini'</span>,<span class="string">'w'</span>))</span><br></pre></td></tr></table></figure>
-<p>对ini的修改已经写入磁盘文件</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">[DEFAULT]</span><br><span class="line">serveraliveinterval = <span class="number">45</span></span><br><span class="line">compression = yes</span><br><span class="line">compressionlevel = <span class="number">9</span></span><br><span class="line">forwardx11 = yes</span><br><span class="line">balence = <span class="number">100</span></span><br><span class="line"></span><br><span class="line">[bitbucket.org]</span><br><span class="line">user = Tom</span><br><span class="line">balence = <span class="number">35.9</span></span><br><span class="line"></span><br><span class="line">[topsecret.com]</span><br><span class="line">port = <span class="number">50022</span></span><br><span class="line">forwardx11 = no</span><br><span class="line">user = jack</span><br><span class="line"></span><br><span class="line">[balence]</span><br><span class="line">tom = <span class="number">1000</span></span><br></pre></td></tr></table></figure>
-<h3 id="清空文件-clear"><a href="#清空文件-clear" class="headerlink" title="清空文件.clear"></a>清空文件.clear</h3><p>仅保留DEFAULT</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">107</span>]: config.clear()</span><br></pre></td></tr></table></figure>
-<h3 id="弹出-pop"><a href="#弹出-pop" class="headerlink" title="弹出.pop"></a>弹出.pop</h3><h3 id="弹出节-popitem"><a href="#弹出节-popitem" class="headerlink" title="弹出节.popitem"></a>弹出节.popitem</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">144</span>]: config.popitem()</span><br><span class="line">Out[<span class="number">144</span>]: (<span class="string">'bitbucket.org'</span>, &lt;Section: bitbucket.org&gt;)</span><br><span class="line"></span><br><span class="line">In [<span class="number">145</span>]: config.popitem()</span><br><span class="line">Out[<span class="number">145</span>]: (<span class="string">'topsecret.com'</span>, &lt;Section: topsecret.com&gt;)</span><br><span class="line"></span><br><span class="line">In [<span class="number">146</span>]: config.popitem()</span><br><span class="line">Out[<span class="number">146</span>]: (<span class="string">'balence'</span>, &lt;Section: balence&gt;)</span><br></pre></td></tr></table></figure>
-<h2 id="DEFAULT"><a href="#DEFAULT" class="headerlink" title="DEFAULT"></a>DEFAULT</h2><p><code>[DEFAULT]</code> 一般包含 ini 格式配置文件的默认项，所以 <code>configparser</code> 部分方法会自动跳过这个 <code>section</code> 。<br>前面已经提到 <code>sections()</code> 是获取不到的，还有删除方法对 <code>[DEFAULT]</code> 也无效：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&gt;&gt;&gt; config.remove_section(&apos;DEFAULT&apos;)</span><br><span class="line">False</span><br><span class="line">&gt;&gt;&gt; config.clear()</span><br><span class="line">&gt;&gt;&gt; &apos;DEFAULT&apos; in config</span><br><span class="line">True</span><br><span class="line">&gt;&gt;&gt; &apos;ForwardX11&apos; in config[&apos;DEFAULT&apos;]</span><br><span class="line">True</span><br><span class="line">&gt;&gt;&gt; config.sections()</span><br><span class="line">[]123456789</span><br></pre></td></tr></table></figure>
-<p>但指定删除和修改 [DEFAULT] 里的 keys &amp; values 是可以的：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&gt;&gt;&gt; config.remove_option(&apos;DEFAULT&apos;, &apos;ForwardX11&apos;)</span><br><span class="line">True</span><br><span class="line">&gt;&gt;&gt; config.set(&apos;DEFAULT&apos;, &apos;ForwardX11&apos;,&apos;no&apos;)</span><br><span class="line">&gt;&gt;&gt; config[&apos;DEFAULT&apos;][&apos;ForwardX11&apos;]</span><br><span class="line">&apos;no&apos;12345</span><br></pre></td></tr></table></figure>
-<p>还有个特殊的是，has_section() 也无效，可以和 in 区别使用</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&gt;&gt;&gt; config.has_section(&apos;DEFAULT&apos;)</span><br><span class="line">False</span><br><span class="line">&gt;&gt;&gt; &apos;DEFAULT&apos; in config</span><br><span class="line">True</span><br></pre></td></tr></table></figure>
-<h2 id="Xshell-配置文件读写"><a href="#Xshell-配置文件读写" class="headerlink" title="Xshell 配置文件读写"></a>Xshell 配置文件读写</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> configparser</span><br><span class="line"></span><br><span class="line"><span class="comment"># 字典序列化为 ini 文件</span></span><br><span class="line">data = &#123;</span><br><span class="line">    <span class="string">"CONNECTION"</span>: &#123;</span><br><span class="line">        <span class="string">"Port"</span>: <span class="string">"22"</span>,</span><br><span class="line">        <span class="string">"Host"</span>: <span class="string">"172.16.100.11"</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="string">"TERMINAL"</span>: &#123;</span><br><span class="line">        <span class="string">"ScrollbackSize"</span>: <span class="string">"200000"</span>,</span><br><span class="line">        <span class="string">"InitKeypadMode"</span>: <span class="string">"2"</span>,</span><br><span class="line">        <span class="string">"TerminalNameForEcho"</span>: <span class="string">"Xshell"</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="string">"TERMINAL:WINDOW"</span>: &#123;</span><br><span class="line">        <span class="string">"ColorScheme"</span>: <span class="string">"New Black"</span>,</span><br><span class="line">        <span class="string">"CursorBlinkInterval"</span>: <span class="string">"400"</span>,</span><br><span class="line">        <span class="string">"FontSize"</span>: <span class="string">"12"</span>,</span><br><span class="line">        <span class="string">"CursorBlink"</span>: <span class="string">"1"</span>,</span><br><span class="line">        <span class="string">"FontFace"</span>: <span class="string">"Consolas"</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="string">"CONNECTION:AUTHENTICATION"</span>: &#123;</span><br><span class="line">        <span class="string">"UserName"</span>: <span class="string">"root"</span>,</span><br><span class="line">        <span class="string">"Password"</span>: <span class="string">"123456"</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">parser = configparser.ConfigParser()</span><br><span class="line">parser.read_dict(data)</span><br><span class="line">parser.write(open(<span class="string">"output.ini"</span>, <span class="string">"w+"</span>))</span><br><span class="line"></span><br><span class="line"><span class="comment"># 读取 ini 文件为字典</span></span><br><span class="line">config = configparser.ConfigParser()</span><br><span class="line">config.read(<span class="string">'output.ini'</span>)</span><br><span class="line">data = config._sections</span><br><span class="line">print(data)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Xshell 配置文件</span></span><br><span class="line"><span class="comment"># data = &#123;</span></span><br><span class="line"><span class="comment">#     "CONNECTION": &#123;"Port": "22", "Host": "172.16.100.11"&#125;, </span></span><br><span class="line"><span class="comment">#     "TERMINAL": &#123;"ScrollbackSize": "200000", "InitKeypadMode": "2", "TerminalNameForEcho": "Xshell"&#125;,</span></span><br><span class="line"><span class="comment">#     "TERMINAL:WINDOW": &#123;"ColorScheme": "New Black", "CursorBlinkInterval": "400", "FontSize": "12", "CursorBlink": "1", "FontFace": "Consolas"&#125;,</span></span><br><span class="line"><span class="comment">#     "CONNECTION:AUTHENTICATION": &#123;"UserName": "root","Password": "123456"&#125;</span></span><br><span class="line"><span class="comment"># &#125;</span></span><br></pre></td></tr></table></figure>
-
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">Hello world!</span><br><span class="line"></span><br><span class="line">POST</span><br><span class="line">GET([(<span class="string">'id'</span>, <span class="string">'5'</span>), (<span class="string">'name'</span>, <span class="string">'yangjinheng'</span>), (<span class="string">'keyword'</span>, <span class="string">'jinhengyang'</span>), (<span class="string">'comment'</span>, <span class="string">'1,a,c'</span>), (<span class="string">'age'</span>, <span class="string">'29'</span>), (<span class="string">'age'</span>, <span class="string">'18'</span>)])</span><br><span class="line">MultiDict([(<span class="string">'post'</span>, <span class="string">'is_a_post'</span>)])</span><br><span class="line">/index.asp</span><br><span class="line">NestedMultiDict([(<span class="string">'id'</span>, <span class="string">'5'</span>), (<span class="string">'name'</span>, <span class="string">'yangjinheng'</span>), (<span class="string">'keyword'</span>, <span class="string">'jinhengyang'</span>), (<span class="string">'comment'</span>, <span class="string">'1,a,c'</span>), (<span class="string">'age'</span>, <span class="string">'29'</span>), (<span class="string">'age'</span>, <span class="string">'18'</span>), (<span class="string">'post'</span>, <span class="string">'is_a_post'</span>)])</span><br><span class="line"></span><br><span class="line">&lt;webob.headers.EnvironHeaders object at <span class="number">0x0000020045F21D30</span>&gt;</span><br></pre></td></tr></table></figure>
           
         
       
@@ -743,7 +659,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://yangjinheng.github.io/2017/09/23/python/14.argparse参数解析器/">
+    <link itemprop="mainEntityOfPage" href="https://yangjinheng.github.io/2017/10/04/python/25.sqlalchemy/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Jin Heng">
@@ -762,7 +678,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/09/23/python/14.argparse参数解析器/" itemprop="url">argparse参数解析器</a></h1>
+                <a class="post-title-link" href="/2017/10/04/python/25.sqlalchemy/" itemprop="url">sqlalchey数据库ORM框架</a></h1>
         
 
         <div class="post-meta">
@@ -774,8 +690,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-23T00:00:00+08:00">
-                2017-09-23
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-04T00:00:00+08:00">
+                2017-10-04
               </time>
             
 
@@ -836,239 +752,156 @@
       
         
           
-            <h2 id="Argparse简介"><a href="#Argparse简介" class="headerlink" title="Argparse简介"></a>Argparse简介</h2><ul>
-<li><code>argparse</code> 是一个用于命令项选项与参数解析的模块</li>
-<li>在程序中定义需要的参数和修饰，模块就会从 <code>sys.argv</code> 中解析出这些参数，不符合定义则抛出异常</li>
-<li>它还可以根据定义自动生成命令行下 <code>-h</code> 帮助信息。</li>
+            <h2 id="导入库"><a href="#导入库" class="headerlink" title="导入库"></a>导入库</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> sqlalchemy <span class="keyword">import</span> create_engine,func,Column,Integer,String</span><br><span class="line"><span class="keyword">from</span> sqlalchemy.ext.declarative <span class="keyword">import</span> declarative_base</span><br><span class="line"><span class="keyword">from</span> sqlalchemy.orm <span class="keyword">import</span> sessionmaker</span><br></pre></td></tr></table></figure>
+<h2 id="创建连接"><a href="#创建连接" class="headerlink" title="创建连接"></a>创建连接</h2><ul>
+<li>creatr_engine 语法</li>
 </ul>
-<h3 id="POSIX约定"><a href="#POSIX约定" class="headerlink" title="POSIX约定"></a>POSIX约定</h3><p>下面是POSIX标准中关于程序名、参数的约定：</p>
+<figure class="highlight"><table><tr><td class="code"><pre><span class="line">creatr_engine(mysql+pymysql://&lt;username&gt;:&lt;password&gt;@&lt;host&gt;/&lt;dbname&gt;[?&lt;options&gt;])</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">echo：是否开启回显</span><br><span class="line">isolation_level：事务(READ COMMITTED,READ UNCOMMITTED,REPEATABLE READ,SERIALIZABLE,AUTOCOMMIT)</span><br></pre></td></tr></table></figure>
 <ul>
-<li>程序名不宜少于2个字符且不多于9个字符；</li>
-<li>程序名应只包含小写字母和阿拉伯数字；</li>
-<li>选项名应该是单字符活单数字，且以短横<code>-</code>为前綴；</li>
-<li>多个不需要选项参数的选项，可以合并。例如：<code>foo -a -b -c</code> 可以合并书写为 <code>foo -abc</code></li>
-<li>选项与其参数之间用空白符隔开；</li>
-<li>选项参数不可选。</li>
-<li>若选项参数有多值，要将其并为一个字串传进来。譬如：<code>myprog -u &quot;arnold,joe,jane&quot;</code>。这种情况下，需要自己解决这些参数的分离问题。</li>
-<li>选项应该在操作数出现之前出现。</li>
-<li>特殊参数<code>--</code>指明所有参数都结束了，其后任何参数都认为是操作数。</li>
-<li>选项如何排列没有什么关系，但对互相排斥的选项，如果一个选项的操作结果覆盖其他选项的操作结果时，最后一个选项起作用；如果选项重复，则顺序处理。</li>
-<li>允许操作数的顺序影响程序行为，但需要作文档说明。</li>
-<li>读写指定文件的程序应该将单个参数’-‘作为有意义的标准输入或输出来对待。</li>
+<li>连接示例</li>
 </ul>
-<h3 id="GNU选项"><a href="#GNU选项" class="headerlink" title="GNU选项"></a>GNU选项</h3><p>GNU鼓励程序员使用–help、–verbose等形式的长选项。这些选项不仅不与POSIX约定冲突，而且容易记忆，另外也提供了在所有GNU工具之间保持一致性的机会。GNU长选项有自己的约定：</p>
-<ul>
-<li>对于已经遵循POSIX约定的GNU程序，每个短选项都有一个对应的长选项。</li>
-<li>额外针对GNU的长选项不需要对应的短选项，仅仅推荐要有。</li>
-<li>长选项可以缩写成保持惟一性的最短的字串。</li>
-<li>选项参数与长选项之间或通过空白字符活通过一个’=’来分隔。</li>
-<li>选项参数是可选的（只对短选项有效）。</li>
-<li>长选项允许以一个短横线为前缀。</li>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">engine = create_engine(<span class="string">"mysql+pymysql://root:Jinheng890821@172.16.100.252/test?charset=utf8mb4"</span>, echo=<span class="keyword">True</span>,isolation_level=<span class="string">"REPEATABLE READ"</span>)</span><br></pre></td></tr></table></figure>
+<h2 id="创建映射"><a href="#创建映射" class="headerlink" title="创建映射"></a>创建映射</h2><ul>
+<li>创建ORM基类</li>
 </ul>
-<h2 id="创建解析器"><a href="#创建解析器" class="headerlink" title="创建解析器"></a>创建解析器</h2><p><code>argparse.ArgumentParser()</code>是参数解析器的类，实例化它可以得到一个参数解析器，下面是实例化参数。</p>
-<p>语法：<code>argparse.ArgumentParser(prog=None, usage=None, description=None, epilog=None, parents=[], formatter_class=&lt;class &#39;argparse.HelpFormatter&#39;&gt;, prefix_chars=&#39;-&#39;, fromfile_prefix_chars=None, argument_default=None, conflict_handler=&#39;error&#39;, add_help=True, allow_abbrev=True)</code></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">Base = declarative_base()</span><br></pre></td></tr></table></figure>
 <ul>
-<li>创建解析器对象</li>
+<li>创建表类</li>
 </ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">10</span>]:  parser = argparse.ArgumentParser()</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">class Student(Base):                       # 创建实体类</span><br><span class="line">    __tablename__ = &apos;student&apos;              # 指定表名</span><br><span class="line">    id = Column(Integer,primary_key=True)  # 定义属性对应字段</span><br><span class="line">    name = Column(String(64))</span><br><span class="line">    age = Column(Integer)</span><br><span class="line">    #age = Column(&apos;age&apos;,Intger)            # 第一参数是字段名，如果和属性名不一致，一定要指定</span><br><span class="line"></span><br><span class="line">    def __repr__(self):</span><br><span class="line">        return &apos;%s id =%s name=%s age=%s&apos; % (self.__class__.__name__,self.id,self.name,self.age)</span><br></pre></td></tr></table></figure>
 <ul>
-<li>可用参数</li>
+<li>通过基类删除继承自 <code>Base</code> 的所有表，在 <code>engine</code> 上执行</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">Base.metadata.drop_all(engine)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>通过基类创建继承自 <code>Base</code> 的所有表，在 <code>engine</code> 上执行</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">Base.metadata.create_all(engine)</span><br></pre></td></tr></table></figure>
+<h2 id="创建会话"><a href="#创建会话" class="headerlink" title="创建会话"></a>创建会话</h2><ul>
+<li>创建会话</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">Session_class = sessionmaker(bind=engine)    <span class="comment">#创建与数据库会话的类，这里返回的是一个类</span></span><br><span class="line">session = Session_class()                    <span class="comment">#生成 session 实例</span></span><br></pre></td></tr></table></figure>
+<h2 id="插入数据"><a href="#插入数据" class="headerlink" title="插入数据"></a>插入数据</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">yangjinheng = Student(name=<span class="string">'yangjinheng'</span>,age=<span class="number">29</span>)    <span class="comment"># 实例化 Student 表类</span></span><br><span class="line">liying = Student(name=<span class="string">'liying'</span>,age=<span class="number">27</span>)</span><br><span class="line"></span><br><span class="line">print(yangjinheng.name,yangjinheng.age)             <span class="comment"># 打印表的字段，此时数据没有被提交</span></span><br><span class="line">print(liying.name,liying.age)                       <span class="comment"># 如果没有执行 commit() 则数据会被回滚</span></span><br><span class="line"></span><br><span class="line">session.commit()                                    <span class="comment"># 将数据提交到数据库</span></span><br></pre></td></tr></table></figure>
+<h2 id="查询数据"><a href="#查询数据" class="headerlink" title="查询数据"></a>查询数据</h2><ul>
+<li>语法</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">data = session.query(Student).filter_by(id=<span class="number">2</span>)  <span class="comment"># 对 session 查询表 Student 并过滤，惰性返回一个列表</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>query对象方法</li>
 </ul>
 <table>
 <thead>
 <tr>
-<th>参数</th>
-<th>含义</th>
+<th>方法</th>
+<th>作用</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>prog</td>
-<td>文件名，默认为 sys.argv[0]，用来在help信息中描述程序的名称</td>
+<td><code>.filter_by(**kwargs)</code></td>
+<td>根据条件过滤，如 <code>session.query(MyClass).filter_by(name = &#39;some name&#39;, id = 5)</code></td>
 </tr>
 <tr>
-<td>usage</td>
-<td>描述程序用途的字符串</td>
+<td><code>.filter(*criterion)</code></td>
+<td>根据条件过滤，比<code>.filter_by()</code>灵活，支持表达式，如 <code>session.query(MyClass).filter(MyClass.name == &#39;some name&#39;, MyClass.id &gt; 5)</code></td>
 </tr>
 <tr>
-<td>description</td>
-<td>help 信息前显示的信息</td>
+<td><code>.order_by(*criterion)</code></td>
+<td>与 SQL 的 <code>ORDER BY</code> 类似，默认升序，需要时可以 <code>sqlalchemy.desc()</code> 降序</td>
 </tr>
 <tr>
-<td>epilog</td>
-<td>help 信息之后显示的信息</td>
+<td><code>.limit(limit)</code></td>
+<td>与 SQL 的 <code>LIMIT</code> 类似</td>
 </tr>
 <tr>
-<td>parents</td>
-<td>由 ArgumentParser 对象组成的列表，它们的 arguments 选项会被包含到新 ArgumentParser 对象中</td>
+<td><code>.offset(offset)</code></td>
+<td>与 SQL 的 <code>OFFSET</code> 类似</td>
 </tr>
 <tr>
-<td>formatter_class</td>
-<td>help 信息输出的格式，为了美观…</td>
+<td><code>.all()</code></td>
+<td>返回匹配查询的所有对象</td>
 </tr>
 <tr>
-<td>prefix_chars</td>
-<td>参数前缀，默认为 ‘-‘，（最好不要修改）</td>
+<td><code>.one()</code></td>
+<td>返回匹配查询的唯一一个（下一个）对象</td>
 </tr>
 <tr>
-<td>fromfile_prefix_chars</td>
-<td>前缀字符，放在文件名之前</td>
+<td><code>.first()</code></td>
+<td>返回匹配查询的第一个对象</td>
 </tr>
 <tr>
-<td>argument_default</td>
-<td>设置一个全局的选项的缺省值，一般每个选项单独设置，基本没用</td>
+<td><code>join(*props, **kwargs)</code></td>
+<td>按给定的 JOIN 条件创建 SQL JOIN 语句</td>
 </tr>
 <tr>
-<td>conflict_handler</td>
-<td>解决冲突的策略，默认情况下冲突会发生错误，（最好不要修改）</td>
+<td><code>update(values, synchronize_session=&#39;evaluate&#39;, update_args=None)</code></td>
+<td>批量更新行</td>
 </tr>
 <tr>
-<td>add_help</td>
-<td>是否增加 -h/-help 选项 (默认为True)，一般help信息都是必须的</td>
-</tr>
-<tr>
-<td>allow_abbrev</td>
-<td>允许长选项的缩写，默认为True</td>
+<td><code>delete(synchronize_session=&#39;evaluate&#39;)</code></td>
+<td>批量删除行</td>
 </tr>
 </tbody>
 </table>
-<h2 id="配置解析器"><a href="#配置解析器" class="headerlink" title="配置解析器"></a>配置解析器</h2><p>向参数解析器添加一个参数，和参数的一些修饰信息，决定了如何从命令行中解析这个参数。用法如下：</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">ArgumentParser.add_argument(name <span class="keyword">or</span> flags...</span><br><span class="line">                            [, action=<span class="string">'...'</span>]</span><br><span class="line">                            [, nargs=<span class="string">'...'</span>]</span><br><span class="line">                            [, const=<span class="string">'...'</span>]</span><br><span class="line">                            [, default=<span class="string">'...'</span>]</span><br><span class="line">                            [, type=<span class="string">'...'</span>]</span><br><span class="line">                            [, choices=<span class="string">'...'</span>]</span><br><span class="line">                            [, required=<span class="string">'...'</span>]</span><br><span class="line">                            [, help=<span class="string">'...'</span>]</span><br><span class="line">                            [, metavar=<span class="string">'...'</span>]</span><br><span class="line">                            [, dest=<span class="string">'...'</span>]</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
 <ul>
-<li>name or flags：参数，分为两种</li>
+<li>filter_by 与 filter 过滤</li>
 </ul>
-<table>
-<thead>
-<tr>
-<th>参数</th>
-<th>类型</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>name</td>
-<td>位置参数，用引号括住的字符串，在程序中引用时候直接使用 <strong>参数解析器对象.参数名</strong> 形式引用</td>
-</tr>
-<tr>
-<td>flags</td>
-<td>可选参数，以 - 开头的字符串，–开头表示全称，在命令行传参时候，两种方式都可以。但在程序中引用时候需要使用   <strong>参数解析器对象.参数全称</strong> 形式引用</td>
-</tr>
-</tbody>
-</table>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">data = session.query(Student).filter_by(age=<span class="number">29</span>).all()          <span class="comment"># filter_by不支持 &lt;&gt;</span></span><br><span class="line">print(data)</span><br><span class="line"></span><br><span class="line">data = session.query(Student).filter(Student.age &gt; <span class="number">28</span>).all()</span><br><span class="line">print(data)</span><br></pre></td></tr></table></figure>
 <blockquote>
-<p> 位置参数：</p>
+<p>filter 可以像SQL一样使用&lt;&gt;等条件，引用字段名称时候需要指明表名称（表类），等值比较需要使用 ==。</p>
 </blockquote>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> argparse    <span class="comment">#导入模块</span></span><br><span class="line">parser = argparse.ArgumentParser()    <span class="comment">#定义一个参数解析器对象</span></span><br><span class="line">parser.add_argument(<span class="string">'path'</span>)    <span class="comment">#定义一个位置参数</span></span><br><span class="line"></span><br><span class="line">args = parser.parse_args()    <span class="comment">#参数解析结果</span></span><br><span class="line">print(args)</span><br><span class="line">print(args.path)    <span class="comment">#打印某个参数接收到的值</span></span><br></pre></td></tr></table></figure>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">[python@localhost test]$ python args.py /etc/init.d/</span><br><span class="line">Namespace(path=<span class="string">'/etc/init.d/'</span>)</span><br><span class="line">/etc/init.d/</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>可选参数：</p>
-</blockquote>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> argparse</span><br><span class="line">parser = argparse.ArgumentParser()</span><br><span class="line">parser.add_argument(<span class="string">'-p'</span>,<span class="string">'--path'</span>)</span><br><span class="line"></span><br><span class="line">args = parser.parse_args()</span><br><span class="line">print(args)</span><br><span class="line">print(args.path)</span><br></pre></td></tr></table></figure>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">[python@localhost test]$ python args.py -p /etc/init.d/</span><br><span class="line">Namespace(path=<span class="string">'/etc/init.d/'</span>)</span><br><span class="line">/etc/init.d/</span><br></pre></td></tr></table></figure>
 <ul>
-<li>action：参数动作，表示从命令行接收到该参数时候如何处理，默认为 store。</li>
+<li>使用主键查询</li>
 </ul>
-<table>
-<thead>
-<tr>
-<th>可用值</th>
-<th>含义</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>store</td>
-<td>设置参数值为命令行获取到该参数后提供的子参数</td>
-</tr>
-<tr>
-<td>store_const</td>
-<td>如果命令行获取到该参数，则设置参数值为 const 所保存的值</td>
-</tr>
-<tr>
-<td>store_true</td>
-<td>如果命令行获取到该参数，则设置参数值为True</td>
-</tr>
-<tr>
-<td>store_false</td>
-<td>如果命令行获取到该参数，则设置参数值为False</td>
-</tr>
-<tr>
-<td>append</td>
-<td>将该参数后的提供的子参数放入列表，例如：test.py -s 1 -s 2 -s 3，收集为 s=[‘1’, ‘2’, ‘3’]</td>
-</tr>
-<tr>
-<td>append_const</td>
-<td>每从命令行获取到该参数一次，就将 const 所保存的值放入列表一次</td>
-</tr>
-<tr>
-<td>count</td>
-<td>如果命令行获取到该参数，则设置参数值为 参数出现的次数</td>
-</tr>
-<tr>
-<td>version</td>
-<td>如果命令行获取到该参数，则显示 version 所保存的值</td>
-</tr>
-</tbody>
-</table>
-<blockquote>
-<p>定义一个可选参数</p>
-</blockquote>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> argparse</span><br><span class="line">parser = argparse.ArgumentParser()</span><br><span class="line">parser.add_argument(<span class="string">'-p'</span>,<span class="string">'--path'</span>,action=<span class="string">'store_true'</span>)</span><br><span class="line"></span><br><span class="line">args = parser.parse_args()</span><br><span class="line">print(args)</span><br><span class="line">print(args.path)</span><br></pre></td></tr></table></figure>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">[python@localhost test]$ python args.py -p</span><br><span class="line">Namespace(path=<span class="keyword">True</span>)</span><br><span class="line"><span class="keyword">True</span></span><br><span class="line">[python@localhost test]$ python args.py </span><br><span class="line">Namespace(path=<span class="keyword">False</span>)</span><br><span class="line"><span class="keyword">False</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">data = session.query(Student).get(<span class="number">1</span>)     <span class="comment">#获取主键为1的记录</span></span><br><span class="line">print(data)</span><br></pre></td></tr></table></figure>
 <ul>
-<li>nargs：参数数量</li>
+<li>多条件查询</li>
 </ul>
-<p>需要注意的是 <code>*、+、?</code> 需要用引号括起来，而数字不用。</p>
-<table>
-<thead>
-<tr>
-<th>符号</th>
-<th>含义</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>‘*’</td>
-<td>0个或多个，可以没有</td>
-</tr>
-<tr>
-<td>‘+’</td>
-<td>1个或多个，至少有1个</td>
-</tr>
-<tr>
-<td>‘?’</td>
-<td>0个或1个，如果未能从命令行获得，则从 default 定义处获取。</td>
-</tr>
-<tr>
-<td>N</td>
-<td>N个，只接受这个数量的参数，多了少了都不行</td>
-</tr>
-</tbody>
-</table>
-<blockquote>
-<p>有默认值的位置参数</p>
-</blockquote>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> argparse</span><br><span class="line">parser = argparse.ArgumentParser()</span><br><span class="line">parser.add_argument(<span class="string">'path'</span>,nargs=<span class="string">'?'</span>,default=<span class="string">'.'</span>)</span><br><span class="line"></span><br><span class="line">args = parser.parse_args()</span><br><span class="line">print(args)</span><br><span class="line">print(args.path)</span><br></pre></td></tr></table></figure>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">[python@localhost test]$ python args.py </span><br><span class="line">Namespace(path=<span class="string">'.'</span>)</span><br><span class="line">.</span><br><span class="line">[python@localhost test]$ python args.py /etc/init.d/</span><br><span class="line">Namespace(path=<span class="string">'/etc/init.d/'</span>)</span><br><span class="line">/etc/init.d/</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 与条件</span></span><br><span class="line">data = session.query(Student).filter((Student.age &gt; <span class="number">28</span>) &amp; (Student.id &lt; <span class="number">10</span>)).all()</span><br><span class="line">print(data)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 或条件</span></span><br><span class="line">data = session.query(Student).filter((Student.age &gt; <span class="number">28</span>) | (Student.id &lt; <span class="number">10</span>)).all()</span><br><span class="line">print(data)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 非条件</span></span><br><span class="line">data = session.query(Student).filter(~(Student.id == <span class="number">1</span>)).all()</span><br><span class="line">print(data)</span><br></pre></td></tr></table></figure>
 <ul>
-<li>choices：设置参数值的范围，如果 <code>choices</code> 中的类型不是字符串，记得指定 <code>type</code></li>
+<li>in 和 not in</li>
 </ul>
-<blockquote>
-<p>可选值的位置参数</p>
-</blockquote>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> argparse</span><br><span class="line">parser = argparse.ArgumentParser()</span><br><span class="line">parser.add_argument(<span class="string">'path'</span>,choices=(<span class="string">'/tmp'</span>,<span class="string">'/etc'</span>))</span><br><span class="line"></span><br><span class="line">args = parser.parse_args()</span><br><span class="line">print(args)</span><br><span class="line">print(args.path)</span><br></pre></td></tr></table></figure>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">[python@localhost test]$ python args.py /etc</span><br><span class="line">Namespace(path=<span class="string">'/etc'</span>)</span><br><span class="line">/etc</span><br><span class="line">[python@localhost test]$ python args.py /opt</span><br><span class="line">usage: args.py [-h] &#123;/tmp,/etc&#125;</span><br><span class="line">args.py: error: argument path: invalid choice: <span class="string">'/opt'</span> (choose <span class="keyword">from</span> <span class="string">'/tmp'</span>, <span class="string">'/etc'</span>)</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># in 成员查询</span><br><span class="line">list1 = [&apos;yangjinheng&apos;,&apos;yangzhongxiao&apos;,&apos;yangyanjun&apos;]</span><br><span class="line">data = session.query(Student).filter(Student.name.in_(list1)).all()</span><br><span class="line">print(data)</span><br><span class="line"></span><br><span class="line"># not in 成员查询</span><br><span class="line">list1 = [&apos;yangjinheng&apos;,&apos;yangzhongxiao&apos;,&apos;yangyanjun&apos;]</span><br><span class="line">data = session.query(Student).filter(~Student.name.in_(list1)).all()</span><br><span class="line">print(data)</span><br></pre></td></tr></table></figure>
 <ul>
-<li>type：参数类型，默认为 <code>str</code></li>
-<li>metavar：帮助信息中显示的参数名称</li>
-<li>dest：可作为参数名，如果没有指定该参数则默认为选项名去掉前缀后作为参数名，对于位置参数无效</li>
-<li>const：保存一个常量</li>
-<li>default：参数的默认值</li>
-<li>required：是否必选，只针对可选参数，对位置参数无效</li>
-<li>version：保存版本信息</li>
-<li>help： help 信息</li>
+<li>like</li>
 </ul>
-<h2 id="其他方法"><a href="#其他方法" class="headerlink" title="其他方法"></a>其他方法</h2><p>.add_argument_group<br>.add_mutually_exclusive_group<br>.add_subparsers<br>.convert_arg_line_to_args<br>.error<br>.exit<br>.format_help<br>.format_usage<br>.get_default<br>.parse_args<br>.parse_known_args<br>.print_help<br>.print_usage<br>.register<br>.set_defaults<br>.print_help</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># like</span></span><br><span class="line">data = session.query(Student).filter(~Student.name.like(<span class="string">'yangjin%'</span>)).all()</span><br><span class="line">print(data)</span><br><span class="line"></span><br><span class="line"><span class="comment"># ilike</span></span><br><span class="line">data = session.query(Student).filter(~Student.name.ilike(<span class="string">'yangjin%'</span>)).all()</span><br><span class="line">print(data)</span><br></pre></td></tr></table></figure>
+<h2 id="修改数据"><a href="#修改数据" class="headerlink" title="修改数据"></a>修改数据</h2><ul>
+<li>首先查询数据生成查询对象，对查询的对象进行修改</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">data = session.query(Student).get(<span class="number">2</span>)     <span class="comment"># 根据主键查询数据</span></span><br><span class="line">data.name = <span class="string">'yangzhongxiao'</span>              <span class="comment"># 修改查询到的数据</span></span><br><span class="line">data.age = <span class="number">28</span>                            <span class="comment"># 修改查询到的数据</span></span><br><span class="line">session.add(data)                        <span class="comment"># 新增一个修改</span></span><br><span class="line">session.commit()                         <span class="comment"># 提交到修改</span></span><br><span class="line">data = session.query(Student).get(<span class="number">2</span>)     <span class="comment"># 再次查询数据</span></span><br><span class="line">print(data)</span><br></pre></td></tr></table></figure>
+<h2 id="删除数据"><a href="#删除数据" class="headerlink" title="删除数据"></a>删除数据</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">data = session.query(Student).filter(Student.name == <span class="string">'xuwei'</span>).delete()</span><br><span class="line">session.commit()</span><br><span class="line"></span><br><span class="line">data = session.query(Student).all()</span><br><span class="line">print(data)</span><br></pre></td></tr></table></figure>
+<h2 id="字段排序"><a href="#字段排序" class="headerlink" title="字段排序"></a>字段排序</h2><ul>
+<li>默认升序</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">data = session.query(Student).order_by(Student.age).all()</span><br><span class="line">print(data)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>降序</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">data = session.query(Student).order_by(Student.age.desc()).all()</span><br><span class="line">print(data)</span><br></pre></td></tr></table></figure>
+<h2 id="消费方法"><a href="#消费方法" class="headerlink" title="消费方法"></a>消费方法</h2><p><code>query</code> 方法获得的是一个惰性求值的类似生成器，下面的方法能对这个生成器立即求值</p>
+<ul>
+<li>条目计数</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">data = session.query(Student).count()</span><br><span class="line">print(data)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>获取所有数据</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">data = session.query(Student).all()</span><br><span class="line">print(data)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>立即获得一条数据</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">data = session.query(Student).limit(<span class="number">1</span>).one()</span><br><span class="line">print(data)</span><br></pre></td></tr></table></figure>
+<h2 id="分组聚合"><a href="#分组聚合" class="headerlink" title="分组聚合"></a>分组聚合</h2><ul>
+<li>聚合</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">data = session.query(func.count(Student.id)).scalar()</span><br><span class="line">print(data)</span><br><span class="line"></span><br><span class="line">data = session.query(func.max(Student.age)).scalar()</span><br><span class="line">print(data)</span><br><span class="line"></span><br><span class="line">data = session.query(func.min(Student.age)).scalar()</span><br><span class="line">print(data)</span><br><span class="line"></span><br><span class="line">data = session.query(func.avg(Student.age)).scalar()</span><br><span class="line">print(data)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>分组</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">mysql&gt; SELECT * FROM student;</span><br><span class="line">+----+---------------+------+--------+</span><br><span class="line">| id | name          | age  | gender |</span><br><span class="line">+----+---------------+------+--------+</span><br><span class="line">|  <span class="number">1</span> | yangjinheng   |   <span class="number">29</span> | M      |</span><br><span class="line">|  <span class="number">2</span> | yangzhongxiao |   <span class="number">28</span> | M      |</span><br><span class="line">|  <span class="number">3</span> | liying        |   <span class="number">28</span> | F      |</span><br><span class="line">|  <span class="number">4</span> | duanpanpan    |   <span class="number">27</span> | F      |</span><br><span class="line">|  <span class="number">5</span> | mayongliang   |   <span class="number">38</span> | M      |</span><br><span class="line">+----+---------------+------+--------+</span><br><span class="line"><span class="number">5</span> rows <span class="keyword">in</span> set (<span class="number">0.00</span> sec)</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">data = session.query(Student.gender,func.count(Student.gender)).group_by(Student.gender).all()</span><br><span class="line">print(data)</span><br></pre></td></tr></table></figure>
 
           
         
@@ -1108,7 +941,7 @@
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/28/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/28/">28</a><span class="page-number current">29</span><a class="page-number" href="/page/30/">30</a><span class="space">&hellip;</span><a class="page-number" href="/page/38/">38</a><a class="extend next" rel="next" href="/page/30/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/page/28/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/28/">28</a><span class="page-number current">29</span><a class="page-number" href="/page/30/">30</a><span class="space">&hellip;</span><a class="page-number" href="/page/43/">43</a><a class="extend next" rel="next" href="/page/30/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1156,7 +989,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">75</span>
+                  <span class="site-state-item-count">86</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

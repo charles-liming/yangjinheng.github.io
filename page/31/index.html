@@ -311,7 +311,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://yangjinheng.github.io/2017/09/20/python/11.datetime日期时间/">
+    <link itemprop="mainEntityOfPage" href="https://yangjinheng.github.io/2017/10/01/python/22.协程和异步/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Jin Heng">
@@ -330,7 +330,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/09/20/python/11.datetime日期时间/" itemprop="url">datetime日期时间模块</a></h1>
+                <a class="post-title-link" href="/2017/10/01/python/22.协程和异步/" itemprop="url">协程和异步</a></h1>
         
 
         <div class="post-meta">
@@ -342,8 +342,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-20T00:00:00+08:00">
-                2017-09-20
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-01T00:00:00+08:00">
+                2017-10-01
               </time>
             
 
@@ -404,488 +404,140 @@
       
         
           
-            <h2 id="datetime模块"><a href="#datetime模块" class="headerlink" title="datetime模块"></a>datetime模块</h2><p>datetime 模块提供了操作日期和时间功能, 该模块提供了五种核心对象：</p>
+            <h1 id="协程"><a href="#协程" class="headerlink" title="协程"></a>协程</h1><p>协程，又称微线程，英文名Coroutine。一句话说明什么是线程：协程是一种用户态的轻量级线程。</p>
+<p>协程拥有自己的寄存器上下文和栈。协程调度切换时，将寄存器上下文和栈保存到其他地方，在切回来的时候，恢复先前保存的寄存器上下文和栈。因此：协程能保留上一次调用时的状态（即所有局部状态的一个特定组合），每次过程重入时，就相当于进入上一次调用的状态，换种说法：进入上一次离开时所处逻辑流的位置。</p>
+<p>优点：</p>
 <ul>
-<li>datetime(时间日期类型)</li>
-<li>date（日期类型）</li>
-<li>time（时间类型）</li>
-<li>tzinfo（时区类型）</li>
-<li>timedelta（时间差类型）</li>
+<li>无需线程上下文切换的开销</li>
+<li>无需原子操作锁定及同步的开销，”原子操作(atomic operation)是不需要synchronized”，所谓原子操作是指不会被线程调度机制打断的操作；这种操作一旦开始，就一直运行到结束，中间不会有任何 context switch （切换到另一个线程）。原子操作可以是一个步骤，也可以是多个操作步骤，但是其顺序是不可以被打乱，或者切割掉只执行部分。视作整体是原子性的核心。</li>
+<li>方便切换控制流，简化编程模型</li>
+<li>高并发+高扩展性+低成本：一个CPU支持上万的协程都不是问题。所以很适合用于高并发处理。</li>
+</ul>
+<p>缺点：</p>
+<ul>
+<li>无法利用多核资源：协程的本质是个单线程,它不能同时将 单个CPU 的多个核用上,协程需要和进程配合才能运行在多CPU上.当然我们日常所编写的绝大部分应用都没有这个必要，除非是cpu密集型应用。</li>
+<li>进行阻塞（Blocking）操作（如I/O时）会阻塞掉整个程序</li>
+</ul>
+<blockquote>
+<p>  并行：多个任务，每个任务在一颗 CPU 上执行</p>
+<p>  并发：多个任务同时在一颗 CPU 上并发执行</p>
+</blockquote>
+<h2 id="yield语句"><a href="#yield语句" class="headerlink" title="yield语句"></a>yield语句</h2><ul>
+<li>生成器</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">gen</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">yield</span> <span class="string">'hello'</span></span><br><span class="line">    <span class="keyword">yield</span> <span class="string">'world'</span></span><br><span class="line"></span><br><span class="line">g = gen()</span><br><span class="line">print(next(g))</span><br><span class="line">print(next(g))</span><br></pre></td></tr></table></figure>
+<ul>
+<li>yeild 关键字在 = 右边作为表达式，可以被接收 send 的值</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">coro</span><span class="params">()</span>:</span></span><br><span class="line">    hello = <span class="keyword">yield</span> <span class="string">"hello"</span></span><br><span class="line">    <span class="keyword">yield</span> hello</span><br><span class="line"></span><br><span class="line">c = coro()</span><br><span class="line">print(next(c))</span><br><span class="line">print(c.send(<span class="string">"world"</span>))</span><br></pre></td></tr></table></figure>
+<h2 id="yield协程"><a href="#yield协程" class="headerlink" title="yield协程"></a>yield协程</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">1.  协程需要使用 send(None) 或者 next(coroutine) 来预激才能启动</span><br><span class="line">2.  在 yield 处协程会暂停执行</span><br><span class="line">3.  可以通过 coroutine.send(value) 来给协程发送值，发送的值会赋值给 yield 表达式左边的变量值</span><br><span class="line">4.  协程执行完成后（没有遇到下一个 yield 语句）会抛出 StopIteration 异常</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">coro2</span><span class="params">(a)</span>:</span></span><br><span class="line">    b = <span class="keyword">yield</span> a</span><br><span class="line">    c = <span class="keyword">yield</span> a + b</span><br><span class="line">    <span class="keyword">yield</span> c</span><br><span class="line"></span><br><span class="line">g = coro2(<span class="number">100</span>)</span><br><span class="line">print(<span class="string">"激活生成器"</span>, next(g))</span><br><span class="line">print(<span class="string">"向生成器发送 900 后返回"</span>, g.send(<span class="number">900</span>))</span><br><span class="line">print(<span class="string">"向生成器发送 100 后返回"</span>, g.send(<span class="number">100</span>))</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">激活生成器 <span class="number">100</span></span><br><span class="line">向生成器发送 <span class="number">900</span> 后返回 <span class="number">1000</span></span><br><span class="line">向生成器发送 <span class="number">100</span> 后返回 <span class="number">100</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>yield 生成器版协程，下面两个任务会交替执行，实现了并行执行任务</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">task_1</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">while</span> <span class="keyword">True</span>:</span><br><span class="line">        print(<span class="string">"---1---"</span>)</span><br><span class="line">        time.sleep(<span class="number">0.1</span>)</span><br><span class="line">        <span class="keyword">yield</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">task_2</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">while</span> <span class="keyword">True</span>:</span><br><span class="line">        print(<span class="string">"---2---"</span>)</span><br><span class="line">        time.sleep(<span class="number">0.1</span>)</span><br><span class="line">        <span class="keyword">yield</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></span><br><span class="line">    t1 = task_1()</span><br><span class="line">    t2 = task_2()</span><br><span class="line">    <span class="keyword">while</span> <span class="keyword">True</span>:</span><br><span class="line">        next(t1)</span><br><span class="line">        next(t2)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
+<ul>
+<li>协程版本生产者消费者模型</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">consumer</span><span class="params">()</span>:</span></span><br><span class="line">    r = <span class="string">''</span></span><br><span class="line">    <span class="keyword">while</span> <span class="keyword">True</span>:</span><br><span class="line">        n = <span class="keyword">yield</span> r</span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> n:</span><br><span class="line">            <span class="keyword">return</span></span><br><span class="line">        print(<span class="string">'[CONSUMER] Consuming %s...'</span> % n)</span><br><span class="line">        r = <span class="string">'200 OK'</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">produce</span><span class="params">(c)</span>:</span></span><br><span class="line">    c.send(<span class="keyword">None</span>)</span><br><span class="line">    n = <span class="number">0</span></span><br><span class="line">    <span class="keyword">while</span> n &lt; <span class="number">5</span>:</span><br><span class="line">        n = n + <span class="number">1</span></span><br><span class="line">        print(<span class="string">'[PRODUCER] Producing %s...'</span> % n)</span><br><span class="line">        r = c.send(n)</span><br><span class="line">        print(<span class="string">'[PRODUCER] Consumer return: %s'</span> % r)</span><br><span class="line">    c.close()</span><br><span class="line"></span><br><span class="line">c = consumer()</span><br><span class="line">produce(c)</span><br></pre></td></tr></table></figure>
+<h2 id="协程装饰器"><a href="#协程装饰器" class="headerlink" title="协程装饰器"></a>协程装饰器</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> functools <span class="keyword">import</span> wraps</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">coroutine</span><span class="params">(func)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">primer</span><span class="params">(*args, **kwargs)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> next(func(*args, **kwargs))</span><br><span class="line">    <span class="keyword">return</span> primer</span><br><span class="line"></span><br><span class="line"><span class="meta">@coroutine</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func</span><span class="params">(a)</span>:</span></span><br><span class="line">    b = <span class="keyword">yield</span> a</span><br><span class="line">    c = <span class="keyword">yield</span> a + b</span><br><span class="line">    <span class="keyword">yield</span> c</span><br><span class="line"></span><br><span class="line">print(func(<span class="number">1</span>))</span><br><span class="line">print(func(<span class="number">2</span>))</span><br><span class="line">print(func(<span class="number">3</span>))</span><br></pre></td></tr></table></figure>
+<h2 id="yield-from"><a href="#yield-from" class="headerlink" title="yield from"></a>yield from</h2><p>yield from 有两个作用：1. 链接子生成器 2. 用来作为调用者和子生成器的通道</p>
+<ol>
+<li>链接子生成器</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">gen1</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="string">"AB"</span>:</span><br><span class="line">        <span class="keyword">yield</span> i</span><br><span class="line">    <span class="keyword">for</span> j <span class="keyword">in</span> range(<span class="number">1</span>,<span class="number">3</span>):</span><br><span class="line">        <span class="keyword">yield</span> j</span><br><span class="line"></span><br><span class="line">print(list(gen1()))</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">gen2</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">yield</span> <span class="keyword">from</span> <span class="string">"AB"</span></span><br><span class="line">    <span class="keyword">yield</span> <span class="keyword">from</span> range(<span class="number">1</span>,<span class="number">3</span>)</span><br><span class="line"></span><br><span class="line">print(list(gen2()))</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">[<span class="string">'A'</span>, <span class="string">'B'</span>, <span class="number">1</span>, <span class="number">2</span>]</span><br><span class="line">[<span class="string">'A'</span>, <span class="string">'B'</span>, <span class="number">1</span>, <span class="number">2</span>]</span><br></pre></td></tr></table></figure>
+<p>yield from 简化了两个 for 循环中的 yield，引用 PEP 380 中的解释就是：</p>
+<blockquote>
+<p>  把迭代器当作生成器使用，相当于把子生成器的定义体内联在 yield from 表达式中。</p>
+<p>  此外子生成器可以执行 return 语句，返回一个值，而返回的值会称为 yield from 表达式的值。</p>
+</blockquote>
+<ol start="2">
+<li>用来作为调用者和子生成器的通道，通过 send 发送的给 yield from 的数据会被子生成器接收</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">coro1</span><span class="params">()</span>:</span></span><br><span class="line">    temp = <span class="keyword">yield</span> <span class="string">"hello"</span></span><br><span class="line">    <span class="keyword">yield</span> temp</span><br><span class="line">    <span class="keyword">return</span> temp</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">coro2</span><span class="params">()</span>:</span></span><br><span class="line">    result = <span class="keyword">yield</span> <span class="keyword">from</span> coro1()</span><br><span class="line">    print(<span class="string">"coro2 result"</span>, result)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></span><br><span class="line">    c2 = coro2()                 <span class="comment"># 新建委派生成器对象</span></span><br><span class="line">    print(next(c2))              <span class="comment"># 通过委派生成器，激活 coro1 这个生成器，会执行到 yield "hello"</span></span><br><span class="line">    print(c2.send(<span class="string">"world"</span>))      <span class="comment"># 会直接发送给 coro1 中 yield "hello" 这个右值表达式的值，赋值给 temp</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        c2.send(<span class="keyword">None</span>)            <span class="comment"># 会导致 coro1 这个子生成器结束返回 world 被 result 接收并抛出异常</span></span><br><span class="line">    <span class="keyword">except</span> StopIteration:</span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line">main()</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">hello</span><br><span class="line">world</span><br><span class="line">coro2 result world</span><br></pre></td></tr></table></figure>
+<h2 id="Gevent模块"><a href="#Gevent模块" class="headerlink" title="Gevent模块"></a>Gevent模块</h2><p>从下面的实验可以看出来，当控制流一遇到I/O的时候，就会立即切换。</p>
+<ul>
+<li>协程基本用法</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> gevent</span><br><span class="line"><span class="keyword">import</span> datetime</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func1</span><span class="params">()</span>:</span></span><br><span class="line">    print(<span class="string">'现在运行func1'</span>)</span><br><span class="line">    gevent.sleep(<span class="number">3</span>)</span><br><span class="line">    print(<span class="string">'返回func1继续运行'</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func2</span><span class="params">()</span>:</span></span><br><span class="line">    print(<span class="string">'现在运行func2'</span>)</span><br><span class="line">    gevent.sleep(<span class="number">3</span>)</span><br><span class="line">    print(<span class="string">'返回func2继续运行'</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func3</span><span class="params">()</span>:</span></span><br><span class="line">    print(<span class="string">'现在运行func3'</span>)</span><br><span class="line">    gevent.sleep(<span class="number">3</span>)</span><br><span class="line">    print(<span class="string">'返回func3继续运行'</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func4</span><span class="params">()</span>:</span></span><br><span class="line">    print(<span class="string">'现在运行func4'</span>)</span><br><span class="line">    gevent.sleep(<span class="number">3</span>)</span><br><span class="line">    print(<span class="string">'返回func4继续运行'</span>)</span><br><span class="line"></span><br><span class="line">t1 = datetime.datetime.now()</span><br><span class="line"></span><br><span class="line">tasklist = [gevent.spawn(func1),gevent.spawn(func2),gevent.spawn(func3),gevent.spawn(func4)]</span><br><span class="line">gevent.joinall(tasklist)</span><br><span class="line"></span><br><span class="line">t2 = datetime.datetime.now()</span><br><span class="line"></span><br><span class="line">print(t2-t1)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>基于协程的爬虫</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> gevent</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> gevent <span class="keyword">import</span> monkey</span><br><span class="line"><span class="keyword">from</span> urllib.request <span class="keyword">import</span> urlopen</span><br><span class="line"></span><br><span class="line">monkey.patch_all()</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func</span><span class="params">(url)</span>:</span></span><br><span class="line">    print(<span class="string">'GET: %s'</span> % url)</span><br><span class="line">    resp = urlopen(url)</span><br><span class="line">    data = resp.read()</span><br><span class="line">    print(<span class="string">'%d bytes received from %s.'</span> % (len(data), url))</span><br><span class="line"></span><br><span class="line">urls = [<span class="string">'https://www.python.org/'</span>, <span class="string">'https://www.yahoo.com/'</span>, <span class="string">'https://github.com/'</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment"># start = time.time()</span></span><br><span class="line"><span class="comment"># for url in urls:</span></span><br><span class="line"><span class="comment">#     func(url)</span></span><br><span class="line"><span class="comment"># end = time.time()</span></span><br><span class="line"><span class="comment"># print("异步cost", end - start)</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">start = time.time()</span><br><span class="line"></span><br><span class="line">tasklist = [gevent.spawn(func, <span class="string">'https://www.python.org/'</span>),gevent.spawn(func, <span class="string">'https://www.yahoo.com/'</span>),gevent.spawn(func, <span class="string">'https://github.com/'</span>),]</span><br><span class="line">gevent.joinall(tasklist)</span><br><span class="line"></span><br><span class="line">end = time.time()</span><br><span class="line"></span><br><span class="line">print(<span class="string">"异步cost"</span>, end - start)</span><br></pre></td></tr></table></figure>
+<h1 id="asyncio"><a href="#asyncio" class="headerlink" title="asyncio"></a>asyncio</h1><p>asyncio是 Python 3.4 试验性引入的异步I/O框架（PEP 3156），提供了基于协程做异步I/O编写单线程并发代码的基础设施。其核心组件有事件循环（Event Loop）、协程(Coroutine）、任务(Task)、未来对象(Future)以及其他一些扩充和辅助性质的模块。 </p>
+<h2 id="Future"><a href="#Future" class="headerlink" title="Future"></a>Future</h2><p>如果不用回调的方式，如何取得异步调用的结果呢？Python 异步框架中使用到了一个 Future 的对象，当异步调用执行完的时候，用来保存它的结果。Future 对象的 result 用来保存未来的执行结果，setresult 用来设置 result 并且运行给 future 对象添加的回调。</p>
+<p>注意这里依然无法完全消除回调，但是却可以屏蔽掉业务代码的回调。</p>
+<p>为了让 Future 支持 yield from 我们给他定义一个 _iter 方法</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Future</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span></span><br><span class="line">        self.result = <span class="keyword">None</span></span><br><span class="line">        self._callbacks = []</span><br><span class="line">        </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">add_done_callback</span><span class="params">(self,fn)</span>:</span></span><br><span class="line">        self._callbacks.append(fn)</span><br><span class="line">        </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">set_result</span><span class="params">(self, result)</span>:</span></span><br><span class="line">        self.result = result</span><br><span class="line">        <span class="keyword">for</span> callback <span class="keyword">in</span> self._callbacks:</span><br><span class="line">            callback(self)</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__iter__</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">yield</span> self</span><br><span class="line">        <span class="keyword">return</span> self.result</span><br></pre></td></tr></table></figure>
+<ul>
+<li>回调地狱</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">callback1</span><span class="params">(a, b)</span>:</span></span><br><span class="line">    c = a + b</span><br><span class="line">    c = callback2(c)</span><br><span class="line">    <span class="keyword">return</span> c</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">callback2</span><span class="params">(c)</span>:</span></span><br><span class="line">    c *= <span class="number">2</span></span><br><span class="line">    callback3(c)</span><br><span class="line">    <span class="keyword">return</span> c</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">callback3</span><span class="params">(c)</span>:</span></span><br><span class="line">    print(c)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">caller</span><span class="params">(a, b)</span>:</span></span><br><span class="line">    callback1(a, b)</span><br><span class="line"></span><br><span class="line">caller(<span class="number">1</span>, <span class="number">2</span>)</span><br></pre></td></tr></table></figure>
+<h2 id="事件循环"><a href="#事件循环" class="headerlink" title="事件循环"></a>事件循环</h2><ul>
+<li>asyncio.events</li>
 </ul>
 <table>
 <thead>
 <tr>
-<th>函数</th>
-<th>用法</th>
+<th>方法</th>
 <th>作用</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>.datetime()</td>
-<td>.datetime(y,m,d,H,M,S)</td>
-<td>返回一个日期时间对象</td>
+<td><code>asyncio.get_event_loop()</code></td>
+<td>返回一个事件循环对象，是 <code>asyncio.BaseEventLoop</code> 的实例</td>
 </tr>
 <tr>
-<td>.strftime()</td>
-<td>.date.strftime(format)</td>
-<td>返回自定义格式化字符串表示日期</td>
+<td><code>.run_until_complete(future)</code></td>
+<td>运行直到 <code>Future</code> 对象运行完成，如果该参数为协同程序, 则将其包装在任务中。</td>
 </tr>
 <tr>
-<td>.now()</td>
-<td>.now()</td>
-<td>返回当前时间的datetime对象</td>
+<td><code>.run_forever()</code></td>
+<td>运行直到调用 <code>.stop()</code></td>
 </tr>
 <tr>
-<td>.utcnow()</td>
-<td>.utcnow()</td>
-<td>返回没有时区的当前时间，也就是格林威治时间</td>
+<td><code>.isruning()</code></td>
+<td>返回事件循环是否正在运行</td>
 </tr>
 <tr>
-<td>.today()</td>
-<td>.today()</td>
-<td>返回本地时区当前时间的 datetime 对象</td>
+<td><code>.close()</code></td>
+<td>关闭事件循环</td>
 </tr>
 <tr>
-<td>.date()</td>
-<td>.date()</td>
-<td>取出日期时间对象中的日期</td>
-</tr>
-<tr>
-<td>.time()</td>
-<td>.time()</td>
-<td>取出日期时间对象中的时间</td>
-</tr>
-<tr>
-<td>.year()</td>
-<td>.year()</td>
-<td>返回年</td>
-</tr>
-<tr>
-<td>.month()</td>
-<td>.month()</td>
-<td>返回月</td>
-</tr>
-<tr>
-<td>.day()</td>
-<td>.day()</td>
-<td>返回日</td>
-</tr>
-<tr>
-<td>.hour()</td>
-<td>.hour()</td>
-<td>返回时</td>
-</tr>
-<tr>
-<td>.minute()</td>
-<td>.minute()</td>
-<td>返回分</td>
-</tr>
-<tr>
-<td>.second()</td>
-<td>.second()</td>
-<td>返回秒</td>
-</tr>
-<tr>
-<td>.microsecond()</td>
-<td>.microsecond()</td>
-<td>返回微秒</td>
-</tr>
-<tr>
-<td>.tzinfo</td>
-<td>.tzinfo</td>
-<td>时区属性</td>
-</tr>
-<tr>
-<td>.weekday()</td>
-<td>date.weekday()</td>
-<td>返回时间对象所处一周的哪一天，格式：周一为0，周日为7</td>
-</tr>
-<tr>
-<td>.isoweekday()</td>
-<td>datetime.isoweekday()</td>
-<td>返回时间对象所处一周的哪一天，格式：周一为1，周日为0，中国默认。</td>
-</tr>
-<tr>
-<td>.isoformat()</td>
-<td>date.isocalendar()</td>
-<td>得到iso格式的时间，以-分隔</td>
-</tr>
-<tr>
-<td>.isocalendar()</td>
-<td>date.isocalendar()</td>
-<td>返回3元组（ISO年，ISO周编号，ISO工作日）。</td>
-</tr>
-<tr>
-<td>.replace()</td>
-<td>datetime.replace(*)</td>
-<td>修改并返回新的时间对象</td>
-</tr>
-<tr>
-<td>.astimezone()</td>
-<td>datetime.astimezone(tz=None)</td>
-<td>转换带有时区的对象</td>
-</tr>
-<tr>
-<td>.timestamp()</td>
-<td>datetime.timestamp()</td>
-<td>将对象转换为时间戳格式</td>
-</tr>
-<tr>
-<td>.utcfromtimestamp()</td>
-<td>.utcfromtimestamp()</td>
-<td>将时间戳转换为格林威治时间</td>
-</tr>
-<tr>
-<td>.fromtimestamp()</td>
-<td>.fromtimestamp()</td>
-<td>将时间戳转换为本地时间</td>
-</tr>
-<tr>
-<td>.fromordinal()</td>
-<td>.fromordinal()</td>
-<td>将 Gregorian 日历时间转换为date对象。</td>
-</tr>
-<tr>
-<td>.combine()</td>
-<td>datetime.combine(date, time, tzinfo=self.tzinfo)</td>
-<td>根据 <code>date</code> 和 <code>time</code> 对象，创建一个 <code>datetime</code> 对象。</td>
-</tr>
-<tr>
-<td>.ctime()</td>
-<td>.ctime()</td>
-<td>转换为英文格式的日期时间</td>
-</tr>
-<tr>
-<td>.dst()</td>
-<td>.dst()</td>
-<td>显示夏令时对时间调整</td>
-</tr>
-<tr>
-<td>.max()、min()</td>
-<td>.max()、min()</td>
-<td>显示一个时间对象的最大和最小值</td>
-</tr>
-<tr>
-<td>.resolution()</td>
-<td>.resolution()</td>
-<td>设置一个时间差值，用来计算时间</td>
-</tr>
-<tr>
-<td>.strptime()</td>
-<td>.strptime()</td>
-<td>将字符串格式化为时间对象</td>
-</tr>
-<tr>
-<td>.timetz()</td>
-<td>.timetz()</td>
-<td>返回一个时间对象带有时区属性</td>
-</tr>
-<tr>
-<td>.toordinal()</td>
-<td>.toordinal()</td>
-<td>返回日期对应的 Gregorian日期，国外有采用，类似中国农历，不常用。</td>
-</tr>
-<tr>
-<td>.tzname()</td>
-<td>.tzname()</td>
-<td>返回时区信息</td>
-</tr>
-<tr>
-<td>.utcoffset()</td>
-<td>.utcoffset()</td>
-<td>返回时区的偏移量</td>
-</tr>
-<tr>
-<td>.timetuple()</td>
-<td>.timetuple()</td>
-<td>把时间转换为元组</td>
-</tr>
-<tr>
-<td>.utctimetuple()</td>
-<td>.utctimetuple()</td>
-<td>把UTC时间转换为元组</td>
+<td><code>.is_closed()</code></td>
+<td>返回时间循环是否已经关闭</td>
 </tr>
 </tbody>
 </table>
-<h2 id="datetime-日期对象"><a href="#datetime-日期对象" class="headerlink" title=".datetime() 日期对象"></a>.datetime() 日期对象</h2><p>datetime对象可以用来表示精确的日期和时间，其实例化方法如下</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">In [61]: datetime.datetime(1970,1,1,23,59,59,999999)</span><br><span class="line">Out[61]: datetime.datetime(1970, 1, 1, 23, 59, 59, 999999)</span><br></pre></td></tr></table></figure>
-<h3 id="strftime-格式化为字符串"><a href="#strftime-格式化为字符串" class="headerlink" title=".strftime() 格式化为字符串"></a>.strftime() 格式化为字符串</h3><p>返回自定义格式化字符串表示日期</p>
-<p>语法：<code>date.strftime(format)</code></p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">178</span>]: datetime.datetime.now().strftime(<span class="string">'%Y-%m-%d %H:%M:%S'</span>)</span><br><span class="line">Out[<span class="number">178</span>]: <span class="string">'2018-04-04 15:31:56'</span></span><br></pre></td></tr></table></figure>
-<h3 id="strptime-字符串转时间"><a href="#strptime-字符串转时间" class="headerlink" title=".strptime() 字符串转时间"></a>.strptime() 字符串转时间</h3><p>将字符串格式化为时间对象</p>
-<p>语法：<code>datetime.strptime(date_string, format)</code></p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">181</span>]: datetime.datetime.strptime(<span class="string">'1989-08-21 12:20:20'</span>,<span class="string">'%Y-%m-%d %H:%M:%S'</span>)</span><br><span class="line">Out[<span class="number">181</span>]: datetime.datetime(<span class="number">1989</span>, <span class="number">8</span>, <span class="number">21</span>, <span class="number">12</span>, <span class="number">20</span>, <span class="number">20</span>)</span><br><span class="line"></span><br><span class="line">datestr = <span class="string">'19/Feb/2013:10:23:29 +0800'</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">181</span>]: datetime.datetime.strptime(datestr,<span class="string">'%d/%b/%Y:%H:%M:%S %z'</span>)</span><br></pre></td></tr></table></figure>
 <ul>
-<li>格式化符号</li>
+<li>asyncio.tasks</li>
 </ul>
 <table>
 <thead>
 <tr>
-<th>指令</th>
-<th><strong>含义</strong></th>
+<th>方法</th>
+<th>作用</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>%a</td>
-<td>星期的简写（星期一 ~ 天：Mon, Tue, Wed, Thu, Fri, Sat, Sun）</td>
+<td><code>wait(fs, *, loop=None, timeout=None, return_when=&#39;ALL_COMPLETED&#39;)</code></td>
+<td>等待 <code>fs</code> 给出的 <code>future</code> 和协程完成。</td>
 </tr>
 <tr>
-<td>%A</td>
-<td>星期的全写（星期一 ~ 天：Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday）</td>
+<td></td>
+<td></td>
 </tr>
 <tr>
-<td>%w</td>
-<td>在一个星期中的第几天（ 0 表示星期天 … 6 表示星期六）</td>
-</tr>
-<tr>
-<td>%d</td>
-<td>在一个月中的第几天（01, 02, …, 31）</td>
-</tr>
-<tr>
-<td>%b</td>
-<td>月份的简写（一月 ~ 十二月：Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec）</td>
-</tr>
-<tr>
-<td>%B</td>
-<td>月份的全写（一月 ~ 十二月：January, February, March, April, May, June, July, August, September, October, November, December）</td>
-</tr>
-<tr>
-<td>%m</td>
-<td>月份（01, 02, …, 12）</td>
-</tr>
-<tr>
-<td>%y</td>
-<td>用两个数字表示年份（例如 2014年 == 14）</td>
-</tr>
-<tr>
-<td>%Y</td>
-<td>用四个数字表示年份</td>
-</tr>
-<tr>
-<td>%H</td>
-<td>二十四小时制（00, 01, …, 23）</td>
-</tr>
-<tr>
-<td>%I</td>
-<td>十二小时制（01, 02, …, 11）</td>
-</tr>
-<tr>
-<td>%p</td>
-<td>AM 或者 PM</td>
-</tr>
-<tr>
-<td>%M</td>
-<td>分钟（00, 01, …, 59）</td>
-</tr>
-<tr>
-<td>%S</td>
-<td>秒（00, 01, …, 59）</td>
-</tr>
-<tr>
-<td>%f</td>
-<td>微秒（000000, 000001, …, 999999）</td>
-</tr>
-<tr>
-<td>%z</td>
-<td>与 UTC 时间的间隔 ；如果是本地时间，返回空字符串（(empty), +0000, -0400, +1030）</td>
-</tr>
-<tr>
-<td>%Z</td>
-<td>时区名称；如果是本地时间，返回空字符串（(empty), UTC, EST, CST）</td>
-</tr>
-<tr>
-<td>%j</td>
-<td>在一年中的第几天（001, 002, …, 366）</td>
-</tr>
-<tr>
-<td>%U</td>
-<td>在一年中的第几周，星期天作为第一天（00, 01, …, 53）</td>
-</tr>
-<tr>
-<td>%W</td>
-<td>在一年中的第几周，星期一作为第一天（00, 01, …, 53）</td>
-</tr>
-<tr>
-<td>%c</td>
-<td>用字符串表示日期和时间（Tue Aug 16 21:30:00 2014）</td>
-</tr>
-<tr>
-<td>%x</td>
-<td>用字符串表示日期（08/16/14）</td>
-</tr>
-<tr>
-<td>%X</td>
-<td>用字符串表示时间（21:30:00）</td>
-</tr>
-<tr>
-<td>%%</td>
-<td>表示百分号</td>
+<td></td>
 </tr>
 </tbody>
 </table>
-<h3 id="now-当前时间"><a href="#now-当前时间" class="headerlink" title=".now() 当前时间"></a>.now() 当前时间</h3><p>返回当前时间的datetime对象</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">10</span>]: datetime.datetime.now()</span><br><span class="line">Out[<span class="number">10</span>]: datetime.datetime(<span class="number">2018</span>, <span class="number">4</span>, <span class="number">4</span>, <span class="number">9</span>, <span class="number">23</span>, <span class="number">51</span>, <span class="number">326016</span>)</span><br><span class="line"><span class="comment">#带时区信息的当前时间</span></span><br><span class="line">In [<span class="number">2</span>]: datetime.datetime.now(datetime.timezone(datetime.timedelta(hours=<span class="number">8</span>)))</span><br><span class="line">Out[<span class="number">2</span>]: datetime.datetime(<span class="number">2018</span>, <span class="number">5</span>, <span class="number">2</span>, <span class="number">18</span>, <span class="number">5</span>, <span class="number">46</span>, <span class="number">264658</span>, tzinfo=datetime.timezone(datetime.timedelta(<span class="number">0</span>, <span class="number">28800</span>)))</span><br></pre></td></tr></table></figure>
-<h3 id="utcnow-格林威治时间"><a href="#utcnow-格林威治时间" class="headerlink" title=".utcnow() 格林威治时间"></a>.utcnow() 格林威治时间</h3><p>返回没有时区的当前时间，也就是格林威治时间</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">266</span>]: datetime.datetime.now()</span><br><span class="line">Out[<span class="number">266</span>]: datetime.datetime(<span class="number">2018</span>, <span class="number">4</span>, <span class="number">4</span>, <span class="number">11</span>, <span class="number">38</span>, <span class="number">37</span>, <span class="number">299010</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">267</span>]: datetime.datetime.utcnow()</span><br><span class="line">Out[<span class="number">267</span>]: datetime.datetime(<span class="number">2018</span>, <span class="number">4</span>, <span class="number">4</span>, <span class="number">3</span>, <span class="number">38</span>, <span class="number">46</span>, <span class="number">530644</span>)</span><br></pre></td></tr></table></figure>
-<h3 id="today-本地时区当前时间"><a href="#today-本地时区当前时间" class="headerlink" title=".today() 本地时区当前时间"></a>.today() 本地时区当前时间</h3><p>返回本地时区当前时间的datetime对象</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">135</span>]: datetime.datetime.now().today()</span><br><span class="line">Out[<span class="number">135</span>]: datetime.datetime(<span class="number">2018</span>, <span class="number">4</span>, <span class="number">4</span>, <span class="number">11</span>, <span class="number">45</span>, <span class="number">26</span>, <span class="number">788182</span>)</span><br></pre></td></tr></table></figure>
-<h3 id="date-返回日期对象"><a href="#date-返回日期对象" class="headerlink" title=".date() 返回日期对象"></a>.date() 返回日期对象</h3><p>取出日期时间对象中的日期</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">263</span>]: datetime.datetime.now().date()</span><br><span class="line">Out[<span class="number">263</span>]: datetime.date(<span class="number">2018</span>, <span class="number">4</span>, <span class="number">4</span>)</span><br></pre></td></tr></table></figure>
-<h3 id="time-返回时间对象"><a href="#time-返回时间对象" class="headerlink" title=".time() 返回时间对象"></a>.time() 返回时间对象</h3><p>取出日期时间对象中的时间</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">265</span>]: datetime.datetime.now().time()</span><br><span class="line">Out[<span class="number">265</span>]: datetime.time(<span class="number">11</span>, <span class="number">37</span>, <span class="number">23</span>, <span class="number">381177</span>)</span><br></pre></td></tr></table></figure>
-<h3 id="year-返回年份字符串"><a href="#year-返回年份字符串" class="headerlink" title=".year() 返回年份字符串"></a>.year() 返回年份字符串</h3><p>返回年份</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">In [122]: datetime.datetime.now().year</span><br><span class="line">Out[122]: 2018</span><br></pre></td></tr></table></figure>
-<h3 id="month-返回月份字符串"><a href="#month-返回月份字符串" class="headerlink" title=".month() 返回月份字符串"></a>.month() 返回月份字符串</h3><p>返回月份</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">123</span>]: datetime.datetime.now().month</span><br><span class="line">Out[<span class="number">123</span>]: <span class="number">4</span></span><br></pre></td></tr></table></figure>
-<h3 id="day-返回日的字符串"><a href="#day-返回日的字符串" class="headerlink" title=".day() 返回日的字符串"></a>.day() 返回日的字符串</h3><p>返回天</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">124</span>]: datetime.datetime.now().day</span><br><span class="line">Out[<span class="number">124</span>]: <span class="number">4</span></span><br></pre></td></tr></table></figure>
-<h3 id="hour-返回小时的字符串"><a href="#hour-返回小时的字符串" class="headerlink" title=".hour() 返回小时的字符串"></a>.hour() 返回小时的字符串</h3><p>返回小时</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">131</span>]: datetime.datetime.now().hour</span><br><span class="line">Out[<span class="number">131</span>]: <span class="number">11</span></span><br></pre></td></tr></table></figure>
-<h3 id="minute-返回分钟的字符串"><a href="#minute-返回分钟的字符串" class="headerlink" title=".minute() 返回分钟的字符串"></a>.minute() 返回分钟的字符串</h3><p>返回分钟</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">132</span>]: datetime.datetime.now().minute</span><br><span class="line">Out[<span class="number">132</span>]: <span class="number">44</span></span><br></pre></td></tr></table></figure>
-<h3 id="second-返回秒的字符串"><a href="#second-返回秒的字符串" class="headerlink" title=".second() 返回秒的字符串"></a>.second() 返回秒的字符串</h3><p>返回秒</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">133</span>]: datetime.datetime.now().second</span><br><span class="line">Out[<span class="number">133</span>]: <span class="number">5</span></span><br></pre></td></tr></table></figure>
-<h3 id="microsecond-返回微秒字符串"><a href="#microsecond-返回微秒字符串" class="headerlink" title=".microsecond() 返回微秒字符串"></a>.microsecond() 返回微秒字符串</h3><p>返回微秒</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">182</span>]: datetime.datetime.now().microsecond</span><br><span class="line">Out[<span class="number">182</span>]: <span class="number">317667</span></span><br></pre></td></tr></table></figure>
-<h3 id="tzinfo-时区对象"><a href="#tzinfo-时区对象" class="headerlink" title=".tzinfo 时区对象"></a>.tzinfo 时区对象</h3><p>每个 <code>datetime</code> 对象都有个时区属性<code>tzinfo</code>，默认情况为<code>None</code> ，除非给这个对象设置一个时区属性。</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">25</span>]: utctime = datetime.datetime.utcnow().replace(tzinfo=datetime.timezone.utc)</span><br><span class="line"></span><br><span class="line">In [<span class="number">26</span>]: utctime</span><br><span class="line">Out[<span class="number">26</span>]: datetime.datetime(<span class="number">2018</span>, <span class="number">4</span>, <span class="number">4</span>, <span class="number">6</span>, <span class="number">17</span>, <span class="number">10</span>, <span class="number">588587</span>, tzinfo=datetime.timezone.utc)</span><br><span class="line"></span><br><span class="line">In [<span class="number">27</span>]: utctime.tzinfo</span><br><span class="line">Out[<span class="number">27</span>]: datetime.timezone.utc</span><br></pre></td></tr></table></figure>
-<h3 id="weekday-返回在周的哪一天"><a href="#weekday-返回在周的哪一天" class="headerlink" title=".weekday() 返回在周的哪一天"></a>.weekday() 返回在周的哪一天</h3><p>返回时间对象所处一周的哪一天，格式：周一为0，周日为7</p>
-<p>语法：<code>date.weekday()</code></p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">165</span>]: datetime.datetime.now().weekday()</span><br><span class="line">Out[<span class="number">165</span>]: <span class="number">2</span></span><br></pre></td></tr></table></figure>
-<h3 id="isoweekday-返回在周的哪一天"><a href="#isoweekday-返回在周的哪一天" class="headerlink" title=".isoweekday() 返回在周的哪一天"></a>.isoweekday() 返回在周的哪一天</h3><p>返回时间对象所处一周的哪一天，格式：周一为1，周日为0，中国默认。</p>
-<p>语法：<code>datetime.isoweekday()</code></p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">179</span>]: datetime.datetime.now().isoweekday()</span><br><span class="line">Out[<span class="number">179</span>]: <span class="number">3</span></span><br></pre></td></tr></table></figure>
-<h3 id="isoformat-iso格式的时间字符串"><a href="#isoformat-iso格式的时间字符串" class="headerlink" title=".isoformat() iso格式的时间字符串"></a>.isoformat() iso格式的时间字符串</h3><p>得到iso格式的时间，以-分隔</p>
-<p>语法：<code>date.isocalendar()</code></p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">8</span>]: datetime.datetime.now().isoformat()</span><br><span class="line">Out[<span class="number">8</span>]: <span class="string">'2018-04-04T13:10:34.889170'</span></span><br></pre></td></tr></table></figure>
-<h3 id="isocalendar-iso-格式的日历时间"><a href="#isocalendar-iso-格式的日历时间" class="headerlink" title=".isocalendar() iso 格式的日历时间"></a>.isocalendar() iso 格式的日历时间</h3><p>返回3元组（ISO年，ISO周编号，ISO工作日）。</p>
-<p>用法：<code>date.isocalendar()</code></p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">13</span>]: datetime.datetime.now().isocalendar()</span><br><span class="line">Out[<span class="number">13</span>]: (<span class="number">2018</span>, <span class="number">14</span>, <span class="number">3</span>)</span><br></pre></td></tr></table></figure>
-<h3 id="replace-修改并返回新时间"><a href="#replace-修改并返回新时间" class="headerlink" title=".replace() 修改并返回新时间"></a>.replace() 修改并返回新时间</h3><p>修改并且返回新的时间</p>
-<p>语法：<code>datetime.replace(year=self.year, month=self.month, day=self.day, hour=self.hour, minute=self.minute, second=self.second, microsecond=self.microsecond, tzinfo=self.tzinfo, * fold=0)</code></p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">15</span>]: datetime.datetime.now().replace(<span class="number">1989</span>,<span class="number">8</span>,<span class="number">21</span>,<span class="number">12</span>,<span class="number">12</span>,<span class="number">30</span>)</span><br><span class="line">Out[<span class="number">15</span>]: datetime.datetime(<span class="number">1989</span>, <span class="number">8</span>, <span class="number">21</span>, <span class="number">12</span>, <span class="number">12</span>, <span class="number">30</span>, <span class="number">672904</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">24</span>]: datetime.datetime.now().replace(month=<span class="number">12</span>,day=<span class="number">12</span>)</span><br><span class="line">Out[<span class="number">24</span>]: datetime.datetime(<span class="number">2018</span>, <span class="number">12</span>, <span class="number">12</span>, <span class="number">13</span>, <span class="number">55</span>, <span class="number">10</span>, <span class="number">734012</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">3</span>]: datetime.datetime.utcnow().replace(tzinfo=datetime.timezone.utc)</span><br><span class="line">Out[<span class="number">3</span>]: datetime.datetime(<span class="number">2018</span>, <span class="number">4</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">56</span>, <span class="number">11</span>, <span class="number">307940</span>, tzinfo=datetime.timezone.utc)</span><br></pre></td></tr></table></figure>
-<h3 id="astimezone-转换带有时区的时间"><a href="#astimezone-转换带有时区的时间" class="headerlink" title=".astimezone() 转换带有时区的时间"></a>.astimezone() 转换带有时区的时间</h3><p>转换带有时区的时间对象</p>
-<p>语法：<code>datetime.astimezone(tz=None)</code></p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">229</span>]: utctime = datetime.datetime.utcnow().replace(tzinfo=datetime.timezone.utc)</span><br><span class="line"></span><br><span class="line">In [<span class="number">230</span>]: utctime</span><br><span class="line">Out[<span class="number">230</span>]: datetime.datetime(<span class="number">2018</span>, <span class="number">4</span>, <span class="number">4</span>, <span class="number">2</span>, <span class="number">51</span>, <span class="number">4</span>, <span class="number">644039</span>, tzinfo=datetime.timezone.utc)</span><br><span class="line"></span><br><span class="line">In [<span class="number">231</span>]: utctime.astimezone(datetime.timezone(datetime.timedelta(hours=<span class="number">8</span>)))</span><br><span class="line">Out[<span class="number">231</span>]: datetime.datetime(<span class="number">2018</span>, <span class="number">4</span>, <span class="number">4</span>, <span class="number">10</span>, <span class="number">51</span>, <span class="number">4</span>, <span class="number">644039</span>, tzinfo=datetime.timezone(datetime.timedelta(<span class="number">0</span>, <span class="number">28800</span>)))</span><br></pre></td></tr></table></figure>
-<h3 id="timestamp-转换为时间戳格式"><a href="#timestamp-转换为时间戳格式" class="headerlink" title=".timestamp() 转换为时间戳格式"></a>.timestamp() 转换为时间戳格式</h3><p>将时间对象转换为时间戳格式</p>
-<p>语法：<code>datetime.timestamp()</code></p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">81</span>]: utctime = datetime.datetime.utcnow().replace(tzinfo=datetime.timezone.utc)</span><br><span class="line"></span><br><span class="line">In [<span class="number">82</span>]: utctime.timestamp()</span><br><span class="line">Out[<span class="number">82</span>]: <span class="number">1522811647.788616</span></span><br></pre></td></tr></table></figure>
-<h3 id="utcfromtimestamp-时间戳转换为格林威治时间"><a href="#utcfromtimestamp-时间戳转换为格林威治时间" class="headerlink" title=".utcfromtimestamp() 时间戳转换为格林威治时间"></a>.utcfromtimestamp() 时间戳转换为格林威治时间</h3><p>将时间戳转换为格林威治时间</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">215</span>]: datetime.datetime.utcfromtimestamp(unix)</span><br><span class="line">Out[<span class="number">215</span>]: datetime.datetime(<span class="number">2018</span>, <span class="number">4</span>, <span class="number">4</span>, <span class="number">7</span>, <span class="number">50</span>, <span class="number">12</span>, <span class="number">704802</span>)</span><br></pre></td></tr></table></figure>
-<h3 id="fromtimestamp-时间戳转换为本地时间"><a href="#fromtimestamp-时间戳转换为本地时间" class="headerlink" title=".fromtimestamp() 时间戳转换为本地时间"></a>.fromtimestamp() 时间戳转换为本地时间</h3><p>将unix时间戳转为本地日期时间</p>
-<p>语法：<code>date.fromtimestamp(timestamp)</code></p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">97</span>]: utctime = datetime.datetime.utcnow().replace(tzinfo=datetime.timezone.utc)</span><br><span class="line"></span><br><span class="line">In [<span class="number">98</span>]: unix = utctime.timestamp()</span><br><span class="line"></span><br><span class="line">In [<span class="number">99</span>]: datetime.datetime.fromtimestamp(unix)</span><br><span class="line">Out[<span class="number">99</span>]: datetime.datetime(<span class="number">2018</span>, <span class="number">4</span>, <span class="number">4</span>, <span class="number">11</span>, <span class="number">18</span>, <span class="number">26</span>, <span class="number">243829</span>)</span><br></pre></td></tr></table></figure>
-<h3 id="fromordinal-Gregorian-日历转换为时间"><a href="#fromordinal-Gregorian-日历转换为时间" class="headerlink" title=".fromordinal() Gregorian 日历转换为时间"></a>.fromordinal() Gregorian 日历转换为时间</h3><p>将Gregorian日历时间转换为date对象；（Gregorian Calendar ：一种日历表示方法，类似于我国的农历，西方国家使用比较多。</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">26</span>]: datetime.datetime.fromordinal(<span class="number">700101</span>)</span><br><span class="line">Out[<span class="number">26</span>]: datetime.datetime(<span class="number">1917</span>, <span class="number">10</span>, <span class="number">24</span>, <span class="number">0</span>, <span class="number">0</span>)</span><br></pre></td></tr></table></figure>
-<h3 id="combine-拼接日期和时间"><a href="#combine-拼接日期和时间" class="headerlink" title=".combine() 拼接日期和时间"></a>.combine() 拼接日期和时间</h3><p>根据 <code>date</code> 和 <code>time</code> 对象，创建一个 <code>datetime</code> 对象。</p>
-<p>用法：<code>datetime.combine(date, time, tzinfo=self.tzinfo)</code></p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">42</span>]: a = datetime.date(<span class="number">1989</span>,<span class="number">8</span>,<span class="number">21</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">43</span>]: b = datetime.time(<span class="number">12</span>,<span class="number">30</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">44</span>]: datetime.datetime.combine(a,b)</span><br><span class="line">Out[<span class="number">44</span>]: datetime.datetime(<span class="number">1989</span>, <span class="number">8</span>, <span class="number">21</span>, <span class="number">12</span>, <span class="number">30</span>)</span><br></pre></td></tr></table></figure>
-<h3 id="ctime-英文格式的日期"><a href="#ctime-英文格式的日期" class="headerlink" title=".ctime() 英文格式的日期"></a>.ctime() 英文格式的日期</h3><p>转换为英文格式的时间日期</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">99</span>]: datetime.datetime.now().ctime()</span><br><span class="line">Out[<span class="number">99</span>]: <span class="string">'Wed Apr  4 15:02:42 2018'</span></span><br></pre></td></tr></table></figure>
-<h3 id="dst-夏令时"><a href="#dst-夏令时" class="headerlink" title=".dst() 夏令时"></a>.dst() 夏令时</h3><p>夏令时相关</p>
-<h3 id="max-时间最大值"><a href="#max-时间最大值" class="headerlink" title=".max() 时间最大值"></a>.max() 时间最大值</h3><p>返回日期时间的最大值</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">136</span>]: datetime.datetime.now().max</span><br><span class="line">Out[<span class="number">136</span>]: datetime.datetime(<span class="number">9999</span>, <span class="number">12</span>, <span class="number">31</span>, <span class="number">23</span>, <span class="number">59</span>, <span class="number">59</span>, <span class="number">999999</span>)</span><br></pre></td></tr></table></figure>
-<h3 id="min-时间最小值"><a href="#min-时间最小值" class="headerlink" title=".min() 时间最小值"></a>.min() 时间最小值</h3><p>返回日期时候的最小值</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">137</span>]: datetime.datetime.now().min</span><br><span class="line">Out[<span class="number">137</span>]: datetime.datetime(<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>)</span><br></pre></td></tr></table></figure>
-<h3 id="resolution-时间解析度"><a href="#resolution-时间解析度" class="headerlink" title=".resolution() 时间解析度"></a>.resolution() 时间解析度</h3><p>时间解析度，一般用来计算时间</p>
-<ul>
-<li>默认的解析度</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">149</span>]: datetime.date.resolution</span><br><span class="line">Out[<span class="number">149</span>]: datetime.timedelta(<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">150</span>]: datetime.time.resolution</span><br><span class="line">Out[<span class="number">150</span>]: datetime.timedelta(<span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">151</span>]: datetime.datetime.resolution</span><br><span class="line">Out[<span class="number">151</span>]: datetime.timedelta(<span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>)</span><br></pre></td></tr></table></figure>
-<ul>
-<li>计算前100天</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">In [154]: datetime.datetime.now() - datetime.date.resolution * 100</span><br><span class="line">Out[154]: datetime.datetime(2017, 12, 25, 15, 26, 0, 143025)</span><br></pre></td></tr></table></figure>
-<ul>
-<li>计算后一天</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">In [157]: datetime.datetime.now() + datetime.date.resolution</span><br><span class="line">Out[157]: datetime.datetime(2018, 4, 5, 15, 26, 48, 416832)</span><br></pre></td></tr></table></figure>
-<h3 id="timetz-带有时区对象的时间"><a href="#timetz-带有时区对象的时间" class="headerlink" title=".timetz() 带有时区对象的时间"></a>.timetz() 带有时区对象的时间</h3><p>返回一个时间对象，带有时区属性</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">190</span>]: datetime.datetime.now().timetz()</span><br><span class="line">Out[<span class="number">190</span>]: datetime.time(<span class="number">15</span>, <span class="number">40</span>, <span class="number">49</span>, <span class="number">140247</span>)</span><br></pre></td></tr></table></figure>
-<h3 id="toordinal-返回-Gregorian-日期"><a href="#toordinal-返回-Gregorian-日期" class="headerlink" title=".toordinal() 返回 Gregorian 日期"></a>.toordinal() 返回 Gregorian 日期</h3><p>返回日期对应的 Gregorian Calendar 日期，国外有采用，类似中国农历，不常用。</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">197</span>]: datetime.datetime.utcnow().replace(tzinfo=datetime.timezone.utc).toordinal()</span><br><span class="line">Out[<span class="number">197</span>]: <span class="number">736788</span></span><br></pre></td></tr></table></figure>
-<h3 id="tzname-返回时区名称"><a href="#tzname-返回时区名称" class="headerlink" title=".tzname() 返回时区名称"></a>.tzname() 返回时区名称</h3><p>返回时区的名称</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">194</span>]: datetime.datetime.utcnow().replace(tzinfo=datetime.timezone.utc).tzname()</span><br><span class="line">Out[<span class="number">194</span>]: <span class="string">'UTC+00:00'</span></span><br></pre></td></tr></table></figure>
-<h3 id="utcoffset-返回时区偏移量"><a href="#utcoffset-返回时区偏移量" class="headerlink" title=".utcoffset() 返回时区偏移量"></a>.utcoffset() 返回时区偏移量</h3><p>返回时区的时间偏移量， 如果 tzinfo 属性是 None，则返回 None；</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">228</span>]: datetime.datetime.utcnow().utcoffset()</span><br><span class="line"></span><br><span class="line">In [<span class="number">230</span>]: datetime.datetime.now().utcoffset()</span><br></pre></td></tr></table></figure>
-<h3 id="timetuple-转换为元组"><a href="#timetuple-转换为元组" class="headerlink" title=".timetuple() 转换为元组"></a>.timetuple() 转换为元组</h3><p>6个元素的时间元组可以转换成9个元素的时间元组，供time模块使用</p>
-<p>语法：<code>date.timetuple()</code></p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">184</span>]: datetime.datetime.now().timetuple()</span><br><span class="line">Out[<span class="number">184</span>]: time.struct_time(tm_year=<span class="number">2018</span>, tm_mon=<span class="number">4</span>, tm_mday=<span class="number">4</span>, tm_hour=<span class="number">15</span>, tm_min=<span class="number">36</span>, tm_sec=<span class="number">52</span>, tm_wday=<span class="number">2</span>, tm_yday=<span class="number">94</span>, tm_isdst=<span class="number">-1</span>)</span><br></pre></td></tr></table></figure>
-<h3 id="utctimetuple-UTC转元组"><a href="#utctimetuple-UTC转元组" class="headerlink" title=".utctimetuple() UTC转元组"></a>.utctimetuple() UTC转元组</h3><p>将UTC时间转换为元组</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">232</span>]: datetime.datetime.now().utctimetuple()</span><br><span class="line">Out[<span class="number">232</span>]: time.struct_time(tm_year=<span class="number">2018</span>, tm_mon=<span class="number">4</span>, tm_mday=<span class="number">4</span>, tm_hour=<span class="number">16</span>, tm_min=<span class="number">1</span>, tm_sec=<span class="number">32</span>, tm_wday=<span class="number">2</span>, tm_yday=<span class="number">94</span>, tm_isdst=<span class="number">0</span>)</span><br></pre></td></tr></table></figure>
-<h2 id="date-日期对象"><a href="#date-日期对象" class="headerlink" title=".date 日期对象"></a>.date 日期对象</h2><p>日期对象</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">39</span>]: datetime.date(<span class="number">1989</span>,<span class="number">8</span>,<span class="number">21</span>)</span><br><span class="line">Out[<span class="number">39</span>]: datetime.date(<span class="number">1989</span>, <span class="number">8</span>, <span class="number">21</span>)</span><br></pre></td></tr></table></figure>
-<h2 id="time-时间对象"><a href="#time-时间对象" class="headerlink" title=".time 时间对象"></a>.time 时间对象</h2><p>时间对象</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">40</span>]: datetime.time(<span class="number">12</span>,<span class="number">30</span>,<span class="number">30</span>)</span><br><span class="line">Out[<span class="number">40</span>]: datetime.time(<span class="number">12</span>, <span class="number">30</span>, <span class="number">30</span>)</span><br></pre></td></tr></table></figure>
-<h2 id="timedelta-时间差"><a href="#timedelta-时间差" class="headerlink" title=".timedelta 时间差"></a>.timedelta 时间差</h2><p>这个对象用来表示时间差距，即两个日期或时间之间的差异。</p>
-<p>用法：</p>
-<p><code>datetime.timedelta(days=0, seconds=0, microseconds=0, milliseconds=0, minutes=0, hours=0, weeks=0)</code></p>
-<ul>
-<li>对时间的加减</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">282</span>]: datetime.datetime.now() + datetime.timedelta(hours=<span class="number">12</span>)</span><br><span class="line">Out[<span class="number">282</span>]: datetime.datetime(<span class="number">2018</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">4</span>, <span class="number">32</span>, <span class="number">57</span>, <span class="number">816865</span>)</span><br></pre></td></tr></table></figure>
-<table>
-<thead>
-<tr>
-<th>名词</th>
-<th>解释</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>year</td>
-<td>年</td>
-</tr>
-<tr>
-<td>month</td>
-<td>月</td>
-</tr>
-<tr>
-<td>weeks</td>
-<td>周</td>
-</tr>
-<tr>
-<td>days</td>
-<td>日</td>
-</tr>
-<tr>
-<td>hours</td>
-<td>时</td>
-</tr>
-<tr>
-<td>minutes</td>
-<td>分</td>
-</tr>
-<tr>
-<td>seconds</td>
-<td>秒</td>
-</tr>
-<tr>
-<td>micrseconds</td>
-<td>微秒</td>
-</tr>
-<tr>
-<td>milliseconds</td>
-<td>毫秒</td>
-</tr>
-</tbody>
-</table>
-<h2 id="timezone-时区"><a href="#timezone-时区" class="headerlink" title=".timezone 时区"></a>.timezone 时区</h2><p>设置时区</p>
-<ul>
-<li>设置时区为UTC</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">229</span>]: utctime = datetime.datetime.utcnow().replace(tzinfo=datetime.timezone.utc)</span><br><span class="line"></span><br><span class="line">In [<span class="number">230</span>]: utctime</span><br><span class="line">Out[<span class="number">230</span>]: datetime.datetime(<span class="number">2018</span>, <span class="number">4</span>, <span class="number">4</span>, <span class="number">2</span>, <span class="number">51</span>, <span class="number">4</span>, <span class="number">644039</span>, tzinfo=datetime.timezone.utc)</span><br><span class="line"></span><br><span class="line">In [<span class="number">231</span>]: utctime.astimezone(datetime.timezone(datetime.timedelta(hours=<span class="number">8</span>)))</span><br><span class="line">Out[<span class="number">231</span>]: datetime.datetime(<span class="number">2018</span>, <span class="number">4</span>, <span class="number">4</span>, <span class="number">10</span>, <span class="number">51</span>, <span class="number">4</span>, <span class="number">644039</span>, tzinfo=datetime.timezone(datetime.timedelta(<span class="number">0</span>, <span class="number">28800</span>)))</span><br></pre></td></tr></table></figure>
-<ul>
-<li>设置时区为东八区</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">231</span>]: utctime.astimezone(datetime.timezone(datetime.timedelta(hours=<span class="number">8</span>)))</span><br><span class="line">Out[<span class="number">231</span>]: datetime.datetime(<span class="number">2018</span>, <span class="number">4</span>, <span class="number">4</span>, <span class="number">10</span>, <span class="number">51</span>, <span class="number">4</span>, <span class="number">644039</span>, tzinfo=datetime.timezone(datetime.timedelta(<span class="number">0</span>, <span class="number">28800</span>)))</span><br></pre></td></tr></table></figure>
-<h2 id="tzinfo-时区"><a href="#tzinfo-时区" class="headerlink" title=".tzinfo 时区"></a>.tzinfo 时区</h2><p>每个 <code>datetime</code> 对象都有个时区属性<code>tzinfo</code>，默认情况为<code>None</code> ，除非给这个对象设置一个时区属性。</p>
-<ul>
-<li>设置时区为UTC</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">25</span>]: utctime = datetime.datetime.utcnow().replace(tzinfo=datetime.timezone.utc)</span><br><span class="line"></span><br><span class="line">In [<span class="number">26</span>]: utctime</span><br><span class="line">Out[<span class="number">26</span>]: datetime.datetime(<span class="number">2018</span>, <span class="number">4</span>, <span class="number">4</span>, <span class="number">6</span>, <span class="number">17</span>, <span class="number">10</span>, <span class="number">588587</span>, tzinfo=datetime.timezone.utc)</span><br><span class="line"></span><br><span class="line">In [<span class="number">27</span>]: utctime.tzinfo</span><br><span class="line">Out[<span class="number">27</span>]: datetime.timezone.utc</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> asyncio</span><br><span class="line"><span class="keyword">import</span> datetime</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">func1</span><span class="params">()</span>:</span></span><br><span class="line">    print(<span class="string">'现在运行func1'</span>)</span><br><span class="line">    <span class="keyword">await</span> asyncio.sleep(<span class="number">3</span>)</span><br><span class="line">    print(<span class="string">'返回func1继续运行'</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">func2</span><span class="params">()</span>:</span></span><br><span class="line">    print(<span class="string">'现在运行func2'</span>)</span><br><span class="line">    <span class="keyword">await</span> asyncio.sleep(<span class="number">3</span>)</span><br><span class="line">    print(<span class="string">'返回func2继续运行'</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">func3</span><span class="params">()</span>:</span></span><br><span class="line">    print(<span class="string">'现在运行func3'</span>)</span><br><span class="line">    <span class="keyword">await</span> asyncio.sleep(<span class="number">3</span>)</span><br><span class="line">    print(<span class="string">'返回func3继续运行'</span>)</span><br><span class="line"></span><br><span class="line">t1 = datetime.datetime.now()</span><br><span class="line"></span><br><span class="line">loop = asyncio.get_event_loop()</span><br><span class="line">tasks = [func1(),func2(),func3()]</span><br><span class="line">loop.run_until_complete(asyncio.wait(tasks))</span><br><span class="line">loop.close()</span><br><span class="line"></span><br><span class="line">t2 = datetime.datetime.now()</span><br><span class="line"></span><br><span class="line">print(t2-t1)</span><br></pre></td></tr></table></figure>
 
           
         
@@ -934,7 +586,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://yangjinheng.github.io/2017/09/19/python/10.random随机模块/">
+    <link itemprop="mainEntityOfPage" href="https://yangjinheng.github.io/2017/09/30/python/21.selectorsIO复用/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Jin Heng">
@@ -953,7 +605,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/09/19/python/10.random随机模块/" itemprop="url">random随机模块</a></h1>
+                <a class="post-title-link" href="/2017/09/30/python/21.selectorsIO复用/" itemprop="url">selectorsIO多路复用</a></h1>
         
 
         <div class="post-meta">
@@ -965,8 +617,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-19T00:00:00+08:00">
-                2017-09-19
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-30T00:00:00+08:00">
+                2017-09-30
               </time>
             
 
@@ -1027,115 +679,110 @@
       
         
           
-            <h2 id="random"><a href="#random" class="headerlink" title="random"></a>random</h2><p>Python提供的随机数生成模块</p>
+            <h2 id="selectors"><a href="#selectors" class="headerlink" title="selectors"></a>selectors</h2><p>该模块允许基于 <code>select</code> 模块原语的高级和高效的I/O复用。鼓励用户使用此模块，除非他们需要精确控制所使用的操作系统级原语。</p>
+<p>模块定义了一个 BaseSelector的抽象基类， 以及它的子类，包括：SelectSelector， PollSelector, EpollSelector, DevpollSelector, KqueueSelector，另外还有 <code>DefaultSelector</code> 类实例化它，就可以返回当前平台上最好的I/O复用器实例。</p>
+<p>模块定义了两个常量，用于描述Event Mask，指示在给定文件对象上应该等待哪些I/O事件。 </p>
 <table>
 <thead>
 <tr>
-<th>Function</th>
-<th>Description</th>
+<th>属性</th>
+<th>含义</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>randrange(start, stop[, step])</td>
-<td>返回范围内的随机整数</td>
+<td><code>EVENT_READ</code></td>
+<td>表示可读，它的值是1</td>
 </tr>
 <tr>
-<td>randint(a, b)</td>
-<td>返回a和b之间的随机整数</td>
-</tr>
-<tr>
-<td>choice(seq)</td>
-<td>从非空序列中返回一个随机元素</td>
-</tr>
-<tr>
-<td>shuffle(seq)</td>
-<td>随机化对象的序列，就地修改</td>
-</tr>
-<tr>
-<td>sample(population, k)</td>
-<td>从可迭代对象中随机选择K个元素</td>
-</tr>
-<tr>
-<td>random()</td>
-<td>返回范围[0.0，1.0）中的下一个随机浮点数</td>
-</tr>
-<tr>
-<td>uniform(a, b)</td>
-<td>返回a和b之间的随机浮点数</td>
-</tr>
-<tr>
-<td>seed(a=None, version=2)</td>
-<td>初始化随机数发生器</td>
-</tr>
-<tr>
-<td>getstate()</td>
-<td>返回捕获生成器当前内部状态的对象</td>
-</tr>
-<tr>
-<td>setstate(state)</td>
-<td>恢复发生器的内部状态</td>
-</tr>
-<tr>
-<td>getrandbits(k)</td>
-<td>返回一个具有k个随机位的Python整数</td>
-</tr>
-<tr>
-<td>triangular(low, high, mode)</td>
-<td>返回低位和高位之间的随机浮点数，并在这些边界之间指定模式</td>
-</tr>
-<tr>
-<td>betavariate(alpha, beta)</td>
-<td>Beta分布</td>
-</tr>
-<tr>
-<td>expovariate(lambd)指数分布</td>
-<td>指数分布</td>
-</tr>
-<tr>
-<td>gammavariate(alpha, beta)</td>
-<td>伽马分布</td>
-</tr>
-<tr>
-<td>gauss(mu, sigma)</td>
-<td>高斯分布</td>
-</tr>
-<tr>
-<td>lognormvariate(mu, sigma)</td>
-<td>记录正态分布</td>
-</tr>
-<tr>
-<td>normalvariate(mu, sigma)</td>
-<td>正态分布</td>
-</tr>
-<tr>
-<td>vonmisesvariate(mu, kappa)</td>
-<td>Von Mises分配</td>
-</tr>
-<tr>
-<td>paretovariate(alpha)</td>
-<td>帕累托分布</td>
-</tr>
-<tr>
-<td>weibullvariate(alpha, beta)</td>
-<td>威布尔分布</td>
+<td><code>EVENT_WRITE</code></td>
+<td>表示可写，它的值是2</td>
 </tr>
 </tbody>
 </table>
-<h3 id="randint"><a href="#randint" class="headerlink" title=".randint"></a>.randint</h3><p>返回a和b之间的随机整数</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">347</span>]: random.randint(<span class="number">10</span>,<span class="number">20</span>)</span><br><span class="line">Out[<span class="number">347</span>]: <span class="number">18</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">348</span>]: random.randint(<span class="number">10</span>,<span class="number">20</span>)</span><br><span class="line">Out[<span class="number">348</span>]: <span class="number">17</span></span><br></pre></td></tr></table></figure>
-<h3 id="choice"><a href="#choice" class="headerlink" title=".choice"></a>.choice</h3><p>从非空序列中返回一个随机元素</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">351</span>]: random.choice([<span class="number">1</span>,<span class="number">3</span>,<span class="number">5</span>,<span class="number">7</span>])</span><br><span class="line">Out[<span class="number">351</span>]: <span class="number">5</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">352</span>]: random.choice([<span class="number">1</span>,<span class="number">3</span>,<span class="number">5</span>,<span class="number">7</span>])</span><br><span class="line">Out[<span class="number">352</span>]: <span class="number">3</span></span><br></pre></td></tr></table></figure>
-<h3 id="shuffle"><a href="#shuffle" class="headerlink" title=".shuffle"></a>.shuffle</h3><p>就地将对象的序列随机化</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">353</span>]: a = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>,<span class="number">8</span>,<span class="number">9</span>]</span><br><span class="line"></span><br><span class="line">In [<span class="number">354</span>]: random.shuffle(a)</span><br><span class="line"></span><br><span class="line">In [<span class="number">355</span>]: a</span><br><span class="line">Out[<span class="number">355</span>]: [<span class="number">9</span>, <span class="number">2</span>, <span class="number">8</span>, <span class="number">4</span>, <span class="number">6</span>, <span class="number">5</span>, <span class="number">3</span>, <span class="number">1</span>, <span class="number">7</span>]</span><br></pre></td></tr></table></figure>
-<h3 id="sample"><a href="#sample" class="headerlink" title=".sample"></a>.sample</h3><p>从可迭代对象中随机选择置顶数目的元素</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">353</span>]: a = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>,<span class="number">8</span>,<span class="number">9</span>]</span><br><span class="line">In [<span class="number">356</span>]: random.sample(a,<span class="number">3</span>)</span><br><span class="line">Out[<span class="number">356</span>]: [<span class="number">6</span>, <span class="number">3</span>, <span class="number">1</span>]</span><br></pre></td></tr></table></figure>
-<h3 id="random-1"><a href="#random-1" class="headerlink" title=".random"></a>.random</h3><p>返回范围[0.0，1.0）中的下一个随机浮点数</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">362</span>]: random.random()</span><br><span class="line">Out[<span class="number">362</span>]: <span class="number">0.8994228502100843</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">363</span>]: random.random()</span><br><span class="line">Out[<span class="number">363</span>]: <span class="number">0.45701151135044815</span></span><br></pre></td></tr></table></figure>
-<h3 id="randrange"><a href="#randrange" class="headerlink" title=".randrange"></a>.randrange</h3><p>从指定的范围和步长范围内的数字内随机选择一个数字</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">382</span>]: list(range(<span class="number">1</span>,<span class="number">10</span>,<span class="number">3</span>))</span><br><span class="line">Out[<span class="number">382</span>]: [<span class="number">1</span>, <span class="number">4</span>, <span class="number">7</span>]</span><br><span class="line"></span><br><span class="line">In [<span class="number">383</span>]: random.randrange(<span class="number">1</span>,<span class="number">10</span>,<span class="number">3</span>)</span><br><span class="line">Out[<span class="number">383</span>]: <span class="number">4</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">384</span>]: random.randrange(<span class="number">1</span>,<span class="number">10</span>,<span class="number">3</span>)</span><br><span class="line">Out[<span class="number">384</span>]: <span class="number">4</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">385</span>]: random.randrange(<span class="number">1</span>,<span class="number">10</span>,<span class="number">3</span>)</span><br><span class="line">Out[<span class="number">385</span>]: <span class="number">1</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">386</span>]: random.randrange(<span class="number">1</span>,<span class="number">10</span>,<span class="number">3</span>)</span><br><span class="line">Out[<span class="number">386</span>]: <span class="number">7</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">387</span>]: random.randrange(<span class="number">1</span>,<span class="number">10</span>,<span class="number">3</span>)</span><br><span class="line">Out[<span class="number">387</span>]: <span class="number">7</span></span><br></pre></td></tr></table></figure>
-<h3 id="uniform"><a href="#uniform" class="headerlink" title=".uniform"></a>.uniform</h3><p>取得一个指定范围内的随机数字</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">394</span>]: random.uniform(<span class="number">10</span>,<span class="number">20</span>)</span><br><span class="line">Out[<span class="number">394</span>]: <span class="number">14.342604788139209</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">395</span>]: random.uniform(<span class="number">10</span>,<span class="number">20</span>)</span><br><span class="line">Out[<span class="number">395</span>]: <span class="number">15.594327115914577</span></span><br></pre></td></tr></table></figure>
+<h2 id="selectors-SelectorKey"><a href="#selectors-SelectorKey" class="headerlink" title="selectors.SelectorKey"></a>selectors.SelectorKey</h2><p>是一个命名元祖类，SelectorKey 是用于将文件对象与其基础文件描述符，所选事件掩码和附加数据相关联的命名元祖。它由几个 BaseSelector 方法返回，它包含下列几个属性。</p>
+<table>
+<thead>
+<tr>
+<th>属性</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>fileobj</code></td>
+<td>需要监视的IO对象</td>
+</tr>
+<tr>
+<td><code>fd</code></td>
+<td>底层文件描述符</td>
+</tr>
+<tr>
+<td><code>events</code></td>
+<td>等待此IO对象发生的事件，可用：<code>EVENT_READ</code> 和 <code>EVENT_WRITE</code></td>
+</tr>
+<tr>
+<td><code>data</code></td>
+<td>与此文件对象关联的可选不透明数据：例如，这可以用于存储每个客户端的会话ID</td>
+</tr>
+</tbody>
+</table>
+<h2 id="selectors-BaseSelector"><a href="#selectors-BaseSelector" class="headerlink" title="selectors.BaseSelector"></a>selectors.BaseSelector</h2><p>BaseSelector 用于等待多个文件对象的I/O事件就绪。它支持文件流注册，注销和一种方法来等待这些流上的I/O事件，并具有可选的超时。它是一个抽象的基类，所以不能实例化，需要实例化 DefaultSelector 类才能使用。 BaseSelector 及其具体实现支持上下文管理协议。</p>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>register(fileobj, events, data=None)</code></td>
+<td>注册文件对象以进行选择，监视文件对象的I/O事件。 <em>fileobj</em> 是要监视的文件对象。它可以是整数文件描述符或具有 <code>fileno()</code> 方法的对象。 <em>events</em> 是要监视的事件的按位掩码。 <em>data</em> 是一个不透明的对象。</td>
+</tr>
+<tr>
+<td><code>unregister(fileobj)</code></td>
+<td>从选择中取消注册文件对象，将其从监视中删除。文件对象在关闭前应该取消注册。 <em>fileobj</em> 必须是先前注册的文件对象。这将返回关联的 SelectorKey 实例，或者如果 fileobj 未注册，则引发 KeyError。如果 fileobj 无效，它将提高 ValueError （例如，它没有 fileno() 方法或其 fileno() 方法具有无效的返回值）。</td>
+</tr>
+<tr>
+<td><code>modify(fileobj, events, data=None)</code></td>
+<td>更改注册文件对象的受监视事件或附加数据。这相当于 <code>BaseSelector.unregister(fileobj)()</code> 随后是 <code>BaseSelector.register(fileobj, events, data)()</code>，除了它可以更有效地实现。</td>
+</tr>
+<tr>
+<td><code>select(timeout=None)</code></td>
+<td>等待直到某些已注册的文件对象准备就绪，或超时到期。如果是 timeout &gt; 0，则指定最大等待时间（以秒为单位）。如果是 timeout &lt;= 0，调用不会阻塞，并且会报告当前准备好的文件对象。如果 timeout 是 None，调用将阻塞，直到受监视的文件对象准备就绪。返回：SelectorKey和mark的元祖</td>
+</tr>
+<tr>
+<td><code>close()</code></td>
+<td>关闭选择器。必须调用此函数才能确保释放任何基础资源。选择器一旦关闭，不得使用。</td>
+</tr>
+<tr>
+<td><code>get_key(fileobj)</code></td>
+<td>返回与注册文件对象相关联的键。这将返回与此文件对象关联的 SelectorKey 实例，或者如果文件对象未注册，则引发 KeyError。</td>
+</tr>
+<tr>
+<td><code>get_map()</code></td>
+<td>返回阻塞IO复用器上已经 返回文件对象到选择器键的映射。这将返回 Mapping 实例将注册文件对象映射到其关联的 SelectorKey 实例。</td>
+</tr>
+<tr>
+<td><code>fileno()</code></td>
+<td>这将返回底层IO复用器对象使用的文件描述符。</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>步骤</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># 实例化一个 selector 对象</span><br><span class="line"># 在 selector 对象上注册监视一个文件描述符，选择监视类型，填写回调函数</span><br><span class="line"># 创建 selector 对象的事件循环</span><br><span class="line"># 遍历事件循环，在事件发生时候调用回调函数</span><br></pre></td></tr></table></figure>
+<ul>
+<li>官方示例</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> selectors</span><br><span class="line"><span class="keyword">import</span> socket</span><br><span class="line"></span><br><span class="line">sel = selectors.DefaultSelector()</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">accept</span><span class="params">(sock, mask)</span>:</span></span><br><span class="line">    conn, addr = sock.accept()  <span class="comment"># Should be ready</span></span><br><span class="line">    print(<span class="string">'accepted'</span>, conn, <span class="string">'from'</span>, addr)</span><br><span class="line">    conn.setblocking(<span class="keyword">False</span>)</span><br><span class="line">    sel.register(conn, selectors.EVENT_READ, read)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">read</span><span class="params">(conn, mask)</span>:</span></span><br><span class="line">    data = conn.recv(<span class="number">1000</span>)  <span class="comment"># Should be ready</span></span><br><span class="line">    <span class="keyword">if</span> data:</span><br><span class="line">        print(<span class="string">'echoing'</span>, repr(data), <span class="string">'to'</span>, conn)</span><br><span class="line">        conn.send(data)  <span class="comment"># Hope it won't block</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        print(<span class="string">'closing'</span>, conn)</span><br><span class="line">        sel.unregister(conn)</span><br><span class="line">        conn.close()</span><br><span class="line"></span><br><span class="line">sock = socket.socket()</span><br><span class="line">sock.bind((<span class="string">'localhost'</span>, <span class="number">1234</span>))</span><br><span class="line">sock.listen(<span class="number">100</span>)</span><br><span class="line">sock.setblocking(<span class="keyword">False</span>)</span><br><span class="line">sel.register(sock, selectors.EVENT_READ, accept)</span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span> <span class="keyword">True</span>:</span><br><span class="line">    events = sel.select()</span><br><span class="line">    <span class="keyword">for</span> key, mask <span class="keyword">in</span> events:</span><br><span class="line">        callback = key.data</span><br><span class="line">        callback(key.fileobj, mask)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>基于事件驱动的群聊</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> socket</span><br><span class="line"><span class="keyword">import</span> threading</span><br><span class="line"><span class="keyword">import</span> datetime</span><br><span class="line"><span class="keyword">import</span> logging</span><br><span class="line"><span class="keyword">import</span> selectors</span><br><span class="line"></span><br><span class="line">FORMAT = <span class="string">"%(asctime)s %(threadName)s %(thread)d %(message)s"</span></span><br><span class="line">logging.basicConfig(format=FORMAT, level=logging.INFO)</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ChatServer</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, ip=<span class="string">'127.0.0.1'</span>, port=<span class="number">60000</span>)</span>:</span> <span class="comment"># 启动服务</span></span><br><span class="line">        self.sock = socket.socket()</span><br><span class="line">        self.addr = (ip, port)</span><br><span class="line">        self.event = threading.Event()</span><br><span class="line">        self.selector = selectors.DefaultSelector() <span class="comment"># 创建selector</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">accept</span><span class="params">(self, sock)</span>:</span>  <span class="comment"># 多人连接</span></span><br><span class="line">        conn, addr = sock.accept()    <span class="comment">#接受连入的请求</span></span><br><span class="line">        conn.setblocking(<span class="keyword">False</span>)</span><br><span class="line">        self.selector.register(conn, selectors.EVENT_READ, self.recv)  <span class="comment"># 注册，监视每一个连接的 socket 对象</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">recv</span><span class="params">(self, sock)</span>:</span>  <span class="comment"># 接收客户端数据</span></span><br><span class="line">        data = sock.recv(<span class="number">1024</span>)  <span class="comment"># 数据已到达，接收数据</span></span><br><span class="line">        <span class="keyword">if</span> data == <span class="string">b''</span>:  <span class="comment"># 客户端主动断开，注销并关闭socket</span></span><br><span class="line">            self.selector.unregister(sock)</span><br><span class="line">            sock.close()</span><br><span class="line">            <span class="keyword">return</span></span><br><span class="line">        msg = <span class="string">"&#123;:%Y/%m/%d %H:%M:%S&#125; &#123;&#125;:&#123;&#125;\n&#123;&#125;\n"</span>.format(datetime.datetime.now(),*sock.getpeername(),data.decode())</span><br><span class="line">        logging.info(msg)</span><br><span class="line">        msg = msg.encode()</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> key <span class="keyword">in</span> self.selector.get_map().values():  <span class="comment"># 遍历目前在IO复用器上套接字</span></span><br><span class="line">            <span class="keyword">if</span> key.data == self.recv:  <span class="comment"># 排除 self.accept 套接字，向 recv 的套接字发送数据</span></span><br><span class="line">                key.fileobj.send(msg)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">start</span><span class="params">(self)</span>:</span> <span class="comment"># 启动监听</span></span><br><span class="line">        self.sock.bind(self.addr)  <span class="comment"># 绑定</span></span><br><span class="line">        self.sock.listen()  <span class="comment"># 监听</span></span><br><span class="line">        self.sock.setblocking(<span class="keyword">False</span>) <span class="comment"># 不阻塞</span></span><br><span class="line">        self.selector.register(self.sock, selectors.EVENT_READ, self.accept)  <span class="comment"># 注册</span></span><br><span class="line">        threading.Thread(target=self.select, name=<span class="string">'selector'</span>, daemon=<span class="keyword">True</span>).start()  <span class="comment"># 启动IO复用器</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">select</span><span class="params">(self)</span>:</span>  <span class="comment"># 阻塞</span></span><br><span class="line">        <span class="keyword">while</span> <span class="keyword">not</span> self.event.is_set():</span><br><span class="line">            events = self.selector.select()  <span class="comment"># 开始监视，一旦有请求连接过来，返回(key, mask)元组</span></span><br><span class="line">            print(<span class="string">'-'</span> * <span class="number">30</span>)</span><br><span class="line">            <span class="keyword">for</span> key, mask <span class="keyword">in</span> events:</span><br><span class="line">                logging.info(key)</span><br><span class="line">                logging.info(mask)</span><br><span class="line">                callback = key.data  <span class="comment"># 回调函数，此处是self.accept，self.recv 函数</span></span><br><span class="line">                callback(key.fileobj)  <span class="comment"># 调用 self.accept，self.recv 参数为连入的套接字</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">stop</span><span class="params">(self)</span>:</span> <span class="comment"># 停止服务</span></span><br><span class="line">        self.event.set()</span><br><span class="line">        fobjs = []</span><br><span class="line">        <span class="keyword">for</span> fd, key <span class="keyword">in</span> self.selector.get_map().items():</span><br><span class="line">            fobjs.append(key.fileobj)</span><br><span class="line">        <span class="keyword">for</span> fobj <span class="keyword">in</span> fobjs:</span><br><span class="line">            self.selector.unregister(fobj)</span><br><span class="line">            fobj.close()</span><br><span class="line">        self.selector.close()</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></span><br><span class="line">    cs = ChatServer()</span><br><span class="line">    cs.start()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> <span class="keyword">True</span>:</span><br><span class="line">        cmd = input(<span class="string">'&gt;&gt;'</span>).strip()</span><br><span class="line">        <span class="keyword">if</span> cmd == <span class="string">'quit'</span>:</span><br><span class="line">            cs.stop()</span><br><span class="line">            threading.Event().wait(<span class="number">3</span>)</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">        logging.info(threading.enumerate())</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
+
           
         
       
@@ -1174,7 +821,7 @@
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/30/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/30/">30</a><span class="page-number current">31</span><a class="page-number" href="/page/32/">32</a><span class="space">&hellip;</span><a class="page-number" href="/page/38/">38</a><a class="extend next" rel="next" href="/page/32/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/page/30/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/30/">30</a><span class="page-number current">31</span><a class="page-number" href="/page/32/">32</a><span class="space">&hellip;</span><a class="page-number" href="/page/43/">43</a><a class="extend next" rel="next" href="/page/32/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1222,7 +869,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">75</span>
+                  <span class="site-state-item-count">86</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

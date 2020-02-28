@@ -311,7 +311,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://yangjinheng.github.io/2019/03/29/kubernetes/Kubernetes高级部分/">
+    <link itemprop="mainEntityOfPage" href="https://yangjinheng.github.io/2019/03/20/personal/Hexo/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Jin Heng">
@@ -330,7 +330,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2019/03/29/kubernetes/Kubernetes高级部分/" itemprop="url">Kubernetes高级部分</a></h1>
+                <a class="post-title-link" href="/2019/03/20/personal/Hexo/" itemprop="url">Hexo 博客优化</a></h1>
         
 
         <div class="post-meta">
@@ -342,8 +342,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-03-29T00:00:00+08:00">
-                2019-03-29
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-03-20T15:32:09+08:00">
+                2019-03-20
               </time>
             
 
@@ -365,8 +365,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Kubernetes/" itemprop="url" rel="index">
-                    <span itemprop="name">Kubernetes</span>
+                  <a href="/categories/个人日志/" itemprop="url" rel="index">
+                    <span itemprop="name">个人日志</span>
                   </a>
                 </span>
 
@@ -404,158 +404,27 @@
       
         
           
-            <h1 id="网络通信"><a href="#网络通信" class="headerlink" title="网络通信"></a>网络通信</h1><p>K8S 的网络通信完全由 CNI 接口上的插件来实现，插件需要实现以下集中通信模型。</p>
-<p>目前比较流行的插件有：flannel、calico、canel、kube-router …</p>
+            <p>终于有小伙伴夸我的博客写的还行了，下面几个博客布局方面的设置，小伙伴们随意取用吧。</p>
+<p>剩下的一些小配置，可以到 Hexo 网站上找。</p>
+<h2 id="优化宽屏显示"><a href="#优化宽屏显示" class="headerlink" title="优化宽屏显示"></a>优化宽屏显示</h2><ul>
+<li>编辑 themes\next\source\css\_variables\base.styl ，查找下面的变量，修改其值</li>
+</ul>
+<figure class="highlight"><table><tr><td class="code"><pre><span class="line">$main-desktop                   = 80%</span><br><span class="line">$main-desktop-large             = 80%</span><br><span class="line"></span><br><span class="line">$content-desktop                = calc(100% - 260px);</span><br><span class="line">$content-desktop-large          = calc(100% - 260px);</span><br></pre></td></tr></table></figure>
+<h2 id="侧边菜单图标"><a href="#侧边菜单图标" class="headerlink" title="侧边菜单图标"></a>侧边菜单图标</h2><p>在下面的网址挑选图标，然后复制图标的名称，例如 icon-list ，那么仅需要 list 即可。</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line">http://www.bootcss.com/p/font-awesome/</span><br></pre></td></tr></table></figure>
 <ul>
-<li>如何加载插件</li>
+<li>示例</li>
 </ul>
-<p>k8s 在启动的时候会去：/etc/cni/net.d/ 目录下寻找网络插件的配置文件，POD 在创建时候 k8s 调用这个配置文件，由插件根据这个配置文件进行创建网络。</p>
-<h2 id="通信模型"><a href="#通信模型" class="headerlink" title="通信模型"></a>通信模型</h2><ol>
-<li>容器间通信：同一个 POD 内多个容器间的通信，使用 lo 网卡通信</li>
-<li>POD间通信：POD IP 直接与 POD IP 通信</li>
-<li>POD 与 Service：POD IP 直接与 Cluster IP</li>
-<li>Service 与集群外部客户端的通信，ingress、NodePort、Loadbacer</li>
-</ol>
-<h2 id="通信模型底层"><a href="#通信模型底层" class="headerlink" title="通信模型底层"></a>通信模型底层</h2><p>无论哪一种网络插件，它们用到的底层方案都是以下几种：</p>
-<ol>
-<li>虚拟网桥：brg，用纯软件实现一个虚拟网卡，一端在POD上，一端在宿主机上接入到网桥或物理接口桥上，称为隧道网络。</li>
-<li>多路复用：MacVLAN，基于 MAC 的方式创建 VLAN ，为每个虚拟接口配置一个独立的 MAC 地址，使得一个物理网卡承载多个容器使用，这样容器直接使用物理网卡，基于 MacVLAN 进行跨节点通信。</li>
-<li>硬件交换：网卡支持硬件交换，SR-IOV （单根-IO虚拟化） 方式，这种网卡支持直接在物理级别虚拟出多个接口，高性能。</li>
-</ol>
-<h2 id="K8S-名称空间"><a href="#K8S-名称空间" class="headerlink" title="K8S 名称空间"></a>K8S 名称空间</h2><p>K8S 名称空间与 POD 网络名称空间不在一个维度，所以即使在不同的 K8S 集群名称空间内创建的不同 POD，也可以通过网络直接通信。</p>
-<p>而目前应用最广的 flannel 网络插件，是不支持这种不同集群命名空间的网络隔离策略的。</p>
-<p>calico 支持地址分配，也支持不同集群命名空间的网络隔离策略，但是它使用较为复杂，支持 BGP 三层网络转发，性能比 flannel 强。</p>
-<p>也可以使用 flannel 来做网络管理，再安装 calico 仅仅做集群命名空间网路隔离策略，这种搭配方案。</p>
-<h2 id="K8s-网络拓扑"><a href="#K8s-网络拓扑" class="headerlink" title="K8s 网络拓扑"></a>K8s 网络拓扑</h2><p>所有 POD 连接到，本机 cni0 接口这个网络，cni0 接口发出的报文到达 flannel.1 这个接口，这个接口将报文封装为隧道协议，通过本机的真实的物理网卡发出。</p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">menu:</span></span><br><span class="line"><span class="attr">  home:</span> <span class="string">/</span> <span class="string">||</span> <span class="string">home</span></span><br><span class="line"><span class="attr">  Linux:</span> <span class="string">/linux/</span> <span class="string">||</span> <span class="string">laptop</span></span><br><span class="line"><span class="attr">  My-SQL:</span> <span class="string">/mysql/</span> <span class="string">||</span> <span class="string">tasks</span></span><br><span class="line"><span class="attr">  Python:</span> <span class="string">/python/</span> <span class="string">||</span> <span class="string">cogs</span></span><br></pre></td></tr></table></figure>
+<h2 id="设置忽略文件"><a href="#设置忽略文件" class="headerlink" title="设置忽略文件"></a>设置忽略文件</h2><p>有时候我会把整个目录软链到博客发布目录，但是目录中可能存在不想发布到博客的文件，所以需要配置忽略</p>
 <ul>
-<li>查看本机的接口</li>
+<li>忽略整个目录下的文件</li>
 </ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">1: lo:                       <span class="comment"># 本地回环</span></span><br><span class="line">2: ens33:                    <span class="comment"># 主机物理网卡</span></span><br><span class="line">3: docker0:                  <span class="comment"># docker 默认的桥接网络，在 k8s 中无用可以删除</span></span><br><span class="line">4: dummy0:                   <span class="comment"># </span></span><br><span class="line">5: kube-ipvs0:               <span class="comment"># </span></span><br><span class="line">6: flannel.1:                <span class="comment"># flannel 虚拟网卡，封装隧道报文</span></span><br><span class="line">7: cni0:                     <span class="comment"># 所有容器处于这个网桥</span></span><br><span class="line">8: veth0c014b8b@if3:         <span class="comment"># 容器的网卡连接到 cni0</span></span><br><span class="line">9: veth97c048e5@if3:         <span class="comment"># 容器的网卡连接到 cni0</span></span><br><span class="line">11: vethd2f0bf2b@if3:        <span class="comment"># 容器的网卡连接到 cni0</span></span><br><span class="line">12: veth648a500f@if3:        <span class="comment"># 容器的网卡连接到 cni0</span></span><br></pre></td></tr></table></figure>
-<ul>
-<li>下载 bridge-utils 包使用命令 brctl show cni0 查看 cni0 接口</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">bridge    name    bridge id           STP    enabled    interfaces</span><br><span class="line">cni0              8000.9a6ec95f8285   no		        veth0c014b8b</span><br><span class="line">                                                        veth648a500f</span><br><span class="line">                                                        veth7a3f56b7</span><br><span class="line">                                                        veth97c048e5</span><br><span class="line">                                                        vethd2f0bf2b</span><br></pre></td></tr></table></figure>
-<h1 id="flannel"><a href="#flannel" class="headerlink" title="flannel"></a>flannel</h1><p>flannel 是一个专为 kubernetes 定制的三层网络解决方案，主要用于解决容器的跨主机通信问题。</p>
-<h2 id="flannel-工作模式"><a href="#flannel-工作模式" class="headerlink" title="flannel 工作模式"></a>flannel 工作模式</h2><ul>
-<li>flannel.1 这个虚拟网卡支持多种传输模式：VxLAN、host-gw、Directrouting、udp </li>
-</ul>
-<table>
-<thead>
-<tr>
-<th>模式</th>
-<th>介绍</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>VXLAN</td>
-<td>使用 VxLAN 作为隧道封装报文</td>
-</tr>
-<tr>
-<td>host-gw</td>
-<td>不使用叠加网络，而是在主机的路由表中创建到其他主机 subnet 的路由条目，性能较好，缺陷是：所有 node 节点必须处于同一个二层网络中。</td>
-</tr>
-<tr>
-<td>DirectRouting</td>
-<td>当主机位于同一子网时启用直接路由，不在回退到 VxLAN。</td>
-</tr>
-<tr>
-<td>UDP</td>
-<td>直接使用 UDP 协议，性能差</td>
-</tr>
-</tbody>
-</table>
-<h2 id="VXLAN-通信过程"><a href="#VXLAN-通信过程" class="headerlink" title="VXLAN 通信过程"></a>VXLAN 通信过程</h2><p>Flannel VXLAN 实质上是一种 “覆盖网络(overlay network)” ，也就是将TCP数据包装在另一种网络包里面进行路由转发和通信，目前已经支持UDP、VxLAN、AWS VPC和GCE路由等数据转发方式。</p>
-<ul>
-<li>flannel VXLAN 通信过程</li>
-</ul>
-<p>在 K8S 上 POD 与 POD 是直接通过对方的 IP 地址进行通信的，POD 发出的报文经过 cni0 网桥到达 flannel ，flannel 将报文封装上一层 VxLAN 的首部，外层又被封装一层 UDP 协议的首部，发送给本机物理网卡，本机物理网卡又将 flannel 发过来的报文外层封装上 IP 首部和以太网帧首部（MAC）由网卡发出，另外一个 node 节点收到报文，内核发现是一个 VxLAN 的包，拆掉 IP 首部送给 flannel 应用程序，flannel 拆掉 VxLAN 首部并将内部的数据发送给，cni0 网桥，cni0 收到后转发给 POD。</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">|                                               |                                   |</span><br><span class="line">|&lt;------------------ VxLAN封装 -----------------&gt;|&lt;----------- 原始报文 -------------&gt;|</span><br><span class="line">+-----------+-----------+-----------+-----------+-----------+-----------+-----------+</span><br><span class="line">|  node 网络 |  node网络  | node 网络 |  VxLan    |   POD MAC |  POD IP   |    data   |</span><br><span class="line">|  帧首部MAC |   IP首部   | UDP 首部  |   首部     |    首部    |   首部    |  Payload  |</span><br><span class="line">+-----------+-----------+-----------+-----------+-----------+-----------+-----------+</span><br></pre></td></tr></table></figure>
-<h2 id="flannel-部署方式"><a href="#flannel-部署方式" class="headerlink" title="flannel 部署方式"></a>flannel 部署方式</h2><ol>
-<li>在 k8s 集群启动前，flannel 直接部署到节点上，作为一个守护进程运行。</li>
-</ol>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">任何一个部署了 kubelet 的节点都应该部署 flannel ，因为 kubelet 要借助 flannel 为 POD 设置网络接口</span><br></pre></td></tr></table></figure>
-<ol start="2">
-<li>使用 kube-admin 直接将 k8s 自己的组件包括 flannel 运行在 k8s 之上的静态 POD。</li>
-</ol>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">必须配置为共享 node 节点网络名称空间的 POD，所以 flannel POD 控制器为 DaemonSet。</span><br></pre></td></tr></table></figure>
-<h2 id="flannel-配置文件"><a href="#flannel-配置文件" class="headerlink" title="flannel 配置文件"></a>flannel 配置文件</h2><ul>
-<li>配置文件选项含义</li>
-</ul>
-<figure class="highlight"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    "Network": "10.244.0.0/16",     // flannel 使用的 CIDR 格式的网络地址，用于为 POD 配置网络功能</span><br><span class="line">	"SubnetLen": 24,                // 把 Network 切分为子网供各 node 节点使用时，使用多长的掩码切分，默认为 24</span><br><span class="line">	"SubnetMin": "10.244.10.0/24",  // 用于分配给 node 的子网起始地址，从这个网络开始分配网络</span><br><span class="line">    "SubnetMax": "10.244.255.0/24"  // 用于分配给 nide 的子网结束位置，这个是最大分配的网路  </span><br><span class="line">    "Backend": &#123;                    // 指明 POD 与 POD 跨节点通信时候使用的 flannel 工作模式</span><br><span class="line">        "Type": "vxlan",            // 工作模式</span><br><span class="line">    	"Directrouting": true       // 是否使用直接路由模式</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<ul>
-<li>flannel 托管到 k8s 上的配置文件，处于 kube-flannel-cfg 这个 configmap 中。</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl get configmap kube-flannel-cfg -n kube-system -o json</span><br></pre></td></tr></table></figure>
-<h2 id="修改工作模式"><a href="#修改工作模式" class="headerlink" title="修改工作模式"></a>修改工作模式</h2><ul>
-<li>修改 flannel 工作模式，添加 Directrouting，这个操作应该在刚刚部署完 k8s 集群时候修改，推荐修改</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl edit configmap kube-flannel-cfg -n kube-system</span><br></pre></td></tr></table></figure>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="string">"Backend"</span>: &#123;</span><br><span class="line">    <span class="string">"Type"</span>: <span class="string">"vxlan"</span>,</span><br><span class="line">    <span class="string">"Directrouting"</span>: <span class="literal">true</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<ul>
-<li>查看本机路由表</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ip route show</span><br></pre></td></tr></table></figure>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">default via 172.16.100.254 dev ens33 proto static metric 100 </span><br><span class="line">10.244.1.0/24 via 10.244.1.0 dev ens33             <span class="comment"># 必须为 dev 物理网卡接口，否则 Directrouting 没有设置成功</span></span><br><span class="line">10.244.2.0/24 via 10.244.2.0 dev ens33             <span class="comment"># 必须为 dev 物理网卡接口，否则 Directrouting 没有设置成功</span></span><br><span class="line">172.16.100.0/24 dev ens33 proto kernel scope link src 172.16.100.101 metric 100 </span><br><span class="line">172.17.0.0/16 dev docker0 proto kernel scope link src 172.17.0.1</span><br></pre></td></tr></table></figure>
-<h1 id="Calico"><a href="#Calico" class="headerlink" title="Calico"></a>Calico</h1><p>Calico 创建和管理⼀个扁平的三层网络(不需要 overlay)，每个容器会分配一个可路由的 ip。由于通信时不需要解包和封包，网络性能损耗小，易于排查，且易于水平扩展。</p>
-<p>小规模部署时可以通过 bgp client 直接互联，大规模下可通过指定的 BGP route reflector 来完成，这样保证所有的数据流量都是通过 IP 路由的方式完成互联的。 </p>
-<p>Calico 基于 iptables 还提供了丰富而灵活的网络 Policy，保证通过各个节点上的 ACLs 来提供 Workload 的多租户隔离、安全组以及其他可达性限制等功能。</p>
-<p>有个新的项目：canel，它集合了 flannel 和 calico 的优点。</p>
-<ul>
-<li>注意</li>
-</ul>
-<p>Calico 目前不支持工作在 iptables 下的 kube-proxy，下面介绍 canal 网络策略的使用</p>
-<h2 id="安装-canal"><a href="#安装-canal" class="headerlink" title="安装 canal"></a>安装 canal</h2><ul>
-<li>下载清单文件，需要翻墙</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl apply -f https://docs.projectcalico.org/v3.6/getting-started/kubernetes/installation/hosted/canal/canal.yaml</span><br></pre></td></tr></table></figure>
-<h2 id="清单定义"><a href="#清单定义" class="headerlink" title="清单定义"></a>清单定义</h2><ul>
-<li>清单格式，详见：kubectl explain networkpolicy</li>
-</ul>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="string">egress</span>                  <span class="string">&lt;[]Object&gt;</span>    <span class="comment"># 出站规则的对象列表</span></span><br><span class="line">  <span class="string">ports</span>                 <span class="string">&lt;[]Object&gt;</span>    <span class="comment"># 目标端口的对象列表</span></span><br><span class="line">    <span class="string">port</span>                <span class="string">&lt;string&gt;</span>      <span class="comment"># 数字形式或者是命名的端口</span></span><br><span class="line">    <span class="string">protocol</span>                          <span class="comment"># 协议 TCP、UDP</span></span><br><span class="line">  <span class="string">to</span>                    <span class="string">&lt;[]Object&gt;</span>    <span class="comment"># 目标地址对象列表</span></span><br><span class="line">    <span class="string">ipBlock</span>             <span class="string">&lt;Object&gt;</span>      <span class="comment"># 一组 IP 地址</span></span><br><span class="line">      <span class="string">cidr</span>	            <span class="string">&lt;string&gt;</span>      <span class="comment"># CIDR 表示的 IP 范围</span></span><br><span class="line">      <span class="string">except</span>	        <span class="string">&lt;[]string&gt;</span>    <span class="comment"># 排除 CIDR 中的某些地址</span></span><br><span class="line">    <span class="string">namespaceSelector</span>   <span class="string">&lt;Object&gt;</span>      <span class="comment"># 名称空间选择器</span></span><br><span class="line">    <span class="string">podSelector</span>         <span class="string">&lt;Object&gt;</span>      <span class="comment"># POD 选择器，目标地址可以也是一组 POD</span></span><br><span class="line"><span class="string">ingress</span>                 <span class="string">&lt;[]Object&gt;</span>    <span class="comment"># 入站规则的对象列表</span></span><br><span class="line">  <span class="string">from</span>                  <span class="string">&lt;[]Object&gt;</span>    <span class="comment"># 源地址对象列表</span></span><br><span class="line">    <span class="string">ipBlock</span>             <span class="string">&lt;Object&gt;</span>      <span class="comment"># 一组 IP 地址</span></span><br><span class="line">      <span class="string">cidr</span>	            <span class="string">&lt;string&gt;</span>      <span class="comment"># CIDR 表示的 IP 范围</span></span><br><span class="line">      <span class="string">except</span>	        <span class="string">&lt;[]string&gt;</span>    <span class="comment"># 排除 CIDR 中的某些地址</span></span><br><span class="line">    <span class="string">namespaceSelector</span>   <span class="string">&lt;Object&gt;</span>      <span class="comment"># 名称空间选择器</span></span><br><span class="line">    <span class="string">podSelector</span>         <span class="string">&lt;Object&gt;</span>      <span class="comment"># POD 选择器，源地址也可以是一组 POD</span></span><br><span class="line">  <span class="string">ports</span>                 <span class="string">&lt;[]Object&gt;</span>    <span class="comment"># POD 自己的端口，表示控制自己的端口是否可以被访问，的对象列表</span></span><br><span class="line">    <span class="string">port</span>                              <span class="comment"># 数字形式或者是命名的端口</span></span><br><span class="line">    <span class="string">protocol</span>                          <span class="comment"># 协议 TCP、UDP</span></span><br><span class="line"><span class="string">podSelector</span>             <span class="string">&lt;Object&gt;</span>      <span class="comment"># POD 选择器决定规则应用在哪些 POD 上</span></span><br><span class="line"><span class="string">policyTypes</span>             <span class="string">&lt;[]string&gt;</span>    <span class="comment"># 可以是 "Ingress", "Egress", 或者 "Ingress,Egress" ，表示放行满足这些规则访问</span></span><br></pre></td></tr></table></figure>
-<h2 id="policyTypes"><a href="#policyTypes" class="headerlink" title="policyTypes"></a>policyTypes</h2><ul>
-<li>首先定义 名称空间</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl create namespace dev</span><br><span class="line">kubectl create namespace prod</span><br></pre></td></tr></table></figure>
-<ul>
-<li>在两个命名空间分别创建一个 POD</li>
-</ul>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Pod</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line"><span class="attr">  name:</span> <span class="string">pod1</span></span><br><span class="line"><span class="attr">  namespace:</span> <span class="string">dev</span></span><br><span class="line"><span class="attr">  labels:</span></span><br><span class="line"><span class="attr">    app:</span> <span class="string">myapp</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line"><span class="attr">  containers:</span></span><br><span class="line"><span class="attr">  - name:</span> <span class="string">myapp</span></span><br><span class="line"><span class="attr">    image:</span> <span class="string">ikubernetes/myapp:v1</span></span><br><span class="line">    </span><br><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Pod</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line"><span class="attr">  name:</span> <span class="string">pod1</span></span><br><span class="line"><span class="attr">  namespace:</span> <span class="string">prod</span></span><br><span class="line"><span class="attr">  labels:</span></span><br><span class="line"><span class="attr">    app:</span> <span class="string">myapp</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line"><span class="attr">  containers:</span></span><br><span class="line"><span class="attr">  - name:</span> <span class="string">myapp</span></span><br><span class="line"><span class="attr">    image:</span> <span class="string">ikubernetes/myapp:v1</span></span><br></pre></td></tr></table></figure>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl apply -f pod-a.yaml -n dev</span><br></pre></td></tr></table></figure>
-<ul>
-<li>拒绝所有 dev 空间的报文</li>
-</ul>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">networking.k8s.io/v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">NetworkPolicy</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line"><span class="attr">  name:</span> <span class="string">deny-all-ingress</span></span><br><span class="line"><span class="attr">  namespace:</span> <span class="string">dev</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line"><span class="attr">  podSelector:</span> <span class="string">&#123;&#125;</span>            <span class="comment"># &#123;&#125; 空的选择器表示选择全部</span></span><br><span class="line"><span class="attr">  policyTypes:</span></span><br><span class="line"><span class="bullet">  -</span> <span class="string">Ingress</span>                  <span class="comment"># 指明 Ingress 规则生效，匹配 Ingress 将被放行，如果没定义 Ingress 则不能匹配所有，会拒绝全部</span></span><br><span class="line">                             <span class="comment"># policyTypes 没有 Egress 表示不控制 Egress ，默认为允许</span></span><br></pre></td></tr></table></figure>
-<ul>
-<li>在指定命名空间应用规则文件</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl apply -f deny-all-ingress.yaml -n dev</span><br></pre></td></tr></table></figure>
-<ul>
-<li>查看规则</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl get networkpolicy -n dev</span><br></pre></td></tr></table></figure>
-<ul>
-<li>查看 dev 空间中的 POD 地址并访问，结果是不能访问，因为这个命名空间拒绝外部访问</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl get pods -n dev -o wide</span><br></pre></td></tr></table></figure>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">curl 10.244.1.2</span><br></pre></td></tr></table></figure>
-<ul>
-<li>查看 prod 空间中的 POD 地址并访问，结果可以访问，因为这个命名空间没有定义规则</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl get pods -n dev -o wide</span><br></pre></td></tr></table></figure>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">curl 10.244.2.2</span><br></pre></td></tr></table></figure>
-<ul>
-<li>允许指定网段的 POD 访问本 POD 的 80 端口</li>
-</ul>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">networking.k8s.io/v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">NetworkPolicy</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line"><span class="attr">  name:</span> <span class="string">allow-80-ingress</span></span><br><span class="line"><span class="attr">  namespace:</span> <span class="string">dev</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line"><span class="attr">  podSelector:</span></span><br><span class="line"><span class="attr">    matchLabels:</span></span><br><span class="line"><span class="attr">      app:</span> <span class="string">myapp</span></span><br><span class="line"><span class="attr">  ingress:</span></span><br><span class="line"><span class="attr">  - from:</span></span><br><span class="line"><span class="attr">    - ipBlock:</span>                   <span class="comment"># 指定源地址为 IP 地址块 </span></span><br><span class="line"><span class="attr">        cidr:</span> <span class="number">10.244</span><span class="number">.0</span><span class="number">.0</span><span class="string">/16</span>    <span class="comment"># 掩码形式指出源地址 IP 地址范围</span></span><br><span class="line"><span class="attr">        except:</span>                  <span class="comment"># 排除 cidr 范围内的某个地址</span></span><br><span class="line"><span class="bullet">        -</span> <span class="number">10.244</span><span class="number">.1</span><span class="number">.2</span><span class="string">/32</span></span><br><span class="line"><span class="attr">    ports:</span></span><br><span class="line"><span class="attr">    - port:</span> <span class="number">80</span>                   <span class="comment"># 入栈且目标端口为 80 的则匹配</span></span><br><span class="line"><span class="attr">      protocol:</span> <span class="string">TCP</span></span><br><span class="line"><span class="attr">    - port:</span> <span class="number">443</span></span><br><span class="line"><span class="attr">      protocol:</span> <span class="string">TCP</span></span><br><span class="line"><span class="attr">  policyTypes:</span></span><br><span class="line"><span class="bullet">  -</span> <span class="string">Ingress</span>                  <span class="comment"># 指明 Ingress 规则生效，匹配 Ingress 将被放行，如果没定义 Ingress 则不能匹配所有，拒绝全部</span></span><br><span class="line">                             <span class="comment"># policyTypes 没有 Egress 表示不控制 Egress ，默认为允许</span></span><br></pre></td></tr></table></figure>
-<ul>
-<li>查看规则</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl get networkpolicy -n dev</span><br></pre></td></tr></table></figure>
-<ul>
-<li>拒绝出栈的所有请求</li>
-</ul>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">networking.k8s.io/v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">NetworkPolicy</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line"><span class="attr">  name:</span> <span class="string">deny-all-egress</span></span><br><span class="line"><span class="attr">  namespace:</span> <span class="string">prod</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line"><span class="attr">  podSelector:</span> <span class="string">&#123;&#125;</span>            <span class="comment"># &#123;&#125; 空的选择器表示选择全部</span></span><br><span class="line"><span class="attr">  policyTypes:</span></span><br><span class="line"><span class="bullet">  -</span> <span class="string">Egress</span>                   <span class="comment"># 指明 Egress 规则生效，匹配 Egress 将被放行，如果没定义 Egress 则不能匹配所有，拒绝全部</span></span><br><span class="line">                             <span class="comment"># policyTypes 没有 Ingress 表示不控制 Egress ，默认为允许</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">skip_render:</span></span><br><span class="line"><span class="bullet">  -</span> <span class="string">"_posts/web/React_demo/**"</span></span><br></pre></td></tr></table></figure>
+<h2 id="在文章中使用模板语法"><a href="#在文章中使用模板语法" class="headerlink" title="在文章中使用模板语法"></a>在文章中使用模板语法</h2>
+在 hexo 中 {{}} 为了防止这样的语法被翻译，可以在文章中使用下面的方法。
+
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123;% raw %&#125;</span><br><span class="line"></span><br><span class="line">&#123;% endraw %&#125;</span><br></pre></td></tr></table></figure>
 
           
         
@@ -604,7 +473,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://yangjinheng.github.io/2019/03/29/kubernetes/kubernetes简介安装/">
+    <link itemprop="mainEntityOfPage" href="https://yangjinheng.github.io/2019/02/07/Linux/windows软硬链接/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Jin Heng">
@@ -623,7 +492,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2019/03/29/kubernetes/kubernetes简介安装/" itemprop="url">Kubernetes入门</a></h1>
+                <a class="post-title-link" href="/2019/02/07/Linux/windows软硬链接/" itemprop="url">Windows 软硬链接右键脚本</a></h1>
         
 
         <div class="post-meta">
@@ -635,8 +504,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-03-29T00:00:00+08:00">
-                2019-03-29
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-02-07T00:00:00+08:00">
+                2019-02-07
               </time>
             
 
@@ -658,8 +527,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Kubernetes/" itemprop="url" rel="index">
-                    <span itemprop="name">Kubernetes</span>
+                  <a href="/categories/运维笔记/" itemprop="url" rel="index">
+                    <span itemprop="name">运维笔记</span>
                   </a>
                 </span>
 
@@ -697,379 +566,67 @@
       
         
           
-            <h1 id="Kubernetes简介"><a href="#Kubernetes简介" class="headerlink" title="Kubernetes简介"></a>Kubernetes简介</h1><ul>
-<li>学习资料来源</li>
+            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>大年初一，在家没什么意思，就整理整理博客，算起来用 HEXO 写博客两年多了。</p>
+<p>让我别扭的一点是我写的 Markdown 总要保存两份，一份是自己的笔记，一份是博客文章，两者的区别就是一个头的区别，作为一个程序员，应该尽量避免冗余、我想能否通过软链接的方式链接呢？(试过快捷方式无效)，于是查了资料，进行了实验，结果是可以的，功能实现以后就懒得写博客这些客套话了，自己看吧，直接上脚本。</p>
+<h2 id="链接命令"><a href="#链接命令" class="headerlink" title="链接命令"></a>链接命令</h2><ul>
+<li>mklink 命令帮助</li>
 </ul>
-<p>马哥教育：<a href="https://blog.51cto.com/mageedu" target="_blank" rel="noopener">https://blog.51cto.com/mageedu</a></p>
-<p>马哥Github：<a href="https://github.com/iKubernetes" target="_blank" rel="noopener">https://github.com/iKubernetes</a></p>
-<p>阳明的博客：<a href="https://www.qikqiak.com/page/archive/" target="_blank" rel="noopener">https://www.qikqiak.com/page/archive/</a></p>
-<p>宋净超（云原生架构手册）：<a href="https://jimmysong.io/kubernetes-handbook/" target="_blank" rel="noopener">https://jimmysong.io/kubernetes-handbook/</a></p>
-<p>Helm 用户指南：<a href="https://whmzsu.github.io/helm-doc-zh-cn/" target="_blank" rel="noopener">https://whmzsu.github.io/helm-doc-zh-cn/</a></p>
-<p>运维之美：<a href="https://www.hi-linux.com/archive/" target="_blank" rel="noopener">https://www.hi-linux.com/archive/</a></p>
-<h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>kubernetes 是希腊语，翻译过来是：舵手的意思，它的原型是谷歌内部使用 Borg 集群管理系统，可以说是集结了 Borg 设计思想的精华，并且吸收了 Borg 系统中的经验和教训。</p>
-<p>它的目标不仅仅是一个编排系统，而是提供一个规范，可以让你来描述集群的架构，定义服务的最终状态，Kubernetes可以帮你将系统自动地达到和维持在这个状态。Kubernetes作为云原生应用的基石，相当于一个云操作系统，其重要性不言而喻。</p>
-<p>kubernetes 在 2014 年发布了第一个版本，目前开源并托管在 Github 上。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">https://github.com/Kubernetes</span><br></pre></td></tr></table></figure>
-<p>目前，AWS、阿里云、微软云，目前已经原生支持 K8S ，目前已经可以让用户直接部署云原生的服务。</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">MKLINK [[/D] | [/H] | [/J]] Link Target</span><br><span class="line"></span><br><span class="line">        /D      创建目录符号链接。默认为文件</span><br><span class="line">                符号链接。</span><br><span class="line">        /H      创建硬链接而非符号链接。</span><br><span class="line">        /J      创建目录联接。</span><br><span class="line">        Link    指定新的符号链接名称。</span><br><span class="line">        Target  指定新链接引用的路径</span><br><span class="line">                (相对或绝对)。</span><br></pre></td></tr></table></figure>
+<h2 id="软硬链接的区别"><a href="#软硬链接的区别" class="headerlink" title="软硬链接的区别"></a>软硬链接的区别</h2><table>
+<thead>
+<tr>
+<th>类型</th>
+<th>参数</th>
+<th>支持路径</th>
+<th>占用空间</th>
+<th>跨磁盘性</th>
+<th>特性</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>符号链接.symlinkd</td>
+<td>/d</td>
+<td>相对/绝对</td>
+<td>不占用</td>
+<td>跨分区/跨网络</td>
+<td>只是源目录的引用，源目录删除则不可用，链接文件删除不影响源文件，在操作系统层面解析，系统认为它是一个符号链接。</td>
+</tr>
+<tr>
+<td>目录联接.junction</td>
+<td>/j</td>
+<td>绝对</td>
+<td>不占用</td>
+<td>跨分区</td>
+<td>同上</td>
+</tr>
+<tr>
+<td>硬链接</td>
+<td>/h</td>
+<td>绝对</td>
+<td>不占用</td>
+<td>仅本分区</td>
+<td>源文件的元数据级别引用，它们的数据块是同一个数据块，所以修改任意一个，另外一个也会发生变动，源文件删除不影响链接文件</td>
+</tr>
+<tr>
+<td>快捷方式.lnk</td>
+<td>右键</td>
+<td>绝对</td>
+<td>很小</td>
+<td>跨分区</td>
+<td>只是操作级别的解析，系统认为它只是一个文件</td>
+</tr>
+</tbody>
+</table>
+<h2 id="我的VBS脚本"><a href="#我的VBS脚本" class="headerlink" title="我的VBS脚本"></a>我的VBS脚本</h2><p>我写了一个 VBS 脚本，方便链接的创建，主要实现了：智能判断源文件类型来实现创建软硬链接、拖放（支持多个文件）或者注册表右键的方式（传参问题！目前支持单个文件）调用，方便快捷</p>
 <ul>
-<li>有什么优势，为什么值得学</li>
+<li>VBS脚本放在 C:\Windows\mklink.vbs</li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">- 基于 Borg 系统，设计成熟，开源、且轻量级，简单易学、容易理解；</span><br><span class="line">- 模块化，可插拔，支持钩子，可任意组合，例如：网络组件 flannel，存储插件；</span><br><span class="line">- 故障发现（存活性探针）和自我修复能力（副本数量）、服务滚动升级（就绪探针）和在线扩容（副本数量）；</span><br><span class="line">- 可扩展的资源自动调度机制（多维度的水平自动扩容）、多粒度的资源配额管理能力（资源限制）。</span><br></pre></td></tr></table></figure>
-<h2 id="Master包含组件"><a href="#Master包含组件" class="headerlink" title="Master包含组件"></a>Master包含组件</h2><p>Master 组件提供的集群控制，Master 组件对集群做出全局性决策(例如：调度)等，负责维护集群的目标状态。</p>
+<figure class="highlight vbscript"><table><tr><td class="code"><pre><span class="line"><span class="comment">' 判断传递参数个数</span></span><br><span class="line"><span class="keyword">If</span> WScript.Arguments.Count = <span class="number">0</span> <span class="keyword">Then</span>  </span><br><span class="line">    <span class="built_in">MsgBox</span> <span class="string">"将需要创建链接的文件拖放到本程序"</span>, vbOKOnly,<span class="string">"用法"</span></span><br><span class="line">    WScript.quit</span><br><span class="line"><span class="keyword">End</span> <span class="keyword">If</span></span><br><span class="line"></span><br><span class="line"><span class="comment">' 变量声明、对象创建</span></span><br><span class="line"><span class="keyword">Dim</span> FileName, BaseName, DiskName, TargetPath, Command</span><br><span class="line"><span class="keyword">Set</span> Fso = <span class="built_in">CreateObject</span>(<span class="string">"Scripting.FileSystemObject"</span>)</span><br><span class="line"><span class="keyword">Set</span> ObjShell = <span class="built_in">CreateObject</span>(<span class="string">"Shell.Application"</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">' 根据文件类型，决定目标范围</span></span><br><span class="line"><span class="keyword">If</span> Fso.FileExists(WScript.Arguments(<span class="number">0</span>))  <span class="keyword">Then</span></span><br><span class="line">    DiskName = Fso.GetDriveName(WScript.Arguments(<span class="number">0</span>))</span><br><span class="line"><span class="keyword">End</span> <span class="keyword">If</span></span><br><span class="line"></span><br><span class="line"><span class="comment">' 弹出目标选择框，取得选择值</span></span><br><span class="line"><span class="keyword">Set</span> ObjFolder = ObjShell.BrowseForFolder(<span class="number">0</span>, <span class="string">"选择一个目录"</span>, <span class="number">0</span>, DiskName)</span><br><span class="line"><span class="keyword">If</span> ObjFolder <span class="keyword">Is</span> <span class="literal">Nothing</span> <span class="keyword">Then</span></span><br><span class="line">    WScript.Quit</span><br><span class="line"><span class="keyword">Else</span></span><br><span class="line">    TargetPath = ObjFolder.Self.Path</span><br><span class="line"><span class="keyword">End</span> <span class="keyword">If</span></span><br><span class="line"></span><br><span class="line"><span class="comment">' 判断要处理多少个文件</span></span><br><span class="line"><span class="keyword">If</span> WScript.Arguments.Count &gt; <span class="number">1</span> <span class="keyword">Then</span></span><br><span class="line">    <span class="keyword">For</span> i = <span class="number">0</span> <span class="keyword">to</span> WScript.Arguments.Count - <span class="number">1</span></span><br><span class="line">        <span class="comment">' filename = filename &amp; cstr(WScript.Arguments(i))</span></span><br><span class="line">        Handler(WScript.Arguments(i))</span><br><span class="line">    <span class="keyword">Next</span></span><br><span class="line"><span class="keyword">Else</span></span><br><span class="line">    Handler(WScript.Arguments(<span class="number">0</span>))</span><br><span class="line"><span class="keyword">End</span> <span class="keyword">If</span></span><br><span class="line"></span><br><span class="line"><span class="comment">' 根据收集的信息拼接命令</span></span><br><span class="line"><span class="keyword">Function</span> Handler(File)</span><br><span class="line">    <span class="comment">' 分析文件名称，等到文件名和路径名</span></span><br><span class="line">    FileName = File</span><br><span class="line">    BaseName = Fso.GetFileName(FileName)</span><br><span class="line"></span><br><span class="line">    <span class="comment">' 根据文件类型，决定创建软或硬链接</span></span><br><span class="line">    <span class="keyword">If</span> Fso.FolderExists(FileName)  <span class="keyword">Then</span></span><br><span class="line">        Command = Command &amp; <span class="string">"MKLINK /D "</span> &amp; TargetPath &amp; <span class="string">"\"</span> &amp; BaseName &amp; <span class="string">" "</span> &amp; FileName &amp; <span class="string">"&amp;"</span></span><br><span class="line">    <span class="keyword">Else</span></span><br><span class="line">        Command = Command &amp; <span class="string">"MKLINK /H "</span> &amp; TargetPath &amp; <span class="string">"\"</span> &amp; BaseName &amp; <span class="string">" "</span> &amp; FileName &amp; <span class="string">"&amp;"</span></span><br><span class="line">    <span class="keyword">End</span> <span class="keyword">If</span></span><br><span class="line"><span class="keyword">End</span> <span class="keyword">Function</span></span><br><span class="line"></span><br><span class="line"><span class="comment">' 执行最终拼接的命令</span></span><br><span class="line">ObjShell.ShellExecute <span class="string">"cmd.exe"</span>, <span class="string">"/C "</span> &amp; Command, <span class="string">""</span>, <span class="string">"runas"</span>, <span class="number">0</span></span><br></pre></td></tr></table></figure>
 <ul>
-<li>etcd</li>
+<li>添加右键菜单 mklink.reg</li>
 </ul>
-<p>用于 Kubernetes 的后端数据存储，所有集群数据都存储在此处</p>
-<ul>
-<li>kube-apiserver</li>
-</ul>
-<p>对外暴露了 Kubernetes API，它是的 Kubernetes 前端控制层，只有 API Server 会与 etcd 通信，其它模块都必须通过 API Server 访问集群状态。</p>
-<ul>
-<li>kube-controller-manager</li>
-</ul>
-<p>处理集群中常规任务，它是单独的进程，内部包含多个控制器，包含如下控制器</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">- 节点控制器: 当节点移除时，负责注意和响应。</span><br><span class="line">- 副本控制器: 负责维护系统中每个副本控制器对象正确数量的 Pod。</span><br><span class="line">- 端点控制器: 填充 端点(Endpoints) 对象(即连接 Services &amp; Pods)。</span><br><span class="line">- 服务帐户和令牌控制器: 为新的命名空间创建默认帐户和 API 访问令牌</span><br></pre></td></tr></table></figure>
-<ul>
-<li>kube-scheduler</li>
-</ul>
-<p>监视新创建的 Pod 为新创建的 POD 分配合适的 node 节点</p>
-<ul>
-<li>addons（插件）</li>
-</ul>
-<p>插件是实现集群功能的 Pod 和 Service，一般被创建于 kube-system 命名空间。例如：coreDNS</p>
-<p>虽然其他插件并不是必需的，但所有 Kubernetes 集群都应该具有Cluster DNS，许多应用依赖于它，为 Kubernetes 服务提供 DNS 记录，容器启动该后会自动将 DNS 服务器包含在自己的 /etc/resolv.conf 中。</p>
-<h2 id="Nodes包含组件"><a href="#Nodes包含组件" class="headerlink" title="Nodes包含组件"></a>Nodes包含组件</h2><p>Node 节点实际负责实施，也就是运行 POD 的节点，上面运行的组件有</p>
-<ul>
-<li>kubelet</li>
-</ul>
-<p>它监测已经分配给自己的 Pod，为 POD 准备卷，下载 POD 所需的 Secret，下载镜像并运行，进行生命周期探测，上报 POD 和节点状态</p>
-<ul>
-<li>kube-proxy</li>
-</ul>
-<p>通过维护主机上的网络规则并执行连接转发，将 Kubernetes 提供的网络服务代理到每个节点上，实现了Kubernetes服务抽象</p>
-<ul>
-<li>docker</li>
-</ul>
-<p>用于运行容器</p>
-<h2 id="网络模型"><a href="#网络模型" class="headerlink" title="网络模型"></a>网络模型</h2><p>k8s 有三种网络：POD网络、集群网络、节点网络</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">POD网络：所有 POD 处于同一个网络中</span><br><span class="line">集群网络：Service 是一个另外一个网络</span><br><span class="line">节点网络：node 节点也是另外一个网络</span><br></pre></td></tr></table></figure>
-<p>所以，接入外部访问时候，请求首先到达 node 网络，然后 node 网络代理至 service 网络，service 根据 ipvs 规则来转发到 pod 网络中的 pod 上。</p>
-<p>k8s 有三种通信：</p>
-<p>同一个 POD 内的多个容器间的通信，可以直接通过 lo 通信</p>
-<p>POD 与 POD 通信，所有 POD 都处于一个网络，可以跨 node 与另外的 POD 直接通信，因为使用了叠加网络。</p>
-<p>POD 与 Service 通信，</p>
-<h1 id="组件和附件"><a href="#组件和附件" class="headerlink" title="组件和附件"></a>组件和附件</h1><h2 id="Controller"><a href="#Controller" class="headerlink" title="Controller"></a>Controller</h2><p>这些控制器分别用于确保不同类型的 POD 资源运行于符合用户所期望的状态。</p>
-<ul>
-<li>RelicationController</li>
-</ul>
-<p>控制同一类 POD 对象的副本数量，实现程序的滚动更新，或者回滚的操作。</p>
-<p>在滚动更新时候，允许临时超出规定的副本数量，</p>
-<ul>
-<li>RelicaSet</li>
-</ul>
-<p>副本集控制器，它不直接使用，它有一个声明式中心控制器 Deployment</p>
-<ul>
-<li>Deployment</li>
-</ul>
-<p>它只能管理无状态的应用，这个控制器，支持二级控制器，例如：HPA（Horizontal Pod Autoscaler，水平 POD 自动伸缩控制器），当负载高的时候，自动启动更多的 POD。</p>
-<ul>
-<li>StatefulSet</li>
-</ul>
-<p>管理有状态的应用</p>
-<ul>
-<li>DaeminSet</li>
-</ul>
-<p>如果需要在每一个 node 上运行一个副本，而不是随意运行</p>
-<ul>
-<li>Job</li>
-</ul>
-<p>运行作业，时间不固定的操作，例如：备份、清理，临时启动一个 POD 来进行备份的任务，运行完成就结束了。</p>
-<p>如果运行时候 JOB 挂了，那么需要重新启动起来，如果运行完成了则不需要再启动了。</p>
-<ul>
-<li>Cronjob</li>
-</ul>
-<p>和周期性作业</p>
-<h2 id="Service"><a href="#Service" class="headerlink" title="Service"></a>Service</h2><p>为客户端提供一个稳定的访问入口，Service 靠标签选择器来关联 POD 的，只要 POD 上有相关的标签，那么就会被 Service 选中，作为 Service 的后端，Service 关联 POD 后会动态探测这个 POD 的 IP 地址和端口，并作为自己调度的后端。</p>
-<p>总的来说客户端请求 Service 由 Service 代理至后端的 POD，所以客户端看到的始终是 Service 的地址。</p>
-<p>K8S 上的 Service 不是一个应用程序，也不是一个组件，它是一个 iptables dnat 规则，或者 ipvs 规则，Service 只是规则，所以是 ping 不通的，但是它的确可以请求。</p>
-<p>Service 作为 k8s 的对象来说，是有名称的，可以通过 Service 的名称解析为 Service 的 IP 地址。</p>
-<ul>
-<li>AddOns</li>
-</ul>
-<p>解析域名是由 DNS 来解析的，为 k8s 中提供域名解析这种基础服务，称之为基础架构 POD 也称为 k8s 附件，所以域名解析的 POD 就是 k8s 中的一种 AddOns。</p>
-<p>而 k8s 中的 dns 附件，是动态的，例如：service 名称发生更改，就会自动触发 dns 中的解析记录的改变，如果手动修改 service 的地址，也会自动触发 DNS 解析记录的改变，所以客户端访问服务时，可以直接访问服务的名称。</p>
-<h2 id="kube-proxy"><a href="#kube-proxy" class="headerlink" title="kube-proxy"></a>kube-proxy</h2><p>在 node 节点上运行的一个守护进程，它负责随时与 apiserver 进行通信，因为每个 pod 发生变化后需要保存在 apiserver 中，而 apiserver 发生改变后会生成一个通知事件，这个事件可以被任何关联的组件接收到，例如被 kube-proxy 一旦发现某个 service 后端的 pod 地址发生改变，那么就由 kube-proxy 负责在本地将地址写入 iptables 或者 ipvs 规则中。</p>
-<p>所以 service 的管理是靠 kube-proxy 来实现的，当你创建一个 service ，那么就靠 kube-proxy 在每个节点上创建为 iptables 或者 ipvs 规则，每个 service 的变动也需要 kube-proxy 反应到规则上。</p>
-<p>apiserver 需要保存各个 node 信息，它需要保存在 etcd 中。</p>
-<h2 id="etcd"><a href="#etcd" class="headerlink" title="etcd"></a>etcd</h2><p>是一个键值存储的系统，与 redis 很想，但是 etcd 还有一些协调功能是 redis 所不具备的，它还有节点选举等功能，从这个角度来讲 etcd 更像 zookpeer。</p>
-<p>由于整个集群的所有信息都保存在 etcd，所以 etcd 如果宕机，那么整个集群就挂了，因而 etcd 需要做高可用。</p>
-<h2 id="flanel"><a href="#flanel" class="headerlink" title="flanel"></a>flanel</h2><p>托管为 k8s 的附件运行</p>
-<p>node 网络：各节点之间进行通信</p>
-<p>POD 网络：所有 node上的 POD 彼此之间通过叠加，或者直接路由方式通信</p>
-<p>service 网络：由 kube-proxy 负责管控和生成</p>
-<h1 id="入门命令"><a href="#入门命令" class="headerlink" title="入门命令"></a>入门命令</h1><h2 id="kubectl"><a href="#kubectl" class="headerlink" title="kubectl"></a>kubectl</h2><p>kubectl 是 apiserver 的客户端程序，这个客户端程序是通过连接 master 节点上的 apiserver ，实现各种 k8s 对象的增删改查等基本操作，在 k8s 可被管理的对象有很多个</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">基本命令 (初级):</span><br><span class="line">  create         从文件或标准输入创建资源</span><br><span class="line">  expose         获取一个复制控制器，服务，部署或者暴露一个 POD 将其作为新的 Kubernetes 服务公开</span><br><span class="line">  run            创建并运行特定的镜像，创建使用 deployment 或 job 管理的容器</span><br><span class="line">  <span class="built_in">set</span>            设置对象的特定功能</span><br><span class="line"></span><br><span class="line">基本命令 (中级):</span><br><span class="line">  explain        文档或者资源</span><br><span class="line">  get            显示一个或多个资源</span><br><span class="line">  edit           编辑服务器上的资源</span><br><span class="line">  delete         按文件名，标准输入，资源和名称或资源和标签选择器删除资源</span><br><span class="line"></span><br><span class="line">部署命令:</span><br><span class="line">  rollout        管理资源的部署</span><br><span class="line">  scale          为部署设置新大小，ReplicaSet, Replication Controller, Job</span><br><span class="line">  autoscale      自动扩展一个部署, ReplicaSet, 或者 ReplicationController</span><br><span class="line"></span><br><span class="line">群集管理命令:</span><br><span class="line">  certificate    修改证书资源.</span><br><span class="line">  cluster-info   显示群集信息</span><br><span class="line">  top            显示资源（CPU /内存/存储）使用情况。</span><br><span class="line">  cordon         将节点标记为不可调度</span><br><span class="line">  uncordon       将节点标记为可调度</span><br><span class="line">  drain          设定 node 进入维护模式</span><br><span class="line">  taint          更新一个或多个节点上的污点</span><br><span class="line"></span><br><span class="line">故障排除和调试命令:</span><br><span class="line">  describe       显示特定资源或资源组的详细信息</span><br><span class="line">  logs           在容器中打印容器的日志</span><br><span class="line">  attach         附加到正在运行的容器</span><br><span class="line">  <span class="built_in">exec</span>           在容器中执行命令</span><br><span class="line">  port-forward   将一个或多个本地端口转发到 pod</span><br><span class="line">  proxy          运行代理到 Kubernetes API 服务器</span><br><span class="line">  cp             将文件和目录复制到容器，和从容器复制，跨容器复制文件</span><br><span class="line">  auth           检查授权</span><br><span class="line"></span><br><span class="line">高级命令:</span><br><span class="line">  diff           针对将要应用的版本的 Diff 实时版本</span><br><span class="line">  apply          通过文件名或标准输入将配置应用于资源</span><br><span class="line">  patch          使用策略合并补丁更新资源的字段</span><br><span class="line">  replace        用文件名或标准输入替换资源</span><br><span class="line">  <span class="built_in">wait</span>           实验阶段命令：在一个或多个资源上等待特定条件，定义一个触发器</span><br><span class="line">  convert        在不同的API版本之间转换配置文件</span><br><span class="line">  kustomize      从目录或远程 URL 构建 kustomization 目标</span><br><span class="line"></span><br><span class="line">设置命令:</span><br><span class="line">  label          更新资源上的标签</span><br><span class="line">  annotate       更新资源上的注释</span><br><span class="line">  completion     命令补全相关功能</span><br><span class="line"></span><br><span class="line">其他命令:</span><br><span class="line">  api-resources  在服务器上打印支持的API资源</span><br><span class="line">  api-versions   以 <span class="string">"group/version"</span> 的形式在服务器上打印支持的API版本</span><br><span class="line">  config         修改 kubeconfig 文件</span><br><span class="line">  plugin         提供与插件交互的实用程序</span><br><span class="line">  version        打印客户端和服务器版本信息</span><br></pre></td></tr></table></figure>
-<h2 id="run"><a href="#run" class="headerlink" title="run"></a>run</h2><ul>
-<li>创建控制器并运行镜像</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl run nginx --image=nginx:latest    <span class="comment"># 创建一个名为 nginx 的控制器，运行 nginx:latest 版本的镜像</span></span><br></pre></td></tr></table></figure>
-<ul>
-<li>指定运行的 POD 数量</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl run nginx --image=nginx --replicas=5  <span class="comment"># 启动 5 个 POD</span></span><br></pre></td></tr></table></figure>
-<ul>
-<li>不运行容器的默认命令，使用自定义的指令</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl run nginx --image=nginx --<span class="built_in">command</span> -- &lt;cmd&gt; &lt;arg1&gt; ... &lt;argN&gt;</span><br></pre></td></tr></table></figure>
-<ul>
-<li>运行一个周期任务</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl run pi --schedule=<span class="string">"0/5 * * * ?"</span> --image=perl --restart=OnFailure -- perl -Mbignum=bpi -wle <span class="string">'print bpi(2000)'</span></span><br></pre></td></tr></table></figure>
-<h2 id="run示例"><a href="#run示例" class="headerlink" title="run示例"></a>run示例</h2><ul>
-<li>指定控制器名称运行 nginx 指定端口和副本数量，以测试模式运行</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl run nginx-deploy --image=nginx --port=80 --replicas=1 --dry-run=<span class="literal">true</span></span><br></pre></td></tr></table></figure>
-<ul>
-<li>查看容器是否运行</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl get deployment</span><br></pre></td></tr></table></figure>
-<ul>
-<li>查看被调度的主机</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl get pod -o wide</span><br></pre></td></tr></table></figure>
-<ul>
-<li>通过 ip 地址直接访问，由于所有的 POD 处于同一个网络中，所以在集群内部是可以访问的</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">curl 10.244.2.2</span><br></pre></td></tr></table></figure>
-<ul>
-<li>假如现在删除刚创建的这个 POD，那么副本控制器会自动在其他的 node 上重建这个 POD</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl delete pods nginx-deploy-5c9b546997-jsmk6</span><br></pre></td></tr></table></figure>
-<ul>
-<li>再次执行查看，会发现容器已经被调度到其他节点上运行了</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl get pod -o wide</span><br></pre></td></tr></table></figure>
-<h2 id="expose"><a href="#expose" class="headerlink" title="expose"></a>expose</h2><p>现在存在一个问题，就是 POD 的 IP 地址可能随时发生变动，所以不能作为访问的入口，那么就需要 service 来代理 POD 来创建一个固定的端点。</p>
-<ul>
-<li>创建一个 service 暴露一个服务</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl expose deployment nginx-deploy --name=nginx --port=80 --target-port=80 --protocol=TCP</span><br></pre></td></tr></table></figure>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">在控制器 nginx-deploy 上创建名字为 nginx 的 service ，它工作端口为 80，代理的后端容器端口 80，协议为 TCP。</span><br></pre></td></tr></table></figure>
-<ul>
-<li>可以看到刚刚创建的名字为 nginx 的 service ，现在就可以在集群内用 service 的地址来访问了，外部不行</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl get service</span><br></pre></td></tr></table></figure>
-<ul>
-<li>删除一个任务</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl delete deployment nginx-deploy</span><br></pre></td></tr></table></figure>
-<h2 id="coredns"><a href="#coredns" class="headerlink" title="coredns"></a>coredns</h2><p>service 提供了对 pod 的固定访问端点，但是 service 本身的变动我们无法知晓，需要 coredns 对 service 做域名解析。</p>
-<ul>
-<li>查看 coredns 运行状态</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl get pods -n kube-system -o wide</span><br></pre></td></tr></table></figure>
-<ul>
-<li>查看各个 kube-system 命名空间运行的服务，可以看到 kube-dns 运行的 IP 地址</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl get service -n kube-system</span><br></pre></td></tr></table></figure>
-<ul>
-<li>使用 kube-dns 来解析 nginx 这个 service 的地址就可以正常解析了</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">dig -t A nginx.default.svc.cluster.local @10.96.0.10</span><br></pre></td></tr></table></figure>
-<ul>
-<li>创建一个访问 nginx 客户端容器，并进入交互式模式，这个容器默认的 dns 服务器就是 kube-dns 所在的服务器</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl run client --image=busybox --replicas=1 -it --restart=Never</span><br></pre></td></tr></table></figure>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">/ <span class="comment"># cat /etc/resolv.conf </span></span><br><span class="line">nameserver 10.96.0.10                                               <span class="comment"># kube-dns 地址</span></span><br><span class="line">search default.svc.cluster.local svc.cluster.local cluster.local    <span class="comment"># 默认的解析搜索域</span></span><br><span class="line">options ndots:5</span><br></pre></td></tr></table></figure>
-<ul>
-<li>在 busybox 这个容器中请求 nginx 这个域名的 service ，能够正常访问</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">wget -O - -q http://nginx:80/</span><br></pre></td></tr></table></figure>
-<h3 id="模拟-POD-被删除"><a href="#模拟-POD-被删除" class="headerlink" title="模拟 POD 被删除"></a>模拟 POD 被删除</h3><ul>
-<li>现在我们删除 service 后端的 POD ，副本控制器会自动创建新的 POD，而 service 则会自动指向新创建的 POD</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl delete pods nginx-deploy-5c9b546997-4w24n</span><br></pre></td></tr></table></figure>
-<ul>
-<li>查看由副本控制器自动创建的 POD</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl get pods</span><br></pre></td></tr></table></figure>
-<ul>
-<li>在 busybox 这个容器中请求 nginx 这个域名的 service ，访问没有受到影响</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">wget -O - -q http://nginx:80/</span><br></pre></td></tr></table></figure>
-<h3 id="模拟-service-被删除"><a href="#模拟-service-被删除" class="headerlink" title="模拟 service 被删除"></a>模拟 service 被删除</h3><ul>
-<li>当我们删除 service 并且重新建立一个 service 再次查看 service 的地址已经发生变化了</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl delete service nginx</span><br></pre></td></tr></table></figure>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl expose deployment nginx-deploy --name=nginx --port=80 --target-port=80 --protocol=TCP</span><br></pre></td></tr></table></figure>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl get service</span><br></pre></td></tr></table></figure>
-<ul>
-<li>在 busybox 这个容器中请求 nginx 这个域名的 service ，访问没有仍然没有受到影响</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">wget -O - -q http://nginx:80/</span><br></pre></td></tr></table></figure>
-<h2 id="labels"><a href="#labels" class="headerlink" title="labels"></a>labels</h2><p>为什么 Pod 被删除后，servic 仍然能够正确的调度到新的 POD 上，这就是 k8s 的 labels 这个机制来保证的。</p>
-<p>能够使用标签机制不止有 pod、在 k8s 中很多对象都可以使用标签，例如：node、service</p>
-<ul>
-<li>查看 service 的详细信息，会发现标签选择器</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl describe service nginx</span><br></pre></td></tr></table></figure>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">Name:              nginx</span><br><span class="line">Namespace:         default</span><br><span class="line">Labels:            run=nginx-deploy</span><br><span class="line">Annotations:       &lt;none&gt;</span><br><span class="line">Selector:          run=nginx-deploy       <span class="comment"># 这个选择器会自动选中 run 标签，且值为 nginx-deploy 的 POD</span></span><br><span class="line">Type:              ClusterIP</span><br><span class="line">IP:                10.101.149.4</span><br><span class="line">Port:              &lt;<span class="built_in">unset</span>&gt;  80/TCP</span><br><span class="line">TargetPort:        80/TCP</span><br><span class="line">Endpoints:         10.244.2.4:80          <span class="comment"># 当 service 的后端，当 POD 发生变动则立即会更新</span></span><br><span class="line">Session Affinity:  None</span><br><span class="line">Events:            &lt;none&gt;</span><br></pre></td></tr></table></figure>
-<ul>
-<li>查看 POD 的标签，会看到拥有 run=nginx-deploy 标签的容器，而人为删除一个 POD 后，副本控制器创建的副本上的标签不会变化，所以标签又被 service 关联。</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl get pods --show-labels</span><br></pre></td></tr></table></figure>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">NAME                            READY   STATUS    RESTARTS   AGE     LABELS</span><br><span class="line">client                          1/1     Running   0          21m     run=client</span><br><span class="line">nginx-deploy-5c9b546997-kh88w   1/1     Running   0          8m37s   pod-template-hash=5c9b546997,run=nginx-deploy</span><br></pre></td></tr></table></figure>
-<ul>
-<li>查看 POD 的详细信息，也可以查看到 POD 的详细信息</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl describe deployment nginx-deploy</span><br></pre></td></tr></table></figure>
-<ul>
-<li>根据标签过滤，使用 -l 来指定标签名称或同时过滤其值</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl get pods --show-labels -l run=nginx-deploy</span><br></pre></td></tr></table></figure>
-<ul>
-<li>标签选择器集中运算</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">关系与：KEY,KEY、KEY=VALUE2,KEY=VALUE2       <span class="comment"># -l run,app</span></span><br><span class="line">等值关系：KEY = VALUE、KEY != VALUE           <span class="comment"># -l run=nginx-deploy,app!=myapp</span></span><br><span class="line">集合关系：KYE <span class="keyword">in</span>|not <span class="keyword">in</span> (VALUE1,VALUE2)      <span class="comment"># -l "release in (canary,bata,alpha)"</span></span><br></pre></td></tr></table></figure>
-<ul>
-<li>显示指定的标签的值，下面显示了两个标签</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl get pods --show-labels -L run,pod-template-hash</span><br></pre></td></tr></table></figure>
-<ul>
-<li>为指定的 POD 打标签，为 client 这个 POD 打上一个 release 标签，其值为 canary</li>
-</ul>
-<p>​<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl label pods client release=canary</span><br></pre></td></tr></table></figure></p>
-<ul>
-<li>修改 POD 的标签，使用 –overwrite 进行修改原有标签</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl label pods client release=stable --overwrite</span><br></pre></td></tr></table></figure>
-<ul>
-<li>删除指定的 nodes 上的标签，使用标签名称加 - 符号</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl label nodes node2 disktype-</span><br></pre></td></tr></table></figure>
-<ul>
-<li>许多资源支持内嵌字段来定义其使用的标签选择器，例如 service 关联 pod 时候：</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">matchLabels：直接给定键值</span><br><span class="line">matchExpressions：基于给定的表达式来定义使用标签选择器：&#123;key:<span class="string">"KEY"</span>,operator:<span class="string">"OPERATOR"</span>,value:[VAL1,VAL2,...]&#125;</span><br><span class="line">    使用 key 与 value 进行 operator 运算，复合条件的才被选择</span><br><span class="line">    操作符：</span><br><span class="line">    	In、NotIn：其 value 列表必须有值</span><br><span class="line">    	Exists、NotExists：其 value 必须为空</span><br></pre></td></tr></table></figure>
-<ul>
-<li>k8s 中很多对象都可以打标签，例如给 nodes 打一个标记，随后在添加资源时候就可以让资源对节点有倾向性了</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl label nodes node2 disktype=ssd</span><br></pre></td></tr></table></figure>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl get nodes --show-labels</span><br></pre></td></tr></table></figure>
-<h2 id="动态扩容"><a href="#动态扩容" class="headerlink" title="动态扩容"></a>动态扩容</h2><ul>
-<li>扩容一个集群的的 POD，下面命令表示修改 deployment 控制器下的 nginx-deply 容器的副本数量为2</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl scale --replicas=5 deployment nginx-deploy</span><br></pre></td></tr></table></figure>
-<h2 id="滚动升级"><a href="#滚动升级" class="headerlink" title="滚动升级"></a>滚动升级</h2><ul>
-<li>更换 nginx-deploy 这个控制器下的 nginx-deploy 容器镜像为 ikubernetes/myapp:v2</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl <span class="built_in">set</span> image deployment nginx-deploy nginx-deploy=ikubernetes/myapp:v2</span><br></pre></td></tr></table></figure>
-<ul>
-<li>查看更新的过程，直到 5 个容器中运行的镜像全部更新完毕</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl rollout status deployment nginx-deploy</span><br></pre></td></tr></table></figure>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[root@node1 ~]<span class="comment"># kubectl rollout status deployment nginx-deploy</span></span><br><span class="line">Waiting <span class="keyword">for</span> deployment <span class="string">"nginx-deploy"</span> rollout to finish: 3 out of 5 new replicas have been updated...</span><br><span class="line">Waiting <span class="keyword">for</span> deployment <span class="string">"nginx-deploy"</span> rollout to finish: 3 out of 5 new replicas have been updated...</span><br><span class="line">Waiting <span class="keyword">for</span> deployment <span class="string">"nginx-deploy"</span> rollout to finish: 3 out of 5 new replicas have been updated...</span><br><span class="line">Waiting <span class="keyword">for</span> deployment <span class="string">"nginx-deploy"</span> rollout to finish: 3 out of 5 new replicas have been updated...</span><br><span class="line">Waiting <span class="keyword">for</span> deployment <span class="string">"nginx-deploy"</span> rollout to finish: 3 out of 5 new replicas have been updated...</span><br><span class="line">Waiting <span class="keyword">for</span> deployment <span class="string">"nginx-deploy"</span> rollout to finish: 4 out of 5 new replicas have been updated...</span><br><span class="line">Waiting <span class="keyword">for</span> deployment <span class="string">"nginx-deploy"</span> rollout to finish: 4 out of 5 new replicas have been updated...</span><br><span class="line">Waiting <span class="keyword">for</span> deployment <span class="string">"nginx-deploy"</span> rollout to finish: 4 out of 5 new replicas have been updated...</span><br><span class="line">Waiting <span class="keyword">for</span> deployment <span class="string">"nginx-deploy"</span> rollout to finish: 4 out of 5 new replicas have been updated...</span><br><span class="line">Waiting <span class="keyword">for</span> deployment <span class="string">"nginx-deploy"</span> rollout to finish: 4 out of 5 new replicas have been updated...</span><br><span class="line">Waiting <span class="keyword">for</span> deployment <span class="string">"nginx-deploy"</span> rollout to finish: 2 old replicas are pending termination...</span><br><span class="line">Waiting <span class="keyword">for</span> deployment <span class="string">"nginx-deploy"</span> rollout to finish: 2 old replicas are pending termination...</span><br><span class="line">Waiting <span class="keyword">for</span> deployment <span class="string">"nginx-deploy"</span> rollout to finish: 2 old replicas are pending termination...</span><br><span class="line">Waiting <span class="keyword">for</span> deployment <span class="string">"nginx-deploy"</span> rollout to finish: 1 old replicas are pending termination...</span><br><span class="line">Waiting <span class="keyword">for</span> deployment <span class="string">"nginx-deploy"</span> rollout to finish: 1 old replicas are pending termination...</span><br><span class="line">Waiting <span class="keyword">for</span> deployment <span class="string">"nginx-deploy"</span> rollout to finish: 1 old replicas are pending termination...</span><br><span class="line">Waiting <span class="keyword">for</span> deployment <span class="string">"nginx-deploy"</span> rollout to finish: 4 of 5 updated replicas are available...</span><br><span class="line">deployment <span class="string">"nginx-deploy"</span> successfully rolled out</span><br></pre></td></tr></table></figure>
-<ul>
-<li>回滚操作，不指定任何的镜像则为上一个版本的镜像</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl rollout undo deployment nginx-deploy</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>  如果防止更新过程中被调度，那么就需要学习就绪性检测才能实现</p>
-</blockquote>
-<h2 id="集群外访问"><a href="#集群外访问" class="headerlink" title="集群外访问"></a>集群外访问</h2><ul>
-<li>修改 service 的网络类型为 NodePort</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl edit service nginx</span><br></pre></td></tr></table></figure>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">type</span>: ClusterIP -&gt; <span class="built_in">type</span>: NodePort</span><br></pre></td></tr></table></figure>
-<ul>
-<li>查看 service 的信息，发现多了一个 30982 端口</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl get service</span><br></pre></td></tr></table></figure>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">NAME         TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)        AGE</span><br><span class="line">kubernetes   ClusterIP   10.96.0.1      &lt;none&gt;        443/TCP        15h</span><br><span class="line">nginx        NodePort    10.105.27.11   &lt;none&gt;        80:30982/TCP   42m</span><br></pre></td></tr></table></figure>
-<ul>
-<li>在集群外部使用任意的 node IP 地址 + 端口来访问</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">http://172.16.100.101:30982/</span><br></pre></td></tr></table></figure>
-<h2 id="排查日志"><a href="#排查日志" class="headerlink" title="排查日志"></a>排查日志</h2><ul>
-<li>查看一个 pod 的某个容器的运行日志</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl logs pod-demo busybox</span><br></pre></td></tr></table></figure>
-<h2 id="连入-POD-容器"><a href="#连入-POD-容器" class="headerlink" title="连入 POD 容器"></a>连入 POD 容器</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl <span class="built_in">exec</span> -it pod-demo -c myapp -- /bin/sh</span><br></pre></td></tr></table></figure>
-<h2 id="在容器内执行命令"><a href="#在容器内执行命令" class="headerlink" title="在容器内执行命令"></a>在容器内执行命令</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl <span class="built_in">exec</span> myapp-deploy-5fdb5f69f-mg9b6 top</span><br><span class="line">kubectl <span class="built_in">exec</span> myapp-deploy-5fdb5f69f-mg9b6 -- sh -c <span class="string">'TEST="this is a test" ; echo $TEST'</span></span><br></pre></td></tr></table></figure>
-<ul>
-<li>执行复杂命令</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">commands=<span class="string">'</span></span><br><span class="line"><span class="string">export CORE_PEER_LOCALMSPID=Org1MSP</span></span><br><span class="line"><span class="string">export CORE_PEER_ADDRESS=peer0-org1:7051</span></span><br><span class="line"><span class="string">export CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/fabric/msp</span></span><br><span class="line"><span class="string">export CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/msp/tlscacerts/tlsca.org1.qloudchain.com-cert.pem</span></span><br><span class="line"><span class="string">peer channel join --blockpath resources/channel-artifacts/channel.block</span></span><br><span class="line"><span class="string">'</span></span><br><span class="line"></span><br><span class="line">kubectl -n baas <span class="built_in">exec</span> cli-org1-6c5fdf6d97-nh4r4 -- bash -c <span class="string">"<span class="variable">$commands</span>"</span></span><br></pre></td></tr></table></figure>
-<h2 id="查看一个POD的镜像"><a href="#查看一个POD的镜像" class="headerlink" title="查看一个POD的镜像"></a>查看一个POD的镜像</h2><ul>
-<li>参考</li>
-</ul>
-<p><a href="https://kubernetes.io/zh/docs/tasks/access-application-cluster/list-all-running-container-images" target="_blank" rel="noopener">https://kubernetes.io/zh/docs/tasks/access-application-cluster/list-all-running-container-images</a></p>
-<ul>
-<li>go模板</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl get pods peer1st-orga-0 -o go-template --template=<span class="string">'&#123;&#123;range .spec.containers&#125;&#125;&#123;&#123;printf "%s\n" .image&#125;&#125;&#123;&#123;end&#125;&#125;'</span></span><br></pre></td></tr></table></figure>
-<ul>
-<li>json方式</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl get pods nfs-client-provisioner-75bd696897-hm7xf -o jsonpath=<span class="string">'&#123;range .spec.containers[*]&#125;&#123;.image&#125;&#123;"\n"&#125;&#123;end&#125;'</span></span><br></pre></td></tr></table></figure>
-<h2 id="查看一个节点污点"><a href="#查看一个节点污点" class="headerlink" title="查看一个节点污点"></a>查看一个节点污点</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl get nodes 172.16.100.101 -o jsonpath=<span class="string">'&#123;.spec.taints&#125;'</span></span><br></pre></td></tr></table></figure>
-<h2 id="过滤显示结果"><a href="#过滤显示结果" class="headerlink" title="过滤显示结果"></a>过滤显示结果</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl get pods --field-selector status.phase=Running --show-labels --selector app=myapp</span><br></pre></td></tr></table></figure>
-<h2 id="并非所有资源都在命名空间"><a href="#并非所有资源都在命名空间" class="headerlink" title="并非所有资源都在命名空间"></a>并非所有资源都在命名空间</h2><p>大多数 kubernetes 资源（例如 Pod、服务、副本控制器等）都位于某些命名空间中。 但是命名空间资源本身并不在命名空间中。</p>
-<p>而且底层资源，例如<a href="https://v1-12.docs.kubernetes.io/docs/admin/node" target="_blank" rel="noopener">节点</a>和持久化卷不属于任何命名空间。</p>
-<p>查看哪些 Kubernetes 资源在命名空间中，哪些不在命名空间中：</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> In a namespace</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> kubectl api-resources --namespaced=<span class="literal">true</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> Not <span class="keyword">in</span> a namespace</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> kubectl api-resources --namespaced=<span class="literal">false</span></span></span><br></pre></td></tr></table></figure>
-<h1 id="对象定义文件"><a href="#对象定义文件" class="headerlink" title="对象定义文件"></a>对象定义文件</h1><p>Kubernetes 对象是一种描述集群工作期望状态的文件，它以 “目标性记录” 的形式来描述一个对象的期望状态，一旦在 K8S 集群上创建对象，K8S 会确保这个对象不断向目标的状态靠近。</p>
-<p>K8S 对象使用 YAML 格式来定义，所有对 K8S 对象的创建、修改、删除都必须通过 Apiserver 进行，在命令行接口时一般使用 kubectl 控制 K8S 对象，kubectl 最后会调用 Apiserver。</p>
-<h2 id="可配置的对象"><a href="#可配置的对象" class="headerlink" title="可配置的对象"></a>可配置的对象</h2><ul>
-<li>工作负载对象</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Pod、ReplicaSet、Deployment、StatefulSet、DaemonSet、Job、CronJob</span><br></pre></td></tr></table></figure>
-<ul>
-<li>服务发现和负载均衡</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Service、Ingress</span><br></pre></td></tr></table></figure>
-<ul>
-<li>配置与存储</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Volume、CSI、ConfigMap、Secret、DownwardAPI</span><br></pre></td></tr></table></figure>
-<ul>
-<li>集群级资源</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Namespace、None、Role、ClusterRole、RoleBinding、ClusterRoleBinding</span><br></pre></td></tr></table></figure>
-<ul>
-<li>元数据类型资源</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">HPA、PodTemplate、LimitRange</span><br></pre></td></tr></table></figure>
-<h2 id="配置清单组成"><a href="#配置清单组成" class="headerlink" title="配置清单组成"></a>配置清单组成</h2><ul>
-<li>配置清单组成部分，大部分资源使用配置清单方式来创建</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">apiVersion:    <span class="comment"># 以 "group/version" 形式指明，这个对象属于哪个 API 组（版本）</span></span><br><span class="line">kind:          <span class="comment"># 资源类别，标记创建什么类型的资源</span></span><br><span class="line">metadata:      <span class="comment"># 定义了资源对象的名称、命名空间（k8s级别的不是系统的）等、标签、注解等</span></span><br><span class="line">spec:          <span class="comment"># 它是用户定义的所期望的资源状态、资源应该拥有什么样的特性，它由控制器确保特性能够被满足</span></span><br><span class="line">status:        <span class="comment"># 显示资源的当前状态，它是只读的，代表了资源当前状态</span></span><br></pre></td></tr></table></figure>
-<ul>
-<li>获取全部的 api 版本</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl api-versions</span><br></pre></td></tr></table></figure>
-<h2 id="获取清单帮助"><a href="#获取清单帮助" class="headerlink" title="获取清单帮助"></a>获取清单帮助</h2><ul>
-<li>查看 k8s 某个内置对象的配置清单格式，应该包含哪些字段，使用 . 来显示字段的格式帮助信息</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl explain pods</span><br><span class="line">kubectl explain pods.metadata</span><br></pre></td></tr></table></figure>
-<h2 id="清单基本格式"><a href="#清单基本格式" class="headerlink" title="清单基本格式"></a>清单基本格式</h2><ul>
-<li>定义一个资源清单</li>
-</ul>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Pod</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line"><span class="attr">  name:</span> <span class="string">pod-deme</span></span><br><span class="line"><span class="attr">  namespace:</span> <span class="string">default</span></span><br><span class="line"><span class="attr">  labels:</span></span><br><span class="line"><span class="attr">    app:</span> <span class="string">myapp</span></span><br><span class="line"><span class="attr">    tier:</span> <span class="string">frontend</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line"><span class="attr">  containers:</span></span><br><span class="line"><span class="attr">  - name:</span> <span class="string">myapp</span></span><br><span class="line"><span class="attr">    image:</span> <span class="string">ikubernetes/myapp:v1</span></span><br><span class="line"><span class="attr">  - name:</span> <span class="string">busybox</span></span><br><span class="line"><span class="attr">    image:</span> <span class="attr">busybox:latest</span></span><br><span class="line"><span class="attr">    command:</span></span><br><span class="line"><span class="bullet">    -</span> <span class="string">"/bin/sh"</span></span><br><span class="line"><span class="bullet">    -</span> <span class="string">"-c"</span></span><br><span class="line"><span class="bullet">    -</span> <span class="string">"sleep 10"</span></span><br></pre></td></tr></table></figure>
-<h2 id="快捷获取清单"><a href="#快捷获取清单" class="headerlink" title="快捷获取清单"></a>快捷获取清单</h2><ul>
-<li>使用 -o 参数来指定对象数据的输出格式，使用 –dry-run 来测试性执行一个指令，它两个结合起来，就可以通过命令创建，且生成 yaml 格式配置文件了 -o yaml –dry-run</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl create secret docker-registry regsecret --docker-server=registry-vpc.cn-hangzhou.aliyuncs.com --docker-username=admin --docker-password=123456 --docker-email=420123641@qq.com -o yaml --dry-run</span><br></pre></td></tr></table></figure>
-<h2 id="create-创建"><a href="#create-创建" class="headerlink" title="create 创建"></a>create 创建</h2><ul>
-<li>创建资源清单中的资源，这样创建的为裸 POD ，没有控制器管理，所以删除后不会自动重建</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl create -f pod-demo.yaml</span><br></pre></td></tr></table></figure>
-<h2 id="delete-删除"><a href="#delete-删除" class="headerlink" title="delete 删除"></a>delete 删除</h2><ul>
-<li>删除资源清单中定义的 POD</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl delete -f pod-demo.yaml</span><br></pre></td></tr></table></figure>
-<h2 id="applay-创建或更新"><a href="#applay-创建或更新" class="headerlink" title="applay 创建或更新"></a>applay 创建或更新</h2><p>applay 可以执行多次，如果发现文件不同，则更新</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl applay -f pod-demo.yaml</span><br></pre></td></tr></table></figure>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-tag">Windows</span> <span class="selector-tag">Registry</span> <span class="selector-tag">Editor</span> <span class="selector-tag">Version</span> 5<span class="selector-class">.00</span></span><br><span class="line"></span><br><span class="line"><span class="selector-attr">[HKEY_CLASSES_ROOT\*\shell\mklink]</span></span><br><span class="line">@="创建硬链接"</span><br><span class="line">"<span class="keyword">Icon</span>"="%<span class="keyword">SystemRoot</span>%\\<span class="keyword">System32</span>\\<span class="keyword">SHELL32</span>.<span class="keyword">dll</span>,<span class="keyword">68</span>"</span><br><span class="line"></span><br><span class="line">[<span class="keyword">HKEY_CLASSES_ROOT</span>\*\<span class="keyword">shell</span>\<span class="keyword">mklink</span>\<span class="keyword">command</span>]</span><br><span class="line">@="<span class="keyword">wscript</span>.<span class="keyword">exe</span> C:\\Windows\\mklink.vbs \<span class="string">"%1\""</span></span><br><span class="line"></span><br><span class="line">[HKEY_CLASSES_ROOT\Directory\shell\mklink]</span><br><span class="line">@=<span class="string">"创建软链接"</span></span><br><span class="line"><span class="string">"Icon"</span>=<span class="string">"%SystemRoot%\\System32\\SHELL32.dll,68"</span></span><br><span class="line"></span><br><span class="line">[HKEY_CLASSES_ROOT\Directory\shell\mklink\command]</span><br><span class="line">@=<span class="string">"wscript.exe C:\\Windows\\mklink.vbs \"%1\""</span></span><br></pre></td></tr></table></figure>
 
           
         
@@ -1109,7 +666,7 @@
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/8/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><span class="page-number current">9</span><a class="page-number" href="/page/10/">10</a><span class="space">&hellip;</span><a class="page-number" href="/page/38/">38</a><a class="extend next" rel="next" href="/page/10/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/page/8/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><span class="page-number current">9</span><a class="page-number" href="/page/10/">10</a><span class="space">&hellip;</span><a class="page-number" href="/page/43/">43</a><a class="extend next" rel="next" href="/page/10/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1157,7 +714,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">75</span>
+                  <span class="site-state-item-count">86</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
