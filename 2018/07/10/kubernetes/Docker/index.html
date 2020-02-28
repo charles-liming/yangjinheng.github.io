@@ -86,7 +86,7 @@
 <meta property="og:site_name" content="默默">
 <meta property="og:description" content="容器技术在 Linux 内核中，提供了 cgroups 功能，来达成资源的限制。它同时也提供了 namespaces 隔离的功能，使应用程序看到的操作系统环境被区隔成独立区间，包括进程树，网络，用户id，以及挂载的文件系统。 CgroupsCGroup 是 Control Groups 的缩写，是 Linux 内核提供的一种可以限制、记录、隔离进程组  (process groups)  所使用的">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-12-16T03:54:50.070Z">
+<meta property="og:updated_time" content="2020-02-25T09:22:07.445Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Docker知识总结">
 <meta name="twitter:description" content="容器技术在 Linux 内核中，提供了 cgroups 功能，来达成资源的限制。它同时也提供了 namespaces 隔离的功能，使应用程序看到的操作系统环境被区隔成独立区间，包括进程树，网络，用户id，以及挂载的文件系统。 CgroupsCGroup 是 Control Groups 的缩写，是 Linux 内核提供的一种可以限制、记录、隔离进程组  (process groups)  所使用的">
@@ -595,9 +595,10 @@
 </ul>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">systemctl <span class="built_in">enable</span> docker</span><br><span class="line">systemctl start docker</span><br><span class="line">docker version</span><br></pre></td></tr></table></figure>
 <ul>
-<li>vim /etc/docker/daemon.json，配置配置加速器</li>
+<li>vim /etc/docker/daemon.json，配置配置加速器 Azure</li>
 </ul>
-<figure class="highlight"><table><tr><td class="code"><pre><span class="line">cat &gt;/etc/docker/daemon.json&lt;&lt;EOF</span><br><span class="line">&#123;</span><br><span class="line">  <span class="attr">"registry-mirrors"</span>: [</span><br><span class="line">    <span class="string">"http://f1361db2.m.daocloud.io"</span>,</span><br><span class="line">    <span class="string">"https://dockerhub.azk8s.cn"</span>,</span><br><span class="line">    <span class="string">"https://reg-mirror.qiniu.com"</span></span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="string">"http://f1361db2.m.daocloud.io"</span></span><br><span class="line"><span class="string">"https://dockerhub.azk8s.cn"</span></span><br><span class="line"><span class="string">"https://reg-mirror.qiniu.com"</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight"><table><tr><td class="code"><pre><span class="line">cat &gt;/etc/docker/daemon.json&lt;&lt;EOF</span><br><span class="line">&#123;</span><br><span class="line">  <span class="attr">"registry-mirrors"</span>: [<span class="string">"https://dockerhub.azk8s.cn"</span>]</span><br><span class="line">&#125;</span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
 <ul>
 <li>Docker 日志文件，默认会打印在系统日志</li>
 </ul>
@@ -1540,7 +1541,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">76</span>
+                  <span class="site-state-item-count">75</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

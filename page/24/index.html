@@ -311,354 +311,6 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://yangjinheng.github.io/2017/10/05/python/26.wsgiref/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Jin Heng">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="默默">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/10/05/python/26.wsgiref/" itemprop="url">web框架原理之wsgiref和webob</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-05T00:00:00+08:00">
-                2017-10-05
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Python/" itemprop="url" rel="index">
-                    <span itemprop="name">Python</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="WSGI"><a href="#WSGI" class="headerlink" title="WSGI"></a>WSGI</h2><ol>
-<li>WSGI (Web 服务器网关接口) 是 python 中所定义的 Web 服务器和 Web 应用程序之间或框架之间的接口标准</li>
-<li>WSGI 接口规范的目的就是规范 Web 服务器与 Web 应用之间的交互，在协议之间进行转换</li>
-<li>WSGI 将 Web 组件分成三类：Web 服务器、Web中间件、Web应用程序<ul>
-<li>服务器：指的是实现了调用应用的部分</li>
-<li>中间件：处于服务器和应用两侧，起粘合作用，具体包括：请求处理、environ 处理</li>
-<li>应用：是一个可调用对象，一般指的是包含一个 __call__ 方法的对象</li>
-</ul>
-</li>
-</ol>
-<h2 id="wsgiref"><a href="#wsgiref" class="headerlink" title="wsgiref"></a>wsgiref</h2><p>wsgiref 是 WSGI 细则的一个参考实现，用于给web服务器和框架提供 WSGI 支持。它提供了下面几个子类：</p>
-<table>
-<thead>
-<tr>
-<th>字类</th>
-<th>功能</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>wsgiref.util</code></td>
-<td><code>WSGI</code> 环境工具</td>
-</tr>
-<tr>
-<td><code>wsgiref.headers</code></td>
-<td><code>WSGI response</code> 头工具</td>
-</tr>
-<tr>
-<td><code>wsgiref.handlers</code></td>
-<td><code>WSGI</code> 服务器基类</td>
-</tr>
-<tr>
-<td><code>wsgiref.simple_server</code></td>
-<td>一个简单的 <code>WSGI HTTP</code> 服务器</td>
-</tr>
-<tr>
-<td><code>wsgiref.validate</code></td>
-<td>检测WSGI服务器是否和 <code>WSGI PEP 3333细则</code> 一致的检查器</td>
-</tr>
-</tbody>
-</table>
-<h3 id="wsgiref-simple-server"><a href="#wsgiref-simple-server" class="headerlink" title="wsgiref.simple_server"></a>wsgiref.simple_server</h3><p>​    本模块实现了一个简单HTTP服务器，可以为 WSGI 应用提供服务，每个服务器实例在给定的主机和端口上服务一个 WSGI 应用程序，如果你想在单个主机和端口上提供多个 WSGI 应用程序，则应该创建一个 WSGI 应用程序，并且解析 PATH_INFO（客户端请求的地址），以为每个请求分配不同的应用程序，例如：使用来自 <code>wsgiref.util</code> 的 <code>shift_path_info()</code> 函数。</p>
-<ul>
-<li>创建服务器</li>
-</ul>
-<p><code>make_server(host,port,app,server_class=WSGIServer,handle_class=WSGIRequestHandler)</code></p>
-<p>创建一个新的监听在 <code>host</code> + <code>port</code> 的 WSGI 服务器，为 <code>app</code> 接受新的连接，返回值是 <code>server_class</code> 的实例，并使用 <code>handle_class</code> 处理请求，其中 <code>app</code> 必须是 PEP 3333 定义的 WSGI 应用程序对象。</p>
-<ul>
-<li>一个 WSGI 应用 demo</li>
-</ul>
-<p><code>demo_app(environ, start_response)</code></p>
-<p>这个函数是个小而完整的 WSGI 应用，它能返回 <code>hello world</code> 和 <code>environ</code> 字典内容 组成的文本页面。</p>
-<ul>
-<li>示例</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> wsgiref.simple_server <span class="keyword">import</span> make_server</span><br><span class="line"><span class="comment">#from wsgiref.simple_server import demo_app     # 为直观展示下面已经将源代码复制出来了</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">demo_app</span><span class="params">(environ,start_response)</span>:</span></span><br><span class="line">    <span class="keyword">from</span> io <span class="keyword">import</span> StringIO</span><br><span class="line">    stdout = StringIO()</span><br><span class="line">    print(<span class="string">"Hello world!"</span>, file=stdout)</span><br><span class="line">    print(file=stdout)</span><br><span class="line">    h = sorted(environ.items())</span><br><span class="line">    <span class="keyword">for</span> k,v <span class="keyword">in</span> h:</span><br><span class="line">        print(k,<span class="string">'='</span>,repr(v), file=stdout)</span><br><span class="line">    start_response(<span class="string">"200 OK"</span>, [(<span class="string">'Content-Type'</span>,<span class="string">'text/plain; charset=utf-8'</span>)])</span><br><span class="line">    <span class="keyword">return</span> [stdout.getvalue().encode(<span class="string">"utf-8"</span>)]</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    server = make_server(<span class="string">'0.0.0.0'</span>,<span class="number">80</span>,demo_app)</span><br><span class="line">    server.serve_forever()</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>启动服务，在浏览器访问本机的IP，就可以看到由 demo_app 返回的页面</p>
-</blockquote>
-<ul>
-<li>细节</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">WSGI 服务器：</span><br><span class="line">	1. 监听在指定的IP和PORT</span><br><span class="line">	2. 接受浏览器的HTTP请求，解析请求封装为 environ 环境数据</span><br><span class="line">	3. 负责调用 WSGI应用程序(app) 并把 environ 和 start_response方法 传给 app</span><br><span class="line">	4. 将 WSGI应用(app) 返回的列表，封装为HTTP响应报文返回给浏览器</span><br><span class="line"></span><br><span class="line">WSGI 应用：</span><br><span class="line">	1. 遵从 WSGI 协议</span><br><span class="line">	2. 必须是一个可调用的对象，或实现了 __call__ 方法的对象</span><br><span class="line">	3. 这个可调用对象应该接受来自WSGI服务器传来的两个参数：environ(请求)、start_response（响应方法）</span><br><span class="line">	4. 必须调用 start_response 以向客户端返回响应包的头部信息</span><br><span class="line">	5. 必须以可迭代对象的形式返回(return) 响应包的正文信息</span><br></pre></td></tr></table></figure>
-<ul>
-<li>请求信息</li>
-</ul>
-<p><code>environ</code> 是一个包含了HTTP请求信息的字典，下面列举一些信息</p>
-<table>
-<thead>
-<tr>
-<th>键</th>
-<th>值含义</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>REQUEST_METHOD</td>
-<td>客户端的请求方法</td>
-</tr>
-<tr>
-<td>PATH_INFO</td>
-<td>请求的URL地址的后半部分</td>
-</tr>
-<tr>
-<td>QUERY_STRING</td>
-<td>查询字符串，即 <code>?</code> 后的内容</td>
-</tr>
-<tr>
-<td>SERVER_NAME</td>
-<td>服务器主机名</td>
-</tr>
-<tr>
-<td>SERVER_PORT</td>
-<td>服务器的端口</td>
-</tr>
-<tr>
-<td>HTTP_HOST</td>
-<td>客户端请求头的 HOST 字段</td>
-</tr>
-<tr>
-<td>SERVER_PROTOCOL</td>
-<td>客户端发送请求所使用的协议版本</td>
-</tr>
-<tr>
-<td>CONTENT_TYPE</td>
-<td>HTTP 请求中任何 Content-Type 域的内容，可能为空或不存在。</td>
-</tr>
-<tr>
-<td>HTTP_USER_AGENT</td>
-<td>客户端所使用的浏览器信息</td>
-</tr>
-</tbody>
-</table>
-<ul>
-<li>响应头</li>
-</ul>
-<p><code>start_response(status, headers, exc_info=None)</code></p>
-<p>start_response，是返回给客户端的响应头部信息，这是一个可调用对象，必须在 WSGI 应用（app）返回前调用，它接受3个参数：</p>
-<table>
-<thead>
-<tr>
-<th>参数</th>
-<th>含义</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>status</code></td>
-<td>响应的状态码，例如：”200 OK”</td>
-</tr>
-<tr>
-<td><code>headers</code></td>
-<td>响应包的HTTP首部信息，每个首部信息的K/V组成一个二元组，放入一个列表中，见：demo_app</td>
-</tr>
-<tr>
-<td><code>exc_info</code></td>
-<td>处理错误的时候使用</td>
-</tr>
-</tbody>
-</table>
-<h3 id="解析environ"><a href="#解析environ" class="headerlink" title="解析environ"></a>解析environ</h3><p>通过解析：<code>environ[&#39;PATH_INFO]</code>，就可以判断用户访问的地址，而使用不同的函数处理响应。</p>
-<ul>
-<li>方法1，在APP内处理URL和页面的对应关系</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> wsgiref.simple_server <span class="keyword">import</span> make_server</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">handle_index</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">return</span> [<span class="string">'&lt;h1&gt;Hello Index&lt;/h1&gt;'</span>.encode(<span class="string">"utf-8"</span>)]</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">hanle_date</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">return</span> [<span class="string">'&lt;h1&gt;Hello Date&lt;/h1&gt;'</span>.encode(<span class="string">"utf-8"</span>)]</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">demo_app</span><span class="params">(environ,start_response)</span>:</span></span><br><span class="line">    start_response(<span class="string">"200 OK"</span>, [(<span class="string">'Content-Type'</span>,<span class="string">'text/plain; charset=utf-8'</span>)])</span><br><span class="line"></span><br><span class="line">    current_url = environ[<span class="string">'PATH_INFO'</span>]</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> current_url == <span class="string">'/index'</span>:</span><br><span class="line">        <span class="keyword">return</span> handle_index()</span><br><span class="line">    <span class="keyword">elif</span> current_url == <span class="string">'/date'</span>:</span><br><span class="line">        <span class="keyword">return</span> hanle_date()</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">return</span> [<span class="string">'&lt;h1&gt;404!&lt;/h1&gt;'</span>.encode(<span class="string">"utf-8"</span>)]</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    server = make_server(<span class="string">'0.0.0.0'</span>,<span class="number">80</span>,demo_app)</span><br><span class="line">    server.serve_forever()</span><br></pre></td></tr></table></figure>
-<ul>
-<li>方法2，在一个字典内部处理URL和页面的对应关系，使用 MVC 模式</li>
-</ul>
-<ol>
-<li>将处理的模块放入 <code>Controller</code> 目录的 <code>page.py</code>下</li>
-</ol>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">def handle_index():</span><br><span class="line">    # return [&apos;&lt;h1&gt;Hello Index&lt;/h1&gt;&apos;.encode(&quot;utf-8&quot;)]</span><br><span class="line">    f = open(&apos;View/index.html&apos;,mode=&apos;rb&apos;)      # 打开目录下的文件</span><br><span class="line">    data = f.read()</span><br><span class="line">    f.close()</span><br><span class="line">    return [data]               # 返回的正文来自 文件</span><br><span class="line"></span><br><span class="line">def hanle_date():</span><br><span class="line">    return [&apos;&lt;h1&gt;Hello Date&lt;/h1&gt;&apos;.encode(&quot;utf-8&quot;)]</span><br></pre></td></tr></table></figure>
-<ol start="2">
-<li>将 page.py 需要的页面文件放入到 <code>View</code> 目录下的 <code>index.html</code></li>
-</ol>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html lang=&quot;en&quot;&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">    &lt;meta charset=&quot;UTF-8&quot;&gt;</span><br><span class="line">    &lt;title&gt;Title&lt;/title&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">    &lt;h1&gt;Hello, Index&lt;/h1&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
-<ol start="3">
-<li>将 page.py 需要的数据库连接等代码 放在 <code>Model</code> 目录中</li>
-</ol>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">...........TODO</span><br></pre></td></tr></table></figure>
-<ol start="4">
-<li>主程序</li>
-</ol>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> wsgiref.simple_server <span class="keyword">import</span> make_server</span><br><span class="line"><span class="keyword">from</span> Controller <span class="keyword">import</span> page          <span class="comment"># 导入 Controller 目录的 page.py</span></span><br><span class="line"></span><br><span class="line">url_dict = &#123;                         <span class="comment"># URL与返回报文的对应关系</span></span><br><span class="line">    <span class="string">'/index'</span>:handle_index,           <span class="comment"># 如果键是一个正则表达式对象，那么就可以处理匹配正则的这一类页面</span></span><br><span class="line">    <span class="string">'/date'</span>:hanle_date</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">handle_app</span><span class="params">(environ,start_response)</span>:</span></span><br><span class="line">    start_response(<span class="string">"200 OK"</span>, [(<span class="string">'Content-Type'</span>,<span class="string">'text/plain; charset=utf-8'</span>)])</span><br><span class="line"></span><br><span class="line">    current_url = environ[<span class="string">'PATH_INFO'</span>]</span><br><span class="line">    func = <span class="keyword">None</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> current_url <span class="keyword">in</span> url_dict:</span><br><span class="line">        func = url_dict[current_url]</span><br><span class="line">    <span class="keyword">if</span> func:</span><br><span class="line">        <span class="keyword">return</span> func()</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">return</span> [<span class="string">'&lt;h1&gt;404!&lt;/h1&gt;'</span>.encode(<span class="string">"utf-8"</span>)]</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    server = make_server(<span class="string">'0.0.0.0'</span>,<span class="number">80</span>,handle_app)</span><br><span class="line">    server.serve_forever()</span><br></pre></td></tr></table></figure>
-<ul>
-<li>MVC 和 MTV</li>
-</ul>
-<p>MVC模式</p>
-<p>将数据库的操作代码放在 Model 目录，将模板页面文件放在 View目录，将业务处理逻辑代码放在 Controller目录这样的分离结构组成整个业务系统即由：<code>Model、View、Controller</code> 组成就是MVC模式。</p>
-<p>MTV模式</p>
-<p>模式就是：<code>Model（数据库）、Template（模板文件）、View（业务处理）</code> django就是MTV的模式</p>
-<h2 id="webob"><a href="#webob" class="headerlink" title="webob"></a>webob</h2><p>Webob是一个Python库，它解析 WSGI environ 环境参数，并且封装为一个 request 对象，这个对象包含了大多数的 HTTP 请求的报文的分析结果。</p>
-<h3 id="Request"><a href="#Request" class="headerlink" title="Request"></a>Request</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> wsgiref.simple_server <span class="keyword">import</span> make_server</span><br><span class="line"><span class="keyword">from</span> webob <span class="keyword">import</span> Request</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">demo_app</span><span class="params">(environ,start_response)</span>:</span></span><br><span class="line">    <span class="keyword">from</span> io <span class="keyword">import</span> StringIO</span><br><span class="line">    stdout = StringIO()</span><br><span class="line">    print(<span class="string">"Hello world!"</span>, file=stdout)</span><br><span class="line">    request = Request(environ)</span><br><span class="line">    print(file=stdout)</span><br><span class="line">    data = [</span><br><span class="line">        request.method,</span><br><span class="line">        request.GET,</span><br><span class="line">        request.POST,</span><br><span class="line">        request.path,</span><br><span class="line">        request.params,</span><br><span class="line">        request.headers</span><br><span class="line">    ]</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> data:</span><br><span class="line">        print(i,type(i),file=stdout)</span><br><span class="line"></span><br><span class="line">    start_response(<span class="string">"200 OK"</span>, [(<span class="string">'Content-Type'</span>,<span class="string">'text/plain; charset=utf-8'</span>)])</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> [stdout.getvalue().encode(<span class="string">'utf-8'</span>)]</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    server = make_server(<span class="string">'0.0.0.0'</span>,<span class="number">80</span>,demo_app)</span><br><span class="line">    server.serve_forever()</span><br></pre></td></tr></table></figure>
-<ul>
-<li>启动上面代码，使用下面的 URL 地址进行POST方法提交，并且定义一个表单数据 <code>&#39;post&#39;=&#39;is_a_post&#39;</code> </li>
-</ul>
-<figure class="highlight"><table><tr><td class="code"><pre><span class="line">http://172.16.100.1/index.asp?id=5&amp;name=yangjinheng&amp;keyword=jinhengyang&amp;comment=1,a,c&amp;age=29&amp;age=18</span><br></pre></td></tr></table></figure>
-<ul>
-<li>从返回的结果可以看出 <code>webob.Request</code> 对 POST 和 URL 的解析，及解析结果的类型</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Hello world!</span><br><span class="line"></span><br><span class="line">POST &lt;class &apos;str&apos;&gt;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">GET([(&apos;id&apos;, &apos;5&apos;), (&apos;name&apos;, &apos;yangjinheng&apos;), (&apos;keyword&apos;, &apos;jinhengyang&apos;), (&apos;comment&apos;, &apos;1,a,c&apos;), (&apos;age&apos;, &apos;29&apos;), (&apos;age&apos;, &apos;18&apos;)]) &lt;class &apos;webob.multidict.GetDict&apos;&gt;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">MultiDict([(&apos;post&apos;, &apos;is_a_post&apos;)]) &lt;class &apos;webob.multidict.MultiDict&apos;&gt;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">/index.asp &lt;class &apos;str&apos;&gt;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">NestedMultiDict([(&apos;id&apos;, &apos;5&apos;), (&apos;name&apos;, &apos;yangjinheng&apos;), (&apos;keyword&apos;, &apos;jinhengyang&apos;), (&apos;comment&apos;, &apos;1,a,c&apos;), (&apos;age&apos;, &apos;29&apos;), (&apos;age&apos;, &apos;18&apos;), (&apos;post&apos;, &apos;is_a_post&apos;)]) &lt;class &apos;webob.multidict.NestedMultiDict&apos;&gt;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">(&apos;Content-Length&apos;, &apos;168&apos;) &lt;class &apos;tuple&apos;&gt;</span><br><span class="line">(&apos;Content-Type&apos;, &apos;multipart/form-data; boundary=--------------------------998275222955574446129312&apos;) &lt;class &apos;tuple&apos;&gt;</span><br><span class="line">(&apos;Cache-Control&apos;, &apos;no-cache&apos;) &lt;class &apos;tuple&apos;&gt;</span><br><span class="line">(&apos;Postman-Token&apos;, &apos;fd052bd5-3454-44bb-9f5d-bbbbca3f3607&apos;) &lt;class &apos;tuple&apos;&gt;</span><br><span class="line">(&apos;User-Agent&apos;, &apos;PostmanRuntime/7.1.5&apos;) &lt;class &apos;tuple&apos;&gt;</span><br><span class="line">(&apos;Accept&apos;, &apos;*/*&apos;) &lt;class &apos;tuple&apos;&gt;</span><br><span class="line">(&apos;Host&apos;, &apos;172.16.100.1&apos;) &lt;class &apos;tuple&apos;&gt;</span><br><span class="line">(&apos;Accept-Encoding&apos;, &apos;gzip, deflate&apos;) &lt;class &apos;tuple&apos;&gt;</span><br><span class="line">(&apos;Connection&apos;, &apos;keep-alive&apos;) &lt;class &apos;tuple&apos;&gt;</span><br></pre></td></tr></table></figure>
-<h3 id="MultiDict"><a href="#MultiDict" class="headerlink" title="MultiDict"></a>MultiDict</h3><p>MultiDict，允许一个 Key 保存好几个值</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> webob.multidict <span class="keyword">import</span> MultiDict</span><br><span class="line"></span><br><span class="line">md = MultiDict()</span><br><span class="line">md.add(<span class="number">1</span>,<span class="string">'yangjinheng'</span>)</span><br><span class="line">md.add(<span class="number">1</span>,<span class="string">'liying'</span>)</span><br><span class="line">md.add(<span class="number">2</span>,<span class="string">'Man'</span>)</span><br><span class="line">md.add(<span class="number">2</span>,<span class="string">'Female'</span>)</span><br><span class="line">md.add(<span class="string">'age'</span>,<span class="number">29</span>)</span><br><span class="line">md.add(<span class="string">'age'</span>,<span class="number">27</span>)</span><br></pre></td></tr></table></figure>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">16</span>]: print(md.getall(<span class="number">2</span>))</span><br><span class="line">[<span class="string">'Man'</span>, <span class="string">'Female'</span>]</span><br><span class="line"></span><br><span class="line">In [<span class="number">17</span>]: print(md.getall(<span class="number">1</span>))</span><br><span class="line">[<span class="string">'yangjinheng'</span>, <span class="string">'liying'</span>]</span><br><span class="line"></span><br><span class="line">In [<span class="number">18</span>]: print(md.getall(<span class="number">2</span>))</span><br><span class="line">[<span class="string">'Man'</span>, <span class="string">'Female'</span>]</span><br><span class="line"></span><br><span class="line">In [<span class="number">19</span>]: print(md.getall(<span class="string">'age'</span>))</span><br><span class="line">[<span class="number">29</span>, <span class="number">27</span>]</span><br><span class="line"></span><br><span class="line">In [<span class="number">24</span>]: print(md.get(<span class="number">1</span>))</span><br><span class="line">liying</span><br><span class="line"></span><br><span class="line">In [<span class="number">25</span>]: print(md.get(<span class="number">2</span>))</span><br><span class="line">Female</span><br><span class="line"></span><br><span class="line">In [<span class="number">27</span>]: print(md[<span class="number">1</span>])</span><br><span class="line">liying</span><br><span class="line"></span><br><span class="line">In [<span class="number">28</span>]: print(md[<span class="number">2</span>])</span><br><span class="line">Female</span><br><span class="line"></span><br><span class="line">In [<span class="number">29</span>]: <span class="keyword">for</span> i <span class="keyword">in</span> md.items():print(i)</span><br><span class="line">(<span class="number">1</span>, <span class="string">'yangjinheng'</span>)</span><br><span class="line">(<span class="number">1</span>, <span class="string">'liying'</span>)</span><br><span class="line">(<span class="number">2</span>, <span class="string">'Man'</span>)</span><br><span class="line">(<span class="number">2</span>, <span class="string">'Female'</span>)</span><br><span class="line">(<span class="string">'age'</span>, <span class="number">29</span>)</span><br><span class="line">(<span class="string">'age'</span>, <span class="number">27</span>)</span><br></pre></td></tr></table></figure>
-<h3 id="Response"><a href="#Response" class="headerlink" title="Response"></a>Response</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> wsgiref.simple_server <span class="keyword">import</span> make_server</span><br><span class="line"><span class="keyword">from</span> webob <span class="keyword">import</span> Request,Response</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">demo_app</span><span class="params">(environ,start_response)</span>:</span></span><br><span class="line">    <span class="keyword">from</span> io <span class="keyword">import</span> StringIO</span><br><span class="line">    stdout = StringIO()</span><br><span class="line">    print(<span class="string">"Hello world!"</span>, file=stdout)</span><br><span class="line">    response = Response()</span><br><span class="line">    print(file=stdout)</span><br><span class="line">    data = [</span><br><span class="line">        response.status,            <span class="comment"># 响应码和原因短语</span></span><br><span class="line">        response.status_code,       <span class="comment"># 响应码</span></span><br><span class="line">        response.headers,           <span class="comment"># 响应报文的HTTP头信息</span></span><br><span class="line">        response.headerlist,        <span class="comment"># 相应报文的列表，由每个字段和值的二元组组成</span></span><br><span class="line">    ]</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> data:</span><br><span class="line">        print(i,type(i),file=stdout)</span><br><span class="line"></span><br><span class="line">    start_response(<span class="string">"200 OK"</span>, [(<span class="string">'Content-Type'</span>,<span class="string">'text/plain; charset=utf-8'</span>)])</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> [stdout.getvalue().encode(<span class="string">'utf-8'</span>)]</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    server = make_server(<span class="string">'0.0.0.0'</span>,<span class="number">80</span>,demo_app)</span><br><span class="line">    server.serve_forever()</span><br></pre></td></tr></table></figure>
-<ul>
-<li>启动上面代码，使用下面的 URL 地址进行POST方法提交，并且定义一个表单数据 <code>&#39;post&#39;=&#39;is_a_post&#39;</code> </li>
-</ul>
-<figure class="highlight"><table><tr><td class="code"><pre><span class="line">http://172.16.100.1/index.asp?id=5&amp;name=yangjinheng&amp;keyword=jinhengyang&amp;comment=1,a,c&amp;age=29&amp;age=18</span><br></pre></td></tr></table></figure>
-<ul>
-<li>返回结果，Response 包含了所有响应 WSGI Server所需要的变量</li>
-</ul>
-<figure class="highlight"><table><tr><td class="code"><pre><span class="line">Hello world!</span><br><span class="line"></span><br><span class="line"><span class="number">200</span> OK &lt;<span class="class"><span class="keyword">class</span> '<span class="title">str</span>'&gt;</span></span><br><span class="line"><span class="class"></span></span><br><span class="line"><span class="class">200 &lt;<span class="title">class</span> '<span class="title">int</span>'&gt;</span></span><br><span class="line"><span class="class"></span></span><br><span class="line"><span class="class"><span class="title">ResponseHeaders</span><span class="params">([<span class="params">(<span class="string">'Content-Type'</span>, <span class="string">'text/html; charset=UTF-8'</span>)</span>, <span class="params">(<span class="string">'Content-Length'</span>, <span class="string">'0'</span>)</span>])</span> &lt;<span class="title">class</span> '<span class="title">webob</span>.<span class="title">headers</span>.<span class="title">ResponseHeaders</span>'&gt;</span></span><br><span class="line"><span class="class"></span></span><br><span class="line">[('Content-Type', 'text/html; charset=UTF-8'), ('Content-Length', '0')] &lt;class 'list'&gt;</span><br></pre></td></tr></table></figure>
-<ul>
-<li>Response 可以帮我们生成响应报文，从而更加简化编程</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> wsgiref.simple_server <span class="keyword">import</span> make_server</span><br><span class="line"><span class="keyword">from</span> webob <span class="keyword">import</span> Request,Response</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">demo_app</span><span class="params">(environ,start_response)</span>:</span></span><br><span class="line">    <span class="keyword">from</span> io <span class="keyword">import</span> StringIO</span><br><span class="line">    stdout = StringIO()</span><br><span class="line">    print(<span class="string">"Hello world!"</span>, file=stdout)</span><br><span class="line">    response = Response()</span><br><span class="line">    print(file=stdout)</span><br><span class="line">    data = [</span><br><span class="line">        response.status,            <span class="comment"># 响应码和原因短语</span></span><br><span class="line">        response.status_code,       <span class="comment"># 响应码</span></span><br><span class="line">        response.headers,           <span class="comment"># 响应报文的HTTP头信息</span></span><br><span class="line">        response.headerlist,        <span class="comment"># 相应报文的列表，由每个字段和值的二元组组成</span></span><br><span class="line">    ]</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> data:</span><br><span class="line">        print(i,type(i),file=stdout)</span><br><span class="line">    </span><br><span class="line">    response.status_code = <span class="number">200</span>     <span class="comment"># 修改响应码的值</span></span><br><span class="line">    response.body = stdout.getvalue().encode(<span class="string">'utf-8'</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> response(environ,start_response)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    server = make_server(<span class="string">'0.0.0.0'</span>,<span class="number">80</span>,demo_app)</span><br><span class="line">    server.serve_forever()</span><br></pre></td></tr></table></figure>
-<ul>
-<li>返回结果</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Hello world!</span><br><span class="line"></span><br><span class="line">200 OK &lt;class &apos;str&apos;&gt;</span><br><span class="line"></span><br><span class="line">200 &lt;class &apos;int&apos;&gt;</span><br><span class="line"></span><br><span class="line">ResponseHeaders([(&apos;Content-Type&apos;, &apos;text/html; charset=UTF-8&apos;), (&apos;Content-Length&apos;, &apos;0&apos;)])  &lt;class &apos;webob.headers.ResponseHeaders&apos;&gt;</span><br><span class="line"></span><br><span class="line">[(&apos;Content-Type&apos;, &apos;text/html; charset=UTF-8&apos;), (&apos;Content-Length&apos;, &apos;0&apos;)] &lt;class &apos;list&apos;&gt;</span><br></pre></td></tr></table></figure>
-<h3 id="webob-dec"><a href="#webob-dec" class="headerlink" title="webob.dec"></a>webob.dec</h3><p><code>webob.dec</code> 更加简化 <code>response</code> 过程，无需再写 <code>response(environ,start_response)</code> 这个语句了。</p>
-<p>被 <code>wsgify</code> 装饰器装饰过的 <code>WSGI APP（可调用对象）</code>需要接收一个 <code>request</code> 对象，然后在函数内可以调用 <code>request</code> 对象写自己的业务逻辑，最后返回结果的时候无需再使用 <code>start_response</code>了，因为 <code>webob.dec</code> 内部的<code>Response</code> 已经替我们做了。</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> wsgiref.simple_server <span class="keyword">import</span> make_server</span><br><span class="line"><span class="keyword">from</span> webob <span class="keyword">import</span> Request,Response</span><br><span class="line"><span class="keyword">from</span> webob.dec <span class="keyword">import</span> wsgify</span><br><span class="line"></span><br><span class="line"><span class="meta">@wsgify</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">demo_app</span><span class="params">(request)</span>:</span></span><br><span class="line">    <span class="keyword">from</span> io <span class="keyword">import</span> StringIO</span><br><span class="line">    stdout = StringIO()</span><br><span class="line">    print(<span class="string">"Hello world!"</span>, file=stdout)</span><br><span class="line">    print(file=stdout)</span><br><span class="line">    data = [</span><br><span class="line">        request.method,</span><br><span class="line">        request.GET,</span><br><span class="line">        request.POST,</span><br><span class="line">        request.path,</span><br><span class="line">        request.params,</span><br><span class="line">        request.headers,</span><br><span class="line">    ]</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> data:</span><br><span class="line">        print(i,file=stdout)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> Response(stdout.getvalue().encode(<span class="string">'utf-8'</span>))    <span class="comment"># 推荐使用 Response 实例方式返回响应</span></span><br><span class="line">    <span class="comment"># return bytes(stdout.getvalue(),encoding='utf-8')    # 也可以使用 bytes 对象</span></span><br><span class="line">    <span class="comment"># return stdout.getvalue()                            # 也可以是字符串对象</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    server = make_server(<span class="string">'0.0.0.0'</span>,<span class="number">80</span>,demo_app)</span><br><span class="line">    server.serve_forever()</span><br></pre></td></tr></table></figure>
-<ul>
-<li>结果</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">Hello world!</span><br><span class="line"></span><br><span class="line">POST</span><br><span class="line">GET([(<span class="string">'id'</span>, <span class="string">'5'</span>), (<span class="string">'name'</span>, <span class="string">'yangjinheng'</span>), (<span class="string">'keyword'</span>, <span class="string">'jinhengyang'</span>), (<span class="string">'comment'</span>, <span class="string">'1,a,c'</span>), (<span class="string">'age'</span>, <span class="string">'29'</span>), (<span class="string">'age'</span>, <span class="string">'18'</span>)])</span><br><span class="line">MultiDict([(<span class="string">'post'</span>, <span class="string">'is_a_post'</span>)])</span><br><span class="line">/index.asp</span><br><span class="line">NestedMultiDict([(<span class="string">'id'</span>, <span class="string">'5'</span>), (<span class="string">'name'</span>, <span class="string">'yangjinheng'</span>), (<span class="string">'keyword'</span>, <span class="string">'jinhengyang'</span>), (<span class="string">'comment'</span>, <span class="string">'1,a,c'</span>), (<span class="string">'age'</span>, <span class="string">'29'</span>), (<span class="string">'age'</span>, <span class="string">'18'</span>), (<span class="string">'post'</span>, <span class="string">'is_a_post'</span>)])</span><br><span class="line"></span><br><span class="line">&lt;webob.headers.EnvironHeaders object at <span class="number">0x0000020045F21D30</span>&gt;</span><br></pre></td></tr></table></figure>
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://yangjinheng.github.io/2017/10/04/python/25.sqlalchemy/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -937,6 +589,355 @@
 
 
     
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://yangjinheng.github.io/2017/10/03/python/24.pymysql/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Jin Heng">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="默默">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/10/03/python/24.pymysql/" itemprop="url">Pymysql</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-03T00:00:00+08:00">
+                2017-10-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Python/" itemprop="url" rel="index">
+                    <span itemprop="name">Python</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="Connection-Object"><a href="#Connection-Object" class="headerlink" title="Connection Object"></a>Connection Object</h2><ul>
+<li>连接构造方法</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, host=None, user=None, password=<span class="string">""</span>,</span></span></span><br><span class="line"><span class="function"><span class="params">                database=None, port=<span class="number">0</span>, unix_socket=None,</span></span></span><br><span class="line"><span class="function"><span class="params">                charset=<span class="string">''</span>, sql_mode=None,</span></span></span><br><span class="line"><span class="function"><span class="params">                read_default_file=None, conv=None, use_unicode=None,</span></span></span><br><span class="line"><span class="function"><span class="params">                client_flag=<span class="number">0</span>, cursorclass=Cursor, init_command=None,</span></span></span><br><span class="line"><span class="function"><span class="params">                connect_timeout=<span class="number">10</span>, ssl=None, read_default_group=None,</span></span></span><br><span class="line"><span class="function"><span class="params">                compress=None, named_pipe=None, no_delay=None,</span></span></span><br><span class="line"><span class="function"><span class="params">                autocommit=False, db=None, passwd=None, local_infile=False,</span></span></span><br><span class="line"><span class="function"><span class="params">                max_allowed_packet=<span class="number">16</span>*<span class="number">1024</span>*<span class="number">1024</span>, defer_connect=False,</span></span></span><br><span class="line"><span class="function"><span class="params">                auth_plugin_map=&#123;&#125;, read_timeout=None, write_timeout=None,</span></span></span><br><span class="line"><span class="function"><span class="params">                bind_address=None, binary_prefix=False)</span>:</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>创建数据库连接</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> pymysql</span><br><span class="line"></span><br><span class="line">config = &#123;</span><br><span class="line">          <span class="string">'host'</span>:<span class="string">'172.16.100.252'</span>,</span><br><span class="line">          <span class="string">'port'</span>:<span class="number">3306</span>,</span><br><span class="line">          <span class="string">'user'</span>:<span class="string">'root'</span>,</span><br><span class="line">          <span class="string">'password'</span>:<span class="string">'Jinheng890821@'</span>,</span><br><span class="line">          <span class="string">'db'</span>:<span class="string">'hellodb'</span>,                              <span class="comment">#指定数据库</span></span><br><span class="line">          <span class="string">'charset'</span>:<span class="string">'utf8mb4'</span>,                         <span class="comment">#设定字符集</span></span><br><span class="line">          <span class="string">'cursorclass'</span>:pymysql.cursors.DictCursor,    <span class="comment">#指定游标类</span></span><br><span class="line">          &#125;</span><br><span class="line"></span><br><span class="line">db = pymysql.Connect(**config)</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>游标，相当于使用 <code>mysql</code> 命令刚进入数据库时候那个光标的位置</p>
+</blockquote>
+<ul>
+<li>类的方法</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.cursor()</code></td>
+<td>使用此连接并且返回连接游标</td>
+</tr>
+<tr>
+<td><code>.begin()</code></td>
+<td>开始事务</td>
+</tr>
+<tr>
+<td><code>.rollback()</code></td>
+<td>对事务进行回滚</td>
+</tr>
+<tr>
+<td><code>.commit()</code></td>
+<td>对事务进行提交</td>
+</tr>
+<tr>
+<td><code>.close()</code></td>
+<td>关闭连接，如果事务没有提交，则此操作包含了隐式回滚</td>
+</tr>
+<tr>
+<td><code>.select_db(db)</code></td>
+<td>选择数据库</td>
+</tr>
+</tbody>
+</table>
+<h2 id="err类"><a href="#err类" class="headerlink" title="err类"></a>err类</h2><table>
+<thead>
+<tr>
+<th>异常</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Warning</td>
+<td>当有严重警告时触发，例如插入数据是被截断等等。必须是 StandardError 的子类。</td>
+</tr>
+<tr>
+<td>Error</td>
+<td>警告以外所有其他错误类。必须是 StandardError 的子类。</td>
+</tr>
+<tr>
+<td>InterfaceError</td>
+<td>当有数据库接口模块本身的错误（而不是数据库的错误）发生时触发。 必须是Error的子类。</td>
+</tr>
+<tr>
+<td>DatabaseError</td>
+<td>和数据库有关的错误发生时触发。 必须是Error的子类。</td>
+</tr>
+<tr>
+<td>DataError</td>
+<td>当有数据处理时的错误发生时触发，例如：除零错误，数据超范围等等。 必须是DatabaseError的子类。</td>
+</tr>
+<tr>
+<td>OperationalError</td>
+<td>指非用户控制的，而是操作数据库时发生的错误。例如：连接意外断开、 数据库名未找到、事务处理失败、内存分配错误等等操作数据库是发生的错误。 必须是DatabaseError的子类。</td>
+</tr>
+<tr>
+<td>IntegrityError</td>
+<td>完整性相关的错误，例如外键检查失败等。必须是DatabaseError子类。</td>
+</tr>
+<tr>
+<td>InternalError</td>
+<td>数据库的内部错误，例如游标（cursor）失效了、事务同步失败等等。 必须是DatabaseError子类。</td>
+</tr>
+<tr>
+<td>ProgrammingError</td>
+<td>程序错误，例如数据表（table）没找到或已存在、SQL语句语法错误、 参数数量错误等等。必须是DatabaseError的子类。</td>
+</tr>
+<tr>
+<td>NotSupportedError</td>
+<td>不支持错误，指使用了数据库不支持的函数或API等。例如在连接对象上 使用.rollback()函数，然而数据库并不支持事务或者事务已关闭。 必须是DatabaseError的子类。</td>
+</tr>
+</tbody>
+</table>
+<h2 id="Cursor-Objects"><a href="#Cursor-Objects" class="headerlink" title="Cursor Objects"></a>Cursor Objects</h2><table>
+<thead>
+<tr>
+<th>方法</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.callproc( procname [, parameters ] )</code></td>
+<td>调用存储过程并且传递参数，结果集可以通过 <code>.fetch*()</code> 得到</td>
+</tr>
+<tr>
+<td><code>.execute(operation [, parameters])</code></td>
+<td>执行数据库命令，<code>.execute(&#39;operation&#39;, (parameters))</code> 使用类似C风格的字符串格式化方法，可以防止SQL注入攻击</td>
+</tr>
+<tr>
+<td><code>.executemany( operation, seq_of_parameters )</code></td>
+<td>批量操作，<code>.execute(&#39;operation&#39;, (seq_of_parameters))</code> 这里的参数可以是可迭代对象组成的序列，这会调用 <code>operation</code> 对序列中的每个元素执行操作</td>
+</tr>
+<tr>
+<td><code>.fetchone()</code></td>
+<td>获取查询结果集的下一行，返回单个序列，或在没有更多数据可用时返回<code>None</code></td>
+</tr>
+<tr>
+<td><code>.fetchmany([ size = cursor.arraysize ])</code></td>
+<td>获取查询结果的下一组行，返回一系列序列（例如元组列表）。没有更多行可用时返回空序列。</td>
+</tr>
+<tr>
+<td><code>.fetchall()</code></td>
+<td>获取查询结果的所有（剩余）行，并将它们作为一系列序列（例如元组列表）返回。请注意，游标的arraysize属性可能会影响此操作的性能。</td>
+</tr>
+<tr>
+<td><code>.close()</code></td>
+<td>关闭游标。也可以直接关闭连接，从而关闭游标</td>
+</tr>
+<tr>
+<td><code>.nextset()</code></td>
+<td>此方法将使光标跳到下一个可用集合，丢弃当前集合中的任何剩余行</td>
+</tr>
+<tr>
+<td><code>.setinputsizes(sizes)</code></td>
+<td>这可以在调用 <code>.execute*()</code> 之前使用，以预定义操作参数的内存区域。</td>
+</tr>
+<tr>
+<td><code>.setoutputsize(size [，column ])</code></td>
+<td>为大列提取设置列缓冲区大小（例如，LONG s，BLOB s等），该列被指定为结果序列的索引。不指定列将为游标中的所有大型列设置默认大小</td>
+</tr>
+<tr>
+<td><code>.scroll(value [, mode=&#39;relative&#39; ])</code></td>
+<td>根据 <code>mode</code> 移动游标到新位置，默认 <code>mode =&#39;relative&#39;</code> 表示相对当前的偏移量，当为 <code>mode =&#39;absolute&#39;</code> 时移动到绝对位置</td>
+</tr>
+<tr>
+<td><code>next()</code></td>
+<td>返回下一行数据</td>
+</tr>
+<tr>
+<td><code>.mogrify(query,args=None)</code></td>
+<td>参数化查询，防止SQL注入攻击，通过调用 <code>execute()</code> 方法返回发送到数据库的确切字符串。</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>属性</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.description</code></td>
+<td>游标结果的字段描述信息，包含了：字段名，字段类型代码，显示尺寸，内部大小，精确度，规模，是否允许空</td>
+</tr>
+<tr>
+<td><code>.rownumber</code></td>
+<td>显示游标所在行</td>
+</tr>
+<tr>
+<td><code>.rowcount</code></td>
+<td>这是一个只读属性，并返回执行 <code>execute()</code> 方法后影响的行数</td>
+</tr>
+<tr>
+<td><code>.arraysize</code></td>
+<td>此读取/写入属性指定一次使用 <code>.fetchmany()</code> 提取的行数。它默认为1</td>
+</tr>
+<tr>
+<td><code>.connection</code></td>
+<td>此只读属性返回创建光标的Connection对象的引用。</td>
+</tr>
+<tr>
+<td><code>.__iter__</code></td>
+<td>将游标转换为可迭代对象</td>
+</tr>
+<tr>
+<td><code>.lastrowid</code></td>
+<td>获取新创建数据的自增ID</td>
+</tr>
+</tbody>
+</table>
+<h3 id="查询操作"><a href="#查询操作" class="headerlink" title="查询操作"></a>查询操作</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> pymysql</span><br><span class="line"></span><br><span class="line">config = &#123;</span><br><span class="line">          <span class="string">'host'</span>:<span class="string">'172.16.100.252'</span>,</span><br><span class="line">          <span class="string">'port'</span>:<span class="number">3306</span>,</span><br><span class="line">          <span class="string">'user'</span>:<span class="string">'root'</span>,</span><br><span class="line">          <span class="string">'password'</span>:<span class="string">'Jinheng890821@'</span>,</span><br><span class="line">          <span class="string">'db'</span>:<span class="string">'hellodb'</span>,</span><br><span class="line">          <span class="string">'charset'</span>:<span class="string">'utf8mb4'</span>,</span><br><span class="line">          <span class="string">'cursorclass'</span>:pymysql.cursors.DictCursor,</span><br><span class="line">          &#125;</span><br><span class="line"></span><br><span class="line">db = pymysql.Connect(**config)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 设置查询条件</span></span><br><span class="line">max_age = <span class="number">30</span></span><br><span class="line">mix_age = <span class="number">25</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 执行sql语句</span></span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    <span class="keyword">with</span> db.cursor() <span class="keyword">as</span> cursor:</span><br><span class="line">        sql = <span class="string">'SELECT * FROM students WHERE Age BETWEEN %s AND %s'</span></span><br><span class="line">        cursor.execute(sql, (mix_age, max_age))</span><br><span class="line">        result = cursor.fetchone()</span><br><span class="line">        print(result)</span><br><span class="line">        result = cursor.fetchone()</span><br><span class="line">        print(result)</span><br><span class="line">    db.commit()    <span class="comment"># 没有设置默认自动提交，需要主动提交，以保存所执行的语句</span></span><br><span class="line"><span class="keyword">finally</span>:</span><br><span class="line">    db.close()</span><br></pre></td></tr></table></figure>
+<ul>
+<li>查询结果</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">&#123;<span class="string">'StuID'</span>: <span class="number">5</span>, <span class="string">'Name'</span>: <span class="string">'Yu Yutong'</span>, <span class="string">'Age'</span>: <span class="number">26</span>, <span class="string">'Gender'</span>: <span class="string">'M'</span>, <span class="string">'ClassID'</span>: <span class="number">3</span>, <span class="string">'TeacherID'</span>: <span class="number">1</span>&#125;</span><br><span class="line">&#123;<span class="string">'StuID'</span>: <span class="number">17</span>, <span class="string">'Name'</span>: <span class="string">'Lin Chong'</span>, <span class="string">'Age'</span>: <span class="number">25</span>, <span class="string">'Gender'</span>: <span class="string">'M'</span>, <span class="string">'ClassID'</span>: <span class="number">4</span>, <span class="string">'TeacherID'</span>: <span class="keyword">None</span>&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="插入操作"><a href="#插入操作" class="headerlink" title="插入操作"></a>插入操作</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> pymysql</span><br><span class="line"></span><br><span class="line">config = &#123;</span><br><span class="line">          <span class="string">'host'</span>:<span class="string">'172.16.100.252'</span>,</span><br><span class="line">          <span class="string">'port'</span>:<span class="number">3306</span>,</span><br><span class="line">          <span class="string">'user'</span>:<span class="string">'root'</span>,</span><br><span class="line">          <span class="string">'password'</span>:<span class="string">'Jinheng890821@'</span>,</span><br><span class="line">          <span class="string">'db'</span>:<span class="string">'hellodb'</span>,</span><br><span class="line">          <span class="string">'charset'</span>:<span class="string">'utf8mb4'</span>,</span><br><span class="line">          <span class="string">'cursorclass'</span>:pymysql.cursors.DictCursor,</span><br><span class="line">          &#125;</span><br><span class="line"></span><br><span class="line">db = pymysql.Connect(**config)</span><br><span class="line"></span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    <span class="keyword">with</span> db.cursor() <span class="keyword">as</span> cursor:</span><br><span class="line">        sql = <span class="string">'INSERT INTO students VALUES (%s,%s,%s,%s,%s,%s)'</span></span><br><span class="line">        cursor.execute(sql, (NULL,<span class="string">'yangjinheng'</span>,<span class="string">'29'</span>,<span class="string">'M'</span>,<span class="number">10</span>,<span class="number">1</span>))</span><br><span class="line">    db.commit()    <span class="comment">#由于默认开启事务，所以需要自己提交，或者回滚</span></span><br><span class="line"><span class="keyword">finally</span>:</span><br><span class="line">    db.close()</span><br></pre></td></tr></table></figure>
+<ul>
+<li>官方示例</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> pymysql.cursors</span><br><span class="line"></span><br><span class="line"><span class="comment"># Connect to the database</span></span><br><span class="line">connection = pymysql.connect(host=<span class="string">'localhost'</span>,</span><br><span class="line">                             user=<span class="string">'user'</span>,</span><br><span class="line">                             password=<span class="string">'passwd'</span>,</span><br><span class="line">                             db=<span class="string">'db'</span>,</span><br><span class="line">                             charset=<span class="string">'utf8mb4'</span>,</span><br><span class="line">                             cursorclass=pymysql.cursors.DictCursor)</span><br><span class="line"></span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    <span class="keyword">with</span> connection.cursor() <span class="keyword">as</span> cursor:</span><br><span class="line">        <span class="comment"># Create a new record</span></span><br><span class="line">        sql = <span class="string">"INSERT INTO `users` (`email`, `password`) VALUES (%s, %s)"</span></span><br><span class="line">        cursor.execute(sql, (<span class="string">'webmaster@python.org'</span>, <span class="string">'very-secret'</span>))</span><br><span class="line"></span><br><span class="line">    <span class="comment"># connection is not autocommit by default. So you must commit to save</span></span><br><span class="line">    <span class="comment"># your changes.</span></span><br><span class="line">    connection.commit()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">with</span> connection.cursor() <span class="keyword">as</span> cursor:</span><br><span class="line">        <span class="comment"># Read a single record</span></span><br><span class="line">        sql = <span class="string">"SELECT `id`, `password` FROM `users` WHERE `email`=%s"</span></span><br><span class="line">        cursor.execute(sql, (<span class="string">'webmaster@python.org'</span>,))</span><br><span class="line">        result = cursor.fetchone()</span><br><span class="line">        print(result)</span><br><span class="line"><span class="keyword">finally</span>:</span><br><span class="line">    connection.close()</span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
   </section>
 
   
@@ -989,7 +990,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">76</span>
+                  <span class="site-state-item-count">75</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

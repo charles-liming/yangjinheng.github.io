@@ -311,492 +311,6 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://yangjinheng.github.io/2017/09/29/python/20.Socket编程/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Jin Heng">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="默默">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/09/29/python/20.Socket编程/" itemprop="url">Socket网络编程</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-29T00:00:00+08:00">
-                2017-09-29
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Python/" itemprop="url" rel="index">
-                    <span itemprop="name">Python</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="Socket编程"><a href="#Socket编程" class="headerlink" title="Socket编程"></a>Socket编程</h1><table>
-<thead>
-<tr>
-<th>名称</th>
-<th>描述</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>.bind()</code></td>
-<td>将地址（主机名和端口）绑定到套接字上</td>
-</tr>
-<tr>
-<td><code>.listen()</code></td>
-<td>设置并启动TCP监听器</td>
-</tr>
-<tr>
-<td><code>.accept()</code></td>
-<td>被动接受TCP客户端连接，一直等待到连接到达，阻塞式</td>
-</tr>
-<tr>
-<td><code>.connect()</code></td>
-<td>主动发起TCP服务连接</td>
-</tr>
-<tr>
-<td><code>.connect_ex()</code></td>
-<td><code>.connect()</code>的扩展版本，此时会以错误码的形式返回问题，而不是抛出一个异常</td>
-</tr>
-<tr>
-<td><code>.close()</code></td>
-<td>关闭套接字</td>
-</tr>
-<tr>
-<td><code>.send()</code></td>
-<td>发送TCP消息</td>
-</tr>
-<tr>
-<td><code>.sendto()</code></td>
-<td>发送UDP消息</td>
-</tr>
-<tr>
-<td><code>.sendall()</code></td>
-<td>完整的发送TCP消息</td>
-</tr>
-<tr>
-<td><code>.sendfile()</code></td>
-<td>零拷贝发送文件</td>
-</tr>
-<tr>
-<td><code>.recv()</code></td>
-<td>接收TCP消息</td>
-</tr>
-<tr>
-<td><code>.recv_into</code></td>
-<td>接收TCP消息到指定的缓冲区</td>
-</tr>
-<tr>
-<td><code>.recvfrom()</code></td>
-<td>接收UDP消息，包含客户端地址信息</td>
-</tr>
-<tr>
-<td><code>.recvfrom_into()</code></td>
-<td>接收UDP消息到指定的缓冲区</td>
-</tr>
-<tr>
-<td><code>.fileno()</code></td>
-<td>套接字的文件描述符</td>
-</tr>
-<tr>
-<td><code>.makefile()</code></td>
-<td>创建与套接字关联的文件对象</td>
-</tr>
-</tbody>
-</table>
-<table>
-<thead>
-<tr>
-<th>名称</th>
-<th>描述</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>.family()</code></td>
-<td>套接字家族</td>
-</tr>
-<tr>
-<td><code>.type()</code></td>
-<td>套接字类型</td>
-</tr>
-<tr>
-<td><code>.proto()</code></td>
-<td>套接字协议</td>
-</tr>
-<tr>
-<td><code>.get_inheritable()</code></td>
-<td>获取套接字的可继承标志</td>
-</tr>
-<tr>
-<td><code>.getpeername()</code></td>
-<td>连接到套接字（TCP）的远程地址</td>
-</tr>
-<tr>
-<td><code>.getsockname()</code></td>
-<td>当前套接字的地址</td>
-</tr>
-<tr>
-<td><code>.getsockopt()</code></td>
-<td>返回给定套接字选项的值</td>
-</tr>
-<tr>
-<td><code>.gettimeout()</code></td>
-<td>获取阻塞套接字操作的超时时间</td>
-</tr>
-</tbody>
-</table>
-<table>
-<thead>
-<tr>
-<th>名称</th>
-<th>描述</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>.shutdown()</code></td>
-<td>关闭连接</td>
-</tr>
-<tr>
-<td><code>.setsockopt()</code></td>
-<td>设置给定套接字选项的值</td>
-</tr>
-<tr>
-<td><code>.settimeout()</code></td>
-<td>设置阻塞套接字操作的超时时间</td>
-</tr>
-<tr>
-<td><code>.setblocking()</code></td>
-<td>设置套接字的阻塞式或非阻塞式</td>
-</tr>
-<tr>
-<td><code>.set_inheritable()</code></td>
-<td>设置套接字的可继承标志</td>
-</tr>
-<tr>
-<td><code>.oictl()</code></td>
-<td>控制套接字的模式（仅支持Windows）</td>
-</tr>
-<tr>
-<td><code>.detach()</code></td>
-<td>在未关闭文件描述符的情况下关闭套接字，返回文件描述符</td>
-</tr>
-<tr>
-<td><code>.dup()</code></td>
-<td>复制套接字。返回连接到同一系统资源的新套接字对象。新的套接字不可继承</td>
-</tr>
-<tr>
-<td><code>.share()</code></td>
-<td>与另一个进程共享套接字,必须提供目标进程id,并将生成的字节对象传递给目标进程,通过调用套接字，<code>fromshare()</code>可以实例化共享套接字。</td>
-</tr>
-</tbody>
-</table>
-<h2 id="TCP套接字"><a href="#TCP套接字" class="headerlink" title="TCP套接字"></a>TCP套接字</h2><h3 id="TCP时间戳服务器"><a href="#TCP时间戳服务器" class="headerlink" title="TCP时间戳服务器"></a>TCP时间戳服务器</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> socket <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">from</span> time <span class="keyword">import</span> ctime</span><br><span class="line"></span><br><span class="line">HOST = <span class="string">'127.0.0.1'</span></span><br><span class="line">PORT = <span class="number">8080</span></span><br><span class="line">BUFSIZ = <span class="number">1024</span></span><br><span class="line">ADDR = (HOST,PORT)</span><br><span class="line"></span><br><span class="line">tcpser = socket(AF_INET,SOCK_STREAM)</span><br><span class="line">tcpser.bind(ADDR)</span><br><span class="line">tcpser.listen(<span class="number">5</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span> <span class="keyword">True</span>:</span><br><span class="line">    print(<span class="string">'waiting for connection...'</span>)</span><br><span class="line">    tcpsock,addr = tcpser.accept()</span><br><span class="line">    print(<span class="string">'...connected from:'</span>,addr)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">while</span> <span class="keyword">True</span>:</span><br><span class="line">        data = tcpsock.recv(BUFSIZ)</span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> data:</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">        print(<span class="string">'recv data %s'</span> % (data))</span><br><span class="line">        msg = bytes(<span class="string">'%s %s'</span> % (ctime(),data),encoding=<span class="string">'utf-8'</span>)</span><br><span class="line">        tcpsock.send(msg)</span><br><span class="line">        print(<span class="string">'send data %s'</span> % (msg))</span><br><span class="line">    tcpsock.close()</span><br><span class="line">tcpser.close()</span><br></pre></td></tr></table></figure>
-<h3 id="TCP聊天服务器"><a href="#TCP聊天服务器" class="headerlink" title="TCP聊天服务器"></a>TCP聊天服务器</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> socket</span><br><span class="line"><span class="keyword">import</span> threading</span><br><span class="line"><span class="keyword">import</span> logging</span><br><span class="line"><span class="keyword">import</span> datetime</span><br><span class="line"></span><br><span class="line">logging.basicConfig(format=<span class="string">"%(asctime)s %(thread)d %(message)s"</span>,level=logging.INFO)</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ChatServer</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self,ip=<span class="string">'127.0.0.1'</span>,port=<span class="number">9999</span>)</span>:</span></span><br><span class="line">        self.sock = socket.socket()</span><br><span class="line">        self.addr = (ip,port)</span><br><span class="line">        self.clients = &#123;&#125;</span><br><span class="line">        self.event = threading.Event()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">start</span><span class="params">(self)</span>:</span></span><br><span class="line">        self.sock.bind(self.addr)</span><br><span class="line">        self.sock.listen()</span><br><span class="line">        threading.Thread(target=self.accept).start()    <span class="comment">#启动一个线程，这个线程可以接收TCP连接</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">accept</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">while</span> <span class="keyword">not</span> self.event.is_set():    <span class="comment">#如果事件没有发生</span></span><br><span class="line">            sock,client = self.sock.accept()    <span class="comment">#阻塞，直到有连接进入</span></span><br><span class="line">            f = sock.makefile(<span class="string">'rw'</span>)    <span class="comment">#创建与套接字关联的文件对象</span></span><br><span class="line">            self.clients[client] = f    <span class="comment">#在客户端字典（clients）添加 已连接套接字的文件对象</span></span><br><span class="line">            threading.Thread(target=self.recv,args=(f,client),name=<span class="string">'recv'</span>).start()    <span class="comment">#启动一个线程接收 客户端发过来的信息 参数为 套接字文件对象 和 客户端的地址</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">recv</span><span class="params">(self,f,client)</span>:</span></span><br><span class="line">        <span class="keyword">while</span> <span class="keyword">not</span> self.event.is_set():    <span class="comment">#如果事件没有发生</span></span><br><span class="line">            <span class="keyword">try</span>:</span><br><span class="line">                print(<span class="string">'try'</span>)</span><br><span class="line">                data = f.readline()    <span class="comment">#接收数据</span></span><br><span class="line">            <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">                logging.error(e)</span><br><span class="line">                data = <span class="string">'quit'</span></span><br><span class="line">            msg = data.strip()</span><br><span class="line">            <span class="keyword">if</span> msg == <span class="string">'quit'</span>:    <span class="comment">#如果客户端要求退出</span></span><br><span class="line">                self.clients.pop(client)    <span class="comment">#则将客户端从客户端字典中弹出</span></span><br><span class="line">                f.close()    <span class="comment">#关闭客户端套接字文件</span></span><br><span class="line">                logging.info(<span class="string">'&#123;&#125; quits'</span>.format(client))</span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line">            msg = <span class="string">'&#123;:%Y/%m/%d %H:%M/%S&#125; &#123;&#125;:&#123;&#125;\n&#123;&#125;\n'</span>.format(datetime.datetime.now(),*client,data)    <span class="comment">#接收到的数据加工一次</span></span><br><span class="line">            logging.info(msg)    <span class="comment">#打印接收到的数据</span></span><br><span class="line"></span><br><span class="line">            <span class="keyword">for</span> s <span class="keyword">in</span> self.clients.values():    <span class="comment">#遍历所有客户端，将消息发送给所有客户端</span></span><br><span class="line">                s.write(msg)</span><br><span class="line">                s.flush()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">stop</span><span class="params">(self)</span>:</span>    <span class="comment">#停止服务器</span></span><br><span class="line">        <span class="keyword">for</span> s <span class="keyword">in</span> self.clients.values():</span><br><span class="line">            s.close()    <span class="comment">#遍历关闭所有的连接</span></span><br><span class="line">        self.sock.close()</span><br><span class="line">        self.event.set()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></span><br><span class="line">    cs = ChatServer()</span><br><span class="line">    cs.start()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> <span class="keyword">True</span>:</span><br><span class="line">        cmd = input(<span class="string">'&gt;&gt;'</span>).strip()</span><br><span class="line">        <span class="keyword">if</span> cmd == <span class="string">'quit'</span>:</span><br><span class="line">            cs.stop()</span><br><span class="line">            threading.Event().wait(<span class="number">3</span>)</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">        logging.info(threading.enumerate())</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
-<p>TCP聊天客户端</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> socket</span><br><span class="line"><span class="keyword">import</span> threading</span><br><span class="line"><span class="keyword">import</span> datetime</span><br><span class="line"><span class="keyword">import</span> logging</span><br><span class="line"></span><br><span class="line">FORMAT = <span class="string">'%(asctime)s %(threadName)s %(thread)d %(message)s'</span></span><br><span class="line">logging.basicConfig(format=FORMAT,level=logging.INFO)</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Chatclient</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self,ip=<span class="string">'127.0.0.1'</span>,port=<span class="number">9999</span>)</span>:</span></span><br><span class="line">        self.sock = socket.socket()</span><br><span class="line">        self.addr = (ip,port)</span><br><span class="line">        self.event = threading.Event()</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">start</span><span class="params">(self)</span>:</span></span><br><span class="line">        self.sock.connect(self.addr)    <span class="comment">#连接到远程服务器，如果不能连接会抛出异常</span></span><br><span class="line">        self.send(<span class="string">'i am ready.'</span>)</span><br><span class="line">        threading.Thread(target=self.recv,name=<span class="string">'recv'</span>).start()    <span class="comment">#启动接收线程</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">recv</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">while</span> <span class="keyword">not</span> self.event.is_set():    <span class="comment">#如果事件没有发生则执行</span></span><br><span class="line">            <span class="keyword">try</span>:</span><br><span class="line">                data = self.sock.recv(<span class="number">1024</span>)    <span class="comment">#阻塞式等待直到数据到达</span></span><br><span class="line">            <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">                logging.error(e)</span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line">            msg = <span class="string">'&#123;:%Y/%m/%d %H:%M:%S&#125; &#123;&#125;:&#123;&#125;\n&#123;&#125;\n'</span>.format(datetime.datetime.now(),*self.addr,data.strip())</span><br><span class="line">            logging.info(msg)     <span class="comment">#当数据到达后由recv线程打印出来</span></span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">send</span><span class="params">(self,msg:str)</span>:</span></span><br><span class="line">        data = <span class="string">'&#123;&#125;\n'</span>.format(msg.strip()).encode()</span><br><span class="line">        self.sock.send(data)    <span class="comment">#发送数据</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">stop</span><span class="params">(self)</span>:</span></span><br><span class="line">        self.sock.close()    <span class="comment">#关闭套接字</span></span><br><span class="line">        self.event.wait(<span class="number">3</span>)   <span class="comment">#等待3秒</span></span><br><span class="line">        self.event.set()    <span class="comment">#设置事件已经发生</span></span><br><span class="line">        logging.info(<span class="string">'client stops.'</span>)</span><br><span class="line">    </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></span><br><span class="line">    cc = Chatclient()</span><br><span class="line">    cc.start()</span><br><span class="line">    <span class="keyword">while</span> <span class="keyword">True</span>:</span><br><span class="line">        cmd = input(<span class="string">'&gt;&gt;&gt;'</span>)</span><br><span class="line">        <span class="keyword">if</span> cmd.strip() == <span class="string">'quit'</span>:</span><br><span class="line">            cc.stop()</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">        cc.send(cmd)    <span class="comment">#向服务器发送数据</span></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
-<h2 id="UDP套接字"><a href="#UDP套接字" class="headerlink" title="UDP套接字"></a>UDP套接字</h2><p>由于UDP是无连接的，如果想要维持状态，那么需要在应用层做状态的检测，下面例子是使用心跳机制来维护在线客户端列表的一种实现。</p>
-<h3 id="UDP聊天服务器"><a href="#UDP聊天服务器" class="headerlink" title="UDP聊天服务器"></a>UDP聊天服务器</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> socket</span><br><span class="line"><span class="keyword">import</span> threading</span><br><span class="line"><span class="keyword">import</span> logging</span><br><span class="line"><span class="keyword">import</span> datetime</span><br><span class="line"></span><br><span class="line">FORMAT = <span class="string">'%(asctime)s %(threadName)s %(thread)d %(message)s'</span></span><br><span class="line">logging.basicConfig(format=FORMAT,level=logging.INFO)</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ChatUDPServer</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self,ip=<span class="string">'127.0.0.1'</span>,port=<span class="number">9999</span>,interval=<span class="number">10</span>)</span>:</span>    <span class="comment">#设置服务器的套接字地址，和最大心跳间隔时间</span></span><br><span class="line">        self.addr = (ip,port)</span><br><span class="line">        self.sock = socket.socket(type=socket.SOCK_DGRAM)</span><br><span class="line">        self.clients = &#123;&#125;    <span class="comment">#保存客户端的套接字地址</span></span><br><span class="line">        self.event = threading.Event()</span><br><span class="line">        self.interval = interval</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">start</span><span class="params">(self)</span>:</span></span><br><span class="line">        self.sock.bind(self.addr)</span><br><span class="line">        threading.Thread(target=self.recv,name=<span class="string">'recv'</span>).start()    <span class="comment">#启动接收线程</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">recv</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">while</span> <span class="keyword">not</span> self.event.is_set():</span><br><span class="line">            localset = set()    <span class="comment">#</span></span><br><span class="line">            data,raddr = self.sock.recvfrom(<span class="number">1024</span>)    <span class="comment">#接收一个客户端发来的数据，和客户端的地址信息</span></span><br><span class="line"></span><br><span class="line">            current = datetime.datetime.now().timestamp()    <span class="comment">#设置当前时间为变量</span></span><br><span class="line">            <span class="keyword">if</span> data.strip() == <span class="string">b'^hb^'</span>:    <span class="comment">#如果接收到的数据是心跳包</span></span><br><span class="line">                print(<span class="string">'^^^^^^^^^^hb'</span>,raddr)</span><br><span class="line">                self.clients[raddr] = current    <span class="comment">#则用当前时间更新客户端地址列表中保存的心跳时间</span></span><br><span class="line">                <span class="keyword">continue</span>    <span class="comment">#处理完心跳包以后直接跳出本次循环，继续下一次的接收</span></span><br><span class="line">            <span class="keyword">elif</span> data.strip() == <span class="string">b'quit'</span>:    <span class="comment">#如果接收到的数据是退出的请求</span></span><br><span class="line">                self.clients.pop(raddr,<span class="keyword">None</span>)    <span class="comment">#首先从客户端地址列表中删除该客户端</span></span><br><span class="line">                logging.info(<span class="string">'&#123;&#125; leaving'</span>.format(raddr))    <span class="comment">#打印客户端离开</span></span><br><span class="line">                <span class="keyword">continue</span>    <span class="comment">#处理完客户端的退出请求，直接跳出本次循环，继续下一次的接收</span></span><br><span class="line">            </span><br><span class="line">            self.clients[raddr] = current    <span class="comment">#如果接受到了数据，那么就认为客户端存活，立刻更新时间戳</span></span><br><span class="line"></span><br><span class="line">            msg = <span class="string">'&#123;&#125;. from &#123;&#125;:&#123;&#125;'</span>.format(data.decode(),*raddr)</span><br><span class="line">            logging.info(msg)    <span class="comment">#打印客户端发来的数据</span></span><br><span class="line">            msg = msg.encode()</span><br><span class="line"></span><br><span class="line">            <span class="keyword">for</span> c,stamp <span class="keyword">in</span> self.clients.items():    <span class="comment">#当需要发送消息时候，检查所有客户端的状态，只给心跳没过期的客户端发送消息</span></span><br><span class="line">                <span class="keyword">if</span> current - stamp &gt; self.interval:</span><br><span class="line">                    localset.add(c)</span><br><span class="line">                <span class="keyword">else</span>:</span><br><span class="line">                    self.sock.sendto(msg,c)</span><br><span class="line"></span><br><span class="line">            <span class="keyword">for</span> c <span class="keyword">in</span> localset:    <span class="comment">#清除不在存活期内的客户端</span></span><br><span class="line">                self.clients.pop(c)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">stop</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">for</span> c <span class="keyword">in</span> self.clients:</span><br><span class="line">            self.sock.sendto(<span class="string">b'bye'</span>,c)</span><br><span class="line">        self.sock.close()</span><br><span class="line">        self.event.set()</span><br><span class="line">    </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></span><br><span class="line">    cs = ChatUDPServer()</span><br><span class="line">    cs.start()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> <span class="keyword">True</span>:</span><br><span class="line">        cmd = input(<span class="string">'&gt;&gt;&gt;'</span>)</span><br><span class="line">        <span class="keyword">if</span> cmd.strip() == <span class="string">'quit'</span>:</span><br><span class="line">            cs.stop()</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">        logging.info(threading.enumerate())</span><br><span class="line">        logging.info(cs.clients)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
-<h3 id="UDP聊天客户端"><a href="#UDP聊天客户端" class="headerlink" title="UDP聊天客户端"></a>UDP聊天客户端</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> socket</span><br><span class="line"><span class="keyword">import</span> threading</span><br><span class="line"><span class="keyword">import</span> logging</span><br><span class="line"></span><br><span class="line">FORMAT = <span class="string">'%(asctime)s %(threadName)s %(thread)d %(message)s'</span></span><br><span class="line">logging.basicConfig(format=FORMAT,level=logging.INFO)</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ChatUdpClient</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self,rip=<span class="string">'127.0.0.1'</span>,rport=<span class="number">9999</span>)</span>:</span></span><br><span class="line">        self.sock = socket.socket(type=socket.SOCK_DGRAM)</span><br><span class="line">        self.raddr = (rip,rport)</span><br><span class="line">        self.event = threading.Event()</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">start</span><span class="params">(self)</span>:</span></span><br><span class="line">        self.sock.connect(self.raddr)    <span class="comment">#设置服务器套接字地址</span></span><br><span class="line"></span><br><span class="line">        threading.Thread(target=self._sendhb,name=<span class="string">'heartbeat'</span>,daemon=<span class="keyword">True</span>).start()    <span class="comment">#启动Heartbeat心跳线程，5秒发送一次</span></span><br><span class="line">        threading.Thread(target=self.recv,name=<span class="string">'recv'</span>).start()    <span class="comment">#启动接收线程</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">_sendhb</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">while</span> <span class="keyword">not</span> self.event.wait(<span class="number">5</span>):</span><br><span class="line">            self.send(<span class="string">'^hb^'</span>)    <span class="comment">#发送心跳包</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">recv</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">while</span> <span class="keyword">not</span> self.event.is_set():</span><br><span class="line">            data,raddr = self.sock.recvfrom(<span class="number">1024</span>)    <span class="comment">#阻塞接收</span></span><br><span class="line"></span><br><span class="line">            msg = <span class="string">'&#123;&#125;. from &#123;&#125;:&#123;&#125;'</span>.format(data.decode(),*raddr)</span><br><span class="line">            logging.info(msg)    <span class="comment">#接收后立刻打印</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">send</span><span class="params">(self,msg:str)</span>:</span></span><br><span class="line">        self.sock.sendto(msg.encode(),self.raddr)    <span class="comment">#向服务器发送消息</span></span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">stop</span><span class="params">(self)</span>:</span></span><br><span class="line">        self.send(<span class="string">'quit'</span>)    <span class="comment">#客户端主动退出</span></span><br><span class="line">        self.sock.close()</span><br><span class="line">        self.event.set()</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></span><br><span class="line">    cc1 = ChatUdpClient()</span><br><span class="line">    cc2 = ChatUdpClient()</span><br><span class="line">    cc1.start()</span><br><span class="line">    cc2.start()</span><br><span class="line">    print(cc1.sock)</span><br><span class="line">    print(cc2.sock)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> <span class="keyword">True</span>:</span><br><span class="line">        cmd = input(<span class="string">'input your words &gt;&gt;'</span>)</span><br><span class="line">        <span class="keyword">if</span> cmd.strip() == <span class="string">'quit'</span>:</span><br><span class="line">            cc1.stop()</span><br><span class="line">            cc2.stop()</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">        cc1.send(cmd)</span><br><span class="line">        cc2.send(cmd)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
-<h1 id="SocketServer"><a href="#SocketServer" class="headerlink" title="SocketServer"></a>SocketServer</h1><p>SocketServer 模块简化了编写网络服务器的任务，它有一个超类 <code>BaseServer</code> 负责定义API，又通过继承重写方式定义出了四个子类。</p>
-<table>
-<thead>
-<tr>
-<th>子类</th>
-<th>作用</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>BaseServer</td>
-<td>定义了核心服务器功能的API，但不具体实现</td>
-</tr>
-<tr>
-<td>TCPServer</td>
-<td>TCP流式套接字</td>
-</tr>
-<tr>
-<td>UDPServer</td>
-<td>UDP数据报套接字</td>
-</tr>
-<tr>
-<td>UnixStreamServer</td>
-<td>Unix形式的TCP套接字</td>
-</tr>
-<tr>
-<td>UnixDataramServer</td>
-<td>Unix形式的UDP套接字</td>
-</tr>
-</tbody>
-</table>
-<p>这四个字类之间的继承关系是：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">+------------+</span><br><span class="line">| BaseServer |</span><br><span class="line">+------------+</span><br><span class="line">      |</span><br><span class="line">      v</span><br><span class="line">+-----------+        +------------------+</span><br><span class="line">| TCPServer |-------&gt;| UnixStreamServer |</span><br><span class="line">+-----------+        +------------------+</span><br><span class="line">      |</span><br><span class="line">      v</span><br><span class="line">+-----------+        +--------------------+</span><br><span class="line">| UDPServer |-------&gt;| UnixDatagramServer |</span><br><span class="line">+-----------+        +--------------------+</span><br></pre></td></tr></table></figure>
-<p>这四个字类，它们以同步方式处理用户请求，也就是说处理完一个用户请求才会处理下一个用户的请求，如果每个请求都需要很长时间才能完成，这就非常不合理了，解决方案是创建一个单独的进程或线程来处理每个请求，所以 <code>socketserver</code> 模块还有两个混入类 <code>ForkingMixIn</code> 和 <code>ThreadingMixIn</code> 用于支持异步方式。</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">                          +------------+</span><br><span class="line">                          | BaseServer |</span><br><span class="line">                          +------------+</span><br><span class="line">                                |</span><br><span class="line">                                v</span><br><span class="line">+----------------+        +-----------+        +----------------+</span><br><span class="line">|  ForkingMixIn  |        | TCPServer |        | ThreadingMixIn |</span><br><span class="line">+----------------+        +-----------+        +----------------+</span><br><span class="line">               \            /   |   \            /</span><br><span class="line">                \          /    |    \          /</span><br><span class="line">         +------------------+   |  +--------------------+</span><br><span class="line">         | ForkingTCPServer |   |  | ThreadingTCPServer |</span><br><span class="line">         +------------------+   |  +--------------------+</span><br><span class="line">                                |</span><br><span class="line">                                v</span><br><span class="line">+----------------+        +-----------+        +----------------+</span><br><span class="line">|   ForkingMixI  |        | UDPServer |        | ThreadingMixIn |</span><br><span class="line">+----------------+        +-----------+        +----------------+</span><br><span class="line">               \             /      \            /</span><br><span class="line">                \           /        \          /</span><br><span class="line">         +------------------+     +--------------------+</span><br><span class="line">         | ForkingUDPServer |     | ThreadingUDPServer |</span><br><span class="line">         +------------------+     +--------------------+</span><br></pre></td></tr></table></figure>
-<ul>
-<li>经过混入的方式又出现了四个字类</li>
-</ul>
-<table>
-<thead>
-<tr>
-<th>字类</th>
-<th>作用</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>ForkingTCPServer</td>
-<td>多进程的TCP流式套接字</td>
-</tr>
-<tr>
-<td>ForkingUDPServer</td>
-<td>多进程的UDP数据报套接字</td>
-</tr>
-<tr>
-<td>ThreadingTCPServer</td>
-<td>多线程的TCP流式套接字</td>
-</tr>
-<tr>
-<td>ThreadingUDPServer</td>
-<td>多线程的UDP数据报套接字</td>
-</tr>
-</tbody>
-</table>
-<h2 id="Server-Objects"><a href="#Server-Objects" class="headerlink" title="Server Objects"></a>Server Objects</h2><p>服务器对象</p>
-<p><code>class socketserver.BaseServer(server_address, RequestHandlerClass)</code> 这是模块中的所有服务器对象的超类。它定义了接口，如下所述，但是大多数的方法不实现，在子类中进行细化。 </p>
-<table>
-<thead>
-<tr>
-<th>方法\</th>
-<th>属性</th>
-<th>含义</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>fileno()</code></td>
-<td>返回套接字文件描述符</td>
-</tr>
-<tr>
-<td><code>handle_request()</code></td>
-<td>该方法用于处理单一的 <code>request</code>，按顺序调用<code>get_request(), verify_request() process_request()</code></td>
-</tr>
-<tr>
-<td><code>serve_forever(*poll_interval=0.5*)</code></td>
-<td>处理请求，直到一个明确的 <code>shutdown()</code> 请求。每 <code>poll_interval</code> 秒轮询一次 <code>shutdown</code> 。忽略 <code>self.timeout</code>。如果你需要做周期性的任务，建议放置在其他线程。</td>
-</tr>
-<tr>
-<td><code>service_actions()</code></td>
-<td>它在 <code>serve_forever()</code> 循环中调用，此方法可由子类别或 mixin 类重写, 以执行特定于给定服务 (如清除操作) 的操作。</td>
-</tr>
-<tr>
-<td><code>shutdown()</code></td>
-<td>告诉 <code>serve_forever()</code> 循环停止并等待其停止。</td>
-</tr>
-<tr>
-<td><code>server_close()</code></td>
-<td>清理服务器，可能被重写</td>
-</tr>
-<tr>
-<td><code>address_family</code></td>
-<td>地址家族，比如 <code>socket.AF_INET</code>和 <code>socket.AF_UNIX</code>。</td>
-</tr>
-<tr>
-<td><code>RequestHandlerClass</code></td>
-<td>需要用户重写的请求处理类，这个类为每个请求创建实例。</td>
-</tr>
-<tr>
-<td><code>server_address</code></td>
-<td>服务器侦听的地址，格式根据协议家族地址的各不相同，请参阅socket模块的文档。</td>
-</tr>
-<tr>
-<td><code>socket</code></td>
-<td>服务器上侦听传入的请求socket对象的服务器。</td>
-</tr>
-</tbody>
-</table>
-<ul>
-<li><p>服务器支持的类变量<br>| 方法|属性            | 含义                                                         |<br>| ——————— | ———————————————————— |<br>| <code>allow_reuse_address</code> | 服务器是否允许地址的重用。默认为false ，并且可在子类中更改。 |<br>| <code>request_queue_size</code>  | 请求队列的大小。如果单个请求需要很长的时间来处理，服务器忙时请求被放置到队列中，最多可以放request_queue_size个。一旦队列已满，来自客户端的请求将得到 “Connection denied”错误。默认值通常为5 ，但可以被子类覆盖。 |<br>| <code>socket_type</code>         | 服务器使用的套接字类型，<code>socket.SOCK_STREAM</code>和<code>socket.SOCK_DGRAM</code>等。 |<br>| <code>timeout</code>             | 超时时间，以秒为单位，或 None表示没有超时。如果<code>handle_request()</code> 在 <code>timeout</code> 内没有收到请求，将调用<code>handle_timeout()</code>。 |</p>
-</li>
-<li><p>可被字类重载的方法<br>| 方法|属性                                 | 含义                                                         |<br>| —————————————— | ———————————————————— |<br>| <code>finish_request()</code>                         | 实际处理 <code>RequestHandlerClass</code>发起的请求并调用其handle()方法。 常用。 |<br>| <code>get_request()</code>                            | 接受socket请求，并返回二元组包含要用于与客户端通信的新<code>socket</code>对象，以及客户端的地址。 |<br>| <code>handle_error(request, client_address)</code>    | 如果 <code>RequestHandlerClass</code> 的 <code>handle()</code> 方法抛出异常时调用。默认操作是打印 <code>traceback</code> 到标准输出，并继续处理其他请求。 |<br>| <code>handle_timeout()</code>                         | 超时处理。默认对于 <code>forking</code> 服务器是收集退出的子进程状态，<code>threading</code> 服务器则什么都不做。 |<br>| <code>process_request(request, client_address)</code> | 调用 <code>finish_request()</code> 创建 <code>RequestHandlerClass</code> 的实例。如果需要，此功能可以创建新的进程或线程来处理请求, <code>ForkingMixIn</code> 和 <code>ThreadingMixIn</code> 类做到这点。常用。 |<br>| <code>server_activate()</code>                        | 通过服务器的构造函数来激活服务器。默认的行为只是监听服务器套接字。可重载。 |<br>| <code>server_bind()</code>                            | 通过服务器的构造函数中调用绑定socket到所需的地址，可重载。   |<br>| <code>verify_request(request, client_address)</code>  | 返回一个布尔值，如果该值为True ，则该请求将被处理，反之请求将被拒绝。此功能可以重写来实现对服务器的访问控制。默认的实现始终返回True。<code>client_address</code>可以限定客户端，比如只处理指定ip区间的请求。 常用。 |</p>
-</li>
-</ul>
-<h2 id="Request-Handler-Objects"><a href="#Request-Handler-Objects" class="headerlink" title="Request Handler Objects"></a>Request Handler Objects</h2><p>请求处理器，处理器接收数据并决定如何操作。它负责在socket层之上实现协议（i.e., HTTP, XML-RPC, or AMQP)，读取数据，处理并写反应。可以重载的方法如下： </p>
-<table>
-<thead>
-<tr>
-<th>方法/属性</th>
-<th>作用</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>setup()</code></td>
-<td>当连接套接字建立，服务器为本次请求做的准备工作. 默认什么都不做，<code>StreamRequestHandler</code>中会创建文件类似的对象以读写<code>socket</code>。</td>
-</tr>
-<tr>
-<td><code>handle()</code></td>
-<td>处理本次连入的请求，解析传入的请求，处理数据，并发送响应。默认什么都不做。常用变量：<code>self.request</code>，<code>self.client_address</code>，<code>self.server</code>。</td>
-</tr>
-<tr>
-<td><code>finish()</code></td>
-<td>连入的请求断开时候，执行的方法，默认什么都不做，如果 <code>setup()</code> 产生异常，不会执行<code>finish()</code>。</td>
-</tr>
-<tr>
-<td><code>.request</code></td>
-<td>本次连入请求的socket对象，支持：<code>.request.recv</code>、<code>.request.send</code> 等</td>
-</tr>
-<tr>
-<td><code>.client_address</code></td>
-<td>本次连入的请求的客户端地址</td>
-</tr>
-<tr>
-<td><code>.server</code></td>
-<td>sockerserver对象</td>
-</tr>
-</tbody>
-</table>
-<p>通常只需要重载<code>handle</code>，重写<code>setup()</code>和<code>finish()</code> ，并提供<code>self.rfile</code>和<code>self.wfile</code>属性，<code>self.rfile</code>和<code>self.wfile</code>可以读取或写入，以获得请求数据或将数据返回到客户端。</p>
-<p><code>self.request</code>的类型与服务类型相关，对于TCP服务<code>self.request</code> 是 <code>socket</code> 对象；对于UDP服务，<code>self.request</code>是字符串和<code>socket</code>，可以在子类<code>StreamRequestHandler</code>或<code>DatagramRequestHandler</code>中重载，</p>
-<p><code>SocketServer</code> 内部使用了  <code>selectors</code> 方式实现异步的通信。</p>
-<p>在一次通信中，每一个请求会对应一个BaseRequestHandler实例，由它负责处理用户的请求。</p>
-<ul>
-<li>请求处理类内部的对象</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> socketserver</span><br><span class="line"><span class="keyword">import</span> threading</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyHandler</span><span class="params">(socketserver.BaseRequestHandler)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">handle</span><span class="params">(self)</span>:</span></span><br><span class="line">        print(self.__dict__)                    <span class="comment">#请求处理类的字典</span></span><br><span class="line">        print(self.request)                     <span class="comment">#连入的请求socket对象</span></span><br><span class="line">        print(self.client_address)              <span class="comment">#连入的请求地址</span></span><br><span class="line">        print(self.server)                      <span class="comment">#sockerserver对象</span></span><br><span class="line">        print(self.server.__dict__)             <span class="comment">#sockerserver对象字典</span></span><br><span class="line"></span><br><span class="line">        print(threading.enumerate())</span><br><span class="line">        print(threading.current_thread())</span><br><span class="line"></span><br><span class="line">addr = (<span class="string">'127.0.0.1'</span>,<span class="number">9999</span>)</span><br><span class="line">server = socketserver.ThreadingTCPServer(addr,MyHandler)</span><br><span class="line">server.serve_forever()</span><br></pre></td></tr></table></figure>
-<h2 id="创建SocketServer"><a href="#创建SocketServer" class="headerlink" title="创建SocketServer"></a>创建SocketServer</h2><ol>
-<li>创建一个类，它继承自 <code>socketserver.BaseRequestHandler</code> 并且在类中重写以覆盖父类的 <code>handle</code> 方法。</li>
-<li>实例化一个<code>SocketServer</code> 如：<code>sockserver.ThreadingTCPServer</code>，并且传递两个参数：<code>(IP,PORT)</code> 和 <code>请求处理类</code> 给这个实例。</li>
-<li>调用这个 <code>SocketServer</code> 的 <code>serve_forever(*poll_interval=0.5*)</code> 方法，来启动这个 <code>SocketServer</code> 。</li>
-<li>调用<code>SocketServer.close()</code></li>
-</ol>
-<ul>
-<li>EchoServer，接受一条消息，返回相同的消息</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> threading</span><br><span class="line"><span class="keyword">import</span> socketserver</span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">EchoHandler</span><span class="params">(socketserver.BaseRequestHandler)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">setup</span><span class="params">(self)</span>:</span></span><br><span class="line">        self.event = threading.Event()</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">finish</span><span class="params">(self)</span>:</span></span><br><span class="line">        self.event.set()</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">handle</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">while</span> <span class="keyword">not</span> self.event.is_set():</span><br><span class="line">            data = self.request.recv(<span class="number">1024</span>).decode()</span><br><span class="line">            msg = <span class="string">'&#123;&#125; &#123;&#125;'</span>.format(self.client_address,data).encode()</span><br><span class="line">            print(self.client_address)</span><br><span class="line">            self.request.send(msg)</span><br><span class="line">            print(threading.enumerate(),self)</span><br><span class="line"></span><br><span class="line">addr = (<span class="string">'0.0.0.0'</span>,<span class="number">60000</span>)</span><br><span class="line">server = socketserver.ThreadingTCPServer(addr,EchoHandler)</span><br><span class="line"><span class="comment"># server.serve_forever()</span></span><br><span class="line"></span><br><span class="line">server_thread = threading.Thread(target=server.serve_forever,name=<span class="string">'EchoServer'</span>,daemon=<span class="keyword">True</span>)</span><br><span class="line">server_thread.start()     <span class="comment">#使用线程启动，避免server.serve_forever阻塞在主线程。</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    <span class="keyword">while</span> <span class="keyword">True</span>:</span><br><span class="line">        cmd = input(<span class="string">'&gt;&gt;&gt;'</span>)</span><br><span class="line">        <span class="keyword">if</span> cmd.strip() == <span class="string">'quit'</span>:</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">        print(threading.enumerate())</span><br><span class="line"><span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">    print(e)</span><br><span class="line"><span class="keyword">except</span> KeyboardInterrupt:</span><br><span class="line">    <span class="keyword">pass</span></span><br><span class="line"><span class="keyword">finally</span>:</span><br><span class="line">    print(<span class="string">'EXIT'</span>)</span><br><span class="line">    sys.exit(<span class="number">0</span>)</span><br></pre></td></tr></table></figure>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://yangjinheng.github.io/2017/09/28/python/19.queue队列/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -946,6 +460,550 @@
 
 
     
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://yangjinheng.github.io/2017/09/27/python/18.multiprocessing多进程/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Jin Heng">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="默默">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/09/27/python/18.multiprocessing多进程/" itemprop="url">Python多进程</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-27T12:20:30+08:00">
+                2017-09-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Python/" itemprop="url" rel="index">
+                    <span itemprop="name">Python</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="multiprocessing"><a href="#multiprocessing" class="headerlink" title="multiprocessing"></a>multiprocessing</h2><p>多进程 <code>Multiprocessing</code> 和多线程 <code>threading</code> 类似, 他们都是在 <code>python</code> 中用来并行运算的. 不过既然有了 <code>threading</code>，为什么 <code>Python</code> 还要出一个 <code>multiprocessing</code> 呢? 原因很简单, 就是用来弥补 <code>threading</code> 在计算密集型程序的不足。</p>
+<ul>
+<li><code>multiprocessing</code> 子类</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>子类</th>
+<th>用处</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Process</td>
+<td>进程类</td>
+</tr>
+<tr>
+<td>Pool</td>
+<td>提供一个进程池</td>
+</tr>
+<tr>
+<td>Lock</td>
+<td>独占锁</td>
+</tr>
+<tr>
+<td>RLock</td>
+<td>重入锁</td>
+</tr>
+<tr>
+<td>Event</td>
+<td>事件同步</td>
+</tr>
+<tr>
+<td>Condition</td>
+<td>条件同步</td>
+</tr>
+<tr>
+<td>Semaphore</td>
+<td>信号量</td>
+</tr>
+<tr>
+<td>BoundedSemaphore</td>
+<td>不可超越的信号量</td>
+</tr>
+<tr>
+<td>Barrier</td>
+<td>栅栏</td>
+</tr>
+<tr>
+<td>Queue</td>
+<td>进程间通信队列</td>
+</tr>
+<tr>
+<td>SimpleQueue</td>
+<td></td>
+</tr>
+<tr>
+<td>Pipe</td>
+<td>进程间通信管道</td>
+</tr>
+<tr>
+<td>Array</td>
+<td></td>
+</tr>
+<tr>
+<td>BufferTooShort</td>
+<td></td>
+</tr>
+<tr>
+<td>JoinableQueue</td>
+<td></td>
+</tr>
+<tr>
+<td>Manager</td>
+<td></td>
+</tr>
+<tr>
+<td>RawArray</td>
+<td></td>
+</tr>
+<tr>
+<td>RawValue</td>
+<td></td>
+</tr>
+<tr>
+<td>SUBDEBUG</td>
+<td></td>
+</tr>
+<tr>
+<td>SUBWARNING</td>
+<td></td>
+</tr>
+<tr>
+<td>Value</td>
+</tr>
+</tbody>
+</table>
+<h2 id="Process多进程"><a href="#Process多进程" class="headerlink" title="Process多进程"></a>Process多进程</h2><ul>
+<li>构造方法</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">__init__(self, group=<span class="keyword">None</span>, target=<span class="keyword">None</span>, name=<span class="keyword">None</span>, args=(), kwargs=&#123;&#125;, *, daemon=<span class="keyword">None</span>)</span><br></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>group</code></td>
+<td>线程组，目前还没有实现，库引用中提示必须是None</td>
+</tr>
+<tr>
+<td><code>target</code></td>
+<td>要执行的函数</td>
+</tr>
+<tr>
+<td><code>name</code></td>
+<td>设置进程的名字</td>
+</tr>
+<tr>
+<td><code>args</code></td>
+<td>传入进程函数的位置参数，元祖形式，例如：<code>args = (args1, args2, )</code></td>
+</tr>
+<tr>
+<td><code>kwargs</code></td>
+<td>传入进程函数的关键字参数，字典形式，例如：<code>kwargs = (key1=value1, key2=value2)</code></td>
+</tr>
+<tr>
+<td><code>daemon</code></td>
+<td>是否是主进程的守护进程，意味着主进程结束时候是否退出，有三种状态：True，守护主进程，主进程结束也随之结束，False，不守护主进程，主进程结束时阻塞直到线程执行完毕。None：继承父进程的daemon状态。</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>方法和属性</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>属性</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.is_alive()</code></td>
+<td>判断是否正在运行</td>
+</tr>
+<tr>
+<td><code>.join(timeout=None)</code></td>
+<td>设置进程为阻塞调用，等待进程结束或者超时，程序控制流才会继续，此调用无视进程的daemon设置</td>
+</tr>
+<tr>
+<td><code>.run()</code></td>
+<td>运行进程函数。可继承Thread重写，参数可从args和kwargs获取</td>
+</tr>
+<tr>
+<td><code>.start()</code></td>
+<td>启动进程</td>
+</tr>
+<tr>
+<td><code>.terminate()</code></td>
+<td>终止指定的进程</td>
+</tr>
+<tr>
+<td><code>.daemon</code></td>
+<td>是否为守护进程</td>
+</tr>
+<tr>
+<td><code>.exitcode</code></td>
+<td>进程的退出状态码</td>
+</tr>
+<tr>
+<td><code>.ident</code></td>
+<td>进程PID</td>
+</tr>
+<tr>
+<td><code>.pid</code></td>
+<td>进程PID</td>
+</tr>
+<tr>
+<td><code>.name</code></td>
+<td>获得进程名</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>示例</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> multiprocessing</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">worker</span><span class="params">(num)</span>:</span></span><br><span class="line">    print(<span class="string">"Worker"</span>, num)</span><br><span class="line">    time.sleep(<span class="number">3</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">5</span>):</span><br><span class="line">        p = multiprocessing.Process(target=worker, args=(i, ))</span><br><span class="line">        p.start()</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">Worker <span class="number">1</span></span><br><span class="line">Worker <span class="number">3</span></span><br><span class="line">Worker <span class="number">2</span></span><br><span class="line">Worker <span class="number">0</span></span><br><span class="line">Worker <span class="number">4</span></span><br></pre></td></tr></table></figure>
+<h2 id="Pool进程池"><a href="#Pool进程池" class="headerlink" title="Pool进程池"></a>Pool进程池</h2><p>Pool类可以创建一个进程池，在同一个时间，只能有指定数量的进程运行，它支持异步和回调。</p>
+<ul>
+<li>构造方法</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">Pool(processes=<span class="keyword">None</span>, initializer=<span class="keyword">None</span>, initargs=(), maxtasksperchild=<span class="keyword">None</span>)</span><br></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th><code>含义</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>processes</code></td>
+<td>进程池中工作进程的数量，如果未指定，则为 <code>multiprocessing.get_cpu()</code> 个</td>
+</tr>
+<tr>
+<td><code>initializer</code></td>
+<td>如果不为None，则每个进程开始前会先调用<code>initializer</code>程序</td>
+</tr>
+<tr>
+<td><code>initargs</code></td>
+<td>为 <code>initializer</code> 提供参数</td>
+</tr>
+<tr>
+<td><code>maxtasksperchild</code></td>
+<td>是指每一个worker最多被重复调用的次数， 然后就会被销毁，然后再重新初始化一个</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>子类</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.apply(func, args=(), kwds={})</code></td>
+<td>同步阻塞执行</td>
+</tr>
+<tr>
+<td><code>.apply_async(func, args=(), kwds={}, callback=None, error_callback=None)</code></td>
+<td>异步执行，<code>callback</code>会在<code>func</code>调用成功后立刻执行回函数，<code>error_callback</code>则会在<code>func</code>调用失败时立即执行的函数</td>
+</tr>
+<tr>
+<td><code>terminate()</code></td>
+<td>结束工作进程</td>
+</tr>
+<tr>
+<td><code>close()</code></td>
+<td>关闭Pool，表示不能再往进程池中添加进程</td>
+</tr>
+<tr>
+<td><code>join()</code></td>
+<td>阻塞等待子进程完成，应该在<code>close()</code>或<code>terminate()</code>后执行</td>
+</tr>
+<tr>
+<td><code>map(func, iterable, chunksize=None)</code></td>
+<td><code>iterable</code> 可迭代对象的每个元素在func上执行，最后将返回几个结果列表</td>
+</tr>
+<tr>
+<td><code>map_async(func, iterable, chunksize=None, callback=None, error_callback=None)</code></td>
+<td>异步版本的<code>map()</code></td>
+</tr>
+<tr>
+<td><code>imap(func, iterable, chunksize=1)</code></td>
+<td>一个惰性版本的<code>map()</code></td>
+</tr>
+<tr>
+<td><code>imap_unordered(func, iterable, chunksize=1)</code></td>
+<td>与<code>imap()</code>，相同，不过结果是无序的</td>
+</tr>
+<tr>
+<td><code>starmap(func, iterable, chunksize=None)</code></td>
+<td>与<code>map()</code>类似，不过<code>iterable</code>的参数会被分解，因此<code>[(1,2), (3,4)]</code>分解为<code>[func(1,2), func(3,4)]</code>。</td>
+</tr>
+<tr>
+<td><code>starmap_async(func, iterable, chunksize=None, callback=None, error_callback=None)</code></td>
+<td>与 <code>starmap()</code> 类似，不过是异步版本的</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><code>apply_async()</code> 和 <code>map_async()</code> 支持的方法 </li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>apply_async方法</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>get(self, timeout=None)</code></td>
+<td>阻塞等待线程调用的结果，或等待超时</td>
+</tr>
+<tr>
+<td><code>ready(self)</code></td>
+<td>返回进程是否完成</td>
+</tr>
+<tr>
+<td><code>successful(self)</code></td>
+<td>是否成功完成，没有成功完成返回AssertionError异常</td>
+</tr>
+<tr>
+<td><code>wait(self, timeout=None)</code></td>
+<td>阻塞等待进程返回，才释放控制流</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><code>apply_async</code> 示例</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> multiprocessing</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func</span><span class="params">(msg)</span>:</span></span><br><span class="line">    time.sleep(<span class="number">5</span>)</span><br><span class="line">    <span class="keyword">return</span> multiprocessing.current_process().name + <span class="string">'-'</span> + msg</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line">    pool = multiprocessing.Pool(processes=<span class="number">4</span>)</span><br><span class="line">    results = []</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">8</span>):</span><br><span class="line">        msg = <span class="string">"hello %d"</span> %(i)</span><br><span class="line">        results.append(pool.apply_async(func, (msg, )))</span><br><span class="line">    pool.close()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> res <span class="keyword">in</span> results:</span><br><span class="line">        <span class="keyword">print</span> (res.get())</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>map_async</code> 示例</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> multiprocessing <span class="keyword">import</span> Pool</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">f</span><span class="params">(x)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> x * x</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    <span class="keyword">with</span> Pool(processes=<span class="number">4</span>) <span class="keyword">as</span> pool:         <span class="comment"># 开始 4 个工作线程</span></span><br><span class="line">        result = pool.apply_async(f, (<span class="number">10</span>,)) <span class="comment"># 使用异步的进程来运行 f </span></span><br><span class="line">        print(result.get(timeout=<span class="number">1</span>))        <span class="comment"># 获得异步进程的结果</span></span><br><span class="line"></span><br><span class="line">        print(pool.map(f, range(<span class="number">10</span>)))       <span class="comment"># 使用map进程处理可迭代的参数</span></span><br><span class="line"></span><br><span class="line">        it = pool.imap(f, range(<span class="number">10</span>))        <span class="comment"># 使用imap惰性的进程来处理可迭代参数</span></span><br><span class="line">        print(next(it))                     <span class="comment"># 获取imap进程的next结果</span></span><br><span class="line">        print(next(it))                     <span class="comment"># 获取imap进程的next结果</span></span><br><span class="line">        print(it.next(timeout=<span class="number">1</span>))           <span class="comment"># 获取imap进程的next结果</span></span><br><span class="line"></span><br><span class="line">        result = pool.apply_async(time.sleep, (<span class="number">10</span>,))</span><br><span class="line">        print(result.get(timeout=<span class="number">1</span>))        <span class="comment"># 这会引发一个异常 multiprocessing.TimeoutError</span></span><br></pre></td></tr></table></figure>
+<h2 id="Queue队列通信"><a href="#Queue队列通信" class="headerlink" title="Queue队列通信"></a>Queue队列通信</h2><p>Queue的功能是将每个核或线程的运算结果放在队里中， 等到每个线程或核运行完毕后再从队列中取出结果， 继续加载运算。原因很简单, 多线程调用的函数不能有返回值, 所以使用Queue存储多个线程运算的结果。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">import</span> multiprocessing</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">worker1</span><span class="params">(queue, i)</span>:</span> </span><br><span class="line">    name = multiprocessing.current_process().name</span><br><span class="line">    data = queue.get()      <span class="comment">#收到消息才执行</span></span><br><span class="line">    print(<span class="string">'Process %s i is %d , data is %s'</span>% (name, i, data))</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">worker2</span><span class="params">(queue, i)</span>:</span> </span><br><span class="line">    name = multiprocessing.current_process().name</span><br><span class="line">    data = queue.get()      <span class="comment">#收到消息才执行  </span></span><br><span class="line">    print(<span class="string">'Process %s i is %d , data is %s'</span>% (name, i, data))</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:  </span><br><span class="line">    queue = multiprocessing.Queue()</span><br><span class="line"></span><br><span class="line">    p1 = multiprocessing.Process(target=worker1, args=(queue, <span class="number">1</span>))  </span><br><span class="line">    p1.start()  </span><br><span class="line"></span><br><span class="line">    p2 = multiprocessing.Process(target=worker2, args=(queue, <span class="number">2</span>))  </span><br><span class="line">    p2.start()  </span><br><span class="line"></span><br><span class="line">    time.sleep(<span class="number">3</span>)          <span class="comment">#3 秒后，发送带有数据的消息</span></span><br><span class="line">    queue.put(<span class="string">'data1'</span>)</span><br><span class="line">    queue.put(<span class="string">'data2'</span>)</span><br><span class="line">    queue.close()          <span class="comment">#发送完成后关闭</span></span><br></pre></td></tr></table></figure>
+<h2 id="concurrent-futures"><a href="#concurrent-futures" class="headerlink" title="concurrent.futures"></a>concurrent.futures</h2><p>Python标准库为我们提供了 <code>threading</code> 和 <code>multiprocessing</code> 模块编写相应的多线程/多进程代码，但是当项目达到一定的规模，频繁创建/销毁进程或者线程是非常消耗资源的，这个时候我们就要编写自己的线程池/进程池，以空间换时间。但从Python3.2开始，标准库为我们提供了 <code>concurrent.futures</code> 模块，它提供了<code>ThreadPoolExecutor</code> 和 <code>ProcessPoolExecutor</code> 两个类，实现了对 <code>threading</code> 和 <code>multiprocessing</code> 的进一步抽象，对编写线程池/进程池提供了直接的支持。</p>
+<p><code>concurrent.futures</code> 模块的基础是<code>Exectuor</code>，它是一个抽象类，它不能被直接使用。但是它提供的两个子类 <code>ThreadPoolExecutor</code> 和 <code>ProcessPoolExecutor</code> 却是非常有用，顾名思义两者分别被用来创建线程池和进程池的代码。我们可以将相应的 <code>tasks</code> 直接放入线程池/进程池，不需要维护 <code>Queue</code> 来操心死锁的问题，线程池/进程池会自动帮我们调度。 </p>
+<p><code>Future</code> 这个概念，你可以把它理解为一个在未来完成的操作，这是异步编程的基础，传统编程模式下比如我们操作 <code>queue.get</code> 的时候，在等待返回结果之前会产生阻塞，CPU 不能让出来做其他事情，而 <code>Future</code> 的引入帮助我们在等待的这段时间可以完成其他的操作。</p>
+<h3 id="ThreadPoolExecutor"><a href="#ThreadPoolExecutor" class="headerlink" title="ThreadPoolExecutor"></a>ThreadPoolExecutor</h3><p>ThreadPoolExecutor 只提供了异步方式的线程&amp;进程池，池内的线程或者进程可以复用。</p>
+<ul>
+<li>定义线程池</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">futures.ThreadPoolExecutor(max_workers=<span class="number">5</span>)    <span class="comment">#定义一个线程池对象</span></span><br></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>submit(fn, *args, **kwargs)</code></td>
+<td>向线程池提交一个函数和参数运行，并且返回一个Future对象，</td>
+</tr>
+<tr>
+<td><code>shutdown(wait=True)</code></td>
+<td>清理Pool，杀掉其内部的所有对象</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>向线程池提交任务并执行，得到future对象</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">future = executor.submit(worker)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>future 对象支持的方法</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.done()</code></td>
+<td>如果调用已成功取消或已完成运行, 则返回 True。</td>
+</tr>
+<tr>
+<td><code>.cancelled()</code></td>
+<td>如果调用成功取消则返回True</td>
+</tr>
+<tr>
+<td><code>.cancel()</code></td>
+<td>尝试取消调用，如果取消成功则返回True，失败则返回False</td>
+</tr>
+<tr>
+<td><code>.running()</code></td>
+<td>如果当前调用正在执行且无法取消，返回True</td>
+</tr>
+<tr>
+<td><code>result(timeout=None)</code></td>
+<td>返回由调用返回的值。如果调用尚未完成, 则此方法将等待超时秒，如果未指定超时或 None, 则等待时间没有限制。</td>
+</tr>
+<tr>
+<td><code>exception(timeout=None)</code></td>
+<td>返回由调用引发的异常。如果调用尚未完成, 则此方法将等待超时秒。</td>
+</tr>
+<tr>
+<td><code>add_done_callback(fn)</code></td>
+<td>将可调用 <code>fn</code> 附加到 <code>future</code> 对象。当 <code>future</code> 对象被取消或完成运行时, <code>fn</code> 将被称为, 如果 <code>future</code> 对象已经完成或被取消, <code>fn</code> 将立即被调用。</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>从future线程内获得返回结果</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">worker</span><span class="params">(x,y)</span>:</span></span><br><span class="line">    msg = x + y</span><br><span class="line">    print(<span class="string">'x + y = %s'</span> % (msg))</span><br><span class="line">    <span class="keyword">return</span> msg</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> concurrent.futures <span class="keyword">import</span> ThreadPoolExecutor</span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> ThreadPoolExecutor(max_workers=<span class="number">1</span>) <span class="keyword">as</span> executor:</span><br><span class="line">    future = executor.submit(worker, <span class="number">2</span>, <span class="number">2</span>)</span><br><span class="line">    print(future.result())</span><br></pre></td></tr></table></figure>
+<ul>
+<li>Future隐藏了底层的复杂性，如果需要以进程模式运行</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">import</span> threading</span><br><span class="line"><span class="keyword">from</span> concurrent <span class="keyword">import</span> futures</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">worker</span><span class="params">()</span>:</span></span><br><span class="line">    time.sleep(<span class="number">3</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    executor = futures.ThreadPoolExecutor(max_workers=<span class="number">5</span>)    <span class="comment">#定义一个线程池</span></span><br><span class="line">    </span><br><span class="line">    fs = []                                    <span class="comment">#定义一个列表，准备装入future对象</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">10</span>):</span><br><span class="line">        future = executor.submit(worker)</span><br><span class="line">        fs.append(future)                      <span class="comment">#向线程池内添加10个任务</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> <span class="keyword">True</span>:</span><br><span class="line">        time.sleep(<span class="number">3</span>)</span><br><span class="line">        print(threading.enumerate())           <span class="comment">#枚举线程列表</span></span><br><span class="line"></span><br><span class="line">        flag = <span class="keyword">True</span></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> fs:</span><br><span class="line">            print(i.done())</span><br><span class="line">            flag = flag <span class="keyword">and</span> i.done()</span><br><span class="line"></span><br><span class="line">        print(<span class="string">'-'</span>*<span class="number">100</span>)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> flag:                               <span class="comment">#如果线程全部执行完毕</span></span><br><span class="line">            executor.shutdown()                <span class="comment">#清理线程池</span></span><br><span class="line">            print(threading.enumerate())       <span class="comment">#枚举线程列表</span></span><br><span class="line">            <span class="keyword">break</span></span><br></pre></td></tr></table></figure>
+<h3 id="ProcessPoolExecutor"><a href="#ProcessPoolExecutor" class="headerlink" title="ProcessPoolExecutor"></a>ProcessPoolExecutor</h3><ul>
+<li>改造成进程的使用方法ProcessPoolExecutor，使用上下文管理来自动清理Pool</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">import</span> threading</span><br><span class="line"><span class="keyword">from</span> concurrent <span class="keyword">import</span> futures</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">worker</span><span class="params">()</span>:</span></span><br><span class="line">    time.sleep(<span class="number">3</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    <span class="keyword">with</span> futures.ProcessPoolExecutor(max_workers=<span class="number">5</span>) <span class="keyword">as</span> executor:   <span class="comment">#定义一个线程池</span></span><br><span class="line">        fs = []                                    <span class="comment">#定义一个列表，准备装入future对象</span></span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">10</span>):</span><br><span class="line">            future = executor.submit(worker)</span><br><span class="line">            fs.append(future)                      <span class="comment">#向线程池内添加10个任务</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">while</span> <span class="keyword">True</span>:</span><br><span class="line">            time.sleep(<span class="number">3</span>)</span><br><span class="line"></span><br><span class="line">            flag = <span class="keyword">True</span></span><br><span class="line">            <span class="keyword">for</span> i <span class="keyword">in</span> fs:</span><br><span class="line">                print(i.done())</span><br><span class="line">                flag = flag <span class="keyword">and</span> i.done()</span><br><span class="line">            print(<span class="string">'-'</span>*<span class="number">100</span>)</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> flag:<span class="keyword">break</span></span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
   </section>
 
   
@@ -998,7 +1056,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">76</span>
+                  <span class="site-state-item-count">75</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
