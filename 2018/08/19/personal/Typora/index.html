@@ -6,7 +6,7 @@
 
 
 <html class="theme-next pisces use-motion" lang="zh-Hans">
-<head><meta name="generator" content="Hexo 3.8.0">
+<head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -376,6 +376,16 @@
 
           
             
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/08/19/personal/Typora/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count gitment-comments-count" data-xid="/2018/08/19/personal/Typora/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
           
 
           
@@ -408,7 +418,7 @@
 </ol>
 <p>所以我对 Typora 的样式做了一些修改，以适应普遍的大屏幕显示，优化显示步骤为：</p>
 <p>首先打开偏好设置 -&gt; 打开主题文件夹 -&gt; 新建 github.user.css 文件，填入如下内容。</p>
-<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="comment">/* 调整视图正文宽度 */</span></span><br><span class="line"><span class="selector-id">#write</span>&#123;</span><br><span class="line">    <span class="attribute">max-width</span>: <span class="number">90%</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 调整源码正文宽度 */</span></span><br><span class="line"><span class="selector-id">#typora-source</span> <span class="selector-class">.CodeMirror-lines</span> &#123;</span><br><span class="line">    <span class="attribute">max-width</span>: <span class="number">90%</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 调整输出 PDF 文件宽度 */</span></span><br><span class="line">@<span class="keyword">media</span> print &#123;</span><br><span class="line">    <span class="selector-id">#write</span>&#123;</span><br><span class="line">        <span class="attribute">max-width</span>: <span class="number">95%</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    @<span class="keyword">page</span> &#123;</span><br><span class="line">        <span class="attribute">size</span>: A3;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 调整正文字体,字体需单独下载 */</span></span><br><span class="line"><span class="selector-tag">body</span> &#123;</span><br><span class="line">    <span class="attribute">font-family</span>: IBM Plex Sans;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="comment">/* 调整视图正文宽度 */</span></span><br><span class="line"><span class="selector-id">#write</span>&#123;</span><br><span class="line">    <span class="attribute">max-width</span>: <span class="number">90%</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 调整源码正文宽度 */</span></span><br><span class="line"><span class="selector-id">#typora-source</span> <span class="selector-class">.CodeMirror-lines</span> &#123;</span><br><span class="line">    <span class="attribute">max-width</span>: <span class="number">90%</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 调整输出 PDF 文件宽度 */</span></span><br><span class="line"><span class="keyword">@media</span> print &#123;</span><br><span class="line">    <span class="selector-id">#write</span>&#123;</span><br><span class="line">        <span class="attribute">max-width</span>: <span class="number">95%</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">@page</span> &#123;</span><br><span class="line">        <span class="attribute">size</span>: A3;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 调整正文字体,字体需单独下载 */</span></span><br><span class="line"><span class="selector-tag">body</span> &#123;</span><br><span class="line">    <span class="attribute">font-family</span>: IBM Plex Sans;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
       
     </div>
     
@@ -474,7 +484,11 @@
           
 
   
-  <div id="gitalk-container"></div>
+    <div class="comments" id="comments">
+      
+        <div id="gitment-container"></div>
+      
+    </div>
 
   
 
@@ -748,26 +762,47 @@
 
 
 
+<!-- LOCAL: You can save these files to your site and update links -->
+    
+        
+        <link rel="stylesheet" href="https://aimingoo.github.io/gitmint/style/default.css">
+        <script src="https://aimingoo.github.io/gitmint/dist/gitmint.browser.js"></script>
+    
+<!-- END LOCAL -->
+
+    
+
+    
+      <script type="text/javascript">
+      function renderGitment(){
+        var gitment = new Gitmint({
+            id: window.location.pathname, 
+            owner: '420123641@qq.com',
+            repo: 'yangjinheng.github.io',
+            
+            lang: "" || navigator.language || navigator.systemLanguage || navigator.userLanguage,
+            
+            oauth: {
+            
+            
+                client_secret: 'a1a4c80b994ee7de926d209ade6d90c06deaa52e',
+            
+                client_id: 'aab00e6bb87e77db0a92'
+            }});
+        gitment.render('gitment-container');
+      }
+
+      
+      renderGitment();
+      
+      </script>
+    
 
 
 
 
 
-  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
-  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
-  <script src="/js/src/md5.min.js"></script>
-   <script type="text/javascript">
-        var gitalk = new Gitalk({
-          clientID: '86e33c97ad3067f9d456',
-          clientSecret: 'ee93fb0fc1345f63936a09214f4b4a75e932c96c',
-          repo: 'yangjinheng.github.io',
-          owner: 'yangjinheng',
-          admin: ['yangjinheng'],
-          id: location.pathname,
-          distractionFreeMode: 'true'
-        })
-        gitalk.render('gitalk-container')
-    </script>
+
 
 
   

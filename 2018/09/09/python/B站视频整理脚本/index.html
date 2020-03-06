@@ -6,7 +6,7 @@
 
 
 <html class="theme-next pisces use-motion" lang="zh-Hans">
-<head><meta name="generator" content="Hexo 3.8.0">
+<head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -376,6 +376,16 @@
 
           
             
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/09/09/python/B站视频整理脚本/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count gitment-comments-count" data-xid="/2018/09/09/python/B站视频整理脚本/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
           
 
           
@@ -407,7 +417,7 @@
 <li><p>下载自己想保存的视频，下载完毕后，命令行切换到 B 站的下载目录，执行本脚本：<code>python bilicache.py</code></p>
 </li>
 </ol>
-<h3 id="Script"><a href="#Script" class="headerlink" title="Script"></a>Script</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> pathlib <span class="keyword">import</span> Path</span><br><span class="line"><span class="keyword">import</span> json</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">CacheMagage</span><span class="params">(object)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span></span><br><span class="line">        self.cwd = Path(<span class="string">'.'</span>).absolute()</span><br><span class="line">        self.twd = self.cwd.joinpath(<span class="string">'videos'</span>)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">extract</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">for</span> dir <span class="keyword">in</span> list(self.cwd.iterdir()):</span><br><span class="line">            <span class="keyword">if</span> dir.is_dir():</span><br><span class="line">                <span class="keyword">try</span>:</span><br><span class="line">                    dirmeta = list(dir.glob(<span class="string">'*.dvi'</span>))[<span class="number">0</span>]</span><br><span class="line">                    twd = self.twd.joinpath(self.get_value(dirmeta,<span class="string">'Title'</span>))</span><br><span class="line">                    twd.mkdir(parents=<span class="keyword">True</span>)</span><br><span class="line">                <span class="keyword">except</span> IndexError:</span><br><span class="line">                    <span class="keyword">continue</span></span><br><span class="line">                <span class="keyword">except</span> FileExistsError:</span><br><span class="line">                    <span class="keyword">continue</span></span><br><span class="line">                <span class="keyword">for</span> video <span class="keyword">in</span> list(dir.iterdir()):</span><br><span class="line">                    <span class="keyword">try</span>:</span><br><span class="line">                        metafile = list(video.glob(<span class="string">'*.info'</span>))[<span class="number">0</span>]</span><br><span class="line">                        videofile = list(video.glob(<span class="string">'*.flv'</span>))[<span class="number">0</span>]</span><br><span class="line">                        filename = self.get_value(metafile,<span class="string">'PartName'</span>,<span class="string">'Title'</span>)</span><br><span class="line">                        newlocal = twd.joinpath(filename + <span class="string">'.flv'</span>)</span><br><span class="line">                        videofile.replace(newlocal)</span><br><span class="line">                    <span class="keyword">except</span> IndexError:</span><br><span class="line">                        <span class="keyword">continue</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_value</span><span class="params">(self,file,value,backupvalue=False)</span>:</span></span><br><span class="line">        json_data = json.load(open(file,<span class="string">'r'</span>,encoding=<span class="string">'UTF-8'</span>))</span><br><span class="line">        jsion_value = json_data[value] <span class="keyword">if</span> json_data[value] <span class="keyword">else</span> json_data[backupvalue]</span><br><span class="line">        <span class="keyword">return</span> jsion_value</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    CacheMagage().extract()</span><br></pre></td></tr></table></figure>
+<h3 id="Script"><a href="#Script" class="headerlink" title="Script"></a>Script</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> pathlib <span class="keyword">import</span> Path</span><br><span class="line"><span class="keyword">import</span> json</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">CacheMagage</span><span class="params">(object)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span></span><br><span class="line">        self.cwd = Path(<span class="string">'.'</span>).absolute()</span><br><span class="line">        self.twd = self.cwd.joinpath(<span class="string">'videos'</span>)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">extract</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">for</span> dir <span class="keyword">in</span> list(self.cwd.iterdir()):</span><br><span class="line">            <span class="keyword">if</span> dir.is_dir():</span><br><span class="line">                <span class="keyword">try</span>:</span><br><span class="line">                    dirmeta = list(dir.glob(<span class="string">'*.dvi'</span>))[<span class="number">0</span>]</span><br><span class="line">                    twd = self.twd.joinpath(self.get_value(dirmeta,<span class="string">'Title'</span>))</span><br><span class="line">                    twd.mkdir(parents=<span class="literal">True</span>)</span><br><span class="line">                <span class="keyword">except</span> IndexError:</span><br><span class="line">                    <span class="keyword">continue</span></span><br><span class="line">                <span class="keyword">except</span> FileExistsError:</span><br><span class="line">                    <span class="keyword">continue</span></span><br><span class="line">                <span class="keyword">for</span> video <span class="keyword">in</span> list(dir.iterdir()):</span><br><span class="line">                    <span class="keyword">try</span>:</span><br><span class="line">                        metafile = list(video.glob(<span class="string">'*.info'</span>))[<span class="number">0</span>]</span><br><span class="line">                        videofile = list(video.glob(<span class="string">'*.flv'</span>))[<span class="number">0</span>]</span><br><span class="line">                        filename = self.get_value(metafile,<span class="string">'PartName'</span>,<span class="string">'Title'</span>)</span><br><span class="line">                        newlocal = twd.joinpath(filename + <span class="string">'.flv'</span>)</span><br><span class="line">                        videofile.replace(newlocal)</span><br><span class="line">                    <span class="keyword">except</span> IndexError:</span><br><span class="line">                        <span class="keyword">continue</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_value</span><span class="params">(self,file,value,backupvalue=False)</span>:</span></span><br><span class="line">        json_data = json.load(open(file,<span class="string">'r'</span>,encoding=<span class="string">'UTF-8'</span>))</span><br><span class="line">        jsion_value = json_data[value] <span class="keyword">if</span> json_data[value] <span class="keyword">else</span> json_data[backupvalue]</span><br><span class="line">        <span class="keyword">return</span> jsion_value</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    CacheMagage().extract()</span><br></pre></td></tr></table></figure>
 <h3 id="SHOW"><a href="#SHOW" class="headerlink" title="SHOW"></a>SHOW</h3><ul>
 <li>整理前</li>
 </ul>
@@ -482,7 +492,11 @@
           
 
   
-  <div id="gitalk-container"></div>
+    <div class="comments" id="comments">
+      
+        <div id="gitment-container"></div>
+      
+    </div>
 
   
 
@@ -781,26 +795,47 @@
 
 
 
+<!-- LOCAL: You can save these files to your site and update links -->
+    
+        
+        <link rel="stylesheet" href="https://aimingoo.github.io/gitmint/style/default.css">
+        <script src="https://aimingoo.github.io/gitmint/dist/gitmint.browser.js"></script>
+    
+<!-- END LOCAL -->
+
+    
+
+    
+      <script type="text/javascript">
+      function renderGitment(){
+        var gitment = new Gitmint({
+            id: window.location.pathname, 
+            owner: '420123641@qq.com',
+            repo: 'yangjinheng.github.io',
+            
+            lang: "" || navigator.language || navigator.systemLanguage || navigator.userLanguage,
+            
+            oauth: {
+            
+            
+                client_secret: 'a1a4c80b994ee7de926d209ade6d90c06deaa52e',
+            
+                client_id: 'aab00e6bb87e77db0a92'
+            }});
+        gitment.render('gitment-container');
+      }
+
+      
+      renderGitment();
+      
+      </script>
+    
 
 
 
 
 
-  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
-  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
-  <script src="/js/src/md5.min.js"></script>
-   <script type="text/javascript">
-        var gitalk = new Gitalk({
-          clientID: '86e33c97ad3067f9d456',
-          clientSecret: 'ee93fb0fc1345f63936a09214f4b4a75e932c96c',
-          repo: 'yangjinheng.github.io',
-          owner: 'yangjinheng',
-          admin: ['yangjinheng'],
-          id: location.pathname,
-          distractionFreeMode: 'true'
-        })
-        gitalk.render('gitalk-container')
-    </script>
+
 
 
   

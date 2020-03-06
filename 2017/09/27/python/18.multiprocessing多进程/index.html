@@ -6,7 +6,7 @@
 
 
 <html class="theme-next pisces use-motion" lang="zh-Hans">
-<head><meta name="generator" content="Hexo 3.8.0">
+<head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -376,6 +376,16 @@
 
           
             
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/09/27/python/18.multiprocessing多进程/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count gitment-comments-count" data-xid="/2017/09/27/python/18.multiprocessing多进程/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
           
 
           
@@ -500,7 +510,7 @@
 <h2 id="Process多进程"><a href="#Process多进程" class="headerlink" title="Process多进程"></a>Process多进程</h2><ul>
 <li>构造方法</li>
 </ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">__init__(self, group=<span class="keyword">None</span>, target=<span class="keyword">None</span>, name=<span class="keyword">None</span>, args=(), kwargs=&#123;&#125;, *, daemon=<span class="keyword">None</span>)</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">__init__(self, group=<span class="literal">None</span>, target=<span class="literal">None</span>, name=<span class="literal">None</span>, args=(), kwargs=&#123;&#125;, *, daemon=<span class="literal">None</span>)</span><br></pre></td></tr></table></figure>
 <table>
 <thead>
 <tr>
@@ -597,7 +607,7 @@
 <ul>
 <li>构造方法</li>
 </ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">Pool(processes=<span class="keyword">None</span>, initializer=<span class="keyword">None</span>, initargs=(), maxtasksperchild=<span class="keyword">None</span>)</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">Pool(processes=<span class="literal">None</span>, initializer=<span class="literal">None</span>, initargs=(), maxtasksperchild=<span class="literal">None</span>)</span><br></pre></td></tr></table></figure>
 <table>
 <thead>
 <tr>
@@ -798,11 +808,11 @@
 <ul>
 <li>Future隐藏了底层的复杂性，如果需要以进程模式运行</li>
 </ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">import</span> threading</span><br><span class="line"><span class="keyword">from</span> concurrent <span class="keyword">import</span> futures</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">worker</span><span class="params">()</span>:</span></span><br><span class="line">    time.sleep(<span class="number">3</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    executor = futures.ThreadPoolExecutor(max_workers=<span class="number">5</span>)    <span class="comment">#定义一个线程池</span></span><br><span class="line">    </span><br><span class="line">    fs = []                                    <span class="comment">#定义一个列表，准备装入future对象</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">10</span>):</span><br><span class="line">        future = executor.submit(worker)</span><br><span class="line">        fs.append(future)                      <span class="comment">#向线程池内添加10个任务</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> <span class="keyword">True</span>:</span><br><span class="line">        time.sleep(<span class="number">3</span>)</span><br><span class="line">        print(threading.enumerate())           <span class="comment">#枚举线程列表</span></span><br><span class="line"></span><br><span class="line">        flag = <span class="keyword">True</span></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> fs:</span><br><span class="line">            print(i.done())</span><br><span class="line">            flag = flag <span class="keyword">and</span> i.done()</span><br><span class="line"></span><br><span class="line">        print(<span class="string">'-'</span>*<span class="number">100</span>)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> flag:                               <span class="comment">#如果线程全部执行完毕</span></span><br><span class="line">            executor.shutdown()                <span class="comment">#清理线程池</span></span><br><span class="line">            print(threading.enumerate())       <span class="comment">#枚举线程列表</span></span><br><span class="line">            <span class="keyword">break</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">import</span> threading</span><br><span class="line"><span class="keyword">from</span> concurrent <span class="keyword">import</span> futures</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">worker</span><span class="params">()</span>:</span></span><br><span class="line">    time.sleep(<span class="number">3</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    executor = futures.ThreadPoolExecutor(max_workers=<span class="number">5</span>)    <span class="comment">#定义一个线程池</span></span><br><span class="line">    </span><br><span class="line">    fs = []                                    <span class="comment">#定义一个列表，准备装入future对象</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">10</span>):</span><br><span class="line">        future = executor.submit(worker)</span><br><span class="line">        fs.append(future)                      <span class="comment">#向线程池内添加10个任务</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">        time.sleep(<span class="number">3</span>)</span><br><span class="line">        print(threading.enumerate())           <span class="comment">#枚举线程列表</span></span><br><span class="line"></span><br><span class="line">        flag = <span class="literal">True</span></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> fs:</span><br><span class="line">            print(i.done())</span><br><span class="line">            flag = flag <span class="keyword">and</span> i.done()</span><br><span class="line"></span><br><span class="line">        print(<span class="string">'-'</span>*<span class="number">100</span>)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> flag:                               <span class="comment">#如果线程全部执行完毕</span></span><br><span class="line">            executor.shutdown()                <span class="comment">#清理线程池</span></span><br><span class="line">            print(threading.enumerate())       <span class="comment">#枚举线程列表</span></span><br><span class="line">            <span class="keyword">break</span></span><br></pre></td></tr></table></figure>
 <h3 id="ProcessPoolExecutor"><a href="#ProcessPoolExecutor" class="headerlink" title="ProcessPoolExecutor"></a>ProcessPoolExecutor</h3><ul>
 <li>改造成进程的使用方法ProcessPoolExecutor，使用上下文管理来自动清理Pool</li>
 </ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">import</span> threading</span><br><span class="line"><span class="keyword">from</span> concurrent <span class="keyword">import</span> futures</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">worker</span><span class="params">()</span>:</span></span><br><span class="line">    time.sleep(<span class="number">3</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    <span class="keyword">with</span> futures.ProcessPoolExecutor(max_workers=<span class="number">5</span>) <span class="keyword">as</span> executor:   <span class="comment">#定义一个线程池</span></span><br><span class="line">        fs = []                                    <span class="comment">#定义一个列表，准备装入future对象</span></span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">10</span>):</span><br><span class="line">            future = executor.submit(worker)</span><br><span class="line">            fs.append(future)                      <span class="comment">#向线程池内添加10个任务</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">while</span> <span class="keyword">True</span>:</span><br><span class="line">            time.sleep(<span class="number">3</span>)</span><br><span class="line"></span><br><span class="line">            flag = <span class="keyword">True</span></span><br><span class="line">            <span class="keyword">for</span> i <span class="keyword">in</span> fs:</span><br><span class="line">                print(i.done())</span><br><span class="line">                flag = flag <span class="keyword">and</span> i.done()</span><br><span class="line">            print(<span class="string">'-'</span>*<span class="number">100</span>)</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> flag:<span class="keyword">break</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">import</span> threading</span><br><span class="line"><span class="keyword">from</span> concurrent <span class="keyword">import</span> futures</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">worker</span><span class="params">()</span>:</span></span><br><span class="line">    time.sleep(<span class="number">3</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    <span class="keyword">with</span> futures.ProcessPoolExecutor(max_workers=<span class="number">5</span>) <span class="keyword">as</span> executor:   <span class="comment">#定义一个线程池</span></span><br><span class="line">        fs = []                                    <span class="comment">#定义一个列表，准备装入future对象</span></span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">10</span>):</span><br><span class="line">            future = executor.submit(worker)</span><br><span class="line">            fs.append(future)                      <span class="comment">#向线程池内添加10个任务</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">            time.sleep(<span class="number">3</span>)</span><br><span class="line"></span><br><span class="line">            flag = <span class="literal">True</span></span><br><span class="line">            <span class="keyword">for</span> i <span class="keyword">in</span> fs:</span><br><span class="line">                print(i.done())</span><br><span class="line">                flag = flag <span class="keyword">and</span> i.done()</span><br><span class="line">            print(<span class="string">'-'</span>*<span class="number">100</span>)</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> flag:<span class="keyword">break</span></span><br></pre></td></tr></table></figure>
 
       
     </div>
@@ -869,7 +879,11 @@
           
 
   
-  <div id="gitalk-container"></div>
+    <div class="comments" id="comments">
+      
+        <div id="gitment-container"></div>
+      
+    </div>
 
   
 
@@ -1168,26 +1182,47 @@
 
 
 
+<!-- LOCAL: You can save these files to your site and update links -->
+    
+        
+        <link rel="stylesheet" href="https://aimingoo.github.io/gitmint/style/default.css">
+        <script src="https://aimingoo.github.io/gitmint/dist/gitmint.browser.js"></script>
+    
+<!-- END LOCAL -->
+
+    
+
+    
+      <script type="text/javascript">
+      function renderGitment(){
+        var gitment = new Gitmint({
+            id: window.location.pathname, 
+            owner: '420123641@qq.com',
+            repo: 'yangjinheng.github.io',
+            
+            lang: "" || navigator.language || navigator.systemLanguage || navigator.userLanguage,
+            
+            oauth: {
+            
+            
+                client_secret: 'a1a4c80b994ee7de926d209ade6d90c06deaa52e',
+            
+                client_id: 'aab00e6bb87e77db0a92'
+            }});
+        gitment.render('gitment-container');
+      }
+
+      
+      renderGitment();
+      
+      </script>
+    
 
 
 
 
 
-  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
-  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
-  <script src="/js/src/md5.min.js"></script>
-   <script type="text/javascript">
-        var gitalk = new Gitalk({
-          clientID: '86e33c97ad3067f9d456',
-          clientSecret: 'ee93fb0fc1345f63936a09214f4b4a75e932c96c',
-          repo: 'yangjinheng.github.io',
-          owner: 'yangjinheng',
-          admin: ['yangjinheng'],
-          id: location.pathname,
-          distractionFreeMode: 'true'
-        })
-        gitalk.render('gitalk-container')
-    </script>
+
 
 
   

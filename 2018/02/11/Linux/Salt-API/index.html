@@ -6,7 +6,7 @@
 
 
 <html class="theme-next pisces use-motion" lang="zh-Hans">
-<head><meta name="generator" content="Hexo 3.8.0">
+<head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -375,6 +375,16 @@
           
 
           
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/02/11/Linux/Salt-API/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count gitment-comments-count" data-xid="/2018/02/11/Linux/Salt-API/" itemprop="commentsCount"></span>
+                </a>
+              </span>
             
           
 
@@ -798,7 +808,11 @@
           
 
   
-  <div id="gitalk-container"></div>
+    <div class="comments" id="comments">
+      
+        <div id="gitment-container"></div>
+      
+    </div>
 
   
 
@@ -911,7 +925,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#REST-API"><span class="nav-number">1.</span> <span class="nav-text">REST API</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#依赖组件"><span class="nav-number">1.1.</span> <span class="nav-text">依赖组件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#部署API"><span class="nav-number">1.2.</span> <span class="nav-text">部署API</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#认证会话"><span class="nav-number">2.</span> <span class="nav-text">认证会话</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#自定义头部方式"><span class="nav-number">2.1.</span> <span class="nav-text">自定义头部方式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用Cookie方式"><span class="nav-number">2.2.</span> <span class="nav-text">使用Cookie方式</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#用法示例"><span class="nav-number">3.</span> <span class="nav-text">用法示例</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#内容协商"><span class="nav-number">3.1.</span> <span class="nav-text">内容协商</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参数介绍"><span class="nav-number">3.2.</span> <span class="nav-text">参数介绍</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#接口定义"><span class="nav-number">4.</span> <span class="nav-text">接口定义</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#"><span class="nav-number">4.1.</span> <span class="nav-text">/</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#login"><span class="nav-number">4.2.</span> <span class="nav-text">/login</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#GET"><span class="nav-number">4.2.1.</span> <span class="nav-text">GET</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#POST"><span class="nav-number">4.2.2.</span> <span class="nav-text">POST</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#logout"><span class="nav-number">4.3.</span> <span class="nav-text">/logout</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#POST-1"><span class="nav-number">4.3.1.</span> <span class="nav-text">POST</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#minions"><span class="nav-number">4.4.</span> <span class="nav-text">/minions/</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#GET-1"><span class="nav-number">4.4.1.</span> <span class="nav-text">GET</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#POST-2"><span class="nav-number">4.4.2.</span> <span class="nav-text">POST</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#jobs"><span class="nav-number">4.5.</span> <span class="nav-text">/jobs/</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#GET-2"><span class="nav-number">4.5.1.</span> <span class="nav-text">GET</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#POST-3"><span class="nav-number">4.5.2.</span> <span class="nav-text">POST</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#run"><span class="nav-number">4.6.</span> <span class="nav-text">/run</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#POST-4"><span class="nav-number">4.6.1.</span> <span class="nav-text">POST</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#events"><span class="nav-number">4.7.</span> <span class="nav-text">/events</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#GET-3"><span class="nav-number">4.7.1.</span> <span class="nav-text">GET</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#hook"><span class="nav-number">4.8.</span> <span class="nav-text">/hook</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#POST-5"><span class="nav-number">4.8.1.</span> <span class="nav-text">POST</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#keys"><span class="nav-number">4.9.</span> <span class="nav-text">/keys/</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#GET-4"><span class="nav-number">4.9.1.</span> <span class="nav-text">GET</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#POST-6"><span class="nav-number">4.9.2.</span> <span class="nav-text">POST</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ws"><span class="nav-number">4.10.</span> <span class="nav-text">/ws/</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#GET-5"><span class="nav-number">4.10.1.</span> <span class="nav-text">GET</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#stats"><span class="nav-number">4.11.</span> <span class="nav-text">/stats</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#GET-6"><span class="nav-number">4.11.1.</span> <span class="nav-text">GET</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#REST-API"><span class="nav-number">1.</span> <span class="nav-text">REST API</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#依赖组件"><span class="nav-number">1.1.</span> <span class="nav-text">依赖组件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#部署API"><span class="nav-number">1.2.</span> <span class="nav-text">部署API</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#认证会话"><span class="nav-number">2.</span> <span class="nav-text">认证会话</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#自定义头部方式"><span class="nav-number">2.1.</span> <span class="nav-text">自定义头部方式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用Cookie方式"><span class="nav-number">2.2.</span> <span class="nav-text">使用Cookie方式</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#用法示例"><span class="nav-number">3.</span> <span class="nav-text">用法示例</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#内容协商"><span class="nav-number">3.1.</span> <span class="nav-text">内容协商</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参数介绍"><span class="nav-number">3.2.</span> <span class="nav-text">参数介绍</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#接口定义"><span class="nav-number">4.</span> <span class="nav-text">接口定义</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#null"><span class="nav-number">4.1.</span> <span class="nav-text">/</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#login"><span class="nav-number">4.2.</span> <span class="nav-text">/login</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#GET"><span class="nav-number">4.2.1.</span> <span class="nav-text">GET</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#POST"><span class="nav-number">4.2.2.</span> <span class="nav-text">POST</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#logout"><span class="nav-number">4.3.</span> <span class="nav-text">/logout</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#POST-1"><span class="nav-number">4.3.1.</span> <span class="nav-text">POST</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#minions"><span class="nav-number">4.4.</span> <span class="nav-text">/minions/</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#GET-1"><span class="nav-number">4.4.1.</span> <span class="nav-text">GET</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#POST-2"><span class="nav-number">4.4.2.</span> <span class="nav-text">POST</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#jobs"><span class="nav-number">4.5.</span> <span class="nav-text">/jobs/</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#GET-2"><span class="nav-number">4.5.1.</span> <span class="nav-text">GET</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#POST-3"><span class="nav-number">4.5.2.</span> <span class="nav-text">POST</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#run"><span class="nav-number">4.6.</span> <span class="nav-text">/run</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#POST-4"><span class="nav-number">4.6.1.</span> <span class="nav-text">POST</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#events"><span class="nav-number">4.7.</span> <span class="nav-text">/events</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#GET-3"><span class="nav-number">4.7.1.</span> <span class="nav-text">GET</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#hook"><span class="nav-number">4.8.</span> <span class="nav-text">/hook</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#POST-5"><span class="nav-number">4.8.1.</span> <span class="nav-text">POST</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#keys"><span class="nav-number">4.9.</span> <span class="nav-text">/keys/</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#GET-4"><span class="nav-number">4.9.1.</span> <span class="nav-text">GET</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#POST-6"><span class="nav-number">4.9.2.</span> <span class="nav-text">POST</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ws"><span class="nav-number">4.10.</span> <span class="nav-text">/ws/</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#GET-5"><span class="nav-number">4.10.1.</span> <span class="nav-text">GET</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#stats"><span class="nav-number">4.11.</span> <span class="nav-text">/stats</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#GET-6"><span class="nav-number">4.11.1.</span> <span class="nav-text">GET</span></a></li></ol></li></ol></li></ol></div>
             
 
           </div>
@@ -1097,26 +1111,47 @@
 
 
 
+<!-- LOCAL: You can save these files to your site and update links -->
+    
+        
+        <link rel="stylesheet" href="https://aimingoo.github.io/gitmint/style/default.css">
+        <script src="https://aimingoo.github.io/gitmint/dist/gitmint.browser.js"></script>
+    
+<!-- END LOCAL -->
+
+    
+
+    
+      <script type="text/javascript">
+      function renderGitment(){
+        var gitment = new Gitmint({
+            id: window.location.pathname, 
+            owner: '420123641@qq.com',
+            repo: 'yangjinheng.github.io',
+            
+            lang: "" || navigator.language || navigator.systemLanguage || navigator.userLanguage,
+            
+            oauth: {
+            
+            
+                client_secret: 'a1a4c80b994ee7de926d209ade6d90c06deaa52e',
+            
+                client_id: 'aab00e6bb87e77db0a92'
+            }});
+        gitment.render('gitment-container');
+      }
+
+      
+      renderGitment();
+      
+      </script>
+    
 
 
 
 
 
-  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
-  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
-  <script src="/js/src/md5.min.js"></script>
-   <script type="text/javascript">
-        var gitalk = new Gitalk({
-          clientID: '86e33c97ad3067f9d456',
-          clientSecret: 'ee93fb0fc1345f63936a09214f4b4a75e932c96c',
-          repo: 'yangjinheng.github.io',
-          owner: 'yangjinheng',
-          admin: ['yangjinheng'],
-          id: location.pathname,
-          distractionFreeMode: 'true'
-        })
-        gitalk.render('gitalk-container')
-    </script>
+
 
 
   

@@ -6,7 +6,7 @@
 
 
 <html class="theme-next pisces use-motion" lang="zh-Hans">
-<head><meta name="generator" content="Hexo 3.8.0">
+<head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -376,6 +376,16 @@
 
           
             
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/09/28/python/19.queue队列/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count gitment-comments-count" data-xid="/2017/09/28/python/19.queue队列/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
           
 
           
@@ -416,8 +426,8 @@
 <h3 id="非阻塞读出-get-nowait"><a href="#非阻塞读出-get-nowait" class="headerlink" title="非阻塞读出.get_nowait"></a>非阻塞读出.get_nowait</h3><p>当弹出到最后一个元素时候，弹出异常。</p>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">22</span>]: q.get_nowait()</span><br><span class="line">Out[<span class="number">22</span>]: <span class="string">'d1'</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">23</span>]: q.get_nowait()</span><br><span class="line">Out[<span class="number">23</span>]: <span class="string">'d2'</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">14</span>]: q.get_nowait()</span><br><span class="line">---------------------------------------------------------------------------</span><br><span class="line">Empty                                     Traceback (most recent call last)</span><br><span class="line">&lt;ipython-input<span class="number">-14</span>-aad002f32be5&gt; <span class="keyword">in</span> &lt;module&gt;()</span><br><span class="line">----&gt; 1 q.get_nowait()</span><br><span class="line"></span><br><span class="line">c:\users\lenovo\appdata\local\programs\python\python36\lib\queue.py <span class="keyword">in</span> get_nowait(self)</span><br><span class="line">    <span class="number">190</span>         <span class="keyword">raise</span> the Empty exception.</span><br><span class="line">    <span class="number">191</span>         <span class="string">'''</span></span><br><span class="line"><span class="string">--&gt; 192         return self.get(block=False)</span></span><br><span class="line"><span class="string">    193</span></span><br><span class="line"><span class="string">    194     # Override these methods to implement other queue organizations</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">c:\users\lenovo\appdata\local\programs\python\python36\lib\queue.py in get(self, block, timeout)</span></span><br><span class="line"><span class="string">    159             if not block:</span></span><br><span class="line"><span class="string">    160                 if not self._qsize():</span></span><br><span class="line"><span class="string">--&gt; 161                     raise Empty</span></span><br><span class="line"><span class="string">    162             elif timeout is None:</span></span><br><span class="line"><span class="string">    163                 while not self._qsize():</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Empty:</span></span><br></pre></td></tr></table></figure>
 <h3 id="队列长度-qsize"><a href="#队列长度-qsize" class="headerlink" title="队列长度.qsize"></a>队列长度.qsize</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">8</span>]: q.qsize()</span><br><span class="line">Out[<span class="number">8</span>]: <span class="number">3</span></span><br></pre></td></tr></table></figure>
-<h3 id="是否为空-empty"><a href="#是否为空-empty" class="headerlink" title="是否为空.empty"></a>是否为空.empty</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">4</span>]: q.put(<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">5</span>]: q.empty()</span><br><span class="line">Out[<span class="number">5</span>]: <span class="keyword">False</span></span><br><span class="line">    </span><br><span class="line">In [<span class="number">6</span>]: q.get()</span><br><span class="line">Out[<span class="number">6</span>]: <span class="number">1</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">7</span>]: q.empty()</span><br><span class="line">Out[<span class="number">7</span>]: <span class="keyword">True</span></span><br></pre></td></tr></table></figure>
-<h3 id="是否为满-full"><a href="#是否为满-full" class="headerlink" title="是否为满.full"></a>是否为满.full</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">38</span>]: q=Queue(maxsize=<span class="number">3</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">39</span>]: q.put(<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">40</span>]: q.put(<span class="number">2</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">41</span>]: q.put(<span class="number">3</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">43</span>]: q.full()</span><br><span class="line">Out[<span class="number">43</span>]: <span class="keyword">True</span></span><br></pre></td></tr></table></figure>
+<h3 id="是否为空-empty"><a href="#是否为空-empty" class="headerlink" title="是否为空.empty"></a>是否为空.empty</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">4</span>]: q.put(<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">5</span>]: q.empty()</span><br><span class="line">Out[<span class="number">5</span>]: <span class="literal">False</span></span><br><span class="line">    </span><br><span class="line">In [<span class="number">6</span>]: q.get()</span><br><span class="line">Out[<span class="number">6</span>]: <span class="number">1</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">7</span>]: q.empty()</span><br><span class="line">Out[<span class="number">7</span>]: <span class="literal">True</span></span><br></pre></td></tr></table></figure>
+<h3 id="是否为满-full"><a href="#是否为满-full" class="headerlink" title="是否为满.full"></a>是否为满.full</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">38</span>]: q=Queue(maxsize=<span class="number">3</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">39</span>]: q.put(<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">40</span>]: q.put(<span class="number">2</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">41</span>]: q.put(<span class="number">3</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">43</span>]: q.full()</span><br><span class="line">Out[<span class="number">43</span>]: <span class="literal">True</span></span><br></pre></td></tr></table></figure>
 <h3 id="阻塞调用-join"><a href="#阻塞调用-join" class="headerlink" title="阻塞调用.join"></a>阻塞调用.join</h3><p>阻塞调用线程，直到队列中的所有任务被处理掉。</p>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">In [<span class="number">3</span>]: q = queue.Queue()</span><br><span class="line"></span><br><span class="line">In [<span class="number">5</span>]: q.join()</span><br><span class="line"><span class="comment">#因队列为0返回</span></span><br><span class="line">In [<span class="number">5</span>]: q.join()</span><br><span class="line"><span class="comment">#因队列为0返回</span></span><br><span class="line">In [<span class="number">10</span>]: q.put(<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">11</span>]: q.join()</span><br><span class="line"><span class="comment">#开始阻塞，直到队列被处理完毕</span></span><br></pre></td></tr></table></figure>
 <h3 id="报告进度-task-done"><a href="#报告进度-task-done" class="headerlink" title="报告进度.task_done"></a>报告进度.task_done</h3><p>主要是为 <code>join</code>配套使用，每次<code>get</code>后需要调用task_done，直到所有任务都task_done，join才取消阻塞。</p>
@@ -487,7 +497,11 @@
           
 
   
-  <div id="gitalk-container"></div>
+    <div class="comments" id="comments">
+      
+        <div id="gitment-container"></div>
+      
+    </div>
 
   
 
@@ -786,26 +800,47 @@
 
 
 
+<!-- LOCAL: You can save these files to your site and update links -->
+    
+        
+        <link rel="stylesheet" href="https://aimingoo.github.io/gitmint/style/default.css">
+        <script src="https://aimingoo.github.io/gitmint/dist/gitmint.browser.js"></script>
+    
+<!-- END LOCAL -->
+
+    
+
+    
+      <script type="text/javascript">
+      function renderGitment(){
+        var gitment = new Gitmint({
+            id: window.location.pathname, 
+            owner: '420123641@qq.com',
+            repo: 'yangjinheng.github.io',
+            
+            lang: "" || navigator.language || navigator.systemLanguage || navigator.userLanguage,
+            
+            oauth: {
+            
+            
+                client_secret: 'a1a4c80b994ee7de926d209ade6d90c06deaa52e',
+            
+                client_id: 'aab00e6bb87e77db0a92'
+            }});
+        gitment.render('gitment-container');
+      }
+
+      
+      renderGitment();
+      
+      </script>
+    
 
 
 
 
 
-  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
-  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
-  <script src="/js/src/md5.min.js"></script>
-   <script type="text/javascript">
-        var gitalk = new Gitalk({
-          clientID: '86e33c97ad3067f9d456',
-          clientSecret: 'ee93fb0fc1345f63936a09214f4b4a75e932c96c',
-          repo: 'yangjinheng.github.io',
-          owner: 'yangjinheng',
-          admin: ['yangjinheng'],
-          id: location.pathname,
-          distractionFreeMode: 'true'
-        })
-        gitalk.render('gitalk-container')
-    </script>
+
 
 
   

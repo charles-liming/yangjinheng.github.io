@@ -6,7 +6,7 @@
 
 
 <html class="theme-next pisces use-motion" lang="zh-Hans">
-<head><meta name="generator" content="Hexo 3.8.0">
+<head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -376,6 +376,16 @@
 
           
             
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/10/22/python/字典的递归遍历/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count gitment-comments-count" data-xid="/2018/10/22/python/字典的递归遍历/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
           
 
           
@@ -401,7 +411,7 @@
 
       
         <p>写发布展示页面的时候，我遇到个问题，使用 pymongo 查询数据库时候，条件不能为空，所以需要将字典内值为空的键移除，但是字典又有嵌套的问题，所以我用了一个递归的写法，从字典里面递归的移除空值的键。</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">d = &#123;</span><br><span class="line">    <span class="number">1</span>:&#123;<span class="number">1</span>:&#123;<span class="number">1</span>:<span class="number">1</span>&#125;&#125;,</span><br><span class="line">    <span class="number">2</span>:&#123;<span class="number">2</span>:&#123;<span class="number">2</span>:<span class="keyword">False</span>&#125;&#125;,</span><br><span class="line">    <span class="number">3</span>:&#123;<span class="number">3</span>:&#123;<span class="number">3</span>:&#123;&#125;&#125;&#125;,</span><br><span class="line">    <span class="number">4</span>:&#123;<span class="number">4</span>:<span class="number">0</span>&#125;,</span><br><span class="line">    <span class="number">5</span>:<span class="number">1</span>,</span><br><span class="line">    <span class="number">6</span>:[],</span><br><span class="line">    <span class="number">7</span>:(),</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">remove</span><span class="params">(old_dict)</span>:</span></span><br><span class="line">    new_dict = &#123;&#125;</span><br><span class="line">    <span class="keyword">for</span> k, v <span class="keyword">in</span> old_dict.items():</span><br><span class="line">        <span class="keyword">if</span> isinstance(v,dict):</span><br><span class="line">            v = remove(v)</span><br><span class="line">        <span class="keyword">if</span> v:</span><br><span class="line">            new_dict[k] = v</span><br><span class="line">    <span class="keyword">return</span> new_dict</span><br><span class="line"></span><br><span class="line">print(remove(d))</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">d = &#123;</span><br><span class="line">    <span class="number">1</span>:&#123;<span class="number">1</span>:&#123;<span class="number">1</span>:<span class="number">1</span>&#125;&#125;,</span><br><span class="line">    <span class="number">2</span>:&#123;<span class="number">2</span>:&#123;<span class="number">2</span>:<span class="literal">False</span>&#125;&#125;,</span><br><span class="line">    <span class="number">3</span>:&#123;<span class="number">3</span>:&#123;<span class="number">3</span>:&#123;&#125;&#125;&#125;,</span><br><span class="line">    <span class="number">4</span>:&#123;<span class="number">4</span>:<span class="number">0</span>&#125;,</span><br><span class="line">    <span class="number">5</span>:<span class="number">1</span>,</span><br><span class="line">    <span class="number">6</span>:[],</span><br><span class="line">    <span class="number">7</span>:(),</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">remove</span><span class="params">(old_dict)</span>:</span></span><br><span class="line">    new_dict = &#123;&#125;</span><br><span class="line">    <span class="keyword">for</span> k, v <span class="keyword">in</span> old_dict.items():</span><br><span class="line">        <span class="keyword">if</span> isinstance(v,dict):</span><br><span class="line">            v = remove(v)</span><br><span class="line">        <span class="keyword">if</span> v:</span><br><span class="line">            new_dict[k] = v</span><br><span class="line">    <span class="keyword">return</span> new_dict</span><br><span class="line"></span><br><span class="line">print(remove(d))</span><br></pre></td></tr></table></figure>
 <ul>
 <li>字典的递归遍历</li>
 </ul>
@@ -476,7 +486,11 @@
           
 
   
-  <div id="gitalk-container"></div>
+    <div class="comments" id="comments">
+      
+        <div id="gitment-container"></div>
+      
+    </div>
 
   
 
@@ -750,26 +764,47 @@
 
 
 
+<!-- LOCAL: You can save these files to your site and update links -->
+    
+        
+        <link rel="stylesheet" href="https://aimingoo.github.io/gitmint/style/default.css">
+        <script src="https://aimingoo.github.io/gitmint/dist/gitmint.browser.js"></script>
+    
+<!-- END LOCAL -->
+
+    
+
+    
+      <script type="text/javascript">
+      function renderGitment(){
+        var gitment = new Gitmint({
+            id: window.location.pathname, 
+            owner: '420123641@qq.com',
+            repo: 'yangjinheng.github.io',
+            
+            lang: "" || navigator.language || navigator.systemLanguage || navigator.userLanguage,
+            
+            oauth: {
+            
+            
+                client_secret: 'a1a4c80b994ee7de926d209ade6d90c06deaa52e',
+            
+                client_id: 'aab00e6bb87e77db0a92'
+            }});
+        gitment.render('gitment-container');
+      }
+
+      
+      renderGitment();
+      
+      </script>
+    
 
 
 
 
 
-  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
-  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
-  <script src="/js/src/md5.min.js"></script>
-   <script type="text/javascript">
-        var gitalk = new Gitalk({
-          clientID: '86e33c97ad3067f9d456',
-          clientSecret: 'ee93fb0fc1345f63936a09214f4b4a75e932c96c',
-          repo: 'yangjinheng.github.io',
-          owner: 'yangjinheng',
-          admin: ['yangjinheng'],
-          id: location.pathname,
-          distractionFreeMode: 'true'
-        })
-        gitalk.render('gitalk-container')
-    </script>
+
 
 
   

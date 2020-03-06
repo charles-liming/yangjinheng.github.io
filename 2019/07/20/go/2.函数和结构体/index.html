@@ -6,7 +6,7 @@
 
 
 <html class="theme-next pisces use-motion" lang="zh-Hans">
-<head><meta name="generator" content="Hexo 3.8.0">
+<head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -376,6 +376,16 @@
 
           
             
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/07/20/go/2.函数和结构体/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count gitment-comments-count" data-xid="/2019/07/20/go/2.函数和结构体/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
           
 
           
@@ -464,13 +474,13 @@
 </ul>
 <figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    r := <span class="function"><span class="keyword">func</span><span class="params">(s <span class="keyword">string</span>)</span> <span class="title">int</span></span> &#123;</span><br><span class="line">        fmt.Println(s, <span class="string">"这是匿名函数"</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="number">110</span></span><br><span class="line">    &#125;(<span class="string">"传递参数"</span>)</span><br><span class="line">    fmt.Println(r)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h2 id="函数变量"><a href="#函数变量" class="headerlink" title="函数变量"></a>函数变量</h2><p>在 Go 语言中函数也是一种类型，函数有多少种形式，函数变量就有多少种写法</p>
-<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> a <span class="function"><span class="keyword">func</span><span class="params">()</span>                  // 无参无返回值</span></span><br><span class="line"><span class="function"><span class="title">var</span> <span class="title">b</span> <span class="title">func</span><span class="params">(<span class="keyword">int</span>)</span>               // 有一个 <span class="title">int</span> 类型参数</span></span><br><span class="line"><span class="function"><span class="title">var</span> <span class="title">c</span> <span class="title">func</span><span class="params">(<span class="keyword">int</span>)</span> <span class="title">string</span>        // 一个有 <span class="title">int</span> 类型参数和 <span class="title">string</span> 类型返回值</span></span><br><span class="line"><span class="function"><span class="title">fmt</span>.<span class="title">Println</span><span class="params">(a,b,c)</span>            // 输出：&lt;<span class="title">nil</span>&gt; &lt;<span class="title">nil</span>&gt; &lt;<span class="title">nil</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> a <span class="function"><span class="keyword">func</span><span class="params">()</span>                  // 无参无返回值</span></span><br><span class="line"><span class="keyword">var</span> b <span class="function"><span class="keyword">func</span><span class="params">(<span class="keyword">int</span>)</span>               // 有一个 <span class="title">int</span> 类型参数</span></span><br><span class="line"><span class="keyword">var</span> c <span class="function"><span class="keyword">func</span><span class="params">(<span class="keyword">int</span>)</span> <span class="title">string</span>        // 一个有 <span class="title">int</span> 类型参数和 <span class="title">string</span> 类型返回值</span></span><br><span class="line">fmt.Println(a,b,c)            <span class="comment">// 输出：&lt;nil&gt; &lt;nil&gt; &lt;nil&gt;</span></span><br></pre></td></tr></table></figure>
 <p>定义完函数变量后，可以使用匿名函数进行赋值，也可以使用已经定义好的函数进行赋值，例如：</p>
-<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> a <span class="function"><span class="keyword">func</span><span class="params">()</span></span></span><br><span class="line"><span class="function">	<span class="title">a</span> = <span class="title">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">		fmt.Println(<span class="string">"执行函数"</span>)</span><br><span class="line">	&#125;</span><br><span class="line">	a()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> a <span class="function"><span class="keyword">func</span><span class="params">()</span></span></span><br><span class="line">	a = <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">		fmt.Println(<span class="string">"执行函数"</span>)</span><br><span class="line">	&#125;</span><br><span class="line">	a()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <figure class="highlight go"><table><tr><td class="code"><pre><span class="line">执行函数</span><br></pre></td></tr></table></figure>
 <p>函数变量定义后，与普通函数调用方式相同，变量名即是函数名。</p>
 <p>函数类型变量是除了 slice、map、channel、interface 外的第五种引用类型</p>
-<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> a <span class="function"><span class="keyword">func</span><span class="params">()</span></span></span><br><span class="line"><span class="function">	<span class="title">a</span> = <span class="title">b</span></span></span><br><span class="line"><span class="function">	<span class="title">a</span><span class="params">()</span></span></span><br><span class="line"><span class="function">	<span class="title">var</span> <span class="title">c</span> <span class="title">func</span><span class="params">()</span></span></span><br><span class="line"><span class="function">	<span class="title">c</span> = <span class="title">a</span></span></span><br><span class="line"><span class="function">	<span class="title">c</span><span class="params">()</span></span></span><br><span class="line">	fmt.Printf("%p %p", a, c)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">b</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(<span class="string">"执行B函数"</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> a <span class="function"><span class="keyword">func</span><span class="params">()</span></span></span><br><span class="line">	a = b</span><br><span class="line">	a()</span><br><span class="line">	<span class="keyword">var</span> c <span class="function"><span class="keyword">func</span><span class="params">()</span></span></span><br><span class="line">	c = a</span><br><span class="line">	c()</span><br><span class="line">	fmt.Printf(<span class="string">"%p %p"</span>, a, c)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">b</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(<span class="string">"执行B函数"</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <figure class="highlight go"><table><tr><td class="code"><pre><span class="line">执行B函数</span><br><span class="line">执行B函数</span><br><span class="line"><span class="number">0x498850</span> <span class="number">0x498850</span></span><br></pre></td></tr></table></figure>
 <h2 id="函数作为参数"><a href="#函数作为参数" class="headerlink" title="函数作为参数"></a>函数作为参数</h2><p>变量可以作为函数的参数或返回值，而函数变量也可以当作函数的参数或返回值，函数作为参数时，类型写为对应类型即可，例如：循环链表 ring 的 Do 方法它接收一个函数作为参数。</p>
 <figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="comment">// 初始化一个 5 个元素的链表，这个初始化的元素代表整个链表，也代表第一个元素</span></span><br><span class="line">	r := ring.New(<span class="number">5</span>)</span><br><span class="line">	r.Value = <span class="number">0</span></span><br><span class="line">	r.Next().Value = <span class="number">1</span></span><br><span class="line">	r.Next().Next().Value = <span class="number">2</span></span><br><span class="line">	r.Prev().Value = <span class="number">4</span></span><br><span class="line">	r.Prev().Prev().Value = <span class="number">3</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">// 循环链表有几个元素，func 就执行几次</span></span><br><span class="line">	r.Do(<span class="function"><span class="keyword">func</span><span class="params">(i <span class="keyword">interface</span>&#123;&#125;)</span></span> &#123;</span><br><span class="line">		fmt.Println(i)</span><br><span class="line">	&#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -488,7 +498,7 @@
 <h2 id="全局变量"><a href="#全局变量" class="headerlink" title="全局变量"></a>全局变量</h2><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> (</span><br><span class="line">	name = <span class="string">"yangjinheng"</span></span><br><span class="line">	age  = <span class="number">30</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(name, age)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h2 id="闭包"><a href="#闭包" class="headerlink" title="闭包"></a>闭包</h2><p>闭包就是解决局部变量不能被外部访问的一种解决方案</p>
 <figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">test</span><span class="params">()</span> <span class="title">func</span><span class="params">()</span> <span class="title">int</span></span> &#123;</span><br><span class="line">	i := <span class="number">0</span></span><br><span class="line">	fn := <span class="function"><span class="keyword">func</span><span class="params">()</span> <span class="title">int</span></span> &#123;</span><br><span class="line">		i = i + <span class="number">1</span>                                     <span class="comment">// 在匿名函数内部访问父函数的变量，这就是闭包</span></span><br><span class="line">		<span class="keyword">return</span> i</span><br><span class="line">	&#125;</span><br><span class="line">	fmt.Printf(<span class="string">"我是 test 的 i %p, %d\n"</span>, &amp;i, i)       <span class="comment">// 匿名函数对闭包中的变量修改，是创建了新的局部变量，而不是真的修改了父函数的变量 </span></span><br><span class="line">	<span class="keyword">return</span> fn</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	f1 := test()</span><br><span class="line">	s1 := f1()</span><br><span class="line">	fmt.Printf(<span class="string">"我是匿名函数的 i %p, %d\n"</span>, &amp;s1, s1)</span><br><span class="line"></span><br><span class="line">	f2 := test()</span><br><span class="line">	s2 := f2()</span><br><span class="line">	fmt.Printf(<span class="string">"我是匿名函数的 i %p, %d\n"</span>, &amp;s2, s2)</span><br><span class="line"></span><br><span class="line">	fmt.Printf(<span class="string">"我是匿名函数 %p %p"</span>, f1, f2)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<figure class="highlight go"><table><tr><td class="code"><pre><span class="line">父函数的 i 内存地址为: <span class="number">0xc000080090</span> 值: <span class="number">0</span>    <span class="comment">// 结论：1. 父函数 i 实际没有被修改</span></span><br><span class="line">匿名函数 i 内存地址为: <span class="number">0xc000080098</span> 值: <span class="number">1</span>    <span class="comment">// 结论：1. 匿名函数访问到了父函数的 i 产生了闭包，2. 匿名函数 i 是新创建的</span></span><br><span class="line">父函数的 i 内存地址为: <span class="number">0xc0000800b8</span> 值: <span class="number">0</span>    <span class="comment">// 结论：1. 父函数 i 实际没有被修改，2. 每次调用父函数 i 的地址都是不同的</span></span><br><span class="line">匿名函数 i 内存地址为: <span class="number">0xc0000800c0</span> 值: <span class="number">1</span>    <span class="comment">// 结论：1. 匿名函数访问到了父函数的 i 产生了闭包，2. 匿名函数 i 是新创建的，3. 每个匿名函数的 i 都是不同的地址，不会互相影响</span></span><br><span class="line">匿名函数 f1 内存地址为: <span class="number">0x4b95d</span>0 匿名函数 f2 内存地址为: <span class="number">0x4b95d</span>0  <span class="comment">// 结论：1. 每次调用父函数返回的匿名函数都是相同的内存地址，2. 每个匿名函数都有自己的栈</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line">父函数的 i 内存地址为: <span class="number">0xc000080090</span> 值: <span class="number">0</span>    <span class="comment">// 结论：1. 父函数 i 实际没有被修改</span></span><br><span class="line">匿名函数 i 内存地址为: <span class="number">0xc000080098</span> 值: <span class="number">1</span>    <span class="comment">// 结论：1. 匿名函数访问到了父函数的 i 产生了闭包，2. 匿名函数 i 是新创建的</span></span><br><span class="line">父函数的 i 内存地址为: <span class="number">0xc0000800b8</span> 值: <span class="number">0</span>    <span class="comment">// 结论：1. 父函数 i 实际没有被修改，2. 每次调用父函数 i 的地址都是不同的</span></span><br><span class="line">匿名函数 i 内存地址为: <span class="number">0xc0000800c0</span> 值: <span class="number">1</span>    <span class="comment">// 结论：1. 匿名函数访问到了父函数的 i 产生了闭包，2. 匿名函数 i 是新创建的，3. 每个匿名函数的 i 都是不同的地址，不会互相影响</span></span><br><span class="line">匿名函数 f1 内存地址为: <span class="number">0x4b95d0</span> 匿名函数 f2 内存地址为: <span class="number">0x4b95d0</span>  <span class="comment">// 结论：1. 每次调用父函数返回的匿名函数都是相同的内存地址，2. 每个匿名函数都有自己的栈</span></span><br></pre></td></tr></table></figure>
 <h1 id="值类型引用类型传参"><a href="#值类型引用类型传参" class="headerlink" title="值类型引用类型传参"></a>值类型引用类型传参</h1><p>讨论值传递和引用传递时，我们讨论的是值类型变量和引用类型变量作为函数参数时，修改形参，是否影响到实参。</p>
 <ol>
 <li>在 Go 语言中有五个引用类型变量，其他都是值类型</li>
@@ -764,7 +774,7 @@
 <li>Done() 表示减少 WaitGroup 计数器的值，应当在程序最后执行，相当于 Add(-1)</li>
 <li>Wait() 表示阻塞直到 WaitGroup 计数器为 0，必须在主线程中</li>
 </ol>
-<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">type</span> WaitGroup</span><br><span class="line">    <span class="function"><span class="keyword">func</span> <span class="params">(wg *WaitGroup)</span> <span class="title">Add</span><span class="params">(delta <span class="keyword">int</span>)</span></span></span><br><span class="line"><span class="function">    <span class="title">func</span> <span class="params">(wg *WaitGroup)</span> <span class="title">Done</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    <span class="title">func</span> <span class="params">(wg *WaitGroup)</span> <span class="title">Wait</span><span class="params">()</span></span></span><br></pre></td></tr></table></figure>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">type</span> WaitGroup</span><br><span class="line">    <span class="function"><span class="keyword">func</span> <span class="params">(wg *WaitGroup)</span> <span class="title">Add</span><span class="params">(delta <span class="keyword">int</span>)</span></span></span><br><span class="line">    <span class="function"><span class="keyword">func</span> <span class="params">(wg *WaitGroup)</span> <span class="title">Done</span><span class="params">()</span></span></span><br><span class="line">    <span class="function"><span class="keyword">func</span> <span class="params">(wg *WaitGroup)</span> <span class="title">Wait</span><span class="params">()</span></span></span><br></pre></td></tr></table></figure>
 <ol>
 <li>waitGroup 使用示例</li>
 </ol>
@@ -793,7 +803,7 @@
 <ul>
 <li>Go 语言标准库中 PAI 如下</li>
 </ul>
-<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">type</span> RWMutex</span><br><span class="line">    <span class="function"><span class="keyword">func</span> <span class="params">(rw *RWMutex)</span> <span class="title">Lock</span><span class="params">()</span>    // 禁止其他协程读写</span></span><br><span class="line"><span class="function">    <span class="title">func</span> <span class="params">(rw *RWMutex)</span> <span class="title">Unlock</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    <span class="title">func</span> <span class="params">(rw *RWMutex)</span> <span class="title">RLock</span><span class="params">()</span>   // 禁止其他协程写入，只能读取</span></span><br><span class="line"><span class="function">    <span class="title">func</span> <span class="params">(rw *RWMutex)</span> <span class="title">RUnlock</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    <span class="title">func</span> <span class="params">(rw *RWMutex)</span> <span class="title">RLocker</span><span class="params">()</span> <span class="title">Locker</span></span></span><br></pre></td></tr></table></figure>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">type</span> RWMutex</span><br><span class="line">    <span class="function"><span class="keyword">func</span> <span class="params">(rw *RWMutex)</span> <span class="title">Lock</span><span class="params">()</span>    // 禁止其他协程读写</span></span><br><span class="line">    <span class="function"><span class="keyword">func</span> <span class="params">(rw *RWMutex)</span> <span class="title">Unlock</span><span class="params">()</span></span></span><br><span class="line">    <span class="function"><span class="keyword">func</span> <span class="params">(rw *RWMutex)</span> <span class="title">RLock</span><span class="params">()</span>   // 禁止其他协程写入，只能读取</span></span><br><span class="line">    <span class="function"><span class="keyword">func</span> <span class="params">(rw *RWMutex)</span> <span class="title">RUnlock</span><span class="params">()</span></span></span><br><span class="line">    <span class="function"><span class="keyword">func</span> <span class="params">(rw *RWMutex)</span> <span class="title">RLocker</span><span class="params">()</span> <span class="title">Locker</span></span></span><br></pre></td></tr></table></figure>
 <p>Go 语言中的 map 不是线程安全的，多个 goroutine 同时操作会出现错误。</p>
 <p>RWmutex 可以添加<strong>多个读锁或者一个写锁</strong>，<strong>读写锁不能同时存在</strong>。</p>
 <ol>
@@ -939,7 +949,11 @@
           
 
   
-  <div id="gitalk-container"></div>
+    <div class="comments" id="comments">
+      
+        <div id="gitment-container"></div>
+      
+    </div>
 
   
 
@@ -1238,26 +1252,47 @@
 
 
 
+<!-- LOCAL: You can save these files to your site and update links -->
+    
+        
+        <link rel="stylesheet" href="https://aimingoo.github.io/gitmint/style/default.css">
+        <script src="https://aimingoo.github.io/gitmint/dist/gitmint.browser.js"></script>
+    
+<!-- END LOCAL -->
+
+    
+
+    
+      <script type="text/javascript">
+      function renderGitment(){
+        var gitment = new Gitmint({
+            id: window.location.pathname, 
+            owner: '420123641@qq.com',
+            repo: 'yangjinheng.github.io',
+            
+            lang: "" || navigator.language || navigator.systemLanguage || navigator.userLanguage,
+            
+            oauth: {
+            
+            
+                client_secret: 'a1a4c80b994ee7de926d209ade6d90c06deaa52e',
+            
+                client_id: 'aab00e6bb87e77db0a92'
+            }});
+        gitment.render('gitment-container');
+      }
+
+      
+      renderGitment();
+      
+      </script>
+    
 
 
 
 
 
-  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
-  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
-  <script src="/js/src/md5.min.js"></script>
-   <script type="text/javascript">
-        var gitalk = new Gitalk({
-          clientID: '86e33c97ad3067f9d456',
-          clientSecret: 'ee93fb0fc1345f63936a09214f4b4a75e932c96c',
-          repo: 'yangjinheng.github.io',
-          owner: 'yangjinheng',
-          admin: ['yangjinheng'],
-          id: location.pathname,
-          distractionFreeMode: 'true'
-        })
-        gitalk.render('gitalk-container')
-    </script>
+
 
 
   

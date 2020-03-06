@@ -6,7 +6,7 @@
 
 
 <html class="theme-next pisces use-motion" lang="zh-Hans">
-<head><meta name="generator" content="Hexo 3.8.0">
+<head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -376,6 +376,16 @@
 
           
             
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/01/15/kubernetes/10.网络通信/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count gitment-comments-count" data-xid="/2019/01/15/kubernetes/10.网络通信/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
           
 
           
@@ -478,7 +488,7 @@
 <h2 id="flannel-配置文件"><a href="#flannel-配置文件" class="headerlink" title="flannel 配置文件"></a>flannel 配置文件</h2><ul>
 <li>配置文件选项含义</li>
 </ul>
-<figure class="highlight"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    "Network": "10.244.0.0/16",     // flannel 使用的 CIDR 格式的网络地址，用于为 POD 配置网络功能</span><br><span class="line">	"SubnetLen": 24,                // 把 Network 切分为子网供各 node 节点使用时，使用多长的掩码切分，默认为 24</span><br><span class="line">	"SubnetMin": "10.244.10.0/24",  // 用于分配给 node 的子网起始地址，从这个网络开始分配网络</span><br><span class="line">    "SubnetMax": "10.244.255.0/24"  // 用于分配给 nide 的子网结束位置，这个是最大分配的网路  </span><br><span class="line">    "Backend": &#123;                    // 指明 POD 与 POD 跨节点通信时候使用的 flannel 工作模式</span><br><span class="line">        "Type": "vxlan",            // 工作模式</span><br><span class="line">    	"Directrouting": true       // 是否使用直接路由模式</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">"Network"</span>: <span class="string">"10.244.0.0/16"</span>,     <span class="comment">// flannel 使用的 CIDR 格式的网络地址，用于为 POD 配置网络功能</span></span><br><span class="line">	<span class="attr">"SubnetLen"</span>: <span class="number">24</span>,                <span class="comment">// 把 Network 切分为子网供各 node 节点使用时，使用多长的掩码切分，默认为 24</span></span><br><span class="line">	<span class="attr">"SubnetMin"</span>: <span class="string">"10.244.10.0/24"</span>,  <span class="comment">// 用于分配给 node 的子网起始地址，从这个网络开始分配网络</span></span><br><span class="line">    <span class="attr">"SubnetMax"</span>: <span class="string">"10.244.255.0/24"</span>  <span class="comment">// 用于分配给 nide 的子网结束位置，这个是最大分配的网路  </span></span><br><span class="line">    <span class="string">"Backend"</span>: &#123;                    <span class="comment">// 指明 POD 与 POD 跨节点通信时候使用的 flannel 工作模式</span></span><br><span class="line">        <span class="attr">"Type"</span>: <span class="string">"vxlan"</span>,            <span class="comment">// 工作模式</span></span><br><span class="line">    	<span class="attr">"Directrouting"</span>: <span class="literal">true</span>       <span class="comment">// 是否使用直接路由模式</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <ul>
 <li>flannel 托管到 k8s 上的配置文件，处于 kube-flannel-cfg 这个 configmap 中。</li>
 </ul>
@@ -516,12 +526,12 @@
 <ul>
 <li>在两个命名空间分别创建一个 POD</li>
 </ul>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Pod</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line"><span class="attr">  name:</span> <span class="string">pod1</span></span><br><span class="line"><span class="attr">  namespace:</span> <span class="string">dev</span></span><br><span class="line"><span class="attr">  labels:</span></span><br><span class="line"><span class="attr">    app:</span> <span class="string">myapp</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line"><span class="attr">  containers:</span></span><br><span class="line"><span class="attr">  - name:</span> <span class="string">myapp</span></span><br><span class="line"><span class="attr">    image:</span> <span class="string">ikubernetes/myapp:v1</span></span><br><span class="line">    </span><br><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Pod</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line"><span class="attr">  name:</span> <span class="string">pod1</span></span><br><span class="line"><span class="attr">  namespace:</span> <span class="string">prod</span></span><br><span class="line"><span class="attr">  labels:</span></span><br><span class="line"><span class="attr">    app:</span> <span class="string">myapp</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line"><span class="attr">  containers:</span></span><br><span class="line"><span class="attr">  - name:</span> <span class="string">myapp</span></span><br><span class="line"><span class="attr">    image:</span> <span class="string">ikubernetes/myapp:v1</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Pod</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">pod1</span></span><br><span class="line">  <span class="attr">namespace:</span> <span class="string">dev</span></span><br><span class="line">  <span class="attr">labels:</span></span><br><span class="line">    <span class="attr">app:</span> <span class="string">myapp</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">containers:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">myapp</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">ikubernetes/myapp:v1</span></span><br><span class="line">    </span><br><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Pod</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">pod1</span></span><br><span class="line">  <span class="attr">namespace:</span> <span class="string">prod</span></span><br><span class="line">  <span class="attr">labels:</span></span><br><span class="line">    <span class="attr">app:</span> <span class="string">myapp</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">containers:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">myapp</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">ikubernetes/myapp:v1</span></span><br></pre></td></tr></table></figure>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl apply -f pod-a.yaml -n dev</span><br></pre></td></tr></table></figure>
 <ul>
 <li>拒绝所有 dev 空间的报文</li>
 </ul>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">networking.k8s.io/v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">NetworkPolicy</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line"><span class="attr">  name:</span> <span class="string">deny-all-ingress</span></span><br><span class="line"><span class="attr">  namespace:</span> <span class="string">dev</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line"><span class="attr">  podSelector:</span> <span class="string">&#123;&#125;</span>            <span class="comment"># &#123;&#125; 空的选择器表示选择全部</span></span><br><span class="line"><span class="attr">  policyTypes:</span></span><br><span class="line"><span class="bullet">  -</span> <span class="string">Ingress</span>                  <span class="comment"># 指明 Ingress 规则生效，匹配 Ingress 将被放行，如果没定义 Ingress 则不能匹配所有，会拒绝全部</span></span><br><span class="line">                             <span class="comment"># policyTypes 没有 Egress 表示不控制 Egress ，默认为允许</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">networking.k8s.io/v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">NetworkPolicy</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">deny-all-ingress</span></span><br><span class="line">  <span class="attr">namespace:</span> <span class="string">dev</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">podSelector:</span> <span class="string">&#123;&#125;</span>            <span class="comment"># &#123;&#125; 空的选择器表示选择全部</span></span><br><span class="line">  <span class="attr">policyTypes:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">Ingress</span>                  <span class="comment"># 指明 Ingress 规则生效，匹配 Ingress 将被放行，如果没定义 Ingress 则不能匹配所有，会拒绝全部</span></span><br><span class="line">                             <span class="comment"># policyTypes 没有 Egress 表示不控制 Egress ，默认为允许</span></span><br></pre></td></tr></table></figure>
 <ul>
 <li>在指定命名空间应用规则文件</li>
 </ul>
@@ -543,7 +553,7 @@
 <ul>
 <li>允许指定网段的 POD 访问本 POD 的 80 端口</li>
 </ul>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">networking.k8s.io/v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">NetworkPolicy</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line"><span class="attr">  name:</span> <span class="string">allow-80-ingress</span></span><br><span class="line"><span class="attr">  namespace:</span> <span class="string">dev</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line"><span class="attr">  podSelector:</span></span><br><span class="line"><span class="attr">    matchLabels:</span></span><br><span class="line"><span class="attr">      app:</span> <span class="string">myapp</span></span><br><span class="line"><span class="attr">  ingress:</span></span><br><span class="line"><span class="attr">  - from:</span></span><br><span class="line"><span class="attr">    - ipBlock:</span>                   <span class="comment"># 指定源地址为 IP 地址块 </span></span><br><span class="line"><span class="attr">        cidr:</span> <span class="number">10.244</span><span class="number">.0</span><span class="number">.0</span><span class="string">/16</span>    <span class="comment"># 掩码形式指出源地址 IP 地址范围</span></span><br><span class="line"><span class="attr">        except:</span>                  <span class="comment"># 排除 cidr 范围内的某个地址</span></span><br><span class="line"><span class="bullet">        -</span> <span class="number">10.244</span><span class="number">.1</span><span class="number">.2</span><span class="string">/32</span></span><br><span class="line"><span class="attr">    ports:</span></span><br><span class="line"><span class="attr">    - port:</span> <span class="number">80</span>                   <span class="comment"># 入栈且目标端口为 80 的则匹配</span></span><br><span class="line"><span class="attr">      protocol:</span> <span class="string">TCP</span></span><br><span class="line"><span class="attr">    - port:</span> <span class="number">443</span></span><br><span class="line"><span class="attr">      protocol:</span> <span class="string">TCP</span></span><br><span class="line"><span class="attr">  policyTypes:</span></span><br><span class="line"><span class="bullet">  -</span> <span class="string">Ingress</span>                  <span class="comment"># 指明 Ingress 规则生效，匹配 Ingress 将被放行，如果没定义 Ingress 则不能匹配所有，拒绝全部</span></span><br><span class="line">                             <span class="comment"># policyTypes 没有 Egress 表示不控制 Egress ，默认为允许</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">networking.k8s.io/v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">NetworkPolicy</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">allow-80-ingress</span></span><br><span class="line">  <span class="attr">namespace:</span> <span class="string">dev</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">podSelector:</span></span><br><span class="line">    <span class="attr">matchLabels:</span></span><br><span class="line">      <span class="attr">app:</span> <span class="string">myapp</span></span><br><span class="line">  <span class="attr">ingress:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">from:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">ipBlock:</span>                   <span class="comment"># 指定源地址为 IP 地址块 </span></span><br><span class="line">        <span class="attr">cidr:</span> <span class="number">10.244</span><span class="number">.0</span><span class="number">.0</span><span class="string">/16</span>    <span class="comment"># 掩码形式指出源地址 IP 地址范围</span></span><br><span class="line">        <span class="attr">except:</span>                  <span class="comment"># 排除 cidr 范围内的某个地址</span></span><br><span class="line">        <span class="bullet">-</span> <span class="number">10.244</span><span class="number">.1</span><span class="number">.2</span><span class="string">/32</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">port:</span> <span class="number">80</span>                   <span class="comment"># 入栈且目标端口为 80 的则匹配</span></span><br><span class="line">      <span class="attr">protocol:</span> <span class="string">TCP</span></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">port:</span> <span class="number">443</span></span><br><span class="line">      <span class="attr">protocol:</span> <span class="string">TCP</span></span><br><span class="line">  <span class="attr">policyTypes:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">Ingress</span>                  <span class="comment"># 指明 Ingress 规则生效，匹配 Ingress 将被放行，如果没定义 Ingress 则不能匹配所有，拒绝全部</span></span><br><span class="line">                             <span class="comment"># policyTypes 没有 Egress 表示不控制 Egress ，默认为允许</span></span><br></pre></td></tr></table></figure>
 <ul>
 <li>查看规则</li>
 </ul>
@@ -551,7 +561,7 @@
 <ul>
 <li>拒绝出栈的所有请求</li>
 </ul>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">networking.k8s.io/v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">NetworkPolicy</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line"><span class="attr">  name:</span> <span class="string">deny-all-egress</span></span><br><span class="line"><span class="attr">  namespace:</span> <span class="string">prod</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line"><span class="attr">  podSelector:</span> <span class="string">&#123;&#125;</span>            <span class="comment"># &#123;&#125; 空的选择器表示选择全部</span></span><br><span class="line"><span class="attr">  policyTypes:</span></span><br><span class="line"><span class="bullet">  -</span> <span class="string">Egress</span>                   <span class="comment"># 指明 Egress 规则生效，匹配 Egress 将被放行，如果没定义 Egress 则不能匹配所有，拒绝全部</span></span><br><span class="line">                             <span class="comment"># policyTypes 没有 Ingress 表示不控制 Egress ，默认为允许</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">networking.k8s.io/v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">NetworkPolicy</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">deny-all-egress</span></span><br><span class="line">  <span class="attr">namespace:</span> <span class="string">prod</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">podSelector:</span> <span class="string">&#123;&#125;</span>            <span class="comment"># &#123;&#125; 空的选择器表示选择全部</span></span><br><span class="line">  <span class="attr">policyTypes:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">Egress</span>                   <span class="comment"># 指明 Egress 规则生效，匹配 Egress 将被放行，如果没定义 Egress 则不能匹配所有，拒绝全部</span></span><br><span class="line">                             <span class="comment"># policyTypes 没有 Ingress 表示不控制 Egress ，默认为允许</span></span><br></pre></td></tr></table></figure>
 
       
     </div>
@@ -576,8 +586,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/01/15/kubernetes/9.Service和ingress/" rel="next" title="service 和 ingress">
-                <i class="fa fa-chevron-left"></i> service 和 ingress
+              <a href="/2019/01/14/kubernetes/8.水平自动扩容/" rel="next" title="水平自动扩容">
+                <i class="fa fa-chevron-left"></i> 水平自动扩容
               </a>
             
           </div>
@@ -586,8 +596,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2019/01/16/kubernetes/11.认证权限和dashboard/" rel="prev" title="权限认证和dashboard">
-                权限认证和dashboard <i class="fa fa-chevron-right"></i>
+              <a href="/2019/01/15/kubernetes/9.Service和ingress/" rel="prev" title="service 和 ingress">
+                service 和 ingress <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -618,7 +628,11 @@
           
 
   
-  <div id="gitalk-container"></div>
+    <div class="comments" id="comments">
+      
+        <div id="gitment-container"></div>
+      
+    </div>
 
   
 
@@ -917,26 +931,47 @@
 
 
 
+<!-- LOCAL: You can save these files to your site and update links -->
+    
+        
+        <link rel="stylesheet" href="https://aimingoo.github.io/gitmint/style/default.css">
+        <script src="https://aimingoo.github.io/gitmint/dist/gitmint.browser.js"></script>
+    
+<!-- END LOCAL -->
+
+    
+
+    
+      <script type="text/javascript">
+      function renderGitment(){
+        var gitment = new Gitmint({
+            id: window.location.pathname, 
+            owner: '420123641@qq.com',
+            repo: 'yangjinheng.github.io',
+            
+            lang: "" || navigator.language || navigator.systemLanguage || navigator.userLanguage,
+            
+            oauth: {
+            
+            
+                client_secret: 'a1a4c80b994ee7de926d209ade6d90c06deaa52e',
+            
+                client_id: 'aab00e6bb87e77db0a92'
+            }});
+        gitment.render('gitment-container');
+      }
+
+      
+      renderGitment();
+      
+      </script>
+    
 
 
 
 
 
-  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
-  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
-  <script src="/js/src/md5.min.js"></script>
-   <script type="text/javascript">
-        var gitalk = new Gitalk({
-          clientID: '86e33c97ad3067f9d456',
-          clientSecret: 'ee93fb0fc1345f63936a09214f4b4a75e932c96c',
-          repo: 'yangjinheng.github.io',
-          owner: 'yangjinheng',
-          admin: ['yangjinheng'],
-          id: location.pathname,
-          distractionFreeMode: 'true'
-        })
-        gitalk.render('gitalk-container')
-    </script>
+
 
 
   

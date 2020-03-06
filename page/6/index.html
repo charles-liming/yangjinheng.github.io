@@ -6,7 +6,7 @@
 
 
 <html class="theme-next pisces use-motion" lang="zh-Hans">
-<head><meta name="generator" content="Hexo 3.8.0">
+<head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -487,7 +487,7 @@
 <h2 id="Since指定时间到现在已经过去的时间"><a href="#Since指定时间到现在已经过去的时间" class="headerlink" title="Since指定时间到现在已经过去的时间"></a>Since指定时间到现在已经过去的时间</h2><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	t0 := time.Now()</span><br><span class="line">	time.Sleep(<span class="number">3</span> * time.Second)</span><br><span class="line">	fmt.Println(time.Since(t0))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">3.0002169s</span><br></pre></td></tr></table></figure>
 <h2 id="Until指定时间距当前还有多久的时间"><a href="#Until指定时间距当前还有多久的时间" class="headerlink" title="Until指定时间距当前还有多久的时间"></a>Until指定时间距当前还有多久的时间</h2><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	t0 := time.Now()</span><br><span class="line">	time.Sleep(<span class="number">3</span> * time.Second)</span><br><span class="line">	fmt.Println(time.Until(t0))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="number">-3.0005766s</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="number">-3.0005766</span>s</span><br></pre></td></tr></table></figure>
 <h2 id="Hours、Minutes、Seconds、Nanoseconds"><a href="#Hours、Minutes、Seconds、Nanoseconds" class="headerlink" title="Hours、Minutes、Seconds、Nanoseconds"></a>Hours、Minutes、Seconds、Nanoseconds</h2><ul>
 <li>返回 Duration 是多少小时、分钟、秒、纳秒</li>
 </ul>
@@ -993,7 +993,7 @@
       
         
           
-            <h1 id="SSHClient"><a href="#SSHClient" class="headerlink" title="SSHClient"></a>SSHClient</h1><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SSHClient</span> <span class="params">(ClosingContextManager)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span></span><br><span class="line">        self._system_host_keys = HostKeys()</span><br><span class="line">        self._host_keys = HostKeys()</span><br><span class="line">        self._host_keys_filename = <span class="keyword">None</span></span><br><span class="line">        self._log_channel = <span class="keyword">None</span></span><br><span class="line">        self._policy = RejectPolicy()</span><br><span class="line">        self._transport = <span class="keyword">None</span></span><br><span class="line">        self._agent = <span class="keyword">None</span></span><br></pre></td></tr></table></figure>
+            <h1 id="SSHClient"><a href="#SSHClient" class="headerlink" title="SSHClient"></a>SSHClient</h1><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SSHClient</span> <span class="params">(ClosingContextManager)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span></span><br><span class="line">        self._system_host_keys = HostKeys()</span><br><span class="line">        self._host_keys = HostKeys()</span><br><span class="line">        self._host_keys_filename = <span class="literal">None</span></span><br><span class="line">        self._log_channel = <span class="literal">None</span></span><br><span class="line">        self._policy = RejectPolicy()</span><br><span class="line">        self._transport = <span class="literal">None</span></span><br><span class="line">        self._agent = <span class="literal">None</span></span><br></pre></td></tr></table></figure>
 <p>SSH 服务器会话的一种高级表示形式。这个类封装了 <code>.Transport</code>, <code>.Channel</code> 和 <code>.SFTPClient</code>，以处理验证和打开通道的大部分方面。一个典型的用例是：</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">client = SSHClient()</span><br><span class="line">client.load_system_host_keys()</span><br><span class="line">client.connect(&apos;ssh.example.com&apos;)</span><br><span class="line">stdin, stdout, stderr = client.exec_command(&apos;ls -l&apos;)</span><br></pre></td></tr></table></figure>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">您可以传递用于身份验证和服务器主机密钥检查的显式重写。默认机制是尝试使用本地密钥文件或 SSH 代理(如果正在运行)。此类的实例可用作上下文管理器。</span><br></pre></td></tr></table></figure>
@@ -1407,6 +1407,19 @@
 
 
 
+
+
+<!-- LOCAL: You can save these files to your site and update links -->
+    
+        
+        <link rel="stylesheet" href="https://aimingoo.github.io/gitmint/style/default.css">
+        <script src="https://aimingoo.github.io/gitmint/dist/gitmint.browser.js"></script>
+    
+<!-- END LOCAL -->
+
+    
+
+    
 
 
 

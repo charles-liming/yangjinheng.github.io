@@ -6,7 +6,7 @@
 
 
 <html class="theme-next pisces use-motion" lang="zh-Hans">
-<head><meta name="generator" content="Hexo 3.8.0">
+<head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -376,6 +376,16 @@
 
           
             
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/09/17/python/8.异常/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count gitment-comments-count" data-xid="/2017/09/17/python/8.异常/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
           
 
           
@@ -460,11 +470,11 @@
 </ul>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">except</span> error</span><br></pre></td></tr></table></figure>
 <h3 id="再次抛出异常"><a href="#再次抛出异常" class="headerlink" title="再次抛出异常"></a>再次抛出异常</h3><p>捕捉到了异常，但是又想重新引发它(传递异常)，可以使用不带参数的raise语句即可： </p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    var = <span class="keyword">False</span></span><br><span class="line">    <span class="keyword">raise</span> NameError(<span class="string">'this is a name error'</span>)</span><br><span class="line"><span class="keyword">except</span> (NameError,KeyError) <span class="keyword">as</span> err:</span><br><span class="line">    <span class="keyword">if</span> var:</span><br><span class="line">        print(<span class="string">'except error'</span>,err)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">raise</span>                     <span class="comment">#在捕捉到的异常内，再次抛出此异常</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    var = <span class="literal">False</span></span><br><span class="line">    <span class="keyword">raise</span> NameError(<span class="string">'this is a name error'</span>)</span><br><span class="line"><span class="keyword">except</span> (NameError,KeyError) <span class="keyword">as</span> err:</span><br><span class="line">    <span class="keyword">if</span> var:</span><br><span class="line">        print(<span class="string">'except error'</span>,err)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">raise</span>                     <span class="comment">#在捕捉到的异常内，再次抛出此异常</span></span><br></pre></td></tr></table></figure>
 <ul>
 <li>结果</li>
 </ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">---------------------------------------------------------------------------</span><br><span class="line">NameError                                 Traceback (most recent call last)</span><br><span class="line">&lt;ipython-input<span class="number">-25</span>-b59c336b9253&gt; <span class="keyword">in</span> &lt;module&gt;()</span><br><span class="line">      <span class="number">1</span> <span class="keyword">try</span>:</span><br><span class="line">      <span class="number">2</span>     var = <span class="keyword">False</span></span><br><span class="line">----&gt; 3     raise NameError('this is a name error')</span><br><span class="line">      <span class="number">4</span> <span class="keyword">except</span> (NameError,KeyError) <span class="keyword">as</span> err:</span><br><span class="line">      <span class="number">5</span>     <span class="keyword">if</span> var:</span><br><span class="line"></span><br><span class="line">NameError: this <span class="keyword">is</span> a name error</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">---------------------------------------------------------------------------</span><br><span class="line">NameError                                 Traceback (most recent call last)</span><br><span class="line">&lt;ipython-input<span class="number">-25</span>-b59c336b9253&gt; <span class="keyword">in</span> &lt;module&gt;()</span><br><span class="line">      <span class="number">1</span> <span class="keyword">try</span>:</span><br><span class="line">      <span class="number">2</span>     var = <span class="literal">False</span></span><br><span class="line">----&gt; 3     raise NameError('this is a name error')</span><br><span class="line">      <span class="number">4</span> <span class="keyword">except</span> (NameError,KeyError) <span class="keyword">as</span> err:</span><br><span class="line">      <span class="number">5</span>     <span class="keyword">if</span> var:</span><br><span class="line"></span><br><span class="line">NameError: this <span class="keyword">is</span> a name error</span><br></pre></td></tr></table></figure>
 <h2 id="自定义异常"><a href="#自定义异常" class="headerlink" title="自定义异常"></a>自定义异常</h2><h3 id="内建异常"><a href="#内建异常" class="headerlink" title="内建异常"></a>内建异常</h3><table>
 <thead>
 <tr>
@@ -746,7 +756,11 @@
           
 
   
-  <div id="gitalk-container"></div>
+    <div class="comments" id="comments">
+      
+        <div id="gitment-container"></div>
+      
+    </div>
 
   
 
@@ -1045,26 +1059,47 @@
 
 
 
+<!-- LOCAL: You can save these files to your site and update links -->
+    
+        
+        <link rel="stylesheet" href="https://aimingoo.github.io/gitmint/style/default.css">
+        <script src="https://aimingoo.github.io/gitmint/dist/gitmint.browser.js"></script>
+    
+<!-- END LOCAL -->
+
+    
+
+    
+      <script type="text/javascript">
+      function renderGitment(){
+        var gitment = new Gitmint({
+            id: window.location.pathname, 
+            owner: '420123641@qq.com',
+            repo: 'yangjinheng.github.io',
+            
+            lang: "" || navigator.language || navigator.systemLanguage || navigator.userLanguage,
+            
+            oauth: {
+            
+            
+                client_secret: 'a1a4c80b994ee7de926d209ade6d90c06deaa52e',
+            
+                client_id: 'aab00e6bb87e77db0a92'
+            }});
+        gitment.render('gitment-container');
+      }
+
+      
+      renderGitment();
+      
+      </script>
+    
 
 
 
 
 
-  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
-  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
-  <script src="/js/src/md5.min.js"></script>
-   <script type="text/javascript">
-        var gitalk = new Gitalk({
-          clientID: '86e33c97ad3067f9d456',
-          clientSecret: 'ee93fb0fc1345f63936a09214f4b4a75e932c96c',
-          repo: 'yangjinheng.github.io',
-          owner: 'yangjinheng',
-          admin: ['yangjinheng'],
-          id: location.pathname,
-          distractionFreeMode: 'true'
-        })
-        gitalk.render('gitalk-container')
-    </script>
+
 
 
   

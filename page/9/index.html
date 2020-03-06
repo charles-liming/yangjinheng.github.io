@@ -6,7 +6,7 @@
 
 
 <html class="theme-next pisces use-motion" lang="zh-Hans">
-<head><meta name="generator" content="Hexo 3.8.0">
+<head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -415,12 +415,12 @@
 <ul>
 <li>示例</li>
 </ul>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">menu:</span></span><br><span class="line"><span class="attr">  home:</span> <span class="string">/</span> <span class="string">||</span> <span class="string">home</span></span><br><span class="line"><span class="attr">  Linux:</span> <span class="string">/linux/</span> <span class="string">||</span> <span class="string">laptop</span></span><br><span class="line"><span class="attr">  My-SQL:</span> <span class="string">/mysql/</span> <span class="string">||</span> <span class="string">tasks</span></span><br><span class="line"><span class="attr">  Python:</span> <span class="string">/python/</span> <span class="string">||</span> <span class="string">cogs</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">menu:</span></span><br><span class="line">  <span class="attr">home:</span> <span class="string">/</span> <span class="string">||</span> <span class="string">home</span></span><br><span class="line">  <span class="attr">Linux:</span> <span class="string">/linux/</span> <span class="string">||</span> <span class="string">laptop</span></span><br><span class="line">  <span class="attr">My-SQL:</span> <span class="string">/mysql/</span> <span class="string">||</span> <span class="string">tasks</span></span><br><span class="line">  <span class="attr">Python:</span> <span class="string">/python/</span> <span class="string">||</span> <span class="string">cogs</span></span><br></pre></td></tr></table></figure>
 <h2 id="设置忽略文件"><a href="#设置忽略文件" class="headerlink" title="设置忽略文件"></a>设置忽略文件</h2><p>有时候我会把整个目录软链到博客发布目录，但是目录中可能存在不想发布到博客的文件，所以需要配置忽略</p>
 <ul>
 <li>忽略整个目录下的文件</li>
 </ul>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">skip_render:</span></span><br><span class="line"><span class="bullet">  -</span> <span class="string">"_posts/web/React_demo/**"</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">skip_render:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">"_posts/web/React_demo/**"</span></span><br></pre></td></tr></table></figure>
 <h2 id="在文章中使用模板语法"><a href="#在文章中使用模板语法" class="headerlink" title="在文章中使用模板语法"></a>在文章中使用模板语法</h2>
 在 hexo 中 {{}} 为了防止这样的语法被翻译，可以在文章中使用下面的方法。
 
@@ -626,7 +626,7 @@
 <ul>
 <li>添加右键菜单 mklink.reg</li>
 </ul>
-<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-tag">Windows</span> <span class="selector-tag">Registry</span> <span class="selector-tag">Editor</span> <span class="selector-tag">Version</span> 5<span class="selector-class">.00</span></span><br><span class="line"></span><br><span class="line"><span class="selector-attr">[HKEY_CLASSES_ROOT\*\shell\mklink]</span></span><br><span class="line">@="创建硬链接"</span><br><span class="line">"<span class="keyword">Icon</span>"="%<span class="keyword">SystemRoot</span>%\\<span class="keyword">System32</span>\\<span class="keyword">SHELL32</span>.<span class="keyword">dll</span>,<span class="keyword">68</span>"</span><br><span class="line"></span><br><span class="line">[<span class="keyword">HKEY_CLASSES_ROOT</span>\*\<span class="keyword">shell</span>\<span class="keyword">mklink</span>\<span class="keyword">command</span>]</span><br><span class="line">@="<span class="keyword">wscript</span>.<span class="keyword">exe</span> C:\\Windows\\mklink.vbs \<span class="string">"%1\""</span></span><br><span class="line"></span><br><span class="line">[HKEY_CLASSES_ROOT\Directory\shell\mklink]</span><br><span class="line">@=<span class="string">"创建软链接"</span></span><br><span class="line"><span class="string">"Icon"</span>=<span class="string">"%SystemRoot%\\System32\\SHELL32.dll,68"</span></span><br><span class="line"></span><br><span class="line">[HKEY_CLASSES_ROOT\Directory\shell\mklink\command]</span><br><span class="line">@=<span class="string">"wscript.exe C:\\Windows\\mklink.vbs \"%1\""</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-tag">Windows</span> <span class="selector-tag">Registry</span> <span class="selector-tag">Editor</span> <span class="selector-tag">Version</span> 5<span class="selector-class">.00</span></span><br><span class="line"></span><br><span class="line"><span class="selector-attr">[HKEY_CLASSES_ROOT\*\shell\mklink]</span></span><br><span class="line">@="创建硬链接"</span><br><span class="line">"Icon"="%SystemRoot%\\System32\\SHELL32.dll,68"</span><br><span class="line"></span><br><span class="line">[HKEY_CLASSES_ROOT\*\shell\mklink\command]</span><br><span class="line">@="wscript.exe <span class="attribute">C:</span>\\Windows\\mklink.vbs \<span class="string">"%1\""</span></span><br><span class="line"></span><br><span class="line">[HKEY_CLASSES_ROOT\Directory\shell\mklink]</span><br><span class="line">@=<span class="string">"创建软链接"</span></span><br><span class="line"><span class="string">"Icon"</span>=<span class="string">"%SystemRoot%\\System32\\SHELL32.dll,68"</span></span><br><span class="line"></span><br><span class="line">[HKEY_CLASSES_ROOT\Directory\shell\mklink\command]</span><br><span class="line">@=<span class="string">"wscript.exe C:\\Windows\\mklink.vbs \"%1\""</span></span><br></pre></td></tr></table></figure>
 
           
         
@@ -939,6 +939,19 @@
 
 
 
+
+
+<!-- LOCAL: You can save these files to your site and update links -->
+    
+        
+        <link rel="stylesheet" href="https://aimingoo.github.io/gitmint/style/default.css">
+        <script src="https://aimingoo.github.io/gitmint/dist/gitmint.browser.js"></script>
+    
+<!-- END LOCAL -->
+
+    
+
+    
 
 
 

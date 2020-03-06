@@ -6,7 +6,7 @@
 
 
 <html class="theme-next pisces use-motion" lang="zh-Hans">
-<head><meta name="generator" content="Hexo 3.8.0">
+<head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -376,6 +376,16 @@
 
           
             
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/10/05/python/26.wsgiref/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count gitment-comments-count" data-xid="/2017/10/05/python/26.wsgiref/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
           
 
           
@@ -563,7 +573,7 @@
 <ol start="4">
 <li>主程序</li>
 </ol>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> wsgiref.simple_server <span class="keyword">import</span> make_server</span><br><span class="line"><span class="keyword">from</span> Controller <span class="keyword">import</span> page          <span class="comment"># 导入 Controller 目录的 page.py</span></span><br><span class="line"></span><br><span class="line">url_dict = &#123;                         <span class="comment"># URL与返回报文的对应关系</span></span><br><span class="line">    <span class="string">'/index'</span>:handle_index,           <span class="comment"># 如果键是一个正则表达式对象，那么就可以处理匹配正则的这一类页面</span></span><br><span class="line">    <span class="string">'/date'</span>:hanle_date</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">handle_app</span><span class="params">(environ,start_response)</span>:</span></span><br><span class="line">    start_response(<span class="string">"200 OK"</span>, [(<span class="string">'Content-Type'</span>,<span class="string">'text/plain; charset=utf-8'</span>)])</span><br><span class="line"></span><br><span class="line">    current_url = environ[<span class="string">'PATH_INFO'</span>]</span><br><span class="line">    func = <span class="keyword">None</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> current_url <span class="keyword">in</span> url_dict:</span><br><span class="line">        func = url_dict[current_url]</span><br><span class="line">    <span class="keyword">if</span> func:</span><br><span class="line">        <span class="keyword">return</span> func()</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">return</span> [<span class="string">'&lt;h1&gt;404!&lt;/h1&gt;'</span>.encode(<span class="string">"utf-8"</span>)]</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    server = make_server(<span class="string">'0.0.0.0'</span>,<span class="number">80</span>,handle_app)</span><br><span class="line">    server.serve_forever()</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> wsgiref.simple_server <span class="keyword">import</span> make_server</span><br><span class="line"><span class="keyword">from</span> Controller <span class="keyword">import</span> page          <span class="comment"># 导入 Controller 目录的 page.py</span></span><br><span class="line"></span><br><span class="line">url_dict = &#123;                         <span class="comment"># URL与返回报文的对应关系</span></span><br><span class="line">    <span class="string">'/index'</span>:handle_index,           <span class="comment"># 如果键是一个正则表达式对象，那么就可以处理匹配正则的这一类页面</span></span><br><span class="line">    <span class="string">'/date'</span>:hanle_date</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">handle_app</span><span class="params">(environ,start_response)</span>:</span></span><br><span class="line">    start_response(<span class="string">"200 OK"</span>, [(<span class="string">'Content-Type'</span>,<span class="string">'text/plain; charset=utf-8'</span>)])</span><br><span class="line"></span><br><span class="line">    current_url = environ[<span class="string">'PATH_INFO'</span>]</span><br><span class="line">    func = <span class="literal">None</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> current_url <span class="keyword">in</span> url_dict:</span><br><span class="line">        func = url_dict[current_url]</span><br><span class="line">    <span class="keyword">if</span> func:</span><br><span class="line">        <span class="keyword">return</span> func()</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">return</span> [<span class="string">'&lt;h1&gt;404!&lt;/h1&gt;'</span>.encode(<span class="string">"utf-8"</span>)]</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    server = make_server(<span class="string">'0.0.0.0'</span>,<span class="number">80</span>,handle_app)</span><br><span class="line">    server.serve_forever()</span><br></pre></td></tr></table></figure>
 <ul>
 <li>MVC 和 MTV</li>
 </ul>
@@ -673,7 +683,11 @@
           
 
   
-  <div id="gitalk-container"></div>
+    <div class="comments" id="comments">
+      
+        <div id="gitment-container"></div>
+      
+    </div>
 
   
 
@@ -972,26 +986,47 @@
 
 
 
+<!-- LOCAL: You can save these files to your site and update links -->
+    
+        
+        <link rel="stylesheet" href="https://aimingoo.github.io/gitmint/style/default.css">
+        <script src="https://aimingoo.github.io/gitmint/dist/gitmint.browser.js"></script>
+    
+<!-- END LOCAL -->
+
+    
+
+    
+      <script type="text/javascript">
+      function renderGitment(){
+        var gitment = new Gitmint({
+            id: window.location.pathname, 
+            owner: '420123641@qq.com',
+            repo: 'yangjinheng.github.io',
+            
+            lang: "" || navigator.language || navigator.systemLanguage || navigator.userLanguage,
+            
+            oauth: {
+            
+            
+                client_secret: 'a1a4c80b994ee7de926d209ade6d90c06deaa52e',
+            
+                client_id: 'aab00e6bb87e77db0a92'
+            }});
+        gitment.render('gitment-container');
+      }
+
+      
+      renderGitment();
+      
+      </script>
+    
 
 
 
 
 
-  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
-  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
-  <script src="/js/src/md5.min.js"></script>
-   <script type="text/javascript">
-        var gitalk = new Gitalk({
-          clientID: '86e33c97ad3067f9d456',
-          clientSecret: 'ee93fb0fc1345f63936a09214f4b4a75e932c96c',
-          repo: 'yangjinheng.github.io',
-          owner: 'yangjinheng',
-          admin: ['yangjinheng'],
-          id: location.pathname,
-          distractionFreeMode: 'true'
-        })
-        gitalk.render('gitalk-container')
-    </script>
+
 
 
   
