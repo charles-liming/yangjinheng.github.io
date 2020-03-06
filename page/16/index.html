@@ -311,7 +311,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://yangjinheng.github.io/2019/01/12/kubernetes/5.configmap和secret/">
+    <link itemprop="mainEntityOfPage" href="https://yangjinheng.github.io/2019/01/12/kubernetes/4.存储卷/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Jin Heng">
@@ -330,7 +330,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2019/01/12/kubernetes/5.configmap和secret/" itemprop="url">configmap 和 secret</a></h1>
+                <a class="post-title-link" href="/2019/01/12/kubernetes/4.存储卷/" itemprop="url">存储卷</a></h1>
         
 
         <div class="post-meta">
@@ -404,96 +404,380 @@
       
         
           
-            <h1 id="配置信息容器化"><a href="#配置信息容器化" class="headerlink" title="配置信息容器化"></a>配置信息容器化</h1><p>k8s 提供了 configMap、secret 这两种特殊类型的存储卷，多数情况下不是为 POD 提供存储空间，而是为用户提供了从集群外部到 POD 内部注入配置信息的方式。</p>
-<ul>
-<li>配置信息容器化有哪些方式</li>
-</ul>
+            <h1 id="POD-存储卷"><a href="#POD-存储卷" class="headerlink" title="POD 存储卷"></a>POD 存储卷</h1><p>大部分有状态的应用都有持久存储，在 Docker 上我们将容器所需要的存储卷放在宿主机上，但是 k8s 上不行，因为 POD 会被在不同的 node 节点上创建删除，所以 k8s 需要一套另外的存储卷机制，它能脱离节点为整个集群提供持久存储。</p>
+<p>k8s 提供了多种不同的存储卷，k8s 中存储卷属于 POD 而不是容器，POD 可以挂载，POD 为什么能有存储卷呢？这是因为在所有节点上运行了一个 Pause 的镜像，它是 POD 的基础架构容器，它拥有存储卷，同一个 POD 内的所有容器是一个网络名称空间的。</p>
+<h2 id="卷的类型"><a href="#卷的类型" class="headerlink" title="卷的类型"></a>卷的类型</h2><blockquote>
+<p>  查看 POD 支持的存储类型：kubectl explain pods.spec.volumes</p>
+</blockquote>
 <ol>
-<li>自定义命令行参数，例如：command、args，根据 args 传递不同的参数来将容器运行为不同的特性</li>
-<li>直接把配置信息制作为 image 中，但是这种方式非常不灵活，这个镜像只能适用于一种使用场景，过度耦合</li>
-<li>环境变量，Cloud Native 支持通过环境变量来加载配置，或者使用 ENTRYPOINT 脚本来预处理环境变量为配置信息</li>
-<li>存储卷，在容器启动时候挂载一个存储卷，或者专用的配置存储卷，挂载到应用程序的配置文件目录</li>
+<li>HostPath：在节点本地新建一个路径，与容器建立关联关系，但节点挂了的数据也不存在了，所以也不具有持久性，容器被调度到别的 node 时候不能跨节点使用HostPath。</li>
+<li>Local：直接使用节点的设备、也支持一个目录类似于 HostPath。</li>
+<li>EmptyDir：只在节点本地使用，一旦 POD 删除，存储卷也会删除，它不具有持久性，当临时目录或者缓存。</li>
+<li>网络存储：iSCSI、NFS、Cifs、glusterfs、cephfs、EBS（AWS)、Disk（Azone）</li>
 </ol>
+<h2 id="容器挂载选项"><a href="#容器挂载选项" class="headerlink" title="容器挂载选项"></a>容器挂载选项</h2><p>在 K8S 中卷属于 POD 的，而不是容器，所以卷的定义在 POD 中，可以定义多个卷。</p>
 <ul>
-<li>Secret与ConfigMap对比</li>
+<li>在 POD 中挂载使用，kubectl explain pods.spec.containers.volumeMounts</li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">相同点：</span><br><span class="line">-   key / value 的形式 </span><br><span class="line">-   属于某个特定的 namespace </span><br><span class="line">-   可以导出到环境变量 </span><br><span class="line">-   可以通过目录/文件形式挂载(支持挂载所有key和部分key)</span><br><span class="line"></span><br><span class="line">不同点：</span><br><span class="line">-   Secret 可以被 ServerAccount 关联(使用) </span><br><span class="line">-   Secret 可以存储 register 的鉴权信息，用在 ImagePullSecret 参数中，用于拉取私有仓库的镜像 </span><br><span class="line">-   Secret 支持 Base64 加密 </span><br><span class="line">-   Secret 分为 kubernetes.io/Service Account，kubernetes.io/dockerconfigjson，Opaque三种类型, Configmap 不区分类型 </span><br><span class="line">-   Secret 文件存储在tmpfs文件系统中，Pod 删除后 Secret文件也会对应的删除。</span><br></pre></td></tr></table></figure>
-<h2 id="POD-获取环境变量"><a href="#POD-获取环境变量" class="headerlink" title="POD 获取环境变量"></a>POD 获取环境变量</h2><ul>
-<li>env，详见：kubectl explain pods.spec.containers.env</li>
-</ul>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="string">name</span>              <span class="string">&lt;string&gt;</span>  <span class="comment"># 变量名称</span></span><br><span class="line"><span class="string">value</span>	          <span class="string">&lt;string&gt;</span>  <span class="comment"># 变量的值</span></span><br><span class="line"><span class="string">valueFrom</span>         <span class="string">&lt;Object&gt;</span>  <span class="comment"># 引用值，如：configMap 的某个键、POD 定义中的字段名，如：metadata.labels</span></span><br><span class="line"><span class="string">resourceFieldRef</span>  <span class="string">&lt;Object&gt;</span>  <span class="comment"># 引用资源限制中的值</span></span><br><span class="line"><span class="string">secretKeyRef</span>      <span class="string">&lt;Object&gt;</span>  <span class="comment"># 引用 secretKey</span></span><br></pre></td></tr></table></figure>
-<h2 id="configMap"><a href="#configMap" class="headerlink" title="configMap"></a>configMap</h2><p>假如我们现在要启动一个 POD ，这个 POD 启动时候，需要读取不同的配置信息，那么我们有两种方式：</p>
-<ol>
-<li>可以将 configMap 资源关联到当前 POD 上，POD 从 configMap 读取一个数据，传递给 POD 内部容器的一个变量，变量被注入后，可以重启容器。</li>
-<li>可以将 configMap 资源挂载到当前 POD 上，作为一个文件系统的路径，这个目录正好是应用程序读取配置文件的路径，容器就可以读取到配置信息了，当 configMap 修改了，那么就会通知 POD ，POD 可以进行重载配置。</li>
-</ol>
-<p>在每个 configMap 中所有的配置信息都保存为键值的配置形式。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">apiVersion: v1</span><br><span class="line">kind: Pod</span><br><span class="line">metadata:</span><br><span class="line">  name: myapp</span><br><span class="line">  namespace: default</span><br><span class="line">  labels:</span><br><span class="line">    app: myapp</span><br><span class="line">spec:</span><br><span class="line">  containers:</span><br><span class="line">  - name: myapp</span><br><span class="line">    image: ikubernetes/myapp:v1</span><br><span class="line">    volumeMounts        &lt;[]Object&gt;  <span class="comment"># 卷挂载对象</span></span><br><span class="line">      mountPath	        &lt;string&gt;    <span class="comment"># 挂载路径</span></span><br><span class="line">      mountPropagation  &lt;string&gt;    <span class="comment"># 确定挂载如何从主机传播到容器</span></span><br><span class="line">      name	            &lt;string&gt;    <span class="comment"># 挂载哪个卷</span></span><br><span class="line">      readOnly	        &lt;boolean&gt;   <span class="comment"># 是否只读挂载</span></span><br><span class="line">      subPath	        &lt;string&gt;    <span class="comment"># 挂载在子路径下</span></span><br><span class="line">      subPathExpr       &lt;string&gt;    <span class="comment"># 与 subPath 类似，挂载在子路径下，不同的是可以使用 $(VAR_NAME) 表示容器扩展这个变量</span></span><br></pre></td></tr></table></figure>
+<h2 id="节点存储"><a href="#节点存储" class="headerlink" title="节点存储"></a>节点存储</h2><h3 id="hostpath存储卷"><a href="#hostpath存储卷" class="headerlink" title="hostpath存储卷"></a>hostpath存储卷</h3><p>在宿主机的路径挂载到 POD 上，POD 删除后，卷数据是不会随之删除的，但如果 node 节点挂掉，那么数据有可能丢失，如果 POD 被调度到其他的节点，那么原来卷的数据就访问不到了。</p>
+<blockquote>
+<p>  <a href="https://kubernetes.io/docs/concepts/storage/volumes/#hostpath" target="_blank" rel="noopener">https://kubernetes.io/docs/concepts/storage/volumes/#hostpath</a></p>
+</blockquote>
 <ul>
-<li>清单格式，详见：kubectl explain configMap</li>
+<li>定义参数，kubectl explain pods.spec.volumes.hostPath</li>
 </ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">apiVersion	&lt;string&gt;              <span class="comment"># 版本号</span></span><br><span class="line">binaryData	&lt;map[string]string&gt;   <span class="comment"># 二进制的数据</span></span><br><span class="line">data	    &lt;map[string]string&gt;   <span class="comment"># 键值对的数据</span></span><br><span class="line">kind	    &lt;string&gt;              <span class="comment"># 对象类型</span></span><br><span class="line">metadata	&lt;Object&gt;              <span class="comment"># 对象元数据</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">path	&lt;string&gt;  <span class="comment"># 主机上目录的路径。 如果路径是符号链接，则会跟随真实路径的链接。</span></span><br><span class="line"><span class="built_in">type</span>	&lt;string&gt;  <span class="comment"># 见下表</span></span><br></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">值</th>
+<th style="text-align:left">行为</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">“”</td>
+<td style="text-align:left">空字符串（默认）用于向后兼容，这意味着在安装 hostPath 卷之前不会执行任何检查。</td>
+</tr>
+<tr>
+<td style="text-align:left">DirectoryOrCreate</td>
+<td style="text-align:left">如果给定路径中不存在任何内容，则将根据需要创建一个空目录，权限设置为0755，与Kubelet具有相同的组和所有权。</td>
+</tr>
+<tr>
+<td style="text-align:left">Directory</td>
+<td style="text-align:left">目录必须存在于给定路径中</td>
+</tr>
+<tr>
+<td style="text-align:left">FileOrCreate</td>
+<td style="text-align:left">如果给定路径中不存在任何内容，则会根据需要创建一个空文件，权限设置为0644，与Kubelet具有相同的组和所有权。</td>
+</tr>
+<tr>
+<td style="text-align:left">File</td>
+<td style="text-align:left">文件必须存在于给定路径中</td>
+</tr>
+<tr>
+<td style="text-align:left">Socket</td>
+<td style="text-align:left">UNIX套接字必须存在于给定路径中</td>
+</tr>
+<tr>
+<td style="text-align:left">CharDevice</td>
+<td style="text-align:left">字符设备必须存在于给定路径中</td>
+</tr>
+<tr>
+<td style="text-align:left">BlockDevice</td>
+<td style="text-align:left">块设备必须存在于给定路径中</td>
+</tr>
+</tbody>
+</table>
 <ul>
-<li>命令行方式创建</li>
+<li>示例</li>
 </ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 创建名为 my-config 的 configMap，它的数据来自目录中的文件，键为文件名，值为文件内容</span></span><br><span class="line">kubectl create configmap my-config --from-file=path/to/dir</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建名为 my-config 的 configMap，它的数据来自文件中的键值对</span></span><br><span class="line">kubectl create configmap my-config --from-file=path/to/file</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建名为 my-config 的 configMap，也可以手动指定键的名称</span></span><br><span class="line">kubectl create configmap my-config --from-file=key1=/path/to/bar/file1.txt --from-file=key2=/path/to/bar/file2.txt</span><br><span class="line"></span><br><span class="line"><span class="comment"># 从字面量中创建</span></span><br><span class="line">kubectl create configmap my-config --from-literal=key1=config1 --from-literal=key2=config2</span><br><span class="line"></span><br><span class="line"><span class="comment"># 从env文件中命名 my-config</span></span><br><span class="line">kubectl create configmap my-config --from-env-file=path/to/bar.env</span><br></pre></td></tr></table></figure>
-<h3 id="注入-POD-ENV"><a href="#注入-POD-ENV" class="headerlink" title="注入 POD ENV"></a>注入 POD ENV</h3><ul>
-<li>创建 ConfigMap 并在 POD ENV 中使用</li>
-</ul>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">ConfigMap</span>                                        <span class="comment"># 创建 ConfigMap 对象</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">nginx-config</span></span><br><span class="line">  <span class="attr">namespace:</span> <span class="string">default</span></span><br><span class="line"><span class="attr">data:</span></span><br><span class="line">  <span class="attr">server_name:</span> <span class="string">myapp.jinheng.com</span>                       <span class="comment"># 键值对数据</span></span><br><span class="line">  <span class="attr">nginx_port:</span> <span class="string">|</span>                                        <span class="comment"># 键值对数据，此处为 nginx 配置文件，需要注意换行的写法</span></span><br><span class="line">    <span class="string">server</span> <span class="string">&#123;</span></span><br><span class="line">        <span class="string">server_name</span>  <span class="string">myapp.jinheng.com;</span></span><br><span class="line">        <span class="string">listen</span>  <span class="number">80</span><span class="string">;</span></span><br><span class="line">        <span class="string">root</span>  <span class="string">/data/web/html;</span></span><br><span class="line">    <span class="string">&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Pod</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">pod-configmap-demo</span></span><br><span class="line">  <span class="attr">namespace:</span> <span class="string">default</span></span><br><span class="line">  <span class="attr">labels:</span></span><br><span class="line">    <span class="attr">app:</span> <span class="string">myapp</span></span><br><span class="line">    <span class="attr">tier:</span> <span class="string">frontend</span></span><br><span class="line">  <span class="attr">annotations:</span></span><br><span class="line">    <span class="attr">jinheng.com/created-by:</span> <span class="string">"cluster amdin"</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">containers:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">myapp</span></span><br><span class="line">      <span class="attr">image:</span> <span class="string">ikubernetes/myapp:v1</span></span><br><span class="line">      <span class="attr">ports:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">http</span></span><br><span class="line">          <span class="attr">containerPort:</span> <span class="number">80</span></span><br><span class="line">      <span class="attr">env:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">NGINX_SERVER_PORT</span>          <span class="comment"># 定义容器内变量的名字，容器需要在启动的时候使用 ENTRYPOINT 脚本将环境变量转换为应用的配置文件</span></span><br><span class="line">          <span class="attr">valueFrom:</span>                       <span class="comment"># 值来自于 configMap 对象中</span></span><br><span class="line">            <span class="attr">configMapKeyRef:</span>               <span class="comment"># 引用 configMap 对象</span></span><br><span class="line">              <span class="attr">name:</span> <span class="string">nginx-config</span>           <span class="comment"># configMap 对象的名字</span></span><br><span class="line">              <span class="attr">key:</span> <span class="string">nginx_port</span>              <span class="comment"># 引用 configMap 中的哪个 key</span></span><br><span class="line">              <span class="attr">optional:</span> <span class="literal">true</span>               <span class="comment"># 相对 POD 启动是否为可选，如果 configMap 中不存在这个值，true 则不阻塞 POD 启动</span></span><br><span class="line">        <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">NGINX_SERVER_NAME</span>          <span class="comment"># 定义容器内变量的名字，使用 exec 进入容器会发现变量已经在启动容器前注入容器内部了。</span></span><br><span class="line">          <span class="attr">valueFrom:</span></span><br><span class="line">            <span class="attr">configMapKeyRef:</span></span><br><span class="line">              <span class="attr">name:</span> <span class="string">nginx-config</span></span><br><span class="line">              <span class="attr">key:</span> <span class="string">server_name</span></span><br></pre></td></tr></table></figure>
-<h3 id="挂载为-POD-卷"><a href="#挂载为-POD-卷" class="headerlink" title="挂载为 POD 卷"></a>挂载为 POD 卷</h3><ul>
-<li>configMap 中的数据可以在容器内挂载为文件，并且当 configMap 中的数据发生变动的时候，容器内的文件相应也会发生变动，但不会重载容器内的进程。</li>
-</ul>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">ConfigMap</span>                                     <span class="comment"># 创建 ConfigMap</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">nginx-config-volumes</span></span><br><span class="line">  <span class="attr">namespace:</span> <span class="string">default</span></span><br><span class="line"><span class="attr">data:</span>                                               <span class="comment"># ConfigMap 中保存了两个数据，</span></span><br><span class="line">  <span class="attr">index:</span> <span class="string">|</span>                                          <span class="comment"># 数据1，它可以在 container 中使用 ENV 注入环境变量，也可以在 container 中使用 volumeMounts 挂载成为文件</span></span><br><span class="line">    <span class="string">&lt;h1&gt;this</span> <span class="string">is</span> <span class="string">a</span> <span class="string">test</span> <span class="string">page&lt;h1&gt;</span></span><br><span class="line">  <span class="attr">vhost:</span> <span class="string">|</span>                                          <span class="comment"># 数据2，它可以在 container 中使用 ENV 注入环境变量，也可以在 container 中使用 volumeMounts 挂载成为文件</span></span><br><span class="line">    <span class="string">server</span> <span class="string">&#123;</span>                                                                                                                                  </span><br><span class="line">        <span class="string">listen</span>       <span class="number">80</span><span class="string">;</span>                                                                                                                      </span><br><span class="line">        <span class="string">server_name</span>  <span class="string">localhost;</span>                                                                                                               </span><br><span class="line">                                                                                                                                              </span><br><span class="line">        <span class="string">location</span> <span class="string">/</span> <span class="string">&#123;</span>                                                                                                                          </span><br><span class="line">            <span class="string">root</span>   <span class="string">/usr/share/nginx/html;</span>                                                                                                     </span><br><span class="line">            <span class="string">index</span>  <span class="string">index.html</span> <span class="string">index.htm;</span>                                                                                                      </span><br><span class="line">        <span class="string">&#125;</span>                                                                                                                                     </span><br><span class="line">                                                                                                                                              </span><br><span class="line">        <span class="string">error_page</span>   <span class="number">500</span> <span class="number">502</span> <span class="number">503</span> <span class="number">504</span>  <span class="string">/50x.html;</span>                                                                                              </span><br><span class="line">        <span class="string">location</span> <span class="string">=</span> <span class="string">/50x.html</span> <span class="string">&#123;</span>                                                                                                                </span><br><span class="line">            <span class="string">root</span>   <span class="string">/usr/share/nginx/html;</span>                                                                                                     </span><br><span class="line">        <span class="string">&#125;</span>                                                                                                                                     </span><br><span class="line">                                                                                                                                              </span><br><span class="line">        <span class="string">location</span> <span class="string">=</span> <span class="string">/hostname.html</span> <span class="string">&#123;</span>                                                                                                           </span><br><span class="line">            <span class="string">alias</span> <span class="string">/etc/hostname;</span>                                                                                                              </span><br><span class="line">        <span class="string">&#125;</span>                                                                                                                                     </span><br><span class="line">    <span class="string">&#125;</span> </span><br><span class="line">    <span class="string">server</span> <span class="string">&#123;</span></span><br><span class="line">        <span class="string">server_name</span>  <span class="string">myapp.jinheng.com;</span></span><br><span class="line">        <span class="string">listen</span>  <span class="number">80</span><span class="string">;</span></span><br><span class="line">        <span class="string">root</span>  <span class="string">/data/web/html;</span></span><br><span class="line">    <span class="string">&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Pod</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">pod-configmap-volumes-demo</span></span><br><span class="line">  <span class="attr">namespace:</span> <span class="string">default</span></span><br><span class="line">  <span class="attr">labels:</span></span><br><span class="line">    <span class="attr">app:</span> <span class="string">myapp</span></span><br><span class="line">    <span class="attr">tier:</span> <span class="string">frontend</span></span><br><span class="line">  <span class="attr">annotations:</span></span><br><span class="line">    <span class="attr">jinheng.com/created-by:</span> <span class="string">"cluster amdin"</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">containers:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">myapp</span></span><br><span class="line">      <span class="attr">image:</span> <span class="string">ikubernetes/myapp:v1</span></span><br><span class="line">      <span class="attr">ports:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">http</span></span><br><span class="line">          <span class="attr">containerPort:</span> <span class="number">80</span></span><br><span class="line">      <span class="attr">volumeMounts:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">nginx-conf</span></span><br><span class="line">          <span class="attr">mountPath:</span> <span class="string">/etc/nginx/conf.d</span></span><br><span class="line">          <span class="attr">readOnly:</span> <span class="literal">true</span></span><br><span class="line">        <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">nginx-page</span></span><br><span class="line">          <span class="attr">mountPath:</span> <span class="string">/data/web/html/</span></span><br><span class="line">          <span class="attr">readOnly:</span> <span class="literal">true</span></span><br><span class="line">  <span class="attr">volumes:</span>                                               <span class="comment"># 定义卷</span></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">nginx-conf</span>                                   <span class="comment"># 定义卷的名字</span></span><br><span class="line">      <span class="attr">configMap:</span>                                         <span class="comment"># 该卷的类型为 configMap</span></span><br><span class="line">        <span class="attr">name:</span> <span class="string">nginx-config-volumes</span>                       <span class="comment"># 从命名空间中读取哪个名字的 configMap</span></span><br><span class="line">        <span class="attr">items:</span>                                           <span class="comment"># 定义 configMap 数据到文件的映射，如果不定义则使用 configMap 中的键为文件名称，值为文件内容</span></span><br><span class="line">          <span class="bullet">-</span> <span class="attr">key:</span> <span class="string">vhost</span>                                   <span class="comment"># 使用 configMap 哪个键</span></span><br><span class="line">            <span class="attr">path:</span> <span class="string">www.conf</span>                               <span class="comment"># 将 configMap 中的数据，映射为容器内哪个文件名称</span></span><br><span class="line">            <span class="attr">mode:</span> <span class="number">644</span>                                    <span class="comment"># 指明文件的权限</span></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">nginx-page</span></span><br><span class="line">      <span class="attr">configMap:</span></span><br><span class="line">        <span class="attr">name:</span> <span class="string">nginx-config-volumes</span></span><br><span class="line">        <span class="attr">items:</span></span><br><span class="line">          <span class="bullet">-</span> <span class="attr">key:</span> <span class="string">index</span></span><br><span class="line">            <span class="attr">path:</span> <span class="string">index.html</span></span><br><span class="line">            <span class="attr">mode:</span> <span class="number">644</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Pod</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">myapp</span></span><br><span class="line">  <span class="attr">namespace:</span> <span class="string">default</span></span><br><span class="line">  <span class="attr">labels:</span></span><br><span class="line">    <span class="attr">app:</span> <span class="string">myapp</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">containers:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">myapp</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">ikubernetes/myapp:v1</span></span><br><span class="line">    <span class="attr">volumeMounts:</span>                       <span class="comment"># 容器挂载哪些卷</span></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">webstore</span>                    <span class="comment"># 挂载哪个卷</span></span><br><span class="line">      <span class="attr">mountPath:</span> <span class="string">/usr/share/nginx/html</span>  <span class="comment"># 挂载到容器内哪个目录</span></span><br><span class="line">      <span class="attr">readOnly:</span> <span class="literal">false</span>                   <span class="comment"># 是否只读</span></span><br><span class="line">  <span class="attr">volumes:</span>                              <span class="comment"># 存储卷属于POD的（不属于容器)</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">webstore</span>                      <span class="comment"># 存储卷对象名字</span></span><br><span class="line">    <span class="attr">hostPath:</span>                           <span class="comment"># hostpath 类型的存储卷对象</span></span><br><span class="line">      <span class="attr">path:</span> <span class="string">/data/myapp</span>                 <span class="comment"># 处于宿主机的目录</span></span><br><span class="line">      <span class="attr">type:</span> <span class="string">DirectoryOrCreate</span>           <span class="comment"># 不存在则创建</span></span><br></pre></td></tr></table></figure>
+<h3 id="gitRepo卷"><a href="#gitRepo卷" class="headerlink" title="gitRepo卷"></a>gitRepo卷</h3><p>将 git 仓库的内容当作存储使用，在 POD 创建时候连接到仓库，并拉取仓库，并将它挂载到容器内当作一个存储卷。</p>
+<p>它其实是建立在 emptyDir 的基础上，但是对卷的操作不会同步到 gitrepo 上。</p>
+<h3 id="emptyDir缓存卷"><a href="#emptyDir缓存卷" class="headerlink" title="emptyDir缓存卷"></a>emptyDir缓存卷</h3><p>它使用宿主机一个目录作为挂载点，随着 POD 生命周期的结束，其中的数据也会丢失，但是它有一个非常大的优点就是可以使用内存当作存储空间挂载使用。</p>
+<p>它可以用在 POD 中两个容器中有一些数据需要共享时候选用。</p>
 <ul>
-<li>启动后进入容器查看文件是否正常挂载</li>
+<li>定义 emptyDir 参数，<code>kubectl explain pods.spec.volumes.emptyDir</code></li>
 </ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl <span class="built_in">exec</span> -it pod-configmap-volumes-demo -c myapp -- /bin/sh</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">medium      &lt;string&gt;    <span class="comment"># 使用 "" 表示使用 Disk 来存储，使用 Memory 表示使用内存</span></span><br><span class="line">sizeLimit   &lt;string&gt;    <span class="comment"># 限制存储空间的大小</span></span><br></pre></td></tr></table></figure>
 <ul>
-<li>使用 curl 命令验证，是否能够正常使用</li>
+<li>使用示例</li>
 </ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ curl 10.244.2.104</span><br><span class="line">Hello MyApp | Version: v1 | &lt;a href=<span class="string">"hostname.html"</span>&gt;Pod Name&lt;/a&gt;</span><br><span class="line"></span><br><span class="line">$ curl -H <span class="string">"Host:myapp.jinheng.com"</span> 10.244.2.104</span><br><span class="line">&lt;h1&gt;this is a <span class="built_in">test</span> page&lt;h1&gt;</span><br></pre></td></tr></table></figure>
-<h2 id="secret"><a href="#secret" class="headerlink" title="secret"></a>secret</h2><p>configMap 是明文存储数据的，如果需要存储敏感数据，则需要使用 secret ，secret 与 configMap 的作用基本一致，且 secret 中的数据不是明文存放的，而是 base64 编码保存的。</p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Pod</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">pod-volume-demo</span></span><br><span class="line">  <span class="attr">namespace:</span> <span class="string">default</span></span><br><span class="line">  <span class="attr">labels:</span></span><br><span class="line">    <span class="attr">app:</span> <span class="string">myapp</span></span><br><span class="line">    <span class="attr">tier:</span> <span class="string">frontend</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">volumes:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">html</span></span><br><span class="line">      <span class="attr">emptyDir:</span> <span class="string">&#123;&#125;</span>      <span class="comment"># 使用磁盘，且没有容量限制</span></span><br><span class="line">  <span class="attr">containers:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">myapp</span></span><br><span class="line">      <span class="attr">image:</span> <span class="string">ikubernetes/myapp:v1</span></span><br><span class="line">      <span class="attr">imagePullPolicy:</span> <span class="string">IfNotPresent</span></span><br><span class="line">      <span class="attr">volumeMounts:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">html</span></span><br><span class="line">          <span class="attr">mountPath:</span> <span class="string">/usr/share/nginx/html/</span></span><br><span class="line">      <span class="attr">ports:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">http</span></span><br><span class="line">          <span class="attr">containerPort:</span> <span class="number">80</span></span><br><span class="line">        <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">https</span></span><br><span class="line">          <span class="attr">containerPort:</span> <span class="number">443</span></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">busybox</span></span><br><span class="line">      <span class="attr">image:</span> <span class="string">busybox:latest</span></span><br><span class="line">      <span class="attr">imagePullPolicy:</span> <span class="string">IfNotPresent</span></span><br><span class="line">      <span class="attr">volumeMounts:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">html</span></span><br><span class="line">          <span class="attr">mountPath:</span> <span class="string">/data/</span></span><br><span class="line">      <span class="attr">command:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="string">"/bin/sh"</span></span><br><span class="line">        <span class="bullet">-</span> <span class="string">"-c"</span></span><br><span class="line">        <span class="bullet">-</span> <span class="string">"while true; do date &gt;&gt; /data/index.html; sleep 10; done"</span></span><br></pre></td></tr></table></figure>
 <ul>
-<li>secret 类型</li>
+<li>使用示例</li>
 </ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker-registry    <span class="comment"># 创建一个 Docker registry 使用的 secret</span></span><br><span class="line">generic            <span class="comment"># 从本地文件，目录或字面值创建一个 secret</span></span><br><span class="line">tls                <span class="comment"># 创建一个 TLS  secret</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Pod</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">pod-volume-demo</span></span><br><span class="line">  <span class="attr">namespace:</span> <span class="string">default</span></span><br><span class="line">  <span class="attr">labels:</span></span><br><span class="line">    <span class="attr">app:</span> <span class="string">myapp</span></span><br><span class="line">    <span class="attr">tier:</span> <span class="string">frontend</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">containers:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">myapp</span></span><br><span class="line">      <span class="attr">image:</span> <span class="string">ikubernetes/myapp:v1</span></span><br><span class="line">      <span class="attr">imagePullPolicy:</span> <span class="string">IfNotPresent</span></span><br><span class="line">      <span class="attr">volumeMounts:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">html</span></span><br><span class="line">          <span class="attr">mountPath:</span> <span class="string">/usr/share/nginx/html/</span></span><br><span class="line">      <span class="attr">ports:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">http</span></span><br><span class="line">          <span class="attr">containerPort:</span> <span class="number">80</span></span><br><span class="line">        <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">https</span></span><br><span class="line">          <span class="attr">containerPort:</span> <span class="number">443</span></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">busybox</span></span><br><span class="line">      <span class="attr">image:</span> <span class="string">busybox:latest</span></span><br><span class="line">      <span class="attr">imagePullPolicy:</span> <span class="string">IfNotPresent</span></span><br><span class="line">      <span class="attr">volumeMounts:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">html</span></span><br><span class="line">          <span class="attr">mountPath:</span> <span class="string">/data/</span></span><br><span class="line">      <span class="attr">command:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="string">"/bin/sh"</span></span><br><span class="line">        <span class="bullet">-</span> <span class="string">"-c"</span></span><br><span class="line">        <span class="bullet">-</span> <span class="string">"while true; do date &gt;&gt; /data/index.html; sleep 10; done"</span></span><br><span class="line">  <span class="attr">volumes:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">html</span></span><br><span class="line">      <span class="attr">emptyDir:</span></span><br><span class="line">        <span class="attr">medium:</span> <span class="string">""</span></span><br><span class="line">        <span class="attr">sizeLimit:</span> <span class="string">1536Mi</span></span><br></pre></td></tr></table></figure>
+<h2 id="网络存储"><a href="#网络存储" class="headerlink" title="网络存储"></a>网络存储</h2><p>网络存储，就是脱离了节点生命周期的存储设备，即使 pod 被调度到别的 node 节点上，仍然可以挂载使用其中的数据。</p>
+<h3 id="nfs"><a href="#nfs" class="headerlink" title="nfs"></a>nfs</h3><p>nfs 服务器是存在于集群之外的服务器，它不受 node 节点的影响，因而在 node 节点宕机后仍然能够提供持久存储给其他 POD。</p>
 <ul>
-<li>清单格式，详见：kubectl explain secret</li>
+<li>在 k8s 的 node 找一个主机，安装配置 nfs 服务器并启动</li>
 </ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">apiVersion	&lt;string&gt;               <span class="comment"># API 版本</span></span><br><span class="line">data	    &lt;map[string]string&gt;    <span class="comment"># 以键值对列出数据，值需要经过 base64 加密</span></span><br><span class="line">kind	    &lt;string&gt;               <span class="comment"># 对象类型</span></span><br><span class="line">metadata	&lt;Object&gt;               <span class="comment"># 元数据</span></span><br><span class="line">stringData	&lt;map[string]string&gt;    <span class="comment"># 明文的数据</span></span><br><span class="line"><span class="built_in">type</span>	    &lt;string&gt;               <span class="comment"># 数据类型</span></span><br></pre></td></tr></table></figure>
-<h3 id="私有仓库认证1"><a href="#私有仓库认证1" class="headerlink" title="私有仓库认证1"></a>私有仓库认证1</h3><ul>
-<li>首先通过命令行创建出来 secret</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl create secret docker-registry regsecret --docker-server=registry-vpc.cn-hangzhou.aliyuncs.com --docker-username=admin --docker-password=123456 --docker-email=420123641@qq.com</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ yum install nfs-utils                                                     <span class="comment"># 安装 nfs 服务</span></span><br><span class="line">$ mkdir -p /data/volumes                                                    <span class="comment"># 创建 volume 卷目录</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">'/data/volumes  172.16.100.0/16(rw,no_root_squash)'</span> &gt;&gt; /etc/exports    <span class="comment"># 配置 nfs 服务器</span></span><br><span class="line">$ systemctl start nfs                                                       <span class="comment"># 启动 nfs 服务器</span></span><br><span class="line">$ ss -tnl                                                                   <span class="comment"># 确认监听端口，nfs 监听 TCP 2049 端口</span></span><br></pre></td></tr></table></figure>
 <ul>
-<li>如果想保存为文件可以</li>
+<li>在 k8s 集群的 node 节点安装 nfs 驱动，测试挂载是否正常</li>
 </ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl get secret regsecret -o yaml</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ yum install nfs-utils</span><br><span class="line">$ mount -t nfs 172.16.100.104:/data/volumes /mnt</span><br></pre></td></tr></table></figure>
 <ul>
-<li>POD 创建时候，从 docker hub 拉取镜像使用的用户名密码，kubectl explain pods.spec 的 imagePullSecrets 字段</li>
+<li>定义 nfs 参数，kubectl explain pods.spec.volumes.nfs</li>
 </ul>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Pod</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">secret-file-pod</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">containers:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">mypod</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">redis</span></span><br><span class="line">  <span class="attr">imagePullSecrets:</span>                         <span class="comment"># 获取镜像需要的用户名密码</span></span><br><span class="line">   <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">regsecret</span>                        <span class="comment"># secret 对象</span></span><br></pre></td></tr></table></figure>
-<h3 id="私有仓库认证2"><a href="#私有仓库认证2" class="headerlink" title="私有仓库认证2"></a>私有仓库认证2</h3><ul>
-<li>首先通过命令行创建出来 secret</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl create secret docker-registry regsecret --docker-server=registry-vpc.cn-hangzhou.aliyuncs.com --docker-username=admin --docker-password=123456 --docker-email=420123641@qq.com</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">path	  &lt;string&gt;       <span class="comment"># nfs 服务器的路径</span></span><br><span class="line">readOnly  &lt;boolean&gt;      <span class="comment"># 是否只读</span></span><br><span class="line">server	  &lt;string&gt;       <span class="comment"># nfs 服务器地址</span></span><br></pre></td></tr></table></figure>
 <ul>
-<li>创建自定义的 serviceaccount 对象，在 serviceaccount 对象上定义 image pull secrets</li>
+<li>使用示例</li>
 </ul>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">ServiceAccount</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">admin</span></span><br><span class="line">  <span class="attr">namespace:</span> <span class="string">default</span></span><br><span class="line"><span class="attr">imagePullSecrets:</span></span><br><span class="line"><span class="bullet">-</span> <span class="attr">name:</span> <span class="string">regsecret</span>                       <span class="comment"># 指定 secret</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Pod</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">pod-vol-nfs-demo</span></span><br><span class="line">  <span class="attr">namespace:</span> <span class="string">default</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">containers:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">myapp</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">ikubernetes/myapp:v1</span></span><br><span class="line">    <span class="attr">volumeMounts:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">html</span></span><br><span class="line">        <span class="attr">mountPath:</span> <span class="string">/usr/share/nginx/html/</span></span><br><span class="line">  <span class="attr">volumes:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">html</span></span><br><span class="line">      <span class="attr">nfs:</span></span><br><span class="line">        <span class="attr">path:</span> <span class="string">/data/volumes</span></span><br><span class="line">        <span class="attr">server:</span> <span class="number">172.16</span><span class="number">.100</span><span class="number">.104</span></span><br></pre></td></tr></table></figure>
+<h2 id="分布式存储"><a href="#分布式存储" class="headerlink" title="分布式存储"></a>分布式存储</h2><p>分布式存储能提供脱离节点生命周期的存储，又比网络存储更加健壮，它是分布式的，有很强的高可用性，但是分布式存储配置复杂，在由 NFS 提供的网络储存中，用户需要知道分配给 POD 的 NFS 存储的地址才能使用，而在由分布式提供的存储能力的存储上，用户需要充分了解该分布式存储的配置参数，才能够使用这个分布式存储。</p>
+<p>由此 K8S 提供了 PV、PVC 两种机制，让普通用户无需关心底层存储参数的配置，只需要说明需要使用多大的持久存储，就可以了。 </p>
+<p>一般 PV 与 PVC 是一对绑定的，PV属于全局，PVC 属于某个名称空间，当一个 PV 被一个 PVC 绑定，别的名称空间 PVC 就不可以再绑定了。请求绑定某个 PV 就是由 PVC 来完成的，被 PVC 绑定的 PV 称作 PV 的绑定状态。</p>
+<p>PVC 绑定了一个 PV，那么 PVC 所处名称空间定义的 POD 就可以使用 persistentVolumeClaim 类型的 volumes 了，然后容器就可以通过 volumeMounts 挂载 PVC 类型的卷了。</p>
+<p>persistentVolumeClaim 卷是否允许多路读写，这取决于 PV 定义时候的读写特性：单路读写、多路读写、多路只读。</p>
+<p>如果某个 POD 不在需要了，我们把它删除了、同时也删除了 PVC、那么此时 PV 还可以有自己的回收策略： delete删除PV、Retain什么都不做。</p>
+<h3 id="PersistentVolume"><a href="#PersistentVolume" class="headerlink" title="PersistentVolume"></a>PersistentVolume</h3><p>由管理员添加的的一个存储的描述，是一个集群级别的全局资源，包含存储的类型，存储的大小和访问模式等。它的生命周期独立于Pod，例如当使用它的 Pod 销毁时对 PV 没有影响。</p>
+<blockquote>
+<p>  见：kubectl explain PersistentVolume.spec</p>
+</blockquote>
 <ul>
-<li>创建 POD 使用指定的 serviceaccount 对象</li>
+<li>在 nfs 上定义存储，/etc/exports，并且导出 nfs 定义</li>
 </ul>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Pod</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">pod-serviceaccount-demo</span></span><br><span class="line">  <span class="attr">namespace:</span> <span class="string">default</span></span><br><span class="line">  <span class="attr">labels:</span></span><br><span class="line">    <span class="attr">app:</span> <span class="string">myapp</span></span><br><span class="line">    <span class="attr">tier:</span> <span class="string">frontend</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">containers:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">nginx</span></span><br><span class="line">      <span class="attr">image:</span> <span class="string">ikubernetes/myapp:v1</span></span><br><span class="line">      <span class="attr">ports:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">http</span></span><br><span class="line">          <span class="attr">containerPort:</span> <span class="number">80</span></span><br><span class="line">  <span class="attr">serviceAccountName:</span> <span class="string">admin</span>                          <span class="comment"># 使用 serviceaccount 进行拉取镜像的认证，这样更加安全</span></span><br></pre></td></tr></table></figure>
-<h3 id="创建-TLS-证书"><a href="#创建-TLS-证书" class="headerlink" title="创建 TLS 证书"></a>创建 TLS 证书</h3><ul>
-<li>首先通过命令行创建出来</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl create secret tls nginx-secret --cert=tls.crt --key=tls.key</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">/data/volumes/v1    172.16.100.0/16(rw,no_root_squash)</span><br><span class="line">/data/volumes/v2    172.16.100.0/16(rw,no_root_squash)</span><br><span class="line">/data/volumes/v3    172.16.100.0/16(rw,no_root_squash)</span><br><span class="line">/data/volumes/v4    172.16.100.0/16(rw,no_root_squash)</span><br><span class="line">/data/volumes/v5    172.16.100.0/16(rw,no_root_squash)</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">exportfs -arv</span><br></pre></td></tr></table></figure>
 <ul>
-<li>secret 中的数据可以在容器内挂载为文件，然后在 nginx 容器内使用证书文件</li>
+<li>将 nfs 在 k8s 中定义为 PersistentVolume，详见：kubectl explain PersistentVolume.spec.nfs</li>
 </ul>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Pod</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">pod-configmap-volumes-demo</span></span><br><span class="line">  <span class="attr">namespace:</span> <span class="string">default</span></span><br><span class="line">  <span class="attr">labels:</span></span><br><span class="line">    <span class="attr">app:</span> <span class="string">myapp</span></span><br><span class="line">    <span class="attr">tier:</span> <span class="string">frontend</span></span><br><span class="line">  <span class="attr">annotations:</span></span><br><span class="line">    <span class="attr">jinheng.com/created-by:</span> <span class="string">"cluster amdin"</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">containers:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">myapp</span></span><br><span class="line">      <span class="attr">image:</span> <span class="string">ikubernetes/myapp:v1</span></span><br><span class="line">      <span class="attr">ports:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">http</span></span><br><span class="line">          <span class="attr">containerPort:</span> <span class="number">80</span></span><br><span class="line">      <span class="attr">volumeMounts:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">nginx-conf</span></span><br><span class="line">          <span class="attr">mountPath:</span> <span class="string">/etc/nginx/secret</span></span><br><span class="line">          <span class="attr">readOnly:</span> <span class="literal">true</span></span><br><span class="line">  <span class="attr">volumes:</span>                                               <span class="comment"># 定义卷</span></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">nginx-conf</span>                                   <span class="comment"># 定义卷的名字</span></span><br><span class="line">      <span class="attr">configMap:</span>                                         <span class="comment"># 该卷的类型为 secret</span></span><br><span class="line">        <span class="attr">name:</span> <span class="string">nginx-secret</span>                               <span class="comment"># 从命名空间中读取哪个名字的 secret</span></span><br><span class="line">        <span class="attr">items:</span>                                           <span class="comment"># 定义 secret 数据到文件的映射，如果不定义则使用 secret 中的键为文件名称，值为文件内容</span></span><br><span class="line">          <span class="bullet">-</span> <span class="attr">key:</span> <span class="string">tls.key</span>                                 <span class="comment"># 使用 secret 哪个键</span></span><br><span class="line">            <span class="attr">path:</span> <span class="string">www.conf</span>                               <span class="comment"># 将 secret 中的数据，映射为容器内哪个文件名称</span></span><br><span class="line">            <span class="attr">mode:</span> <span class="number">644</span>                                    <span class="comment"># 指明文件的权限</span></span><br><span class="line">          <span class="bullet">-</span> <span class="attr">key:</span> <span class="string">tls.crt</span></span><br><span class="line">            <span class="attr">path:</span> <span class="string">index.html</span></span><br><span class="line">            <span class="attr">mode:</span> <span class="number">644</span></span><br></pre></td></tr></table></figure>
-<h3 id="设置secret为环境变量"><a href="#设置secret为环境变量" class="headerlink" title="设置secret为环境变量"></a>设置secret为环境变量</h3><figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Pod</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">secret-env-pod</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">containers:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">mycontainer</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">redis</span></span><br><span class="line">    <span class="attr">env:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">SECRET_USERNAME</span></span><br><span class="line">        <span class="attr">valueFrom:</span></span><br><span class="line">          <span class="attr">secretKeyRef:</span></span><br><span class="line">            <span class="attr">name:</span> <span class="string">mysecret</span></span><br><span class="line">            <span class="attr">key:</span> <span class="string">username</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">SECRET_PASSWORD</span></span><br><span class="line">        <span class="attr">valueFrom:</span></span><br><span class="line">          <span class="attr">secretKeyRef:</span></span><br><span class="line">            <span class="attr">name:</span> <span class="string">mysecret</span></span><br><span class="line">            <span class="attr">key:</span> <span class="string">password</span></span><br><span class="line">  <span class="attr">restartPolicy:</span> <span class="string">Never</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">PersistentVolume</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">pv-001</span></span><br><span class="line">  <span class="attr">labels:</span></span><br><span class="line">    <span class="attr">name:</span> <span class="string">pv001</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">accessModes:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">ReadWriteMany</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">ReadWriteOnce</span></span><br><span class="line">  <span class="attr">capacity:</span></span><br><span class="line">    <span class="attr">storage:</span> <span class="string">1Gi</span></span><br><span class="line">  <span class="attr">nfs:</span></span><br><span class="line">    <span class="attr">path:</span> <span class="string">/data/volumes/v1</span></span><br><span class="line">    <span class="attr">server:</span> <span class="number">172.16</span><span class="number">.100</span><span class="number">.104</span></span><br><span class="line"></span><br><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">PersistentVolume</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">pv-002</span></span><br><span class="line">  <span class="attr">labels:</span></span><br><span class="line">    <span class="attr">name:</span> <span class="string">pv003</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">accessModes:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">ReadWriteMany</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">ReadWriteOnce</span></span><br><span class="line">  <span class="attr">capacity:</span></span><br><span class="line">    <span class="attr">storage:</span> <span class="string">2Gi</span></span><br><span class="line">  <span class="attr">nfs:</span></span><br><span class="line">    <span class="attr">path:</span> <span class="string">/data/volumes/v2</span></span><br><span class="line">    <span class="attr">server:</span> <span class="number">172.16</span><span class="number">.100</span><span class="number">.104</span></span><br><span class="line"></span><br><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">PersistentVolume</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">pv-003</span></span><br><span class="line">  <span class="attr">labels:</span></span><br><span class="line">    <span class="attr">name:</span> <span class="string">pv003</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">accessModes:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">ReadWriteMany</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">ReadWriteOnce</span></span><br><span class="line">  <span class="attr">capacity:</span></span><br><span class="line">    <span class="attr">storage:</span> <span class="string">3Gi</span></span><br><span class="line">  <span class="attr">nfs:</span></span><br><span class="line">    <span class="attr">path:</span> <span class="string">/data/volumes/v3</span></span><br><span class="line">    <span class="attr">server:</span> <span class="number">172.16</span><span class="number">.100</span><span class="number">.104</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl get persistentvolume</span><br><span class="line">NAME     CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS      CLAIM   STORAGECLASS   REASON   AGE</span><br><span class="line">pv-001   1Gi        RWO,RWX        Retain           Available                                   3m38s</span><br><span class="line">pv-002   2Gi        RWO,RWX        Retain           Available                                   3m38s</span><br><span class="line">pv-003   3Gi        RWO,RWX        Retain           Available                                   3m38s</span><br></pre></td></tr></table></figure>
+<h3 id="PersistentVolumeClaim"><a href="#PersistentVolumeClaim" class="headerlink" title="PersistentVolumeClaim"></a>PersistentVolumeClaim</h3><p>是 Namespace 级别的资源，描述对 PV 的一个请求。请求信息包含存储大小，访问模式等。</p>
+<ul>
+<li>定义 PVC，kubectl explain PersistentVolumeClaim.spec</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">accessModes         &lt;[]string&gt;  <span class="comment"># 设置访问模式</span></span><br><span class="line">    ReadWriteOnce               <span class="comment"># 单个节点以读写方式挂载</span></span><br><span class="line">    ReadOnlyMany                <span class="comment"># - 多节点以只读方式挂载</span></span><br><span class="line">    ReadWriteMany               <span class="comment"># - 多节点以读写方式挂载</span></span><br><span class="line"></span><br><span class="line">dataSource          &lt;Object&gt;    <span class="comment"># 如果配置程序可以支持 Volume Snapshot 数据源，它将创建一个新卷，并且数据将同时还原到该卷。 </span></span><br><span class="line">resources           &lt;Object&gt;    <span class="comment"># 资源表示 PersistentVolume 应具有的最小资源</span></span><br><span class="line">selector            &lt;Object&gt;    <span class="comment"># 选择哪个 PersistentVolume</span></span><br><span class="line">storageClassName    &lt;string&gt;    <span class="comment"># 存储类名称</span></span><br><span class="line">volumeMode          &lt;string&gt;    <span class="comment"># 定义声明所需的 PersistentVolume 类型才能被选中</span></span><br><span class="line">volumeName          &lt;string&gt;    <span class="comment"># 后端 PersistentVolume ，就是精确选择 PersistentVolume ，而不是使用 selector 来选定</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>在 volumes 中使用 PVC，kubectl explain pods.spec.volumes.persistentVolumeClaim</li>
+</ul>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="string">persistentVolumeClaim</span></span><br><span class="line">    <span class="string">claimName</span>    <span class="string">&lt;string&gt;</span>  <span class="comment"># 在当前名称空间已经创建号的 PVC 名称</span></span><br><span class="line">    <span class="string">readOnly</span>     <span class="string">&lt;boolean&gt;</span> <span class="comment"># 是否只读</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>定义 PersistentVolumeClaim，详见：kubectl explain PersistentVolumeClaim.spec</li>
+</ul>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">PersistentVolumeClaim</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">my-pvc</span></span><br><span class="line">  <span class="attr">namespace:</span> <span class="string">default</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">accessModes:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">ReadWriteMany</span>        <span class="comment"># 访问模式</span></span><br><span class="line">  <span class="attr">resources:</span>               <span class="comment"># 资源条件</span></span><br><span class="line">    <span class="attr">requests:</span>              <span class="comment"># 挑选 PV 时候必须满足的条件，不满足则一直等待</span></span><br><span class="line">      <span class="attr">storage:</span> <span class="string">2Gi</span>         <span class="comment"># 存储大小</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>在 pod 清单中定义 persistentVolumeClaim 类型的 volumes ，并在容器中挂载 volumeMounts。</li>
+</ul>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Pod</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">pod-vol-nfs-demo</span></span><br><span class="line">  <span class="attr">namespace:</span> <span class="string">default</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">containers:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">myapp</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">ikubernetes/myapp:v1</span></span><br><span class="line">    <span class="attr">volumeMounts:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">html</span></span><br><span class="line">        <span class="attr">mountPath:</span> <span class="string">/usr/share/nginx/html/</span></span><br><span class="line">  <span class="attr">volumes:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">html</span></span><br><span class="line">      <span class="attr">persistentVolumeClaim:</span></span><br><span class="line">        <span class="attr">claimName:</span> <span class="string">my-pvc</span>            <span class="comment"># 使用的 PVC 的名称</span></span><br></pre></td></tr></table></figure>
+<h3 id="StorageClass"><a href="#StorageClass" class="headerlink" title="StorageClass"></a>StorageClass</h3><p>PVC 申请 PV 的时候，未必有符合条件的 PV，k8s 为我们准备了 StorageClass 可以在 PVC 申请 PV 的时候通过 StorageClass 动态生成 PV。</p>
+<p>StorageClass 可以动态的到 CephFS 、NFS 等存储（或者云端存储）产生一个 PV，要求存储设备必须支持 RESTfull 风格的接口。</p>
+<h2 id="存储功能"><a href="#存储功能" class="headerlink" title="存储功能"></a>存储功能</h2><table>
+<thead>
+<tr>
+<th style="text-align:left">Volume Plugin</th>
+<th style="text-align:left">ReadWriteOnce</th>
+<th style="text-align:left">ReadOnlyMany</th>
+<th style="text-align:left">ReadWriteMany</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">AWSElasticBlockStore</td>
+<td style="text-align:left">✓</td>
+<td style="text-align:left">-</td>
+<td style="text-align:left">-</td>
+</tr>
+<tr>
+<td style="text-align:left">AzureFile</td>
+<td style="text-align:left">✓</td>
+<td style="text-align:left">✓</td>
+<td style="text-align:left">✓</td>
+</tr>
+<tr>
+<td style="text-align:left">AzureDisk</td>
+<td style="text-align:left">✓</td>
+<td style="text-align:left">-</td>
+<td style="text-align:left">-</td>
+</tr>
+<tr>
+<td style="text-align:left">Cinder</td>
+<td style="text-align:left">✓</td>
+<td style="text-align:left">-</td>
+<td style="text-align:left">-</td>
+</tr>
+<tr>
+<td style="text-align:left">CSI</td>
+<td style="text-align:left">depends on the driver</td>
+<td style="text-align:left">depends on the driver</td>
+<td style="text-align:left">depends on the driver</td>
+</tr>
+<tr>
+<td style="text-align:left">FC</td>
+<td style="text-align:left">✓</td>
+<td style="text-align:left">✓</td>
+<td style="text-align:left">-</td>
+</tr>
+<tr>
+<td style="text-align:left">FlexVolume</td>
+<td style="text-align:left">✓</td>
+<td style="text-align:left">✓</td>
+<td style="text-align:left">depends on the driver</td>
+</tr>
+<tr>
+<td style="text-align:left">Flocker</td>
+<td style="text-align:left">✓</td>
+<td style="text-align:left">-</td>
+<td style="text-align:left">-</td>
+</tr>
+<tr>
+<td style="text-align:left">GCEPersistentDisk</td>
+<td style="text-align:left">✓</td>
+<td style="text-align:left">✓</td>
+<td style="text-align:left">-</td>
+</tr>
+<tr>
+<td style="text-align:left">Glusterfs</td>
+<td style="text-align:left">✓</td>
+<td style="text-align:left">✓</td>
+<td style="text-align:left">✓</td>
+</tr>
+<tr>
+<td style="text-align:left">HostPath</td>
+<td style="text-align:left">✓</td>
+<td style="text-align:left">-</td>
+<td style="text-align:left">-</td>
+</tr>
+<tr>
+<td style="text-align:left">iSCSI</td>
+<td style="text-align:left">✓</td>
+<td style="text-align:left">✓</td>
+<td style="text-align:left">-</td>
+</tr>
+<tr>
+<td style="text-align:left">Quobyte</td>
+<td style="text-align:left">✓</td>
+<td style="text-align:left">✓</td>
+<td style="text-align:left">✓</td>
+</tr>
+<tr>
+<td style="text-align:left">NFS</td>
+<td style="text-align:left">✓</td>
+<td style="text-align:left">✓</td>
+<td style="text-align:left">✓</td>
+</tr>
+<tr>
+<td style="text-align:left">CephFS</td>
+<td style="text-align:left">✓</td>
+<td style="text-align:left">✓</td>
+<td style="text-align:left">✓</td>
+</tr>
+<tr>
+<td style="text-align:left">RBD</td>
+<td style="text-align:left">✓</td>
+<td style="text-align:left">✓</td>
+<td style="text-align:left">-</td>
+</tr>
+<tr>
+<td style="text-align:left">VsphereVolume</td>
+<td style="text-align:left">✓</td>
+<td style="text-align:left">-</td>
+<td style="text-align:left">- (works when Pods are collocated)</td>
+</tr>
+<tr>
+<td style="text-align:left">PortworxVolume</td>
+<td style="text-align:left">✓</td>
+<td style="text-align:left">-</td>
+<td style="text-align:left">✓</td>
+</tr>
+<tr>
+<td style="text-align:left">ScaleIO</td>
+<td style="text-align:left">✓</td>
+<td style="text-align:left">✓</td>
+<td style="text-align:left">-</td>
+</tr>
+<tr>
+<td style="text-align:left">StorageOS</td>
+<td style="text-align:left">✓</td>
+<td style="text-align:left">-</td>
+<td style="text-align:left">-</td>
+</tr>
+</tbody>
+</table>
+<h2 id="StorageClass-Ceph-fs"><a href="#StorageClass-Ceph-fs" class="headerlink" title="StorageClass Ceph fs"></a>StorageClass Ceph fs</h2><h3 id="创建-CephFs"><a href="#创建-CephFs" class="headerlink" title="创建 CephFs"></a>创建 CephFs</h3><ul>
+<li>创建两个 poll ，CephFS 需要使用两个 Pool 来分别存储数据和元数据</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ceph osd pool create cephfs_data 128</span><br><span class="line">ceph osd pool create cephfs_metadata 128</span><br></pre></td></tr></table></figure>
+<ul>
+<li>创建一个 CephFS</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ceph fs new cephfs cephfs_metadata cephfs_data</span><br></pre></td></tr></table></figure>
+<ul>
+<li>查看 CephFS </li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ceph fs ls</span><br></pre></td></tr></table></figure>
+<ul>
+<li>查看 mds 状态是否进入 active</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ceph mds <span class="built_in">stat</span></span><br></pre></td></tr></table></figure>
+<h3 id="安装-cephfs-provisioner"><a href="#安装-cephfs-provisioner" class="headerlink" title="安装 cephfs-provisioner"></a>安装 cephfs-provisioner</h3><ul>
+<li>K8S 官方的外部存储 provisioner 项目，Cephfs 在 ceph/cephfs/deploy/rbac 这个目录中</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">https://github.com/kubernetes-incubator/external-storage.git</span><br></pre></td></tr></table></figure>
+<ul>
+<li>克隆项目</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/kubernetes-incubator/external-storage.git</span><br></pre></td></tr></table></figure>
+<ul>
+<li>部署 cephfs-provisioner</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl apply -f external-storage/ceph/rbd/deploy/rbac/</span><br></pre></td></tr></table></figure>
+<ul>
+<li>查看 cephfs-provisioner 容器运行状态</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl get pods -n kube-system</span><br></pre></td></tr></table></figure>
+<h3 id="创建-StorageClass"><a href="#创建-StorageClass" class="headerlink" title="创建 StorageClass"></a>创建 StorageClass</h3><ul>
+<li>使用 cephfs 的官方示例</li>
+</ul>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="string">https://github.com/kubernetes-incubator/external-storage/tree/master/ceph/cephfs/example</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>创建 Secret 使用 CephX 认证</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">---</span><br><span class="line">apiVersion: v1</span><br><span class="line">kind: Secret</span><br><span class="line">metadata:</span><br><span class="line">  name: ceph-admin-secret</span><br><span class="line">  namespace: kube-system</span><br><span class="line"><span class="built_in">type</span>: <span class="string">"kubernetes.io/rbd"</span></span><br><span class="line">data:</span><br><span class="line">  <span class="comment"># ceph auth get-key client.admin | base64                                                  # 从这个命令中取得 keyring 认证的 base64 密钥串复制到下面</span></span><br><span class="line">  key: QVFER3U5TmM1NXQ4SlJBQXhHMGltdXZlNFZkUXRvN2tTZ1BENGc9PQ==</span><br></pre></td></tr></table></figure>
+<ul>
+<li>创建存储类</li>
+</ul>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">kind:</span> <span class="string">StorageClass</span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">storage.k8s.io/v1</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">cephfs</span></span><br><span class="line"><span class="attr">provisioner:</span> <span class="string">ceph.com/cephfs</span></span><br><span class="line"><span class="attr">parameters:</span></span><br><span class="line">    <span class="attr">monitors:</span> <span class="number">172.16</span><span class="number">.100</span><span class="number">.11</span><span class="string">:6789,192.172.16.100.12:6789,172.16.100.13:6789</span>                  <span class="comment"># monitor 地址</span></span><br><span class="line">    <span class="attr">adminId:</span> <span class="string">admin</span>                                                                          <span class="comment"># 管理员ID</span></span><br><span class="line">    <span class="attr">adminSecretName:</span> <span class="string">ceph-admin-secret</span>                                                      <span class="comment"># 使用 ceph-admin-secret 这个 Secret</span></span><br><span class="line">    <span class="attr">adminSecretNamespace:</span> <span class="string">kube-system</span>                                                          <span class="comment"># Secret 所在名称空间</span></span><br><span class="line">    <span class="attr">claimRoot:</span> <span class="string">/pvc-volumes</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>创建 PVC</li>
+</ul>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">PersistentVolumeClaim</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">ceph-cephfs-pvc</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">storageClassName:</span> <span class="string">cephfs</span></span><br><span class="line">  <span class="attr">accessModes:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">ReadWriteMany</span></span><br><span class="line">  <span class="attr">resources:</span></span><br><span class="line">    <span class="attr">requests:</span></span><br><span class="line">      <span class="attr">storage:</span> <span class="string">10Gi</span></span><br></pre></td></tr></table></figure>
+<h2 id="StorageClass-Ceph-rbd"><a href="#StorageClass-Ceph-rbd" class="headerlink" title="StorageClass Ceph rbd"></a>StorageClass Ceph rbd</h2><p>注意：RBD 模式是不支持 ReadWriteMany 的</p>
+<h3 id="配置-Ceph-储存池"><a href="#配置-Ceph-储存池" class="headerlink" title="配置 Ceph 储存池"></a>配置 Ceph 储存池</h3><ul>
+<li>所有节点安装依赖</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">yum install -y ceph-common</span><br></pre></td></tr></table></figure>
+<ul>
+<li>加载内核模块，并且写入开机启动</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">modprobe rbd</span><br><span class="line">lsmod | grep rbd</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">echo</span> <span class="string">"rbd"</span> &gt;&gt; /etc/modules-load.d/ceph.conf</span><br><span class="line">systemctl <span class="built_in">enable</span> systemd-modules-load.service</span><br></pre></td></tr></table></figure>
+<ul>
+<li>因为有默认的存储池叫 rbd ，权限要求不严格的情况这一步不需要执行，创建 ceph 存储池，创建用户</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ceph osd pool create kube 4096                                                               <span class="comment"># 创建 pool</span></span><br><span class="line">ceph osd pool ls                                                                             <span class="comment"># 查看 pool</span></span><br><span class="line"></span><br><span class="line">ceph auth get-or-create client.kube mon <span class="string">'allow r'</span> osd <span class="string">'allow rwx pool=kube'</span> -o /etc/ceph/ceph.client.kube.keyring</span><br><span class="line">ceph auth list                                                                               <span class="comment"># 授权 client.kube 用户访问 kube 这个 pool</span></span><br><span class="line"></span><br><span class="line">scp /etc/ceph/ceph.client.kube.keyring node1:/etc/ceph/                                      <span class="comment"># 将用户 keyring 文件拷贝到各个 ceph 节点</span></span><br><span class="line">scp /etc/ceph/ceph.client.kube.keyring node1:/etc/ceph/</span><br></pre></td></tr></table></figure>
+<h3 id="安装-rbd-provisioner"><a href="#安装-rbd-provisioner" class="headerlink" title="安装 rbd-provisioner"></a>安装 rbd-provisioner</h3><ul>
+<li>K8S 官方的外部存储 provisioner 项目，Cephfs 在 ceph/rbd/deploy/rbac 这个目录中</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">https://github.com/kubernetes-incubator/external-storage.git</span><br></pre></td></tr></table></figure>
+<ul>
+<li>克隆项目</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/kubernetes-incubator/external-storage.git</span><br></pre></td></tr></table></figure>
+<ul>
+<li>修复一个官方遗漏的一个权限，这允许 rbd-provisioner 访问 ceph 的密钥</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">cat &gt;&gt;external-storage/ceph/rbd/deploy/rbac/clusterrole.yaml&lt;&lt;EOF</span><br><span class="line">  - apiGroups: [<span class="string">""</span>]</span><br><span class="line">    resources: [<span class="string">"secrets"</span>]</span><br><span class="line">    verbs: [<span class="string">"create"</span>, <span class="string">"get"</span>, <span class="string">"list"</span>, <span class="string">"watch"</span>]</span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
+<ul>
+<li>部署 rbd-provisioner</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl apply -f external-storage/ceph/rbd/deploy/rbac/</span><br></pre></td></tr></table></figure>
+<ul>
+<li>查看 rbd-provisioner 容器运行状态</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">kubectl get pods -n kube-system</span><br></pre></td></tr></table></figure>
+<h3 id="创建-StorageClass-1"><a href="#创建-StorageClass-1" class="headerlink" title="创建 StorageClass"></a>创建 StorageClass</h3><ul>
+<li>使用 ceph rbd 的官方示例</li>
+</ul>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="string">https://github.com/kubernetes-incubator/external-storage/tree/master/ceph/rbd/examples</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>创建 Secret 使用 CephX 认证，如果已经存在，则不需要再次创建</li>
+</ul>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Secret</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">ceph-admin-secret</span></span><br><span class="line">  <span class="attr">namespace:</span> <span class="string">kube-system</span></span><br><span class="line"><span class="attr">type:</span> <span class="string">"kubernetes.io/rbd"</span></span><br><span class="line"><span class="attr">data:</span></span><br><span class="line">  <span class="comment"># ceph auth get-key client.admin | base64                                                  # 从这个命令中取得 keyring 认证的 base64 密钥串复制到下面</span></span><br><span class="line">  <span class="attr">key:</span> <span class="string">QVFER3U5TmM1NXQ4SlJBQXhHMGltdXZlNFZkUXRvN2tTZ1BENGc9PQ==</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>创建存储类</li>
+</ul>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">StorageClass</span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">storage.k8s.io/v1</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">ceph-rbd</span></span><br><span class="line"><span class="attr">provisioner:</span> <span class="string">ceph.com/rbd</span></span><br><span class="line"><span class="attr">parameters:</span></span><br><span class="line">  <span class="attr">monitors:</span> <span class="number">172.16</span><span class="number">.100</span><span class="number">.11</span><span class="string">:6789,192.172.16.100.12:6789,172.16.100.13:6789</span>                    <span class="comment"># monitor 地址</span></span><br><span class="line">  <span class="attr">pool:</span> <span class="string">rbd</span>                                                                                 <span class="comment"># 存储池的名称</span></span><br><span class="line">  <span class="attr">adminId:</span> <span class="string">admin</span>                                                                            <span class="comment"># 管理员ID</span></span><br><span class="line">  <span class="attr">adminSecretName:</span> <span class="string">ceph-admin-secret</span>                                                        <span class="comment"># 使用 ceph-admin-secret 这个 Secret</span></span><br><span class="line">  <span class="attr">adminSecretNamespace:</span> <span class="string">kube-system</span>                                                         <span class="comment"># Secret 所在名称空间</span></span><br><span class="line">  <span class="attr">userId:</span> <span class="string">admin</span>                                                                             <span class="comment"># 用户ID</span></span><br><span class="line">  <span class="attr">userSecretName:</span> <span class="string">ceph-admin-secret</span>                                                         <span class="comment"># 使用 ceph-admin-secret 这个 Secret</span></span><br><span class="line">  <span class="attr">userSecretNamespace:</span> <span class="string">kube-system</span>                                                          <span class="comment"># Secret 所在名称空间</span></span><br><span class="line">  <span class="attr">fsType:</span> <span class="string">ext4</span>                                                                              <span class="comment"># 文件系统</span></span><br><span class="line">  <span class="attr">imageFormat:</span> <span class="string">"2"</span></span><br><span class="line">  <span class="attr">imageFeatures:</span> <span class="string">"layering"</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>创建 PVC</li>
+</ul>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">PersistentVolumeClaim</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">ceph-rbd-pvc</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">storageClassName:</span> <span class="string">ceph-rbd</span></span><br><span class="line">  <span class="attr">accessModes:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">ReadWriteOnce</span></span><br><span class="line">  <span class="attr">resources:</span></span><br><span class="line">    <span class="attr">requests:</span></span><br><span class="line">      <span class="attr">storage:</span> <span class="string">10Gi</span></span><br></pre></td></tr></table></figure>
+<p># </p>
 
           
         
@@ -1237,19 +1521,6 @@
 
 
 
-
-
-<!-- LOCAL: You can save these files to your site and update links -->
-    
-        
-        <link rel="stylesheet" href="https://aimingoo.github.io/gitmint/style/default.css">
-        <script src="https://aimingoo.github.io/gitmint/dist/gitmint.browser.js"></script>
-    
-<!-- END LOCAL -->
-
-    
-
-    
 
 
 
